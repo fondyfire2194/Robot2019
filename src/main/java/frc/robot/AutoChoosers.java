@@ -30,10 +30,10 @@ public class AutoChoosers {
 
 		startPositionChooser = new SendableChooser<Command>();
 
-		startPositionChooser.setDefaultOption("Left",new LHab1ToLShipMid());
+		startPositionChooser.setDefaultOption("Left",new LHabToLShipMid());
 		startPositionChooser.addOption("LCenter", new LCenHabToLShipFront());
 		startPositionChooser.addOption("RCenter", new RCenHabToRShipFront());
-		startPositionChooser.addOption("Right", new RHab1ToRShipMid());
+		startPositionChooser.addOption("Right", new RHabToRShipMid());
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 

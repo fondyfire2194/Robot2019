@@ -8,19 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.BuildTrajectory;
+import frc.robot.Robot.*;
 import frc.robot.Robot;
 
 public class SetActiveTrajectory extends Command {
-  public SetActiveTrajectory() {
+  private String myFileName;
+
+  public SetActiveTrajectory(String fileName) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+  myFileName = fileName;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.activeTrajectory[0] = null;
-    Robot.activeTrajectory[1] = null;
+   Robot.activeTrajectory = BuildTrajectory.buildFileName(false, myFileName);
   }
 
   // Called repeatedly when this Command is scheduled to run

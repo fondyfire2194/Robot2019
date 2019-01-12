@@ -9,13 +9,13 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.TimeDelay;
+import frc.robot.commands.SetActiveTrajectory;
 
-public class LHab1ToLShipMid extends CommandGroup {
+public class LHabToLShipMid extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LHab1ToLShipMid() {
+  public LHabToLShipMid() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -32,6 +32,7 @@ public class LHab1ToLShipMid extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+    addSequential(new SetActiveTrajectory("LHabToShipMid"));
     addSequential(new PathfinderTrajectory());
     
 

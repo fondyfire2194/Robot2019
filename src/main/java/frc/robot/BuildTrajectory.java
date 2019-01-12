@@ -28,15 +28,15 @@ public class BuildTrajectory {
 
 		Robot.chosenFileName = "NONE";
 
-		myLeftFile = new File(tempPath + name + "_left_detailed.csv");
-		myRightFile = new File(tempPath + name + "_right_detailed.csv");
+		myLeftFile = new File(tempPath + name + ".left.pf1.csv");
+		myRightFile = new File(tempPath + name + ".right.pf1.csv");
 
 		if (myLeftFile.exists() && myRightFile.exists()) {
 			// Pathfinder.readFromCSV(myLeftFile);
 			// Pathfinder.readFromCSV(myRightFile);
 			 active[0] = Pathfinder.readFromCSV(myLeftFile);
 			 active[1] = Pathfinder.readFromCSV(myRightFile);
-			Robot.chosenFileName = tempPath + name + "_left_detailed.csv";
+			Robot.chosenFileName = tempPath + name + ".left.pf1.csv";
 			Robot.buildOK = true;
 		}
 		return active;

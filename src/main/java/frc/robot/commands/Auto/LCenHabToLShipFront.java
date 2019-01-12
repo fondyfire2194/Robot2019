@@ -9,7 +9,7 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.TimeDelay;
+import frc.robot.commands.SetActiveTrajectory;
 
 public class LCenHabToLShipFront extends CommandGroup {
   /**
@@ -32,6 +32,7 @@ public class LCenHabToLShipFront extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+    addSequential(new SetActiveTrajectory("LCenHabTOLShipFront"));
     addSequential(new PathfinderTrajectory());
   }
 }

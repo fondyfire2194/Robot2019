@@ -9,13 +9,12 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.TimeDelay;
 
-public class RHab1ToRShipMid extends CommandGroup {
+public class RHabToRShipMid extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public RHab1ToRShipMid() {
+  public RHabToRShipMid() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
