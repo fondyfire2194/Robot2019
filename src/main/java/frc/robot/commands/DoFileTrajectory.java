@@ -19,6 +19,7 @@ public class DoFileTrajectory extends InstantCommand {
 	protected void initialize() {
 		Robot.doFileTrajectory = true;
 
+		
 	}
 
 }
