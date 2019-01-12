@@ -21,44 +21,43 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Pref {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
- 
+
   private static Vector<String> v;
   private static Enumeration<String> e;
   private static String tempString;
   private static double tempDouble;
 
- public static HashMap<String, Double> prefDict = new HashMap<>();
+  public static HashMap<String, Double> prefDict = new HashMap<>();
 
- static
-  {
+  static {
     prefDict.put("DriveStraighKp", .03);
     prefDict.put("DrivePositionKp", .03);
     prefDict.put("RotateKp", 0.2);
     prefDict.put("RotateKi", .0001);
-    prefDict.put("RotateKd", .0); 
+    prefDict.put("RotateKd", .0);
     prefDict.put("RotateIzone", 3.);
     prefDict.put("PathKp", 0.2);
     prefDict.put("PathKd", 0.);
     prefDict.put("PathKa", .02);
     prefDict.put("PathKt", .2);
-    prefDict.put("JSTwistKp",.2);
-    prefDict.put("PathKpRev",0.2);
-    prefDict.put("PathKdRev",.0);
-    prefDict.put("PathKaRev",.02);
-    prefDict.put("PathKtRev",.2);
- 
+    prefDict.put("JSTwistKp", .2);
+    prefDict.put("PathKpRev", 0.2);
+    prefDict.put("PathKdRev", .0);
+    prefDict.put("PathKaRev", .02);
+    prefDict.put("PathKtRev", .2);
+
   }
 
-  public static void ensureRioPrefs(){
+  public static void ensureRioPrefs() {
     // init();
-        deleteUnused();
-         addMissing();
-    }
+    deleteUnused();
+    addMissing();
+  }
 
   public static void deleteUnused() {
     v = new Vector<String>();
     v = Robot.prefs.getKeys();
-int a=0;
+    int a = 0;
     String[] myArray = v.toArray(new String[v.size()]);
     // SmartDashboard.putNumber("Asz",v.size());
     // SmartDashboard.putString("ASTR1",myArray[1]);
@@ -66,15 +65,16 @@ int a=0;
     for (int i = 0; i < v.size(); i++) {
       // SmartDashboard.putString("A"+String.valueOf(i),myArray[i]);
       boolean doNotDelete = myArray[i].equals(".type");
-      
-      if (!doNotDelete&&!prefDict.containsKey(myArray[i])&&Robot.prefs.containsKey(myArray[1])){
-      //   a++;
-      //   SmartDashboard.putString("ASTR",myArray[i]);
-      //   SmartDashboard.putNumber("AI",i);  
-      // SmartDashboard.putNumber("A",a);
-        Robot.prefs.remove(myArray[i]);}
+
+      if (!doNotDelete && !prefDict.containsKey(myArray[i]) && Robot.prefs.containsKey(myArray[1])) {
+        // a++;
+        // SmartDashboard.putString("ASTR",myArray[i]);
+        // SmartDashboard.putNumber("AI",i);
+        // SmartDashboard.putNumber("A",a);
+        Robot.prefs.remove(myArray[i]);
+      }
     }
- 
+
   }
 
   public static void addMissing() {
@@ -95,6 +95,7 @@ int a=0;
     else
       return 0;
   }
+
   // test function
   public static void writePrefs() {
     Robot.prefs.putDouble("Key1", 987.654);
@@ -114,8 +115,5 @@ int a=0;
       Robot.prefs.remove(e.nextElement());
     }
   }
-
-
- 
 
 }

@@ -23,6 +23,7 @@ import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
+import frc.robot.commands.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -128,12 +129,13 @@ public class Robot extends TimedRobot {
 
     testTrajectoryChooser = new SendableChooser<Integer>();
 
-    testTrajectoryChooser.addDefault("TestTrajA", 0);
-    testTrajectoryChooser.addObject("TestTrajB", 1);
-    testTrajectoryChooser.addObject("TestTrajC", 2);
-    testTrajectoryChooser.addObject("TestTrajD", 3);
-    testTrajectoryChooser.addObject("TestTrajE", 4);
-    testTrajectoryChooser.addObject("TestTrajF", 5);
+
+    testTrajectoryChooser.setDefaultOption("TestTrajA", 0);
+    testTrajectoryChooser.addOption("TestTrajB", 1);
+    testTrajectoryChooser.addOption("TestTrajC", 2);
+    testTrajectoryChooser.addOption("TestTrajD", 3);
+    testTrajectoryChooser.addOption("TestTrajE", 4);
+    testTrajectoryChooser.addOption("TestTrajF", 5);
 
     SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
   }
