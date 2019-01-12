@@ -39,8 +39,8 @@ public class AutoChoosers {
 
 		stopChooser = new SendableChooser<Boolean>();
 
-		stopChooser.setDefaultOption("Two Hatch", false);
-		stopChooser.addOption("One Hatch", true);
+		stopChooser.setDefaultOption("Two Hatch", true);
+		stopChooser.addOption("One Hatch", false);
 
 		SmartDashboard.putData("Number of Hatches", stopChooser);
 
