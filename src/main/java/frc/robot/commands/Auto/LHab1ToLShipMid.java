@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.TimeDelay;
 
-public class CHab1ToLC extends CommandGroup {
+public class LHab1ToLShipMid extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public CHab1ToLC() {
+  public LHab1ToLShipMid() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

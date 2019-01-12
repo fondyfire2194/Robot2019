@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
   public static boolean orientRunning;
   public static boolean reverseOrient;
   public static boolean doTeleopOrient;
+  public static Boolean stopper;
 
   private Trajectory testTrajectory;
   public static double targetPosition;
@@ -154,6 +155,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
+
+    stopper = AutoChoosers.stopChooser.getSelected();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
