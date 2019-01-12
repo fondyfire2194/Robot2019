@@ -19,6 +19,7 @@ public class AutoChoosers {
 
 	public static SendableChooser<Command> startPositionChooser;
 	public static SendableChooser<Command> testTrajectoryChooser;
+	public static SendableChooser<Boolean> stopChooser;
 	public static SendableChooser<Double> timeDelayChooser;
 
 	public static void init() {
@@ -36,6 +37,12 @@ public class AutoChoosers {
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 
+		stopChooser = new SendableChooser<Boolean>();
+
+		stopChooser.setDefaultOption("Two Hatch", false);
+		stopChooser.addOption("One Hatch", true);
+
+		SmartDashboard.putData("Number of Hatches", stopChooser);
 
 		timeDelayChooser = new SendableChooser<Double>();
 
