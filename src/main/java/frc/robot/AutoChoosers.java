@@ -25,15 +25,15 @@ public class AutoChoosers {
 	public static void init() {
 		testTrajectoryChooser = new SendableChooser<Command>();
 
-		testTrajectoryChooser.setDefaultOption("Left To CS2",new LHab1ToLCS2());
+		testTrajectoryChooser.setDefaultOption("Left To CS2",new LHab1ToLShipMid());
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
 		startPositionChooser = new SendableChooser<Command>();
 
-		startPositionChooser.setDefaultOption("Left",new LHab1ToLCS2());
-		startPositionChooser.addOption("LCenter", new CHab1ToLC());
-		startPositionChooser.addOption("RCenter", new CHab2ToRC());
-		startPositionChooser.addOption("Right", new RHab1ToRCS2());
+		startPositionChooser.setDefaultOption("Left",new LHab1ToLShipMid());
+		startPositionChooser.addOption("LCenter", new LCenHabToLShipFront());
+		startPositionChooser.addOption("RCenter", new RCenHabToRShipFront());
+		startPositionChooser.addOption("Right", new RHab1ToRShipMid());
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 

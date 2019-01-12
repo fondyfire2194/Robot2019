@@ -10,11 +10,11 @@ package frc.robot.commands.Auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.TimeDelay;
 
-public class LHab1ToLCS2 extends CommandGroup {
+public class RHab1ToRShipMid extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LHab1ToLCS2() {
+  public RHab1ToRShipMid() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
