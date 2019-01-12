@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DoFileTrajectory;
-import frc.robot.commands.DoRobotPosition;
 import frc.robot.commands.DoTeleopRobotOrient;
 import frc.robot.commands.DoTeleopTrajectory;
 import frc.robot.commands.ResetEncoders;
 import frc.robot.commands.ResetGyro;
-import frc.robot.commands.WritePrefs;
 import frc.robot.commands.DeleteAllPrefs;
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -59,19 +57,13 @@ public class OI {
     Timer.delay(.02);
     SmartDashboard.putData(new ResetGyro());
     Timer.delay(.02);
-    SmartDashboard.putData("PositionRobot", new DoRobotPosition());
-    Timer.delay(.02);
-    // SmartDashboard.putData("PositionStop", new StopPositioning());
     SmartDashboard.putData("OrientRobot", new DoTeleopRobotOrient());
-    Timer.delay(.02);
     Timer.delay(.02);
     SmartDashboard.putData("Tel Traj", new DoTeleopTrajectory());
     Timer.delay(.02);
     SmartDashboard.putData("File Traj", new DoFileTrajectory());
     Timer.delay(.02);
-    // SmartDashboard.putData("WritePrefs", new WritePrefs());
-     Timer.delay(.02);
-     SmartDashboard.putData("DeletePrefs", new DeleteAllPrefs());
+
 
 
   }

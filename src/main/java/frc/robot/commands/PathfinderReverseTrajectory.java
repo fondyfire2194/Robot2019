@@ -8,9 +8,9 @@ import frc.robot.Robot;
 /**
  *
  */
-public class PathfinderReverseTrajectoryUsingNotifier extends Command {
+public class PathfinderReverseTrajectory extends Command {
 
-	public PathfinderReverseTrajectoryUsingNotifier() {
+	public PathfinderReverseTrajectory() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);

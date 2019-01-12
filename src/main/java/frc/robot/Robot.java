@@ -15,10 +15,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.PathfinderReverseTrajectoryUsingNotifier;
-import frc.robot.commands.PathfinderTrajectoryUsingNotifier;
+import frc.robot.commands.PathfinderReverseTrajectory;
+import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
-import frc.robot.commands.RobotPosition;
 import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
@@ -37,7 +36,6 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
   public static SimpleCSVLogger simpleCSVLogger;
-  public static GeneratePositionTrajectory generatePositionTrajectory;
   public static String chosenFileName = "Dummy";
   public static OI m_oi;
   public static Preferences prefs;
@@ -52,7 +50,7 @@ public class Robot extends TimedRobot {
   public static boolean reverseOrient;
   public static boolean doTeleopOrient;
 
-  private boolean revPosn = false;
+  private Trajectory testTrajectory;
   public static double targetPosition;
   public static double targetRate;
   public static double xPosition;
@@ -73,8 +71,8 @@ public class Robot extends TimedRobot {
   public static boolean doFileTrajectory;
   public static boolean trajectoryRunning;
   public static boolean buildOK;
-  private SendableChooser<Integer> testTrajectoryChooser;
-  private int testTrajectory;
+
+
 
   public static String[] names = { "Step", "LeftCmd", "LeftFt", "RightCmd", "RightFt", "AngleCmd", "Angle",
       "LeftSegVel", "left", "ActLeftVel", "RightSegVel", "right", "ActRightVel", "turn" };
@@ -97,47 +95,20 @@ public class Robot extends TimedRobot {
     robotRotate = new RobotRotate();
     m_oi = new OI();
     simpleCSVLogger = new SimpleCSVLogger();
-    generatePositionTrajectory = new GeneratePositionTrajectory();
     prefs = Preferences.getInstance();
       //  Pref.deleteUnused();
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
     Timer.delay(.02);
-    SmartDashboard.putNumber("Posn_Target", 4);
-    Timer.delay(.02);
-    SmartDashboard.putNumber("PosnTargetRate", .5);
-    Timer.delay(.02);
-    positionTargetFt = Robot.driveTrain.getLeftEncoderCount() / Constants.DRIVE_ENCODER_CTS_PER_FT;
+
     SmartDashboard.putNumber("Target Angle", angleTarget);
     Timer.delay(.02);
     SmartDashboard.putNumber("Orient Rate", orientRate);
     Timer.delay(.02);
     SmartDashboard.putBoolean("RevOrient", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("Incremental", incrPosn);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("RevPosn", revPosn);
-    Timer.delay(.02);
-    // trajectory entries
-    SmartDashboard.putNumber("TrajX", 10);
-    Timer.delay(.02);
-    SmartDashboard.putNumber("TrajY", 0);
-    Timer.delay(.02);
-    SmartDashboard.putNumber("TrajAngle", 0);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("RevTraj", false);
-
-    testTrajectoryChooser = new SendableChooser<Integer>();
 
 
-    testTrajectoryChooser.setDefaultOption("TestTrajA", 0);
-    testTrajectoryChooser.addOption("TestTrajB", 1);
-    testTrajectoryChooser.addOption("TestTrajC", 2);
-    testTrajectoryChooser.addOption("TestTrajD", 3);
-    testTrajectoryChooser.addOption("TestTrajE", 4);
-    testTrajectoryChooser.addOption("TestTrajF", 5);
-
-    SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
   }
 
   /**
@@ -223,18 +194,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-    if (doRobotPosition) {
-      targetPosition = SmartDashboard.getNumber("Posn_Target", 5);
-      targetRate = SmartDashboard.getNumber("PosnTargetRate", .5);
-      if (SmartDashboard.getBoolean("RevPosn", false))
-        targetPosition = -targetPosition;
-      if (SmartDashboard.getBoolean("Incremental", false)) {
-        new RobotPosition(targetPosition, targetRate, motionType.absolute, stopPositioning, 20.).start();
-      } else
-        new RobotPosition(targetPosition, targetRate, motionType.incremental, stopPositioning, 20.).start();
-
-      doRobotPosition = false;
-    }
     if (doTeleopOrient) {
       // sensors.resetGyro();
 
@@ -253,42 +212,12 @@ public class Robot extends TimedRobot {
      * 
      * 
      */
-    if (doTeleopTrajectory) {
-      trajectoryX = SmartDashboard.getNumber("TrajX", 10);
-      trajectoryY = SmartDashboard.getNumber("TrajY", 0);
-      trajectoryAngle = SmartDashboard.getNumber("TrajAngle", 0);
- activeTrajectory = 
-     generatePositionTrajectory.generate(trajectoryX, trajectoryY, trajectoryAngle);
-     logName = "Manual";
-    }
+
     if (doFileTrajectory) {
 
-      testTrajectory = testTrajectoryChooser.getSelected();
+      // testTrajectory = testTrajectoryChooser.getSelected();
 
-      switch (testTrajectory) {
-
-      case 0:
-        trajFileName = "TestTrajA";
-        break;
-      case 1:
-        trajFileName = "TestTrajB";
-        break;
-      case 2:
-        trajFileName = "TestTrajC";
-        break;
-      case 3:
-        trajFileName = "TestTrajD";
-        break;
-      case 4:
-        trajFileName = "TestTrajE";
-        break;
-      case 5:
-        trajFileName = "TestTrajF";
-        break;
-      default:
-        trajFileName = "None";
-        break;
-      }
+ 
  logName = trajFileName;
       activeTrajectory = BuildTrajectory.buildFileName(true, trajFileName);
       SmartDashboard.putBoolean("FileOK", buildOK);
@@ -307,10 +236,10 @@ public class Robot extends TimedRobot {
       constantsFromPrefs();
 
       if (!SmartDashboard.getBoolean("RevTraj", false)) {
-        new PathfinderTrajectoryUsingNotifier().start();
+        new PathfinderTrajectory().start();
         constantsFromPrefs();
       } else {
-        new PathfinderReverseTrajectoryUsingNotifier().start();
+        new PathfinderReverseTrajectory().start();
         revConstantsFromPrefs();
       }
       trajectoryRunning = true;

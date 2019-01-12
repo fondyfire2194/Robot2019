@@ -7,21 +7,39 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
-import frc.robot.Pref;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 
-public class WritePrefs extends InstantCommand {
- 
-  public WritePrefs() {
+/**
+ * Add your docs here.
+ */
+public class TimeDelay extends TimedCommand {
+  /**
+   * Add your docs here.
+   */
+  public TimeDelay(double timeout) {
+    super(timeout);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    super();
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-     Pref.writePrefs();
   }
 
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
+  }
+
+  // Called once after timeout
+  @Override
+  protected void end() {
+  }
+
+  // Called when another command which requires one or more of the same
+  // subsystems is scheduled to run
+  @Override
+  protected void interrupted() {
+  }
 }

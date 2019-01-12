@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class PathfinderTrajectoryUsingNotifier extends Command {
+public class PathfinderTrajectoryVision extends Command {
 	private double startTime;
 	private int scanCounter;
 
-	public PathfinderTrajectoryUsingNotifier() {
+	public PathfinderTrajectoryVision() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
