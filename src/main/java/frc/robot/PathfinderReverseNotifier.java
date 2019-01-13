@@ -17,8 +17,10 @@ public class PathfinderReverseNotifier {
 
 	static Notifier _notifier = new Notifier(new PeriodicRunnable());
 	private static double lastSegmentPosition;
+	private static boolean myRobotMoveForward;
 
-	public static void startNotifier() {
+	public static void startNotifier(boolean robotMoveForward) {
+		myRobotMoveForward = robotMoveForward;
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
 		lastSegmentPosition = Robot.activeTrajectory[0].get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
@@ -53,19 +55,33 @@ public class PathfinderReverseNotifier {
 	 */
 	private static void runReverseTrajectory() {
 		passCounter--;
-		double left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
-		double right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
+		double left = 0;
+		double right = 0;
+		if (myRobotMoveForward) {
+			left = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getRightFeet());
+		} else {
+			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
+		}
 
 		desired_heading = Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading());
 
 		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - (-Robot.driveTrain.getGyroYaw()));
 		double turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
+		double leftPct = 0;
+		double rightPct = 0;
+		if (myRobotMoveForward) {
+			leftPct = Constants.MINIMUM_START_PCT + left + turn;
+			rightPct = Constants.MINIMUM_START_PCT + right - turn;
+		} else {
+			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
+			rightPct = -Constants.MINIMUM_START_PCT + right + turn;
+		}
 
-		double leftPct = Constants.MINIMUM_START_PCT + left - turn;
-		double rightPct = Constants.MINIMUM_START_PCT + right + turn;
 
-		Robot.driveTrain.leftDriveOut(-leftPct);
-		Robot.driveTrain.rightDriveOut(-rightPct);
+		Robot.driveTrain.leftDriveOut(leftPct);
+		Robot.driveTrain.rightDriveOut(rightPct);
 
 		if (passCounter > 1) {
 			/*

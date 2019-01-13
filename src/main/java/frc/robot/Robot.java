@@ -72,8 +72,6 @@ public class Robot extends TimedRobot {
   public static boolean trajectoryRunning;
   public static boolean buildOK;
 
-
-
   public static String[] names = { "Step", "LeftCmd", "LeftFt", "RightCmd", "RightFt", "AngleCmd", "Angle",
       "LeftSegVel", "left", "ActLeftVel", "RightSegVel", "right", "ActRightVel", "turn" };
   public static String[] units = { "Number", "FT", "FT", "FT", "FT", "Deg", "Deg", "pct", "pct", "pct", "pct", "pct",
@@ -96,7 +94,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     simpleCSVLogger = new SimpleCSVLogger();
     prefs = Preferences.getInstance();
-      //  Pref.deleteUnused();
+    // Pref.deleteUnused();
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
     Timer.delay(.02);
@@ -107,7 +105,6 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("RevOrient", false);
     Timer.delay(.02);
-
 
   }
 
@@ -153,7 +150,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+
+    m_autonomousCommand = AutoChoosers.startPositionChooser.getSelected();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -217,11 +215,10 @@ public class Robot extends TimedRobot {
 
       // testTrajectory = testTrajectoryChooser.getSelected();
 
- 
- logName = trajFileName;
+      logName = trajFileName;
       activeTrajectory = BuildTrajectory.buildFileName(true, trajFileName);
       SmartDashboard.putBoolean("FileOK", buildOK);
-      
+
       if (!buildOK) {
         doFileTrajectory = false;
         DriverStation.reportError("Error reading file", true);
@@ -235,13 +232,30 @@ public class Robot extends TimedRobot {
       yPosition = activeTrajectory[0].get(0).y - (Constants.WHEELBASE_WIDTH / 2);
       constantsFromPrefs();
 
-      if (!SmartDashboard.getBoolean("RevTraj", false)) {
-        new PathfinderTrajectory().start();
+      int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
+
+      switch (trajectoryDirectionChooser) {
+
+        case 0:
+        new PathfinderTrajectory(true).start();
         constantsFromPrefs();
-      } else {
-        new PathfinderReverseTrajectory().start();
+        break;
+        case 1:
+        new PathfinderTrajectory(false).start();
         revConstantsFromPrefs();
+        break;
+        case 2:
+        new PathfinderReverseTrajectory(true).start();
+        constantsFromPrefs();
+        break;
+        case 3:
+        new PathfinderReverseTrajectory(false).start();
+        revConstantsFromPrefs();
+        break;
+
       }
+
+ 
       trajectoryRunning = true;
       doTeleopTrajectory = false;
       doFileTrajectory = false;
@@ -264,9 +278,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
-     SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
+    SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
     SmartDashboard.putNumber("Preftest", Pref.getPref("y"));
-    SmartDashboard.putString("FileChosen",chosenFileName);
+    SmartDashboard.putString("FileChosen", chosenFileName);
 
   }
 

@@ -27,8 +27,10 @@ public class PathfinderNotifier {
 	private static int activeTrajectoryLength;
 	private static double periodic_time = .02;
 	private static double desired_heading;
+	private static boolean myRobotMoveForward;
 
-	public static void startNotifier() {
+	public static void startNotifier(boolean robotMoveForward) {
+		myRobotMoveForward = robotMoveForward;
 		minTime = 999;
 		maxTime = 0;
 		timeAverage = 0;
@@ -79,8 +81,17 @@ public class PathfinderNotifier {
 		 */
 		segmentCounter++;
 
-		double left = Robot.driveTrain.leftDf.calculate(Robot.driveTrain.getLeftFeet());
-		double right = Robot.driveTrain.rightDf.calculate(Robot.driveTrain.getRightFeet());
+		double left = 0;
+		double right = 0;
+		if (myRobotMoveForward) {
+			left = Robot.driveTrain.leftDf.calculate(Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.rightDf.calculate(Robot.driveTrain.getRightFeet());
+		}
+		else {
+			left = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
+		}
+
 		desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 
 		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - (-Robot.driveTrain.getGyroYaw()));
@@ -90,8 +101,15 @@ public class PathfinderNotifier {
 		 * 
 		 * 
 		 */
-		double leftPct = Constants.MINIMUM_START_PCT + left + turn;
-		double rightPct = Constants.MINIMUM_START_PCT + right - turn;
+		double leftPct = 0;
+		double rightPct = 0;
+		if (myRobotMoveForward) {
+			leftPct = Constants.MINIMUM_START_PCT + left + turn;
+			rightPct = Constants.MINIMUM_START_PCT + right - turn;
+		} else {
+			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
+			rightPct = -Constants.MINIMUM_START_PCT - right + turn;
+		}
 
 		Robot.driveTrain.leftDriveOut(leftPct);
 		Robot.driveTrain.rightDriveOut(rightPct);
@@ -106,15 +124,14 @@ public class PathfinderNotifier {
 			 * 
 			 */
 
-			Robot.simpleCSVLogger.writeData((double) segmentCounter,
-					Robot.driveTrain.leftDf.getSegment().position, Robot.driveTrain.getLeftFeet(),
-					Robot.driveTrain.rightDf.getSegment().position, Robot.driveTrain.getRightFeet(),
-					Pathfinder.boundHalfDegrees(desired_heading), -Robot.driveTrain.getGyroYaw(),
-					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC,
-					leftPct, Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
-					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC,
-					rightPct, Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
-					turn);
+			Robot.simpleCSVLogger.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
+					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
+					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
+					-Robot.driveTrain.getGyroYaw(),
+					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, leftPct,
+					Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
+					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, rightPct,
+					Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC, turn);
 		}
 
 		thisTime = Timer.getFPGATimestamp();

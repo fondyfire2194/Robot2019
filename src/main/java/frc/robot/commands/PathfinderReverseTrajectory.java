@@ -9,11 +9,12 @@ import frc.robot.Robot;
  *
  */
 public class PathfinderReverseTrajectory extends Command {
-
-	public PathfinderReverseTrajectory() {
+	private boolean myRobotMoveForward;
+	public PathfinderReverseTrajectory(boolean robotMoveForward) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
+		myRobotMoveForward = robotMoveForward;
 	}
 
 	// Called just before this Command runs the first time
@@ -43,7 +44,7 @@ public class PathfinderReverseTrajectory extends Command {
 		if (Robot.createTrajectoryRunFile)
 			Robot.simpleCSVLogger.init("Trajectory", Robot.logName + "Rev", Robot.names, Robot.units);
 
-		PathfinderReverseNotifier.startNotifier();
+		PathfinderReverseNotifier.startNotifier(myRobotMoveForward);
 
 	}
 

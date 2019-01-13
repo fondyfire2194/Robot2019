@@ -19,18 +19,25 @@ public class AutoChoosers {
 
 	public static SendableChooser<Command> startPositionChooser;
 	public static SendableChooser<Command> testTrajectoryChooser;
+	public static SendableChooser<Integer> trajectoryDirectionChooser;
+
 	public static SendableChooser<Boolean> stopChooser;
 	public static SendableChooser<Double> timeDelayChooser;
 
 	public static void init() {
 		testTrajectoryChooser = new SendableChooser<Command>();
 
-		testTrajectoryChooser.setDefaultOption("Left To CS2",new LHab1ToLCS2());
+		testTrajectoryChooser.setDefaultOption("Left To CS2", new LHab1ToLCS2());
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
+		trajectoryDirectionChooser = new SendableChooser<Integer>();
+		trajectoryDirectionChooser.setDefaultOption("FaceFwdMoveFwd", 0);
+		trajectoryDirectionChooser.addOption("FaceFwdMoveBack", 1);
+		trajectoryDirectionChooser.addOption("FaceBackMoveFwd", 1);
+		trajectoryDirectionChooser.addOption("FaceBackMoveBack", 1);
 		startPositionChooser = new SendableChooser<Command>();
 
-		startPositionChooser.setDefaultOption("Left",new LHab1ToLCS2());
+		startPositionChooser.setDefaultOption("Left", new LHab1ToLCS2());
 		startPositionChooser.addOption("LCenter", new CHab1ToLC());
 		startPositionChooser.addOption("RCenter", new CHab2ToRC());
 		startPositionChooser.addOption("Right", new RHab1ToRCS2());

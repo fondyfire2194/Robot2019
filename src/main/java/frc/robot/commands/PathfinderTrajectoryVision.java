@@ -54,7 +54,7 @@ public class PathfinderTrajectoryVision extends Command {
 		}
 		scanCounter = 0;
 		startTime = Timer.getFPGATimestamp();
-		PathfinderNotifier.startNotifier();
+		PathfinderNotifier.startNotifier(true);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
