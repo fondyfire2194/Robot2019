@@ -22,7 +22,8 @@ import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
-import frc.robot.commands.*;
+
+import frc.robot.LimeLight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,9 +37,11 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
   public static SimpleCSVLogger simpleCSVLogger;
+  public static LimeLight limelightCamera;
   public static String chosenFileName = "Dummy";
   public static OI m_oi;
   public static Preferences prefs;
+  public static BuildTrajectory buildTrajectory;
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   public static boolean doRobotPosition;
@@ -50,7 +53,6 @@ public class Robot extends TimedRobot {
   public static boolean reverseOrient;
   public static boolean doTeleopOrient;
 
-  private Trajectory testTrajectory;
   public static double targetPosition;
   public static double targetRate;
   public static double xPosition;
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
   }
 
   public static Trajectory[] activeTrajectory;// = new Trajectory[2];
+  public static Trajectory[] bufferTrajectory;
   public static double[] activeTrajectoryGains = { 0, 0, 0, 0 };
   public static double[] activeTrajectoryTwoGains = { 0, 0, 0, 0 };
   public static boolean doTeleopTrajectory;
@@ -93,6 +96,8 @@ public class Robot extends TimedRobot {
     robotRotate = new RobotRotate();
     m_oi = new OI();
     simpleCSVLogger = new SimpleCSVLogger();
+    limelightCamera= new LimeLight();
+    buildTrajectory = new BuildTrajectory();
     prefs = Preferences.getInstance();
     // Pref.deleteUnused();
     Pref.addMissing();
@@ -216,7 +221,7 @@ public class Robot extends TimedRobot {
       // testTrajectory = testTrajectoryChooser.getSelected();
 
       logName = trajFileName;
-      activeTrajectory = BuildTrajectory.buildFileName(true, trajFileName);
+      activeTrajectory = BuildTrajectory.buildFileName( true, trajFileName);
       SmartDashboard.putBoolean("FileOK", buildOK);
 
       if (!buildOK) {

@@ -13,14 +13,17 @@ public class BuildTrajectory {
 
 	// }
 
-	public static Trajectory[] buildFileName(boolean usb, String name) {
-		Trajectory active[] = new Trajectory[2];
+	public static Trajectory[] buildFileName( boolean usb, String name) {
+		Trajectory buffer[] = new Trajectory[2];
 		Robot.buildOK = false;
 		String tempPath = null;
 		String filePath = "/home/lvuser/Traj19CSV/";
 
 		String usbFilePath = "/U/Traj19CSV/";
 
+		String leftExtension ="_left_detailed.csv";
+		String rightExtension ="_right_detailed.csv";
+		
 		if (usb)
 			tempPath = usbFilePath;
 		else
@@ -28,18 +31,18 @@ public class BuildTrajectory {
 
 		Robot.chosenFileName = "NONE";
 
-		myLeftFile = new File(tempPath + name + "_left_detailed.csv");
-		myRightFile = new File(tempPath + name + "_right_detailed.csv");
+		myLeftFile = new File(tempPath + name + leftExtension);
+		myRightFile = new File(tempPath + name + rightExtension);
 
 		if (myLeftFile.exists() && myRightFile.exists()) {
 			// Pathfinder.readFromCSV(myLeftFile);
 			// Pathfinder.readFromCSV(myRightFile);
-			 active[0] = Pathfinder.readFromCSV(myLeftFile);
-			 active[1] = Pathfinder.readFromCSV(myRightFile);
-			Robot.chosenFileName = tempPath + name + "_left_detailed.csv";
+			 buffer[0] = Pathfinder.readFromCSV(myLeftFile);
+			 buffer[1] = Pathfinder.readFromCSV(myRightFile);
+			Robot.chosenFileName = tempPath + name + leftExtension;
 			Robot.buildOK = true;
 		}
-		return active;
+		return buffer;
 
 	}
 }
