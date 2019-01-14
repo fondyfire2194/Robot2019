@@ -5,31 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Limelight;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import frc.robot.LimelightControlMode.*;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class SetLimelightLeds extends InstantCommand {
+public class SetGyroOffset extends InstantCommand {
   /**
    * Add your docs here.
    */
-  private LedMode myLedMode;
-  public SetLimelightLeds( LedMode ledMode){
+  float myOffset;
+
+  public SetGyroOffset(float offset) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myLedMode = ledMode;
+    myOffset = offset;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.limelightCamera.setLEDMode(myLedMode);
+    Robot.driveTrain.gyroOffset = myOffset;
   }
 
 }

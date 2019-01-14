@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.PathfinderReverseTrajectory;
 import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
+import frc.robot.commands.TimeDelay;
 import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
@@ -38,11 +39,22 @@ public class Robot extends TimedRobot {
   public static RobotRotate robotRotate;
   public static SimpleCSVLogger simpleCSVLogger;
   public static LimeLight limelightCamera;
+  public static AutoChoosers autoChoosers;
   public static String chosenFileName = "Dummy";
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  Command m_autonomousCommand;
+  Command firstAutonomousCommand;
+  Command secondAutonomousCommand;
+
+  Command autoTimeDelayCommand;
+  double autoTimeDelaySeconds;
+
+  boolean firstAutonomousCommandDone;
+  boolean secondAutonomousCommandDone;
+  
+  boolean autoTimeDelayDone;
+
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   public static boolean doRobotPosition;
   public static double positionTargetFt;
@@ -96,8 +108,10 @@ public class Robot extends TimedRobot {
     robotRotate = new RobotRotate();
     m_oi = new OI();
     simpleCSVLogger = new SimpleCSVLogger();
-    limelightCamera= new LimeLight();
+    limelightCamera = new LimeLight();
     buildTrajectory = new BuildTrajectory();
+    autoChoosers = new AutoChoosers();
+    // autoChoosers.init();
     prefs = Preferences.getInstance();
     // Pref.deleteUnused();
     Pref.addMissing();
@@ -156,8 +170,16 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    m_autonomousCommand = AutoChoosers.startPositionChooser.getSelected();
+    autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
+    if (autoTimeDelaySeconds != 0)
 
+    {
+      autoTimeDelayCommand = new TimeDelay(autoTimeDelaySeconds);
+    } else
+      autoTimeDelayDone = true;
+    firstAutonomousCommand = AutoChoosers.startPositionChooser.getSelected();
+    secondAutonomousCommand = AutoChoosers.secondHatchChooser.getSelected();
+  
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
      * switch(autoSelected) { case "My Auto": autonomousCommand = new
@@ -166,9 +188,7 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
-    }
+
   }
 
   /**
@@ -177,6 +197,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+
+    if (autoTimeDelayDone && firstAutonomousCommand != null) {
+      firstAutonomousCommand.start();
+    }
+
+    if (firstAutonomousCommandDone && secondAutonomousCommand != null)
+      secondAutonomousCommand.start();
+
   }
 
   @Override
@@ -185,9 +213,16 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if(autoTimeDelayCommand!=null){
+      autoTimeDelayCommand.cancel();
     }
+    if (firstAutonomousCommand != null) {
+      firstAutonomousCommand.cancel();
+    }
+    if (secondAutonomousCommand != null) {
+      secondAutonomousCommand.cancel();
+    }
+
   }
 
   /**
@@ -221,7 +256,7 @@ public class Robot extends TimedRobot {
       // testTrajectory = testTrajectoryChooser.getSelected();
 
       logName = trajFileName;
-      activeTrajectory = BuildTrajectory.buildFileName( true, trajFileName);
+      activeTrajectory = BuildTrajectory.buildFileName(true, trajFileName);
       SmartDashboard.putBoolean("FileOK", buildOK);
 
       if (!buildOK) {
@@ -241,26 +276,25 @@ public class Robot extends TimedRobot {
 
       switch (trajectoryDirectionChooser) {
 
-        case 0:
+      case 0:
         new PathfinderTrajectory(true).start();
         constantsFromPrefs();
         break;
-        case 1:
+      case 1:
         new PathfinderTrajectory(false).start();
         revConstantsFromPrefs();
         break;
-        case 2:
+      case 2:
         new PathfinderReverseTrajectory(true).start();
         constantsFromPrefs();
         break;
-        case 3:
+      case 3:
         new PathfinderReverseTrajectory(false).start();
         revConstantsFromPrefs();
         break;
 
       }
 
- 
       trajectoryRunning = true;
       doTeleopTrajectory = false;
       doFileTrajectory = false;
@@ -302,4 +336,6 @@ public class Robot extends TimedRobot {
     activeTrajectoryGains[2] = Pref.getPref("PathKaRev");// prefs.getDouble("PathA", 0);
     activeTrajectoryGains[3] = Pref.getPref("PathKtRev");// prefs.getDouble("PathTurn", 0);
   }
+
+
 }

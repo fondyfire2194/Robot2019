@@ -48,6 +48,7 @@ public class DriveTrain extends Subsystem {
   public double rightPositionTargetFt;
   public boolean useGyroComp;
   public double driveStraightAngle = 0;
+  public float gyroOffset = 0;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -163,6 +164,11 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroYaw() {
+    float temp = imu.getYaw() + gyroOffset;
+    if(temp > 180)
+      temp-=180;
+    if (temp < -180)
+       temp +=180;
     return imu.getYaw();
   }
 

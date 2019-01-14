@@ -18,13 +18,14 @@ import frc.robot.commands.Auto.*;
 public class AutoChoosers {
 
 	public static SendableChooser<Command> startPositionChooser;
+	public static SendableChooser<Command> secondHatchChooser;
+
 	public static SendableChooser<Command> testTrajectoryChooser;
 	public static SendableChooser<Integer> trajectoryDirectionChooser;
 
-	public static SendableChooser<Boolean> stopChooser;
 	public static SendableChooser<Double> timeDelayChooser;
 
-	public static void init() {
+	 public AutoChoosers() {
 		testTrajectoryChooser = new SendableChooser<Command>();
 
 		testTrajectoryChooser.setDefaultOption("Left To CS2", new LHab1ToLCS2());
@@ -35,21 +36,27 @@ public class AutoChoosers {
 		trajectoryDirectionChooser.addOption("FaceFwdMoveBack", 1);
 		trajectoryDirectionChooser.addOption("FaceBackMoveFwd", 1);
 		trajectoryDirectionChooser.addOption("FaceBackMoveBack", 1);
+		SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
+
+
+
 		startPositionChooser = new SendableChooser<Command>();
 
-		startPositionChooser.setDefaultOption("Left", new LHab1ToLCS2());
+		startPositionChooser.setDefaultOption("Left to LCS2", new LHab1ToLCS2());
 		startPositionChooser.addOption("LCenter", new CHab1ToLC());
 		startPositionChooser.addOption("RCenter", new CHab2ToRC());
-		startPositionChooser.addOption("Right", new RHab1ToRCS2());
+		startPositionChooser.addOption("Right to RCS2", new RHab1ToRCS2());
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 
-		stopChooser = new SendableChooser<Boolean>();
+		secondHatchChooser = new SendableChooser<Command>();
 
-		stopChooser.setDefaultOption("Two Hatch", false);
-		stopChooser.addOption("One Hatch", true);
+		secondHatchChooser.setDefaultOption("No Second Hatch", new DoNothing());
+		secondHatchChooser.addOption("LC1", new LC1ToLLD());
+		secondHatchChooser.addOption("LC2", new LC2ToRLD());
 
-		SmartDashboard.putData("Number of Hatches", stopChooser);
+		SmartDashboard.putData("Second Hatch", secondHatchChooser);
+
 
 		timeDelayChooser = new SendableChooser<Double>();
 
@@ -59,8 +66,8 @@ public class AutoChoosers {
 		timeDelayChooser.addOption("Three Seconds", 3.);
 		timeDelayChooser.addOption("Four Seconds", 4.);
 		timeDelayChooser.addOption("Five Seconds", 5.);
-
+		timeDelayChooser.addOption("Six Seconds", 6.);
 		SmartDashboard.putData("Delay Chooser", timeDelayChooser);
 
-	}
+	 }
 }

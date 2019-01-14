@@ -87,9 +87,10 @@ public class PathfinderNotifier {
 			left = Robot.driveTrain.leftDf.calculate(Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.rightDf.calculate(Robot.driveTrain.getRightFeet());
 		}
-		else {
-			left = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
-			right = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
+		else 
+		{
+		    right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
+			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
 		}
 
 		desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
@@ -107,8 +108,8 @@ public class PathfinderNotifier {
 			leftPct = Constants.MINIMUM_START_PCT + left + turn;
 			rightPct = Constants.MINIMUM_START_PCT + right - turn;
 		} else {
-			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
-			rightPct = -Constants.MINIMUM_START_PCT - right + turn;
+			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
 		}
 
 		Robot.driveTrain.leftDriveOut(leftPct);
