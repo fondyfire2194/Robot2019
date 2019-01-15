@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.JoystickArcadeDrive;
+import frc.robot.commands.JoystickArcadeDriveVision;
 import frc.robot.ReverseDistanceFollower;
 import frc.robot.SD;
 import frc.robot.Constants;
@@ -92,7 +93,9 @@ public class DriveTrain extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new JoystickArcadeDrive());
+
+    // setDefaultCommand(new JoystickArcadeDrive());
+    setDefaultCommand(new JoystickArcadeDriveVision());
   }
 
   public void leftDriveOut(double speed) {

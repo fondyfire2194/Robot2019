@@ -19,12 +19,14 @@ import frc.robot.commands.PathfinderReverseTrajectory;
 import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
 import frc.robot.commands.TimeDelay;
+import frc.robot.commands.RobotDriveToTarget;
 import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
 
 import frc.robot.LimeLight;
+import frc.robot.LimelightControlMode.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -58,12 +60,14 @@ public class Robot extends TimedRobot {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   public static boolean doRobotPosition;
   public static double positionTargetFt;
+  public static double positionFPS;
   public static boolean incrPosn;
   public static boolean isPositioning;
   public static boolean stopPositioning;
   public static boolean orientRunning;
   public static boolean reverseOrient;
   public static boolean doTeleopOrient;
+  public static boolean doTeleopPosition;
 
   public static double targetPosition;
   public static double targetRate;
@@ -117,7 +121,8 @@ public class Robot extends TimedRobot {
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
     Timer.delay(.02);
-
+    SmartDashboard.putNumber("Target Feet", 5);
+    SmartDashboard.putNumber("Position FPS", 5);
     SmartDashboard.putNumber("Target Angle", angleTarget);
     Timer.delay(.02);
     SmartDashboard.putNumber("Orient Rate", orientRate);
@@ -231,6 +236,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    if (doTeleopPosition) {
+			positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
+			positionFPS = SmartDashboard.getNumber("Position FPS", 12);
+			new RobotDriveToTarget(positionTargetFt, positionFPS, false, 8).start();
+			doTeleopPosition = false;
+		}
+
 
     if (doTeleopOrient) {
       // sensors.resetGyro();
@@ -314,6 +326,8 @@ public class Robot extends TimedRobot {
 
   public void updateStatus() {
     driveTrain.updateStatus();
+    SmartDashboard.putBoolean("VisionTarget", limelightCamera.getIsTargetFound());
+    SmartDashboard.putNumber("DegToTarget", limelightCamera.getdegRotationToTarget());
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);

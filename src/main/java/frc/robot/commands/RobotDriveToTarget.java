@@ -55,7 +55,7 @@ public class RobotDriveToTarget extends Command {
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
 		decelerate = false;
-		slowDownFeet = Pref.getPref("HatchSldnDist");
+		slowDownFeet = Pref.getPref("DriveSldnDist");
 		
 	}
 

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DoFileTrajectory;
 import frc.robot.commands.DoTeleopRobotOrient;
 import frc.robot.commands.DoTeleopTrajectory;
+import frc.robot.commands.DoTeleopPosition;
 import frc.robot.commands.ResetEncoders;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DeleteAllPrefs;
@@ -61,6 +62,10 @@ public class OI {
     SmartDashboard.putData(new ResetGyro());
     Timer.delay(.02);
     SmartDashboard.putData("OrientRobot", new DoTeleopRobotOrient());
+    Timer.delay(.02);
+    SmartDashboard.putData("DriveToTarget", new DoTeleopPosition());
+
+    
     Timer.delay(.02);
     SmartDashboard.putData("Tel Traj", new DoTeleopTrajectory());
     Timer.delay(.02);
