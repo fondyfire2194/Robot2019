@@ -25,7 +25,7 @@ public class AutoChoosers {
 	public static void init() {
 		testTrajectoryChooser = new SendableChooser<Command>();
 
-		testTrajectoryChooser.setDefaultOption("Left To CS2",new LHab1ToLShipMid());
+		testTrajectoryChooser.setDefaultOption("Left To CS2",new LHabToLShipMid());
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
 		startPositionChooser = new SendableChooser<Command>();

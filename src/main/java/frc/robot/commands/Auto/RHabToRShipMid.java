@@ -33,6 +33,8 @@ public class RHabToRShipMid extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new SetActiveTrajectory("RHabToRShipMid"));
+    addSequential(new SetActiveTrajectory("RShipMidToRLoad"));
+    addSequential(new SetActiveTrajectory("RLoadToRShipClose"));
     addSequential(new PathfinderTrajectory());
   }
 }

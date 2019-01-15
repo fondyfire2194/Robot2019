@@ -33,6 +33,8 @@ public class LHabToLShipMid extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new SetActiveTrajectory("LHabToShipMid"));
+    addSequential(new SetActiveTrajectory("LShipMidToLLoad"));
+    addSequential(new SetActiveTrajectory("LLoadToR"));
     addSequential(new PathfinderTrajectory());
     
 
