@@ -20,15 +20,16 @@ public class AutoChoosers {
 	public static SendableChooser<Command> startPositionChooser;
 	public static SendableChooser<Command> secondHatchChooser;
 
-	public static SendableChooser<Command> testTrajectoryChooser;
+	public static SendableChooser<String> testTrajectoryChooser;
 	public static SendableChooser<Integer> trajectoryDirectionChooser;
 
 	public static SendableChooser<Double> timeDelayChooser;
 
 	 public AutoChoosers() {
-		testTrajectoryChooser = new SendableChooser<Command>();
+		testTrajectoryChooser = new SendableChooser<String>();
 
-		testTrajectoryChooser.setDefaultOption("Left To CS2", new LHab1ToLCS2());
+		testTrajectoryChooser.setDefaultOption("Straight One", "StraightOne");
+
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
 		trajectoryDirectionChooser = new SendableChooser<Integer>();

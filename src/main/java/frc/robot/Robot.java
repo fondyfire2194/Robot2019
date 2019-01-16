@@ -20,10 +20,13 @@ import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.BuildTrajectoryToBuffer;
+import frc.robot.commands.BufferToActiveTrajectory;
 import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
+import frc.robot.AutoChoosers;
 
 import frc.robot.LimeLight;
 import frc.robot.LimelightControlMode.*;
@@ -84,6 +87,9 @@ public class Robot extends TimedRobot {
 
   public static Trajectory[] activeTrajectory;// = new Trajectory[2];
   public static Trajectory[] bufferTrajectory;
+  public static String testTrajectoryName;
+  public static int testTrajectoryDirection;
+
   public static double[] activeTrajectoryGains = { 0, 0, 0, 0 };
   public static double[] activeTrajectoryTwoGains = { 0, 0, 0, 0 };
   public static boolean doTeleopTrajectory;
@@ -257,19 +263,17 @@ public class Robot extends TimedRobot {
     }
 
     /**
-     * Create trajectory from Shuffleboard x, y and angle fields put it in active
-     * trajectory array. [0] is left [1] is right get the 4 trajectory loop gains
-     * (P, D, A and Turn)from prefs start the trajectory notifier and data logger
+     * 
      * 
      * 
      */
 
     if (doFileTrajectory) {
 
-      // testTrajectory = testTrajectoryChooser.getSelected();
-
-      logName = trajFileName;
-      activeTrajectory = BuildTrajectory.buildFileName(true, trajFileName);
+       testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
+       testTrajectoryDirection = AutoChoosers.trajectoryDirectionChooser.getSelected();
+    
+      
       SmartDashboard.putBoolean("FileOK", buildOK);
 
       if (!buildOK) {
@@ -278,6 +282,9 @@ public class Robot extends TimedRobot {
       }
     }
     if (doTeleopTrajectory || (doFileTrajectory && buildOK)) {
+
+      new BuildTrajectoryToBuffer(false,testTrajectoryName ).start();
+      new BufferToActiveTrajectory().start();
 
       driveTrain.resetEncoders();
       driveTrain.resetGyro();

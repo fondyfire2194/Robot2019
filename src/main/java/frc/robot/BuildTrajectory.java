@@ -17,7 +17,7 @@ public class BuildTrajectory {
 		Trajectory buffer[] = new Trajectory[2];
 		Robot.buildOK = false;
 		String tempPath = null;
-		String filePath = "/home/lvuser/Traj19CSV/";
+		String filePath = "/home/lvuser/deploy/";
 
 		String usbFilePath = "/U/Traj19CSV/";
 
