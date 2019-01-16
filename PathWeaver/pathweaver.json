@@ -1,0 +1,10 @@
+{
+  "lengthUnit": "Foot",
+  "timeStep": 0.05,
+  "maxVelocity": 8.0,
+  "maxAcceleration": 12.0,
+  "maxJerk": 100.0,
+  "wheelBase": 2.17,
+  "gameName": "Destination: Deep Space",
+  "outputDir": "../../DeepSpace/PractiseRobot/src/main/deploy"
+}

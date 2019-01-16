@@ -29,14 +29,16 @@ public class AutoChoosers {
 		testTrajectoryChooser = new SendableChooser<String>();
 
 		testTrajectoryChooser.setDefaultOption("Straight One", "StraightOne");
+		testTrajectoryChooser.addOption("Curve One", "CurveOne");
+		testTrajectoryChooser.addOption("Curve Two", "CurveTwo");
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
 		trajectoryDirectionChooser = new SendableChooser<Integer>();
-		trajectoryDirectionChooser.setDefaultOption("FaceFwdMoveFwd", 0);
-		trajectoryDirectionChooser.addOption("FaceFwdMoveBack", 1);
-		trajectoryDirectionChooser.addOption("FaceBackMoveFwd", 1);
-		trajectoryDirectionChooser.addOption("FaceBackMoveBack", 1);
+		trajectoryDirectionChooser.setDefaultOption("FaceFieldMoveField", 0);
+		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 1);
+		trajectoryDirectionChooser.addOption("FaceWallMoveField", 2);
+		trajectoryDirectionChooser.addOption("FaceWallMoveWall", 3);
 		SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
 
 

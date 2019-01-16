@@ -23,7 +23,7 @@ public class BuildTrajectoryToBuffer extends InstantCommand {
 
 	// Called once when the command executes
 	protected void initialize() {
-		Robot.bufferTrajectory = BuildTrajectory.buildFileName(myUsb, myFileName);
+		Robot.bufferTrajectory = Robot.buildTrajectory.buildFileName(myUsb, myFileName);
 
 	}
 

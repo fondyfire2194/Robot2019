@@ -9,20 +9,20 @@ public class BuildTrajectory {
 	public static File myLeftFile;
 	public static File myRightFile;
 
-	// public BuildTrajectory() {
+	public BuildTrajectory() {
 
-	// }
+	}
 
-	public static Trajectory[] buildFileName( boolean usb, String name) {
+	public Trajectory[] buildFileName( boolean usb, String name) {
 		Trajectory buffer[] = new Trajectory[2];
 		Robot.buildOK = false;
 		String tempPath = null;
-		String filePath = "/home/lvuser/deploy/";
+		String filePath = "/home/lvuser/deploy/output/";
 
 		String usbFilePath = "/U/Traj19CSV/";
 
-		String leftExtension ="left.pf1.csv";
-		String rightExtension ="right.pf1.csv";
+		String leftExtension =".left.pf1.csv";
+		String rightExtension =".right.pf1.csv";
 		
 		if (usb)
 			tempPath = usbFilePath;
@@ -30,7 +30,7 @@ public class BuildTrajectory {
 			tempPath = filePath;
 
 		Robot.chosenFileName = "NONE";
-
+		Robot.chosenFileName = tempPath + name + leftExtension;
 		myLeftFile = new File(tempPath + name + leftExtension);
 		myRightFile = new File(tempPath + name + rightExtension);
 
