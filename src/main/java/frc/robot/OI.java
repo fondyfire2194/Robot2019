@@ -74,6 +74,7 @@ public class OI {
     SmartDashboard.putData("LEDS On", new SetLimelightLeds(LedMode.kforceOn) );
     SmartDashboard.putData("LEDS Off", new SetLimelightLeds(LedMode.kforceOff) );
 
+    SmartDashboard.putData("Toggle View", new ToggleCamMode());
 
   }
 }

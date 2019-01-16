@@ -89,8 +89,8 @@ public class PathfinderNotifier {
 		}
 		else 
 		{
-		    right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
-			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
+		    right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getLeftFeet());
 		}
 
 		desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());

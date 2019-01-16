@@ -27,6 +27,7 @@ public class Constants {
   public static double MAX_ENC_CTS_PER_100MS = MAX_ROBOT_FT_PER_SEC * FT_PER_SEC_TO_ENC_CTS_PER_100MS;
   public static double FT_PER_SEC_TO_PCT_OUT = 1 / MAX_ROBOT_FT_PER_SEC;
   public final static double WHEELBASE_WIDTH = 2.1;
+  public final static double MAX_TARGET_AREA = 6.5;
 
 
   private Constants() {

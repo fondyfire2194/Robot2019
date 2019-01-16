@@ -22,16 +22,17 @@ public class RobotDriveToTarget extends Command {
 	public double slowDownFeet = 2;
 	public boolean decelerate;
 	private double myEndpoint;
-	private double startOfVisionPoint = 5;
+	private double startOfVisionPoint = 8;
 
 	private double endOfVisionPoint = 1;
 	private boolean inVisionRange;
 	private double remainingFtToHatch;
 	private double activeMotionComp;
+	private double maxTargetArea = 20;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
-	// inPositionband is in inches
+	// inPositionband is in feet
 
 	public RobotDriveToTarget(double distance, double speed, boolean endItNow, double timeout) {
 		// Use requires() here to declare subsystem dependencies
@@ -92,11 +93,12 @@ public class RobotDriveToTarget extends Command {
 
 		if (useVisionComp) {
 			activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 		}
 		if (useGyroComp)
-			// activeMotionComp = Robot.robotRotate.getTargetYawComp();
+			 activeMotionComp = Robot.driveTrain.getCurrentComp();
 
-		Robot.driveTrain.arcadeDrive(currentMaxSpeed, activeMotionComp);
+		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
 
 	
 
@@ -105,7 +107,7 @@ public class RobotDriveToTarget extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= (myEndpoint);
+		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= (myEndpoint) || Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
 	}
 
 	// Called once after isFinished returns true

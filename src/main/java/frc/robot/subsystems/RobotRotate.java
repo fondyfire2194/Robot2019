@@ -24,14 +24,13 @@ public class RobotRotate extends PIDSubsystem {
 	private static final double Kf = 0;
 
 	private static final double toleranceAngle = 2;
-	
 
 	public double loopOutput;
 	public boolean orientClockwise;
 
 	// Initialize your subsystem here
 	public RobotRotate() {
-		super("RobotRotate", Kp, Ki, Kd,Kf);
+		super("RobotRotate", Kp, Ki, Kd, Kf);
 		getPIDController().setInputRange(-180, 180);
 		getPIDController().setOutputRange(-1, 1);
 		getPIDController().setContinuous();
@@ -59,10 +58,16 @@ public class RobotRotate extends PIDSubsystem {
 		// setDefaultCommand(new MySpecialCommand());
 	}
 
+	boolean useVision = false;
+
 	@Override
 	protected double returnPIDInput() {
-		return Robot.driveTrain.getGyroYaw();
-		// return  Robot.mAnalogGyro.getAngle();
+		if (!useVision)
+			return Robot.driveTrain.getGyroYaw();
+		else
+			return Robot.limelightCamera.getdegRotationToTarget();
+			
+		// return Robot.mAnalogGyro.getAngle();
 		// return Robot.sensors.imu.getYaw();
 		// Return your input value for the PID loop
 		// e.g. a sensor, like a potentiometer:
@@ -71,16 +76,16 @@ public class RobotRotate extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		double temp = 0;
-		if (Math.abs(output) < Constants.MINIMUM_START_PCT) {
-			temp = Constants.MINIMUM_START_PCT;
-			if (output < 0)
-				temp = -temp;
-		} else
+		 double temp = 0;
+		// if (Math.abs(output) < Constants.MINIMUM_START_PCT) {
+		// 	temp = Constants.MINIMUM_START_PCT;
+		// 	if (output < 0)
+		// 		temp = -temp;
+		// } else
 			temp = output;
 		loopOutput = temp;
 		Robot.driveTrain.leftDriveOut(temp);
-		Robot.driveTrain.rightDriveOut(temp);
+		Robot.driveTrain.rightDriveOut(-temp);
 	}
 
 	public void enablePID() {

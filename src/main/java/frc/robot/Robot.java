@@ -27,6 +27,7 @@ import jaci.pathfinder.Trajectory;
 
 import frc.robot.LimeLight;
 import frc.robot.LimelightControlMode.*;
+import frc.robot.SD;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -326,8 +327,8 @@ public class Robot extends TimedRobot {
 
   public void updateStatus() {
     driveTrain.updateStatus();
-    SmartDashboard.putBoolean("VisionTarget", limelightCamera.getIsTargetFound());
-    SmartDashboard.putNumber("DegToTarget", limelightCamera.getdegRotationToTarget());
+    limelightCamera.updateStatus();
+ 
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
