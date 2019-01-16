@@ -28,6 +28,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
+import frc.robot.VisionData;
 
 import frc.robot.LimeLight;
 import frc.robot.LimelightControlMode.*;
@@ -46,6 +47,7 @@ public class Robot extends TimedRobot {
   public static RobotRotate robotRotate;
   public static SimpleCSVLogger simpleCSVLogger;
   public static LimeLight limelightCamera;
+  public static VisionData visionData;
   public static AutoChoosers autoChoosers;
   public static String chosenFileName = "Dummy";
   public static OI m_oi;
@@ -124,6 +126,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     simpleCSVLogger = new SimpleCSVLogger();
     limelightCamera = new LimeLight();
+    visionData = new VisionData();
     buildTrajectory = new BuildTrajectory();
     generatePositionTrajectory = new GeneratePositionTrajectory();
     autoChoosers = new AutoChoosers();
@@ -349,12 +352,12 @@ public class Robot extends TimedRobot {
   public void updateStatus() {
     driveTrain.updateStatus();
     limelightCamera.updateStatus();
+    visionData.updateStatus();
 
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
     SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
-    SmartDashboard.putNumber("Preftest", Pref.getPref("y"));
     SmartDashboard.putString("FileChosen", chosenFileName);
 
   }

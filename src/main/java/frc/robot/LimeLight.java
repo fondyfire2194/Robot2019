@@ -371,6 +371,7 @@ public class LimeLight {
         SD.putN2("BNDBoxWidth", Robot.limelightCamera.getBoundingBoxWidth());
         SD.putN2("BndBoxHeight", Robot.limelightCamera.getBoundingBoxHeight());
         SD.putN1("Pipeline Latency", Robot.limelightCamera.getPipelineLatency());
+        SD.putN("Pipeline #", getPipeline());
 
     }
 }
