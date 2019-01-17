@@ -14,6 +14,7 @@ public class BuildTrajectory {
 	}
 
 	public Trajectory[] buildFileName( boolean usb, String name) {
+		Robot.buildInProgress=true;
 		Trajectory buffer[] = new Trajectory[2];
 		Robot.buildOK = false;
 		String tempPath = null;
@@ -35,12 +36,14 @@ public class BuildTrajectory {
 		myRightFile = new File(tempPath + name + rightExtension);
 
 		if (myLeftFile.exists() && myRightFile.exists()) {
-			// Pathfinder.readFromCSV(myLeftFile);
-			// Pathfinder.readFromCSV(myRightFile);
+			 Robot.bufferTrajName = "Loading";
 			 buffer[0] = Pathfinder.readFromCSV(myLeftFile);
 			 buffer[1] = Pathfinder.readFromCSV(myRightFile);
+
 			Robot.chosenFileName = tempPath + name + leftExtension;
 			Robot.buildOK = true;
+			Robot.bufferTrajName = name;
+			Robot.buildInProgress=false;
 		}
 		return buffer;
 

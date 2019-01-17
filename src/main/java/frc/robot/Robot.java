@@ -90,9 +90,11 @@ public class Robot extends TimedRobot {
   public enum motionType {
     incremental, absolute
   }
-
-  public static Trajectory[] activeTrajectory;// = new Trajectory[2];
+  public static Trajectory[] activeTrajectory;
+  
+  public static String activeTrajName = "Empty";
   public static Trajectory[] bufferTrajectory;
+  public static String bufferTrajName = "Empty";
   public static String testTrajectoryName;
   public static int testTrajectoryDirection;
 
@@ -115,6 +117,9 @@ public class Robot extends TimedRobot {
   public static String trajFileName;
   public static String logName;
   public static boolean robotMoveForward;
+  int test;
+  public static boolean buildInProgress;
+  public static int startPositionSelected;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -161,7 +166,45 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    updateStatus();
+    test++;
+    SmartDashboard.putNumber("Test", test);
+    boolean notMatch = true;
+
+    if (notMatch) {
+      testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
+    } else {
+      startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+
+      switch (startPositionSelected) {
+      case 0:
+        break;
+      case 1:
+        break;
+      case 2:
+        testTrajectoryName = "LHab1ToLCS2";
+        break;
+      case 3:
+        testTrajectoryName = "RHab1ToRCS2";
+        break;
+      default:
+        break;
+      }
+    }
+
+    if (!trajectoryRunning && !buildInProgress && isDisabled()) {
+
+      if (activeTrajName != testTrajectoryName) {
+        bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
+        bufferTrajName = testTrajectoryName;
+        activeTrajectory = bufferTrajectory;
+        activeTrajName = bufferTrajName;
+
+        
+      }
+      SmartDashboard.putString("FileInBuffer", bufferTrajName);
+      SmartDashboard.putString("FileAtive", activeTrajName);
+
+    }
   }
 
   /**
@@ -193,14 +236,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    autonomousCommand[1] = AutoChoosers.startPositionChooser.getSelected();
-
     autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
+
+    startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
 
     if (autoTimeDelaySeconds != 0) {
 
       autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
-      
+
     } else {
       autonomousCommandDone[0] = true;
     }
@@ -223,12 +266,22 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
-    if (autonomousCommandDone[0] && autonomousCommand[1] != null) {
-      autonomousCommand[1].start();
-    }
+    if (autonomousCommandDone[0]) {
 
-    if (autonomousCommandDone[1] && autonomousCommand[2] != null)
-      autonomousCommand[2].start();
+      switch (startPositionSelected) {
+
+      case 0:
+        PathSelectAuto.CHAB1LC.build();
+      case 1:
+        PathSelectAuto.CHAB1RC.build();
+      case 2:
+        PathSelectAuto.LHAB1ToCS2.build();
+      case 3:
+        PathSelectAuto.RHAB1ToCS2.build();
+
+      }
+
+    }
 
   }
 
@@ -283,10 +336,10 @@ public class Robot extends TimedRobot {
 
       testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
       testTrajectoryDirection = AutoChoosers.trajectoryDirectionChooser.getSelected();
-
-      bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
-      SmartDashboard.putBoolean("FileOK", buildOK);
-
+      if (activeTrajName != testTrajectoryName) {
+        bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
+        SmartDashboard.putBoolean("FileOK", buildOK);
+      }
       if (!buildOK) {
 
         doFileTrajectory = false;
@@ -311,24 +364,24 @@ public class Robot extends TimedRobot {
 
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
       boolean faceField = true;
-      
+
       switch (trajectoryDirectionChooser) {
 
-      case 0://move forward into field
+      case 0:// move forward into field
         new PathfinderTrajectory(faceField).start();
-        robotMoveForward=true;
+        robotMoveForward = true;
         constantsFromPrefs();
         break;
-      case 1://move reverse into field
+      case 1:// move reverse into field
         new PathfinderTrajectory(!faceField).start();
         revConstantsFromPrefs();
-        robotMoveForward=false;
+        robotMoveForward = false;
         break;
-      case 2://move reverse to wall
+      case 2:// move reverse to wall
         new PathfinderReverseTrajectory(faceField).start();
         constantsFromPrefs();
         break;
-      case 3://move forward to wall
+      case 3:// move forward to wall
         new PathfinderReverseTrajectory(!faceField).start();
         revConstantsFromPrefs();
         break;
@@ -362,6 +415,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("OrientRng", orientRunning);
     SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
     SmartDashboard.putString("FileChosen", chosenFileName);
+    SmartDashboard.putString("FileInBuffer", bufferTrajName);
+    SmartDashboard.putString("FileAtive", activeTrajName);
 
   }
 

@@ -95,7 +95,7 @@ public class PathfinderNotifier {
 
 		desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 
-		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - (-Robot.driveTrain.getGyroYaw()));
+		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - (Robot.driveTrain.getGyroYaw()));
 		double turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 		/*
 		 * see Reverse Pathfinder Notifier for explanations of following equations

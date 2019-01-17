@@ -8,13 +8,12 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.TimeDelay;
 
-public class CHab2ToRC extends CommandGroup {
+public class MoveAndPickUpHatchPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public CHab2ToRC() {
+  public MoveAndPickUpHatchPanel() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -31,6 +30,5 @@ public class CHab2ToRC extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new TimeDelay(2));
   }
 }

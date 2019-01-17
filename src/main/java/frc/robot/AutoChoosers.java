@@ -17,7 +17,7 @@ import frc.robot.commands.Auto.*;
 
 public class AutoChoosers {
 
-	public static SendableChooser<Command> startPositionChooser;
+	public static SendableChooser<Integer> startPositionChooser;
 	public static SendableChooser<Command> secondHatchChooser;
 
 	public static SendableChooser<String> testTrajectoryChooser;
@@ -43,15 +43,16 @@ public class AutoChoosers {
 
 
 
-		startPositionChooser = new SendableChooser<Command>();
+		startPositionChooser = new SendableChooser<Integer>();
 
-		startPositionChooser.setDefaultOption("Left to LCS2", new LHab1ToLCS2());
-		startPositionChooser.addOption("LCenter", new CHab1ToLC());
-		startPositionChooser.addOption("RCenter", new CHab2ToRC());
-		startPositionChooser.addOption("Right to RCS2", new RHab1ToRCS2());
-		startPositionChooser.addOption("DriverControl", new SetUpDriverControl());
+		startPositionChooser.setDefaultOption("Left to LCS2",0);
+		startPositionChooser.addOption("LCenter", 1);
+		startPositionChooser.addOption("RCenter", 2);
+		startPositionChooser.addOption("Right to RCS2",3);
+		startPositionChooser.addOption("DriverControl", 4);
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
+		
 
 		secondHatchChooser = new SendableChooser<Command>();
 

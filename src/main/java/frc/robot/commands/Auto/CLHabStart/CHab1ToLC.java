@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.CLHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.PathfinderReverseTrajectory;
@@ -55,16 +55,15 @@ public class CHab1ToLC extends CommandGroup {
      * 
      */
 
-    addParallel(new BuildTrajectoryToBuffer(true, "back and up"));// back and up
+    addParallel(new BuildTrajectoryToBuffer(false, "up and forward"));// back and up
 
     addSequential(new RobotDriveToTarget(3, .5, false, 10));
+    
+    addParallel(new BufferToActiveTrajectory());  
+    
     addSequential(new PlacePanel());
 
-    addSequential(new BufferToActiveTrajectory());// back and up
-
-    addParallel(new BuildTrajectoryToBuffer(true, "up and forward"));// up and forward
-
-    addSequential(new PathfinderReverseTrajectory(true));// back and up
+    addParallel(new PathfinderReverseTrajectory(true));// back and up
 
     addSequential(new BufferToActiveTrajectory());// up and forward
 
@@ -72,18 +71,6 @@ public class CHab1ToLC extends CommandGroup {
 
     addSequential(new PathfinderTrajectory(true));// up and forward
 
-    addSequential(new BufferToActiveTrajectory());// to load station
-
-    addParallel(new BuildTrajectoryToBuffer(true, "from load station "));// to load station
-
-    addSequential(new PickUpPanel());
-
-    addSequential(new BufferToActiveTrajectory());// from load station
-
-    addSequential(new PathfinderReverseTrajectory(true));// from load station
-
-    addSequential(new RobotDriveToTarget(3, .5, false, 10));
-
-    addSequential(new PlacePanel());
+    
   }
 }
