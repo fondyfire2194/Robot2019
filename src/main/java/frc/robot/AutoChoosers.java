@@ -36,8 +36,8 @@ public class AutoChoosers {
 
 		trajectoryDirectionChooser = new SendableChooser<Integer>();
 		trajectoryDirectionChooser.setDefaultOption("FaceFieldMoveField", 0);
-		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 1);
-		trajectoryDirectionChooser.addOption("FaceWallMoveField", 2);
+		trajectoryDirectionChooser.addOption("FaceWallMoveField", 1);
+		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 2);
 		trajectoryDirectionChooser.addOption("FaceWallMoveWall", 3);
 		SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
 

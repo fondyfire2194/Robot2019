@@ -167,11 +167,11 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroYaw() {
-    float temp = imu.getYaw() + gyroOffset;
-    if(temp > 180)
-      temp-=180;
-    if (temp < -180)
-       temp +=180;
+    // float temp = imu.getYaw() + gyroOffset;
+    // if(temp > 180)
+    //   temp-=180;
+    // if (temp < -180)
+    //    temp +=180;
     return imu.getYaw();
   }
 

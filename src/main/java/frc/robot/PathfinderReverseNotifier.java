@@ -58,8 +58,8 @@ public class PathfinderReverseNotifier {
 		double left = 0;
 		double right = 0;
 		if (myRobotMoveForward) {
-			left = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getLeftFeet());
-			right = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
+			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
 		} else {
 			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
@@ -72,11 +72,11 @@ public class PathfinderReverseNotifier {
 		double leftPct = 0;
 		double rightPct = 0;
 		if (myRobotMoveForward) {
-			leftPct = Constants.MINIMUM_START_PCT + left + turn;
-			rightPct = Constants.MINIMUM_START_PCT + right - turn;
-		} else {
 			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
-			rightPct = -Constants.MINIMUM_START_PCT + right + turn;
+			rightPct = -Constants.MINIMUM_START_PCT - right + turn;
+		} else {
+			leftPct = Constants.MINIMUM_START_PCT + left - turn;
+			rightPct = Constants.MINIMUM_START_PCT + right + turn;
 		}
 
 

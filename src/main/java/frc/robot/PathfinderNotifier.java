@@ -108,8 +108,9 @@ public class PathfinderNotifier {
 			leftPct = Constants.MINIMUM_START_PCT + left + turn;
 			rightPct = Constants.MINIMUM_START_PCT + right - turn;
 		} else {
-			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
-			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
+			rightPct = -Constants.MINIMUM_START_PCT - right + turn;
+			SmartDashboard.putNumber("LPCT",leftPct);
 		}
 
 		Robot.driveTrain.leftDriveOut(leftPct);

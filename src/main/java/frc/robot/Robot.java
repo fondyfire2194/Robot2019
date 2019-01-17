@@ -114,6 +114,7 @@ public class Robot extends TimedRobot {
   public static double trajectoryAngle;
   public static String trajFileName;
   public static String logName;
+  public static boolean robotMoveForward;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -310,23 +311,25 @@ public class Robot extends TimedRobot {
 
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
       boolean faceField = true;
-      boolean faceWall = false;
+      
       switch (trajectoryDirectionChooser) {
 
-      case 0:
+      case 0://move forward into field
         new PathfinderTrajectory(faceField).start();
+        robotMoveForward=true;
         constantsFromPrefs();
         break;
-      case 1:
-        new PathfinderTrajectory(faceWall).start();
+      case 1://move reverse into field
+        new PathfinderTrajectory(!faceField).start();
         revConstantsFromPrefs();
+        robotMoveForward=false;
         break;
-      case 2:
+      case 2://move reverse to wall
         new PathfinderReverseTrajectory(faceField).start();
         constantsFromPrefs();
         break;
-      case 3:
-        new PathfinderReverseTrajectory(faceWall).start();
+      case 3://move forward to wall
+        new PathfinderReverseTrajectory(!faceField).start();
         revConstantsFromPrefs();
         break;
 
