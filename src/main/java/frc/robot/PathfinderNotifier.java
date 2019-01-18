@@ -105,12 +105,13 @@ public class PathfinderNotifier {
 		double leftPct = 0;
 		double rightPct = 0;
 		if (myRobotMoveForward) {
-			leftPct = Constants.MINIMUM_START_PCT + left + turn;
-			rightPct = Constants.MINIMUM_START_PCT + right - turn;
+			leftPct = Constants.MINIMUM_START_PCT + left - turn;
+			rightPct = Constants.MINIMUM_START_PCT + right + turn;
+			SmartDashboard.putNumber("LPCT",leftPct);
 		} else {
 			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
 			rightPct = -Constants.MINIMUM_START_PCT - right + turn;
-			SmartDashboard.putNumber("LPCT",leftPct);
+			
 		}
 
 		Robot.driveTrain.leftDriveOut(leftPct);
@@ -129,7 +130,7 @@ public class PathfinderNotifier {
 			Robot.simpleCSVLogger.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
 					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
 					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
-					-Robot.driveTrain.getGyroYaw(),
+					Robot.driveTrain.getGyroYaw(),
 					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, leftPct,
 					Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
 					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, rightPct,

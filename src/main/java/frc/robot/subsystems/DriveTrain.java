@@ -210,5 +210,11 @@ public class DriveTrain extends Subsystem {
     SD.putN1("GyroYaw", getGyroYaw());
     SD.putN2("LeftCmd", getLeftCommand());
     SD.putN2("RightCmd", getRightCommand());
+    SD.putN2("LeftA Amps",leftTalonOne.getOutputCurrent());
+    SD.putN2("LeftB Amps",leftTalonTwo.getOutputCurrent());
+    SD.putN2("LeftC Amps",leftTalonThree.getOutputCurrent());
+    SD.putN2("RightA Amps",rightTalonOne.getOutputCurrent());
+    SD.putN2("RightB Amps",rightTalonTwo.getOutputCurrent());
+    SD.putN2("RightC Amps",rightTalonThree.getOutputCurrent());
   }
 }

@@ -140,7 +140,8 @@ public class Robot extends TimedRobot {
     autonomousCommand = new Command[6];
     autonomousCommandDone = new boolean[6];
     prefs = Preferences.getInstance();
-    // Pref.deleteUnused();
+    // Pref.deleteAllPrefs();
+    //  Pref.deleteUnused();
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
     Timer.delay(.02);
@@ -337,14 +338,20 @@ public class Robot extends TimedRobot {
       testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
       testTrajectoryDirection = AutoChoosers.trajectoryDirectionChooser.getSelected();
       if (activeTrajName != testTrajectoryName) {
-        bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
+        activeTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
+        activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
+        Robot.logName = activeTrajName;
       }
+      else buildOK=true;
       if (!buildOK) {
 
         doFileTrajectory = false;
         DriverStation.reportError("Error reading file", true);
       }
+      activeTrajName = testTrajectoryName;
+      SmartDashboard.putBoolean("FileOK", buildOK);
+      Robot.logName = activeTrajName;
     }
 
     if (doTeleopTrajectory) {
@@ -354,7 +361,7 @@ public class Robot extends TimedRobot {
     }
     if (doTeleopTrajectory || (doFileTrajectory && buildOK)) {
 
-      activeTrajectory = bufferTrajectory;
+      // activeTrajectory = bufferTrajectory;
 
       driveTrain.resetEncoders();
       driveTrain.resetGyro();
@@ -416,8 +423,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
     SmartDashboard.putString("FileChosen", chosenFileName);
     SmartDashboard.putString("FileInBuffer", bufferTrajName);
-    SmartDashboard.putString("FileAtive", activeTrajName);
 
+    SmartDashboard.putNumber("AG0", activeTrajectoryGains[0]);
+    SmartDashboard.putNumber("AG1", activeTrajectoryGains[1]);
+    SmartDashboard.putNumber("AG2", activeTrajectoryGains[2]);
+    SmartDashboard.putNumber("AG3", activeTrajectoryGains[3]);
+ 
+ 
+ 
   }
 
   private void constantsFromPrefs() {
