@@ -90,8 +90,9 @@ public class Robot extends TimedRobot {
   public enum motionType {
     incremental, absolute
   }
+
   public static Trajectory[] activeTrajectory;
-  
+
   public static String activeTrajName = "Empty";
   public static Trajectory[] bufferTrajectory;
   public static String bufferTrajName = "Empty";
@@ -99,7 +100,7 @@ public class Robot extends TimedRobot {
   public static int testTrajectoryDirection;
 
   public static double[] activeTrajectoryGains = { 0, 0, 0, 0 };
-  public static double[] activeTrajectoryTwoGains = { 0, 0, 0, 0 };
+  public static double[] bufferTrajectoryGains = { 0, 0, 0, 0 };
   public static boolean doTeleopTrajectory;
   public static boolean revTraj;;
   public static boolean doFileTrajectory;
@@ -120,7 +121,9 @@ public class Robot extends TimedRobot {
   int test;
   public static boolean buildInProgress;
   public static int startPositionSelected;
-
+  public static boolean useUsb = true;
+  public static  boolean faceField = true;
+  public static  boolean invertY = true;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -141,7 +144,7 @@ public class Robot extends TimedRobot {
     autonomousCommandDone = new boolean[6];
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
-    //  Pref.deleteUnused();
+    // Pref.deleteUnused();
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
     Timer.delay(.02);
@@ -153,6 +156,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("RevOrient", false);
     Timer.delay(.02);
+    SmartDashboard.putBoolean("InvertY", false);
 
   }
 
@@ -200,7 +204,6 @@ public class Robot extends TimedRobot {
         activeTrajectory = bufferTrajectory;
         activeTrajName = bufferTrajName;
 
-        
       }
       SmartDashboard.putString("FileInBuffer", bufferTrajName);
       SmartDashboard.putString("FileAtive", activeTrajName);
@@ -338,12 +341,12 @@ public class Robot extends TimedRobot {
       testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
       testTrajectoryDirection = AutoChoosers.trajectoryDirectionChooser.getSelected();
       if (activeTrajName != testTrajectoryName) {
-        activeTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
+        activeTrajectory = buildTrajectory.buildFileName(useUsb, testTrajectoryName);
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
         Robot.logName = activeTrajName;
-      }
-      else buildOK=true;
+      } else
+        buildOK = true;
       if (!buildOK) {
 
         doFileTrajectory = false;
@@ -370,27 +373,27 @@ public class Robot extends TimedRobot {
       constantsFromPrefs();
 
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
-      boolean faceField = true;
+     invertY =  SmartDashboard.getBoolean("InvertY", false);
 
       switch (trajectoryDirectionChooser) {
 
       case 0:// move forward into field
-        new PathfinderTrajectory(faceField).start();
+        new PathfinderTrajectory(faceField,invertY).start();
         robotMoveForward = true;
         constantsFromPrefs();
         break;
       case 1:// move reverse into field
-        new PathfinderTrajectory(!faceField).start();
+        new PathfinderTrajectory(!faceField,invertY).start();
         revConstantsFromPrefs();
         robotMoveForward = false;
         break;
       case 2:// move reverse to wall
         new PathfinderReverseTrajectory(faceField).start();
-        constantsFromPrefs();
+        revConstantsFromPrefs();
         break;
       case 3:// move forward to wall
         new PathfinderReverseTrajectory(!faceField).start();
-        revConstantsFromPrefs();
+        constantsFromPrefs();
         break;
 
       }
@@ -428,9 +431,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("AG1", activeTrajectoryGains[1]);
     SmartDashboard.putNumber("AG2", activeTrajectoryGains[2]);
     SmartDashboard.putNumber("AG3", activeTrajectoryGains[3]);
- 
- 
- 
+
   }
 
   private void constantsFromPrefs() {

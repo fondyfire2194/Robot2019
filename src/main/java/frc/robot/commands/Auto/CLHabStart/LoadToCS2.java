@@ -8,18 +8,12 @@
 package frc.robot.commands.Auto.CLHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.TimeDelay;
-import frc.robot.commands.HatchPanels.*;
-import frc.robot.commands.BuildTrajectoryToBuffer;
-import frc.robot.commands.BufferToActiveTrajectory;
-public class CL1ToLoadApproach extends CommandGroup {
+
+public class LoadToCS2 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public CL1ToLoadApproach() {
+  public LoadToCS2() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -36,17 +30,5 @@ public class CL1ToLoadApproach extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    
-
-
-    addSequential(new PickUpPanel());
-
-    addSequential(new BufferToActiveTrajectory());// from load station
-
-    addSequential(new PathfinderReverseTrajectory(true));// from load station
-
-    addSequential(new RobotDriveToTarget(3, .5, false, 10));
-
-    addSequential(new PlacePanel());
   }
 }

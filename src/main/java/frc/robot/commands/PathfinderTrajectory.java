@@ -16,11 +16,13 @@ public class PathfinderTrajectory extends Command {
 	private double startTime;
 	private int scanCounter;
 	private boolean myRobotMoveForward;
+	private boolean myYInverted;
 
-	public PathfinderTrajectory(boolean robotMoveForward) {
+	public PathfinderTrajectory(boolean robotMoveForward, boolean yInverted) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		myRobotMoveForward = robotMoveForward;
+		myYInverted = yInverted;
 		requires(Robot.driveTrain);
 	}
 
@@ -56,7 +58,7 @@ public class PathfinderTrajectory extends Command {
 		}
 		scanCounter = 0;
 		startTime = Timer.getFPGATimestamp();
-		PathfinderNotifier.startNotifier(myRobotMoveForward);
+		PathfinderNotifier.startNotifier(myRobotMoveForward, myYInverted);
 	}
 
 	// Called repeatedly when this Command is scheduled to run

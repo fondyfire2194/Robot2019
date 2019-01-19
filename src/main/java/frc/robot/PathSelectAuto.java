@@ -12,16 +12,20 @@ public enum PathSelectAuto {
 	 * 
 	 */
 
-	CHAB1LC(new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC()), //
+	CHAB1LC(new CHab1ToLC(), new LCToLoadApproach(), new AdjustLoadApproach(), new MoveToAndLoadPanel(),
+	new LoadToCS2()), //
+
 	CHAB1RC(new CHab1ToRC(), new CHab1ToRC(), new CHab1ToLC(), new CHab1ToLC()), //
 
 	LHAB1ToCS2(new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC()), //
-	RHAB1ToCS2(new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC());
+
+	RHAB1ToCS2(new LoadToCS2(), new CHab1ToLC(), new CHab1ToLC(), new CHab1ToLC());
 
 	private Command first;
 	private Command second;
 	private Command third;
 	private Command fourth;
+	private Command fifth;
 
 	/*
 	 * 4 oommand constructor constructor
@@ -34,6 +38,19 @@ public enum PathSelectAuto {
 		this.fourth = fourth;
 
 	}
+		/*
+	 * 5 oommand constructor constructor
+	 */
+	PathSelectAuto(Command first, Command second, Command third, Command fourth, Command fifth) {
+
+		this.first = first;
+		this.second = second;
+		this.third = third;
+		this.fourth = fourth;
+		this.fifth = fifth;
+
+	}
+
 
 	/*
 	 * 
@@ -49,6 +66,8 @@ public enum PathSelectAuto {
 		Robot.autonomousCommand[3] = this.third;
 
 		Robot.autonomousCommand[4] = this.fourth;
+
+		Robot.autonomousCommand[5] = this.fifth;
 
 	}
 }

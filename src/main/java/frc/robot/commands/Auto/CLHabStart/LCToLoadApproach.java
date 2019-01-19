@@ -17,11 +17,11 @@ import frc.robot.commands.BuildTrajectoryToBuffer;
 import frc.robot.Robot;
 import frc.robot.commands.BufferToActiveTrajectory;
 
-public class CHab1ToLC extends CommandGroup {
+public class LCToLoadApproach extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public CHab1ToLC() {
+  public LCToLoadApproach() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -38,33 +38,27 @@ public class CHab1ToLC extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    /*
-     * Pathfinder always generates X moves starting at 0 in the plus direction from
-     * alliance wall toward the field. We can run the robot starting at the
-     * beginning or end of the generated trajectory leading with the front or rear of
-     * the robot. PathfinderTrajectory starts at the beginning of the trajectory and
-     * PathfinderReverseTrajectory from the end. A True entry means we want the
-     * front of the robot to lead and a False means we want the rear to lead.
+    /**
+     * Two curves to get C shape, Pathfinder can't change X direction Do reverse
+     * curve back and up Do reverse curve up and forward Do curve to load station
+     * Pick up panel Do reverse curve forward and left Position using vision Attach
+     * panel
      */
 
-    /*
-     * Center start opposite left hatch.
-     *  Position using vision. Attach panel.
-     * Build trajectory for next group
-     * 
-     * 
-     * 
-     */
 
-    addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, "rev to wall and left"));// rev to wall and left
+    addSequential(new BufferToActiveTrajectory());//rev to wall and left
 
-    addSequential(new RobotDriveToTarget(3, .5, false, 10));//position using vision correction
-        
-    addSequential(new PlacePanel());
+    addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, "left and rev to field"));// left and rev to field
 
-    
+    addSequential(new PathfinderReverseTrajectory(Robot.faceField));// rev to wall and left
 
-    
-  }
+    addSequential(new BufferToActiveTrajectory());//left and rev to field
+
+    addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, ""));// to load approach
+
+    addSequential(new PathfinderTrajectory(!Robot.faceField,!Robot.invertY));// left and reverse to field
+
+    addSequential(new BufferToActiveTrajectory());//rev to wall and left
+
+ }
 }
