@@ -77,6 +77,10 @@ public class PathfinderReverseNotifier {
 		passCounter--;
 		double left = 0;
 		double right = 0;
+		double leftPct = 0;
+		double rightPct = 0;
+		double angleDifference = 0;
+		double turn = 0;
 		//convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
 
@@ -87,8 +91,8 @@ public class PathfinderReverseNotifier {
 		 *  normal condition robot moves forward to field
 		 * standard Pathfinder trajectory use
 		 *  */
-	    	double left = Robot.driveTrainCanBus.revLeftDf.calculate(-Robot.driveTrainCanBus.getLeftFeet());
-		    double right = Robot.driveTrainCanBus.revRightDf.calculate(-Robot.driveTrainCanBus.getRightFeet());
+	    	left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
+		    right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
 			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;

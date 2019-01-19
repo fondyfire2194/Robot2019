@@ -50,7 +50,7 @@ public class LCToLoadApproach extends CommandGroup {
 
     addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, "left and rev to field"));// left and rev to field
 
-    addSequential(new PathfinderReverseTrajectory(Robot.faceField));// rev to wall and left
+    addSequential(new PathfinderReverseTrajectory(Robot.faceField,Robot.invertY));// rev to wall and left
 
     addSequential(new BufferToActiveTrajectory());//left and rev to field
 

@@ -69,11 +69,13 @@ public class DriveTrain extends Subsystem {
     leftTalonThree.set(ControlMode.Follower, RobotMap.DRIVETRAIN_LEFT_TALON_ONE);
 
     leftTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    leftTalonOne.setSensorPhase(true);
 
     rightTalonTwo.set(ControlMode.Follower, RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
     rightTalonThree.set(ControlMode.Follower, RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
 
     rightTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    rightTalonOne.setSensorPhase(true);
 
     try {
       // imu = new AHRS(I2C.Port.kOnboard);

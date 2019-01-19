@@ -27,11 +27,11 @@ public class PathfinderNotifier {
 	private static int activeTrajectoryLength;
 	private static double periodic_time = .02;
 	private static double desired_heading;
-	private static boolean myRobotMoveReverse;
+	private static boolean myfaceField;
 	private static boolean myInvertY;
 	private static int switchMode;
 
-	public static void startNotifier(boolean robotMoveReverse, boolean invertY) {
+	public static void startNotifier(boolean faceField, boolean invertY) {
 		/**
 		 * all moves are towards the field and away from the wall robot can move in its
 		 * forward or reverse directiom it can have its command angle inverted to mirror
@@ -39,15 +39,15 @@ public class PathfinderNotifier {
 		 * 
 		 */
 
-		myRobotMoveReverse = robotMoveReverse;
+		myfaceField = faceField;
 		myInvertY = invertY;
-		if (!myRobotMoveReverse && !myInvertY)
+		if (myfaceField && !myInvertY)
 			switchMode = 1;// normal
-		if (!myRobotMoveReverse && myInvertY)
+		if (myfaceField && myInvertY)
 			switchMode = 2;// robot move fwd invert y
-		if (myRobotMoveReverse && !myInvertY)
+		if (!myfaceField && !myInvertY)
 			switchMode = 3;// rev motion
-		if (myRobotMoveReverse && myInvertY)
+		if (!myfaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
 		minTime = 999;
@@ -108,7 +108,7 @@ public class PathfinderNotifier {
 		double turn = 0;
 		//convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
-
+			SmartDashboard.putNumber("Switch Mode", switchMode);
 		switch (switchMode) {
 
 		case 1:
@@ -151,8 +151,8 @@ public class PathfinderNotifier {
 			 * any future motions
 			 * 
 			 */
-			right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
-			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
+			right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getLeftFeet());
 			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;

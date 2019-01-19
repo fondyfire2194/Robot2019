@@ -18,7 +18,7 @@ public class Constants {
    * 
    */
   // Constants for drive
-  public static double DRIVE_ENCODER_COUNTS_PER_INCH = 433;
+  public static double DRIVE_ENCODER_COUNTS_PER_INCH = 403;
   public static final double DRIVE_ENCODER_CTS_PER_FT = DRIVE_ENCODER_COUNTS_PER_INCH * 12;
   public static final double MINIMUM_START_PCT = .1;
   public static final double IN_POSITION_BAND_FT = .5;

@@ -374,7 +374,8 @@ public class Robot extends TimedRobot {
 
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
      invertY =  SmartDashboard.getBoolean("InvertY", false);
-
+    driveTrain.resetGyro();
+    driveTrain.resetEncoders();
       switch (trajectoryDirectionChooser) {
 
       case 0:// move forward into field
@@ -388,12 +389,12 @@ public class Robot extends TimedRobot {
         robotMoveReverse = true;
         break;
       case 2:// move reverse to wall
-        new PathfinderReverseTrajectory(faceField).start();
+        new PathfinderReverseTrajectory(faceField,invertY).start();
         robotMoveReverse = true;
         revConstantsFromPrefs();
         break;
       case 3:// move forward to wall
-        new PathfinderReverseTrajectory(!faceField).start();
+        new PathfinderReverseTrajectory(!faceField,invertY).start();
         robotMoveReverse = false;
         constantsFromPrefs();
         break;
@@ -425,7 +426,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
-    SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
+    // SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
     SmartDashboard.putString("FileChosen", chosenFileName);
     SmartDashboard.putString("FileInBuffer", bufferTrajName);
 
