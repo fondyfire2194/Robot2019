@@ -171,44 +171,44 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    test++;
-    SmartDashboard.putNumber("Test", test);
-    boolean notMatch = true;
+    // test++;
+    // SmartDashboard.putNumber("Test", test);
+    // boolean notMatch = true;
 
-    if (notMatch) {
-      testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
-    } else {
-      startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+    // if (notMatch) {
+    //   testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
+    // } else {
+    //   startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
 
-      switch (startPositionSelected) {
-      case 0:
-        break;
-      case 1:
-        break;
-      case 2:
-        testTrajectoryName = "LHab1ToLCS2";
-        break;
-      case 3:
-        testTrajectoryName = "RHab1ToRCS2";
-        break;
-      default:
-        break;
-      }
-    }
+    //   switch (startPositionSelected) {
+    //   case 0:
+    //     break;
+    //   case 1:
+    //     break;
+    //   case 2:
+    //     testTrajectoryName = "LHab1ToLCS2";
+    //     break;
+    //   case 3:
+    //     testTrajectoryName = "RHab1ToRCS2";
+    //     break;
+    //   default:
+    //     break;
+    //   }
+    // }
 
-    if (!trajectoryRunning && !buildInProgress && isDisabled()) {
+    // if (!trajectoryRunning && !buildInProgress && isDisabled()) {
 
-      if (activeTrajName != testTrajectoryName) {
-        bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
-        bufferTrajName = testTrajectoryName;
-        activeTrajectory = bufferTrajectory;
-        activeTrajName = bufferTrajName;
+    //   if (activeTrajName != testTrajectoryName) {
+    //     bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
+    //     bufferTrajName = testTrajectoryName;
+    //     activeTrajectory = bufferTrajectory;
+    //     activeTrajName = bufferTrajName;
 
-      }
-      SmartDashboard.putString("FileInBuffer", bufferTrajName);
-      SmartDashboard.putString("FileAtive", activeTrajName);
+    //   }
+    //   SmartDashboard.putString("FileInBuffer", bufferTrajName);
+    //   SmartDashboard.putString("FileAtive", activeTrajName);
 
-    }
+    // }
   }
 
   /**
@@ -366,21 +366,22 @@ public class Robot extends TimedRobot {
 
       // activeTrajectory = bufferTrajectory;
 
-      driveTrain.resetEncoders();
-      driveTrain.resetGyro();
-      xPosition = activeTrajectory[0].get(0).x;
-      yPosition = activeTrajectory[0].get(0).y - (Constants.WHEELBASE_WIDTH / 2);
+      // driveTrain.resetEncoders();
+      // driveTrain.resetGyro();
+      // xPosition = activeTrajectory[0].get(0).x;
+      // yPosition = activeTrajectory[0].get(0).y - (Constants.WHEELBASE_WIDTH / 2);
       constantsFromPrefs();
 
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
      invertY =  SmartDashboard.getBoolean("InvertY", false);
-    driveTrain.resetGyro();
-    driveTrain.resetEncoders();
+    // driveTrain.resetGyro();
+    // driveTrain.resetEncoders();
       switch (trajectoryDirectionChooser) {
 
       case 0:// move forward into field
         new PathfinderTrajectory(faceField,invertY).start();
         robotMoveReverse = false;
+        SmartDashboard.putString("Jacob", "");
         constantsFromPrefs();
         break;
       case 1:// move reverse into field
@@ -404,6 +405,7 @@ public class Robot extends TimedRobot {
       trajectoryRunning = true;
       doTeleopTrajectory = false;
       doFileTrajectory = false;
+      doFileTrajectory = false;
     }
     doFileTrajectory = false;
 
@@ -426,9 +428,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
-    // SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
+    SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
     SmartDashboard.putString("FileChosen", chosenFileName);
     SmartDashboard.putString("FileInBuffer", bufferTrajName);
+    SmartDashboard.putString("Active Trajectory", activeTrajName);
 
     SmartDashboard.putNumber("AG0", activeTrajectoryGains[0]);
     SmartDashboard.putNumber("AG1", activeTrajectoryGains[1]);

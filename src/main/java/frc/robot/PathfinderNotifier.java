@@ -58,7 +58,7 @@ public class PathfinderNotifier {
 		thisTime = 0;
 		lastTime = 0;
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
-		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;
+		periodic_time = Robot.driveTrain.leftDf.getSegment().dt/1000;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -169,8 +169,8 @@ public class PathfinderNotifier {
 			 * any future motions
 			 * 
 			 */
-			right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getRightFeet());
-			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
 			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;

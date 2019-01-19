@@ -28,9 +28,15 @@ public class AutoChoosers {
 	 public AutoChoosers() {
 		testTrajectoryChooser = new SendableChooser<String>();
 
-		testTrajectoryChooser.setDefaultOption("Straight One", "StraightOne");
-		testTrajectoryChooser.addOption("Curve One", "CurveOne");
-		testTrajectoryChooser.addOption("Curve Two", "CurveTwo");
+		// testTrajectoryChooser.setDefaultOption("Straight One", "StraightOne");
+		// testTrajectoryChooser.addOption("Curve One", "CurveOne");
+		// testTrajectoryChooser.addOption("Curve Two", "CurveTwo");
+		// testTrajectoryChooser.addOption("Curve Three", "CurveThree");
+		testTrajectoryChooser.addOption("Right Turn", "SimpleRightTurn");
+		testTrajectoryChooser.addOption("Left Turn", "SimpleLeftTurn");
+		testTrajectoryChooser.setDefaultOption("Straight Line", "SimpleStraight");
+		testTrajectoryChooser.addOption("Field to Wall Test", "FieldToWallTest");
+		// testTrajectoryChooser.addOption("Left Hab to Cargo Ship", "LHabTOCS2");
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 

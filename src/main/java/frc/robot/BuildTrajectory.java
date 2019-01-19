@@ -22,8 +22,11 @@ public class BuildTrajectory {
 
 		String usbFilePath = "/U/Traj19CSV/";
 
-		String leftExtension = ".left.pf1.csv";
-		String rightExtension = ".right.pf1.csv";
+		// String leftExtension = ".left.pf1.csv";
+		// String rightExtension = ".right.pf1.csv";
+
+		String leftExtension = "_left.csv";
+		String rightExtension = "_right.csv";
 
 		if (usb)
 			tempPath = usbFilePath;

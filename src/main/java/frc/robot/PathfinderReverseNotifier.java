@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Notifier;
 import jaci.pathfinder.Pathfinder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PathfinderReverseNotifier {
 	private static int passCounter = 0;
@@ -17,11 +18,11 @@ public class PathfinderReverseNotifier {
 
 	static Notifier _notifier = new Notifier(new PeriodicRunnable());
 	private static double lastSegmentPosition;
-	private static boolean myRobotMoveReverse;
+	private static boolean myfaceField;
 	private static boolean myInvertY;
 	private static int switchMode;
 
-	public static void startNotifier(boolean robotMoveReverse, boolean invertY) {
+	public static void startNotifier(boolean faceField, boolean invertY) {
 				/**
 		 * all moves are towards the wall and away from the field. Robot can move in its
 		 * forward or reverse direction. It can have its command angle inverted to mirror
@@ -29,22 +30,22 @@ public class PathfinderReverseNotifier {
 		 * 
 		 */
 
-		myRobotMoveReverse = robotMoveReverse;
+		myfaceField = faceField;
 		myInvertY = invertY;
-		if (!myRobotMoveReverse && !myInvertY)
+		if (myfaceField && !myInvertY)
 			switchMode = 1;// reverse toward wall
-		if (!myRobotMoveReverse && myInvertY)
+		if (myfaceField && myInvertY)
 			switchMode = 2;// reverse toward wall invert y
-		if (myRobotMoveReverse && !myInvertY)
-			switchMode = 3;// rev toward field
-		if (myRobotMoveReverse && myInvertY)
+		if (!myfaceField && !myInvertY)
+			switchMode = 3;// Forward toward wall
+		if (!myfaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
 
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
 		lastSegmentPosition = Robot.activeTrajectory[0].get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
-		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt;
+		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt/1000;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -83,7 +84,7 @@ public class PathfinderReverseNotifier {
 		double turn = 0;
 		//convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
-
+		SmartDashboard.putNumber("Switch RevMode", switchMode);
 		switch (switchMode) {
 
 		case 1:
@@ -107,13 +108,13 @@ public class PathfinderReverseNotifier {
 			 * right/left distance follower and target angle inverted
 			 * 
 			 */
-			right = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getRightFeet());
-			left = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
 			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = Constants.MINIMUM_START_PCT + left + turn;
-			rightPct = Constants.MINIMUM_START_PCT + right - turn;
+			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
 			break;
 
 		case 3:
@@ -126,13 +127,13 @@ public class PathfinderReverseNotifier {
 			 * any future motions
 			 * 
 			 */
-			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
-			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getRightFeet());
 			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
-			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			leftPct = (Constants.MINIMUM_START_PCT + left + turn);
+			rightPct = (Constants.MINIMUM_START_PCT + right - turn);
 			break;
 
 		case 4:
@@ -144,27 +145,18 @@ public class PathfinderReverseNotifier {
 			 * any future motions
 			 * 
 			 */
-			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
-			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getLeftFeet());
 			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
-			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			leftPct = (Constants.MINIMUM_START_PCT + left + turn);
+			rightPct = (Constants.MINIMUM_START_PCT + right - turn);
 			break;
 
 		default:
 			break;
 		}
-
-		if (myRobotMoveReverse) {
-			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
-			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
-		} else {
-			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
-			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
-		}
-
 
 
 		Robot.driveTrain.leftDriveOut(leftPct);
