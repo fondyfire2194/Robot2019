@@ -17,10 +17,30 @@ public class PathfinderReverseNotifier {
 
 	static Notifier _notifier = new Notifier(new PeriodicRunnable());
 	private static double lastSegmentPosition;
-	private static boolean myRobotMoveForward;
+	private static boolean myRobotMoveReverse;
+	private static boolean myInvertY;
+	private static int switchMode;
 
-	public static void startNotifier(boolean robotMoveForward) {
-		myRobotMoveForward = robotMoveForward;
+	public static void startNotifier(boolean robotMoveReverse, boolean invertY) {
+				/**
+		 * all moves are towards the wall and away from the field. Robot can move in its
+		 * forward or reverse direction. It can have its command angle inverted to mirror
+		 * Y it can have its sides inverted by following opposite side trajectory
+		 * 
+		 */
+
+		myRobotMoveReverse = robotMoveReverse;
+		myInvertY = invertY;
+		if (!myRobotMoveReverse && !myInvertY)
+			switchMode = 1;// reverse toward wall
+		if (!myRobotMoveReverse && myInvertY)
+			switchMode = 2;// reverse toward wall invert y
+		if (myRobotMoveReverse && !myInvertY)
+			switchMode = 3;// rev toward field
+		if (myRobotMoveReverse && myInvertY)
+			switchMode = 4;// rev motion Y inverted
+
+
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
 		lastSegmentPosition = Robot.activeTrajectory[0].get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
@@ -57,7 +77,83 @@ public class PathfinderReverseNotifier {
 		passCounter--;
 		double left = 0;
 		double right = 0;
-		if (myRobotMoveForward) {
+		//convenience because gyro action is opposite of trajectory generation
+		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
+
+		switch (switchMode) {
+
+		case 1:
+		/**
+		 *  normal condition robot moves forward to field
+		 * standard Pathfinder trajectory use
+		 *  */
+	    	double left = Robot.driveTrainCanBus.revLeftDf.calculate(-Robot.driveTrainCanBus.getLeftFeet());
+		    double right = Robot.driveTrainCanBus.revRightDf.calculate(-Robot.driveTrainCanBus.getRightFeet());
+			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
+			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
+			break;
+
+		case 2:
+			/**
+			 * allows one trajectory to be used instead of two. Used for opposite side of
+			 * cargo ship. Robot moves forward to field with y inverted. Left/right follow
+			 * right/left distance follower and target angle inverted
+			 * 
+			 */
+			right = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getLeftFeet());
+			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
+			leftPct = Constants.MINIMUM_START_PCT + left + turn;
+			rightPct = Constants.MINIMUM_START_PCT + right - turn;
+			break;
+
+		case 3:
+			/**
+			 * robot moves backwards to field This requires a negated drive command and the
+			 * side positions nust be negated and exchanged. The side exchange is needed for
+			 * turns as the one with the longer distance is now the opposite The target
+			 * angle doesnt change but if this is the first move after startup, then the
+			 * gyro angle will be 180 off from normal and must be compensated somehow for
+			 * any future motions
+			 * 
+			 */
+			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
+			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
+			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
+			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			break;
+
+		case 4:
+		/**
+			 * robot moves backwards to field with Y invertd. This requires a negated drive command.
+			 * Side positions nust be negated but not exchanged.The target
+			 * angle doesnt change but if this is the first move after startup, then the
+			 * gyro angle will be 180 off from normal and must be compensated somehow for
+			 * any future motions
+			 * 
+			 */
+			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
+			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
+			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
+			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			break;
+
+		default:
+			break;
+		}
+
+		if (myRobotMoveReverse) {
 			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
 			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
 		} else {
@@ -65,19 +161,6 @@ public class PathfinderReverseNotifier {
 			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
 		}
 
-		desired_heading = Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading());
-
-		double angleDifference = Pathfinder.boundHalfDegrees(desired_heading - (Robot.driveTrain.getGyroYaw()));
-		double turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-		double leftPct = 0;
-		double rightPct = 0;
-		if (myRobotMoveForward) {
-			leftPct = -Constants.MINIMUM_START_PCT - left - turn;
-			rightPct = -Constants.MINIMUM_START_PCT - right + turn;
-		} else {
-			leftPct = Constants.MINIMUM_START_PCT + left - turn;
-			rightPct = Constants.MINIMUM_START_PCT + right + turn;
-		}
 
 
 		Robot.driveTrain.leftDriveOut(leftPct);

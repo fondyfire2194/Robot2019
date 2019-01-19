@@ -15,13 +15,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PathfinderTrajectory extends Command {
 	private double startTime;
 	private int scanCounter;
-	private boolean myRobotMoveForward;
+	private boolean myRobotMoveReverse;
 	private boolean myYInverted;
 
-	public PathfinderTrajectory(boolean robotMoveForward, boolean yInverted) {
+	public PathfinderTrajectory(boolean robotMoveReverse, boolean yInverted) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		myRobotMoveForward = robotMoveForward;
+		myRobotMoveReverse = robotMoveReverse;
 		myYInverted = yInverted;
 		requires(Robot.driveTrain);
 	}
@@ -58,7 +58,7 @@ public class PathfinderTrajectory extends Command {
 		}
 		scanCounter = 0;
 		startTime = Timer.getFPGATimestamp();
-		PathfinderNotifier.startNotifier(myRobotMoveForward, myYInverted);
+		PathfinderNotifier.startNotifier(myRobotMoveReverse, myYInverted);
 	}
 
 	// Called repeatedly when this Command is scheduled to run

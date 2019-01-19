@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
   public static double trajectoryAngle;
   public static String trajFileName;
   public static String logName;
-  public static boolean robotMoveForward;
+  public static boolean robotMoveReverse;
   int test;
   public static boolean buildInProgress;
   public static int startPositionSelected;
@@ -379,20 +379,22 @@ public class Robot extends TimedRobot {
 
       case 0:// move forward into field
         new PathfinderTrajectory(faceField,invertY).start();
-        robotMoveForward = true;
+        robotMoveReverse = false;
         constantsFromPrefs();
         break;
       case 1:// move reverse into field
         new PathfinderTrajectory(!faceField,invertY).start();
         revConstantsFromPrefs();
-        robotMoveForward = false;
+        robotMoveReverse = true;
         break;
       case 2:// move reverse to wall
         new PathfinderReverseTrajectory(faceField).start();
+        robotMoveReverse = true;
         revConstantsFromPrefs();
         break;
       case 3:// move forward to wall
         new PathfinderReverseTrajectory(!faceField).start();
+        robotMoveReverse = false;
         constantsFromPrefs();
         break;
 
