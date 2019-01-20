@@ -32,7 +32,7 @@ public class Pref {
   static {
     prefDict.put("DriveStraighKp", .03);
     prefDict.put("DrivePositionKp", .03);
-    prefDict.put("DriveSldnDist",2.);
+    prefDict.put("DriveSldnDist", 2.);
 
     prefDict.put("RotateKp", 0.2);
     prefDict.put("RotateKi", .0001);
@@ -50,9 +50,19 @@ public class Pref {
     prefDict.put("PathKtRev", .2);
 
     prefDict.put("VisionKp", .01);
-
     prefDict.put("JSTwistKp", .2);
+
+    prefDict.put("ElevatorMMKf", .75);
+    prefDict.put("ElevatorMMKp", .2);
+    prefDict.put("ElevatorMMKi", 0.);
+    prefDict.put("ElevatorMMKd", 0.);
+    // down values no longer used - same as up
+    prefDict.put("ElevatorDownMMKf", .4);
+    prefDict.put("ElevatorDownMMKp", .09);
+    prefDict.put("ElevatorDownMMKi", 0.);
+    prefDict.put("ElevatorDownMMKd", 0.);
   }
+  
 
   public static void ensureRioPrefs() {
     // init();

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.commands.Auto.*;
-
+import frc.robot.commands.Auto.CL1HabStart.*;
 public class AutoChoosers {
 
 	public static SendableChooser<Integer> startPositionChooser;
@@ -64,7 +64,7 @@ public class AutoChoosers {
 
 		secondHatchChooser.setDefaultOption("No Second Hatch", new DoNothing());
 		secondHatchChooser.addOption("LC1", new LC1ToLLD());
-		secondHatchChooser.addOption("LC2", new LC2ToRLD());
+		// secondHatchChooser.addOption("LC2", new LC2ToRLD());
 
 		SmartDashboard.putData("Second Hatch", secondHatchChooser);
 

@@ -1,7 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.commands.Auto.CLHabStart.*;
+import frc.robot.commands.Auto.CR1HabStart.*;
+import frc.robot.commands.Auto.CL1HabStart.*;
+// import frc.robot.commands.Auto.LHab1Start.*;
+
 import frc.robot.commands.Auto.*;
 
 public enum PathSelectAuto {

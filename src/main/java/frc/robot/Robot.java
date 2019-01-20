@@ -25,6 +25,7 @@ import frc.robot.commands.BufferToActiveTrajectory;
 import frc.robot.commands.Auto.*;
 import frc.robot.BuildTrajectory;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
@@ -45,6 +46,7 @@ import frc.robot.SD;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
+  public static Elevator elevator;
   public static SimpleCSVLogger simpleCSVLogger;
   public static LimeLight limelightCamera;
   public static VisionData visionData;

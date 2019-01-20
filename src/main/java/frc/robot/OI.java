@@ -53,7 +53,8 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
-
+  public Joystick co_driverController = new Joystick(RobotMap.OI_CO_DRIVER_CONTROLLER);
+  
   public OI(){
     Timer.delay(.02);
 

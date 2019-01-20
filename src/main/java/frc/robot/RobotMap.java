@@ -20,7 +20,8 @@ public class RobotMap {
   public static final int DRIVETRAIN_LEFT_TALON_THREE = 5;
   public static final int DRIVETRAIN_RIGHT_TALON_ONE = 6;
 	public static final int DRIVETRAIN_RIGHT_TALON_TWO = 7;
-	public static final int DRIVETRAIN_RIGHT_TALON_THREE = 8;
+  public static final int DRIVETRAIN_RIGHT_TALON_THREE = 8;
+  public static final int ELEVATOR_MOTOR = 12;
 	
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
@@ -28,7 +29,7 @@ public class RobotMap {
   // public static int rightMotor = 2;
 	
 	public static final int OI_DRIVER_CONTROLLER = 0;
-
+  public static final int OI_CO_DRIVER_CONTROLLER = 1;
 
 
   // If you are using multiple modules, make sure to define both the port
