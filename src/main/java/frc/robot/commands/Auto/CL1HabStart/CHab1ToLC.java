@@ -13,7 +13,7 @@ import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotDriveToTarget;
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.HatchPanels.*;
-import frc.robot.commands.BuildTrajectoryToBuffer;
+
 import frc.robot.Robot;
 import frc.robot.commands.BufferToActiveTrajectory;
 
@@ -57,7 +57,6 @@ public class CHab1ToLC extends CommandGroup {
      * 
      */
 
-    addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, "rev to wall and left"));// rev to wall and left
 
     addSequential(new RobotDriveToTarget(3, .5, false, 10));//position using vision correction
         

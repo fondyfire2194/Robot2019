@@ -17,19 +17,21 @@ public class BufferToActiveTrajectory extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public BufferToActiveTrajectory() {
+  private int myNumber;
+  public BufferToActiveTrajectory(int number) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myNumber=number;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.activeTrajectory[0]=Robot.bufferTrajectory[0];
-    Robot.activeTrajectory[1]=Robot.bufferTrajectory[1];
+    Robot.activeTrajectory[0] = Robot.bufferTrajectory[myNumber][0];
+    Robot.activeTrajectory[1] = Robot.bufferTrajectory[myNumber][1];
     Robot.activeTrajName = Robot.bufferTrajName;
-    
+
   }
 
 }

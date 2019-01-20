@@ -20,7 +20,7 @@ import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.BuildTrajectoryToBuffer;
+
 import frc.robot.commands.BufferToActiveTrajectory;
 import frc.robot.commands.Auto.*;
 import frc.robot.BuildTrajectory;
@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static GeneratePositionTrajectory generatePositionTrajectory;
+
   public static Command[] autonomousCommand;
 
   public static Command autoTimeDelayCommand;
@@ -85,18 +85,16 @@ public class Robot extends TimedRobot {
   private double angleTarget = 90;
   private double orientRate = 0.5;
 
-  private double endX = 10;
-  private double endY = 1;
-  private double endAngle = 0;
-
   public enum motionType {
     incremental, absolute
   }
 
+  public static boolean useGainPrefs = false;
   public static Trajectory[] activeTrajectory;
 
   public static String activeTrajName = "Empty";
-  public static Trajectory[] bufferTrajectory;
+  public static Trajectory[][] bufferTrajectory = new Trajectory[6][2];
+
   public static String bufferTrajName = "Empty";
   public static String testTrajectoryName;
   public static int testTrajectoryDirection;
@@ -124,8 +122,13 @@ public class Robot extends TimedRobot {
   public static boolean buildInProgress;
   public static int startPositionSelected;
   public static boolean useUsb = true;
-  public static  boolean faceField = true;
-  public static  boolean invertY = true;
+  public static boolean faceField = true;
+  public static boolean invertY = true;
+  public static boolean trajectoriesLoaded;
+  private int lastStartPositionSelected;
+  private int scanCounter;
+  private int jac;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -139,7 +142,7 @@ public class Robot extends TimedRobot {
     limelightCamera = new LimeLight();
     visionData = new VisionData();
     buildTrajectory = new BuildTrajectory();
-    generatePositionTrajectory = new GeneratePositionTrajectory();
+
     autoChoosers = new AutoChoosers();
     // autoChoosers.init();
     autonomousCommand = new Command[6];
@@ -159,7 +162,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("RevOrient", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("InvertY", false);
-
+    Timer.delay(.02);
+    SmartDashboard.putBoolean("UseGainPrefs", false);
   }
 
   /**
@@ -173,44 +177,59 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // test++;
-    // SmartDashboard.putNumber("Test", test);
-    // boolean notMatch = true;
+    scanCounter++;
 
-    // if (notMatch) {
-    //   testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
-    // } else {
-    //   startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+    startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+    if (isDisabled()&&!trajectoriesLoaded || startPositionSelected != lastStartPositionSelected) {
 
-    //   switch (startPositionSelected) {
-    //   case 0:
-    //     break;
-    //   case 1:
-    //     break;
-    //   case 2:
-    //     testTrajectoryName = "LHab1ToLCS2";
-    //     break;
-    //   case 3:
-    //     testTrajectoryName = "RHab1ToRCS2";
-    //     break;
-    //   default:
-    //     break;
-    //   }
-    // }
+      int i = 0;
 
-    // if (!trajectoryRunning && !buildInProgress && isDisabled()) {
-
-    //   if (activeTrajName != testTrajectoryName) {
-    //     bufferTrajectory = buildTrajectory.buildFileName(false, testTrajectoryName);
-    //     bufferTrajName = testTrajectoryName;
-    //     activeTrajectory = bufferTrajectory;
-    //     activeTrajName = bufferTrajName;
-
-    //   }
-    //   SmartDashboard.putString("FileInBuffer", bufferTrajName);
-    //   SmartDashboard.putString("FileAtive", activeTrajName);
-
-    // }
+      if (startPositionSelected == 0) {
+        if (scanCounter >= 50) {
+          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.leftStartNames[i]);
+          i++;
+          scanCounter = 0;
+          if (i >= TrajDict.leftStartNames.length - 1) {
+            lastStartPositionSelected = startPositionSelected;
+            trajectoriesLoaded = true;
+          }
+        }
+      }
+      if (startPositionSelected == 1) {
+        if (scanCounter >= 50) {
+          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.leftCenterStartNames[i]);
+          i++;
+          scanCounter = 0;
+          if (i >= TrajDict.leftCenterStartNames.length - 1) {
+            lastStartPositionSelected = startPositionSelected;
+            trajectoriesLoaded = true;
+          }
+        }
+      }
+      
+      if (startPositionSelected == 2) {
+        if (scanCounter >= 50) {
+          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.rightCenterStartNames[i]);
+          i++;
+          scanCounter = 0;
+          if (i >= TrajDict.rightCenterStartNames.length - 1) {
+            lastStartPositionSelected = startPositionSelected;
+            trajectoriesLoaded = true;
+          }
+        }
+      }
+      if (startPositionSelected == 3) {
+        if (scanCounter >= 50) {
+          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.rightStartNames[i]);
+          i++;
+          scanCounter = 0;
+          if (i >= TrajDict.rightStartNames.length - 1) {
+            lastStartPositionSelected = startPositionSelected;
+            trajectoriesLoaded = true;
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -359,47 +378,29 @@ public class Robot extends TimedRobot {
       Robot.logName = activeTrajName;
     }
 
-    if (doTeleopTrajectory) {
-
-      bufferTrajectory = generatePositionTrajectory.generate(endX, endY, endAngle);
-      Robot.chosenFileName = "Manual Gen";
-    }
-    if (doTeleopTrajectory || (doFileTrajectory && buildOK)) {
-
-      // activeTrajectory = bufferTrajectory;
-
-      // driveTrain.resetEncoders();
-      // driveTrain.resetGyro();
-      // xPosition = activeTrajectory[0].get(0).x;
-      // yPosition = activeTrajectory[0].get(0).y - (Constants.WHEELBASE_WIDTH / 2);
-      constantsFromPrefs();
-
+    if ((doFileTrajectory && buildOK)) {
+      if (useGainPrefs)
+        constantsFromPrefs();
+      else
+        activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
-     invertY =  SmartDashboard.getBoolean("InvertY", false);
-    // driveTrain.resetGyro();
-    // driveTrain.resetEncoders();
+      invertY = SmartDashboard.getBoolean("InvertY", false);
+      useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", false);
+
       switch (trajectoryDirectionChooser) {
 
       case 0:// move forward into field
-        new PathfinderTrajectory(faceField,invertY).start();
-        robotMoveReverse = false;
-        SmartDashboard.putString("Jacob", "");
-        constantsFromPrefs();
+        new PathfinderTrajectory(faceField, invertY).start();
         break;
       case 1:// move reverse into field
-        new PathfinderTrajectory(!faceField,invertY).start();
-        revConstantsFromPrefs();
-        robotMoveReverse = true;
+        new PathfinderTrajectory(!faceField, invertY).start();
         break;
       case 2:// move reverse to wall
-        new PathfinderReverseTrajectory(faceField,invertY).start();
-        robotMoveReverse = true;
-        revConstantsFromPrefs();
+        new PathfinderReverseTrajectory(faceField, invertY).start();
+
         break;
       case 3:// move forward to wall
-        new PathfinderReverseTrajectory(!faceField,invertY).start();
-        robotMoveReverse = false;
-        constantsFromPrefs();
+        new PathfinderReverseTrajectory(!faceField, invertY).start();
         break;
 
       }

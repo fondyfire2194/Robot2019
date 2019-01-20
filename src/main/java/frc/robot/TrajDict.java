@@ -15,11 +15,18 @@ import java.util.HashMap;
 
 public class TrajDict {
 
-	// order is Kp, Kd, Ka and Kturn
+public static String[] leftStartNames = {"A","B"};
+public static String[] leftCenterStartNames = {"A","B"};
+public static String[] rightCenterStartNames = {"A","B"};
+public static String[] rightStartNames = {"A","B"};
+
+
+	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
-		gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(leftStartNames[0], new Double[] { .4, 0., 0.02, 1. });
+		
 		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
 		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
 		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
@@ -37,9 +44,13 @@ public class TrajDict {
 		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
 
 	}
-	public static Double[] getTrajGains(String name){
+	public static double[] getTrajGains(String name){
 	String key = name;
-       Double[] temp = gainDict.get(key);
-       return temp;
+	   Double[] temp = gainDict.get(key);
+	     double[] temp1 = new double[4];
+	   for (int i =0;i<4;i++){
+		 temp1[i] = temp[i];
+	   }
+       return temp1;
 	}
 }

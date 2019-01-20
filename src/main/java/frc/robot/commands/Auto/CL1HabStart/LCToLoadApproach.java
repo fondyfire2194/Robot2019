@@ -13,7 +13,7 @@ import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotDriveToTarget;
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.HatchPanels.*;
-import frc.robot.commands.BuildTrajectoryToBuffer;
+
 import frc.robot.Robot;
 import frc.robot.commands.BufferToActiveTrajectory;
 
@@ -46,19 +46,17 @@ public class LCToLoadApproach extends CommandGroup {
      */
 
 
-    addSequential(new BufferToActiveTrajectory());//rev to wall and left
+    addSequential(new BufferToActiveTrajectory(0));//rev to wall and left
 
-    addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, "left and rev to field"));// left and rev to field
-
+ 
     addSequential(new PathfinderReverseTrajectory(Robot.faceField,Robot.invertY));// rev to wall and left
 
-    addSequential(new BufferToActiveTrajectory());//left and rev to field
+    addSequential(new BufferToActiveTrajectory(1));//left and rev to field
 
-    addParallel(new BuildTrajectoryToBuffer(Robot.useUsb, ""));// to load approach
 
     addSequential(new PathfinderTrajectory(!Robot.faceField,!Robot.invertY));// left and reverse to field
 
-    addSequential(new BufferToActiveTrajectory());//rev to wall and left
+    addSequential(new BufferToActiveTrajectory(2));//rev to wall and left
 
  }
 }
