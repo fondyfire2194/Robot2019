@@ -5,17 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.CL1HabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.SetActiveTrajectory;
 
-public class LHabToLShipMid extends CommandGroup {
+public class MoveToAndLoadPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LHabToLShipMid() {
+  public MoveToAndLoadPanel() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -32,11 +30,5 @@ public class LHabToLShipMid extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new SetActiveTrajectory("LHabToShipMid"));
-    addSequential(new SetActiveTrajectory("LShipMidToLLoad"));
-    addSequential(new SetActiveTrajectory("LLoadToR"));
-    addSequential(new PathfinderTrajectory());
-    
-
   }
 }

@@ -5,17 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.LHab1Start;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.SetActiveTrajectory;
 
-public class LCenHabToLShipFront extends CommandGroup {
+public class LLDToLC2 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LCenHabToLShipFront() {
+  public LLDToLC2() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -32,7 +30,5 @@ public class LCenHabToLShipFront extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new SetActiveTrajectory("LCenHabTOLShipFront"));
-    addSequential(new PathfinderTrajectory());
   }
 }

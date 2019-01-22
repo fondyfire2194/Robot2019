@@ -9,17 +9,24 @@ public class BuildTrajectory {
 	public static File myLeftFile;
 	public static File myRightFile;
 
-	// public BuildTrajectory() {
+	public BuildTrajectory() {
 
-	// }
+	}
 
-	public static Trajectory[] buildFileName(boolean usb, String name) {
-		Trajectory active[] = new Trajectory[2];
+	public Trajectory[] buildFileName(boolean usb, String name) {
+		Robot.buildInProgress = true;
+		Trajectory buffer[] = new Trajectory[2];
 		Robot.buildOK = false;
 		String tempPath = null;
-		String filePath = "/home/lvuser/Traj19CSV/";
+		String filePath = "/home/lvuser/deploy/paths/";
 
 		String usbFilePath = "/U/Traj19CSV/";
+
+		// String leftExtension = ".left.pf1.csv";
+		// String rightExtension = ".right.pf1.csv";
+
+		String leftExtension = "_left.csv";
+		String rightExtension = "_right.csv";
 
 		if (usb)
 			tempPath = usbFilePath;
@@ -27,19 +34,21 @@ public class BuildTrajectory {
 			tempPath = filePath;
 
 		Robot.chosenFileName = "NONE";
-
-		myLeftFile = new File(tempPath + name + ".left.pf1.csv");
-		myRightFile = new File(tempPath + name + ".right.pf1.csv");
+		Robot.chosenFileName = tempPath + name + leftExtension;
+		myLeftFile = new File(tempPath + name + leftExtension);
+		myRightFile = new File(tempPath + name + rightExtension);
 
 		if (myLeftFile.exists() && myRightFile.exists()) {
-			// Pathfinder.readFromCSV(myLeftFile);
-			// Pathfinder.readFromCSV(myRightFile);
-			 active[0] = Pathfinder.readFromCSV(myLeftFile);
-			 active[1] = Pathfinder.readFromCSV(myRightFile);
-			Robot.chosenFileName = tempPath + name + ".left.pf1.csv";
+			Robot.bufferTrajName = "Loading";
+			buffer[0] = Pathfinder.readFromCSV(myLeftFile);
+			buffer[1] = Pathfinder.readFromCSV(myRightFile);
+
+			Robot.chosenFileName = tempPath + name + leftExtension;
 			Robot.buildOK = true;
+			Robot.bufferTrajName = name;
+			Robot.buildInProgress = false;
 		}
-		return active;
+		return buffer;
 
 	}
 }

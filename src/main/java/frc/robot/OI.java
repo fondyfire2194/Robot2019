@@ -13,9 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DoFileTrajectory;
 import frc.robot.commands.DoTeleopRobotOrient;
 import frc.robot.commands.DoTeleopTrajectory;
+import frc.robot.commands.DoTeleopPosition;
 import frc.robot.commands.ResetEncoders;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DeleteAllPrefs;
+import frc.robot.commands.Limelight.*;
+import frc.robot.LimelightControlMode.*;
+import frc.robot.LimeLight;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -49,7 +53,8 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
-
+  public Joystick co_driverController = new Joystick(RobotMap.OI_CO_DRIVER_CONTROLLER);
+  
   public OI(){
     Timer.delay(.02);
 
@@ -59,12 +64,18 @@ public class OI {
     Timer.delay(.02);
     SmartDashboard.putData("OrientRobot", new DoTeleopRobotOrient());
     Timer.delay(.02);
+    SmartDashboard.putData("DriveToTarget", new DoTeleopPosition());
+
+    
+    Timer.delay(.02);
     SmartDashboard.putData("Tel Traj", new DoTeleopTrajectory());
     Timer.delay(.02);
     SmartDashboard.putData("File Traj", new DoFileTrajectory());
     Timer.delay(.02);
+    SmartDashboard.putData("LEDS On", new SetLimelightLeds(LedMode.kforceOn) );
+    SmartDashboard.putData("LEDS Off", new SetLimelightLeds(LedMode.kforceOff) );
 
-
+    SmartDashboard.putData("Toggle View", new ToggleCamMode());
 
   }
 }

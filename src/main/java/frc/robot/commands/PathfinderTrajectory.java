@@ -15,10 +15,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PathfinderTrajectory extends Command {
 	private double startTime;
 	private int scanCounter;
+	private boolean myRobotMoveReverse;
+	private boolean myYInverted;
 
-	public PathfinderTrajectory() {
+	public PathfinderTrajectory(boolean robotMoveReverse, boolean yInverted) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		myRobotMoveReverse = robotMoveReverse;
+		myYInverted = yInverted;
 		requires(Robot.driveTrain);
 	}
 
@@ -49,12 +53,12 @@ public class PathfinderTrajectory extends Command {
 		Robot.driveTrain.rightDf.reset();
 		Robot.trajectoryRunning = true;
 		if (Robot.createTrajectoryRunFile) {
-			Robot.simpleCSVLogger.init("Trajectory", Robot.logName +" Fwd", Robot.names, Robot.units);
+			Robot.simpleCSVLogger.init("Trajectory", Robot.logName + " Fwd", Robot.names, Robot.units);
 			// Robot.simpleCSVLogger.writeData(P, I, D, V, A);
 		}
 		scanCounter = 0;
 		startTime = Timer.getFPGATimestamp();
-		PathfinderNotifier.startNotifier();
+		PathfinderNotifier.startNotifier(myRobotMoveReverse, myYInverted);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
