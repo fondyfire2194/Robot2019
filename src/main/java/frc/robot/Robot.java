@@ -24,7 +24,8 @@ import frc.robot.commands.RobotDriveToTarget;
 import frc.robot.commands.BufferToActiveTrajectory;
 import frc.robot.commands.Auto.*;
 import frc.robot.BuildTrajectory;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.TrajDict;
+import frc.robot.subsystems.DriveTrain;;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
@@ -85,11 +86,12 @@ public class Robot extends TimedRobot {
   private double angleTarget = 90;
   private double orientRate = 0.5;
 
-  public enum motionType {
+  public enum motionType 
+  {
     incremental, absolute
   }
 
-  public static boolean useGainPrefs = false;
+  public static boolean useGainPrefs = true;
   public static Trajectory[] activeTrajectory;
 
   public static String activeTrajName = "Empty";
@@ -163,7 +165,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("InvertY", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("UseGainPrefs", false);
+    SmartDashboard.putBoolean("UseGainPrefs", true);
   }
 
   /**
@@ -305,7 +307,8 @@ public class Robot extends TimedRobot {
         PathSelectAuto.RHAB1ToCS2.build();
 
       }
-
+autonomousCommand[1].start();
+if autonomousCommandDone[1]
     }
 
   }
@@ -385,21 +388,21 @@ public class Robot extends TimedRobot {
         activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
       int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
       invertY = SmartDashboard.getBoolean("InvertY", false);
-      useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", false);
+      useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
       switch (trajectoryDirectionChooser) {
 
-      case 0:// move forward into field
+      case 1:// move forward into field
         new PathfinderTrajectory(faceField, invertY).start();
         break;
-      case 1:// move reverse into field
+      case 2:// move reverse into field
         new PathfinderTrajectory(!faceField, invertY).start();
         break;
-      case 2:// move reverse to wall
+      case 3:// move reverse to wall
         new PathfinderReverseTrajectory(faceField, invertY).start();
 
         break;
-      case 3:// move forward to wall
+      case 4:// move forward to wall
         new PathfinderReverseTrajectory(!faceField, invertY).start();
         break;
 

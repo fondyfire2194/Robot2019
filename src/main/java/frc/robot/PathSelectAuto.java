@@ -5,7 +5,7 @@ import frc.robot.commands.Auto.CR1HabStart.*;
 import frc.robot.commands.Auto.CL1HabStart.*;
 // import frc.robot.commands.Auto.LHab1Start.*;
 
-import frc.robot.commands.Auto.*;
+
 
 public enum PathSelectAuto {
 	/*
@@ -15,7 +15,7 @@ public enum PathSelectAuto {
 	 * 
 	 */
 
-	CHAB1LC(new CHab1ToLC(), new LCToLoadApproach(), new AdjustLoadApproach(), new MoveToAndLoadPanel(),
+	CHAB1LC(new CHab1ToLC(), new LCToLoadApproach(), new RobotOrient(180, .5, true, 5), new MoveToAndLoadPanel(),
 	new LoadToCS2()), //
 
 	CHAB1RC(new CHab1ToRC(), new CHab1ToRC(), new CHab1ToLC(), new CHab1ToLC()), //

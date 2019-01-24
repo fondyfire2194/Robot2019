@@ -6,7 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Add your docs here.
  */
@@ -14,37 +16,54 @@ public class VisionData {
 
     public int[] boxHeight;
     public double[] distanceFeet;
+    public double[] validTargetAngles;
+    private double atTargetAngle = 5.;
 
     public VisionData() {
-        boxHeight = new int[] {0, 5,10,15,20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85,90};
+        boxHeight = new int[] { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90 };
 
-        distanceFeet = new double[] {10,9,8,7, 6.1,5.5,4.1,3.5,3.2,2.8,2.5,2.3,2.7,2.4,1.9,1.8,1.3,1.2,1.0 };
+        distanceFeet = new double[] { 10, 9, 8, 7, 6.1, 5.5, 4.1, 3.5, 3.2, 2.8, 2.5, 2.3, 2.7, 2.4, 1.9, 1.8, 1.3, 1.2,
+                1.0 };
+
+        validTargetAngles = new double[] { 0, 62.5, 90, 152.5, 180, -152.5, -90, -62.5 };
 
     }
 
     public double calculateDistance() {
-        int lookUpIndex=0;
+        int lookUpIndex = 0;
         int segmentRange = 0;
-        int distIntoRange =0;
-        double distanceRange=0;
-        
+        int distIntoRange = 0;
+        double distanceRange = 0;
+
         double boxHeightValue = Robot.limelightCamera.getBoundingBoxHeight();
-        if ( boxHeightValue> 0 && boxHeightValue < 85) {
-            lookUpIndex = (int)boxHeightValue / 5;
+        if (boxHeightValue > 0 && boxHeightValue < 85) {
+            lookUpIndex = (int) boxHeightValue / 5;
             segmentRange = (boxHeight[lookUpIndex + 1] - boxHeight[lookUpIndex]);
             if (segmentRange != 0) {
-                distIntoRange = ((int)boxHeightValue - lookUpIndex * 5);
+                distIntoRange = ((int) boxHeightValue - lookUpIndex * 5);
                 distanceRange = (distanceFeet[lookUpIndex] - distanceFeet[lookUpIndex + 1]);
-                return (distanceFeet[lookUpIndex]
-                        - ((distanceRange * (double) distIntoRange) / (double) segmentRange));
+                return (distanceFeet[lookUpIndex] - ((distanceRange * (double) distIntoRange) / (double) segmentRange));
             } else
                 return 0;
         } else
             return 0;
 
     }
-    public void updateStatus(){
-        SD.putN1("TargetDistance",calculateDistance());
+
+    public double targetAngleError() {
+        double temp = 999;
+        for (int i = 0; i < validTargetAngles.length; i++) {
+            if(Math.abs(Robot.driveTrain.getGyroYaw() - validTargetAngles[i]) < atTargetAngle){ 
+                temp =  validTargetAngles[i] - Robot.driveTrain.getGyroYaw();
+                i=99; 
+            }               
+        }
+        return temp;
+    }
+
+    public void updateStatus() {
+        SD.putN1("TargetDistance", calculateDistance());
+        SD.putN1("TargetAngleErr", targetAngleError());
     }
 
 }

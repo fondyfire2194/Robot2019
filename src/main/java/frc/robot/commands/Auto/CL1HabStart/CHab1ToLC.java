@@ -8,14 +8,10 @@
 package frc.robot.commands.Auto.CL1HabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
+
 import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.TimeDelay;
 import frc.robot.commands.HatchPanels.*;
 
-import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
 
 public class CHab1ToLC extends CommandGroup {
   /**
@@ -62,7 +58,7 @@ public class CHab1ToLC extends CommandGroup {
         
     addSequential(new PlacePanel());
 
-    
+    addSequential(new SetAutoConmmandDone(1));
 
     
   }

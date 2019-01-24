@@ -58,7 +58,7 @@ public class PathfinderNotifier {
 		thisTime = 0;
 		lastTime = 0;
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
-		periodic_time = Robot.driveTrain.leftDf.getSegment().dt/1000;
+		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;///1000;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -146,7 +146,7 @@ public class PathfinderNotifier {
 			 * robot moves backwards to field This requires a negated drive command and the
 			 * side positions nust be negated and exchanged. The side exchange is needed for
 			 * turns as the one with the longer distance is now the opposite The target
-			 * angle doesnt change but if this is the first move after startup, then the
+			 * angle doesn't change but if this is the first move after startup, then the
 			 * gyro angle will be 180 off from normal and must be compensated somehow for
 			 * any future motions
 			 * 
@@ -163,8 +163,8 @@ public class PathfinderNotifier {
 		case 4:
 		/**
 			 * robot moves backwards to field with Y invertd. This requires a negated drive command.
-			 * Side positions nust be negated but not exchanged.The target
-			 * angle doesnt change but if this is the first move after startup, then the
+			 * Side positions must be negated but not exchanged.The target
+			 * angle doesn't change but if this is the first move after startup, then the
 			 * gyro angle will be 180 off from normal and must be compensated somehow for
 			 * any future motions
 			 * 

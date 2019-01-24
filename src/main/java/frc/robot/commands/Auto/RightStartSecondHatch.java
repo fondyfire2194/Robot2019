@@ -5,23 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.CL1HabStart;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.TimeDelay;
-import frc.robot.commands.HatchPanels.*;
 
-import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
-
-public class LCToLoadApproach extends CommandGroup {
+public class RightStartSecondHatch extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LCToLoadApproach() {
+  public RightStartSecondHatch(int number) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -38,22 +30,34 @@ public class LCToLoadApproach extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    /**
-     * Two curves to get C shape, Pathfinder can't change X direction Do reverse
-     * curve back and up Do reverse curve up and forward Do curve to load station
-     * Pick up panel Do reverse curve forward and left Position using vision Attach
-     * panel
-     */
 
+    switch (number) {
+      case 0:
+        // teleop
+        break;
 
-    addSequential(new BufferToActiveTrajectory(0));//rev to wall and left
+      case 1:
+        // Left cargo ship 1
+        break;
 
-    addSequential(new PathfinderReverseTrajectory(Robot.faceField,Robot.invertY));// rev to wall and left
+      case 2:
+        // left cargo ship 2
+        break;
 
-    addSequential(new BufferToActiveTrajectory(1));//left and rev to field
+      case 3:
+        // left cargo ship 3
+        break;
+        
+      case 4:
+        // end cargo ship left
+        break;
 
-    addSequential(new PathfinderTrajectory(!Robot.faceField,!Robot.invertY));// left and reverse to field
-
-
- }
+      case 5:
+        // end cargo ship right
+        break;
+      
+      default:
+        break;
+    }
+  }
 }
