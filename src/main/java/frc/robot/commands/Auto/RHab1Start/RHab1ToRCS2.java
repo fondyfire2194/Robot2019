@@ -8,7 +8,10 @@
 package frc.robot.commands.Auto.RHab1Start;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.TimeDelay;
+import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.HatchPanels.*;
+import frc.robot.commands.Auto.*;
+
 
 public class RHab1ToRCS2 extends CommandGroup {
   /**
@@ -31,6 +34,12 @@ public class RHab1ToRCS2 extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new TimeDelay(2));
+    addSequential(new SetRunningCommandName("Vision Move"));
+    addSequential(new RobotDriveToTarget(3, .5, false, 10));// position using vision correction
+    addSequential(new SetRunningCommandName("Place Panel"));
+    addSequential(new PlacePanel());
+
+    addSequential(new SetAutoCommandDone(1));
+
   }
 }

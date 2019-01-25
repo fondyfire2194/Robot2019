@@ -18,23 +18,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.PathfinderReverseTrajectory;
 import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
-import frc.robot.commands.TimeDelay;
 import frc.robot.commands.RobotDriveToTarget;
 
-import frc.robot.commands.BufferToActiveTrajectory;
 import frc.robot.commands.Auto.*;
 import frc.robot.BuildTrajectory;
 import frc.robot.TrajDict;
-import frc.robot.subsystems.DriveTrain;;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.RobotRotate;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
 import frc.robot.VisionData;
-
+import frc.robot.AutoCommands;
 import frc.robot.LimeLight;
 import frc.robot.LimelightControlMode.*;
-import frc.robot.SD;
+import frc.robot.LoadFiles;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -86,8 +84,7 @@ public class Robot extends TimedRobot {
   private double angleTarget = 90;
   private double orientRate = 0.5;
 
-  public enum motionType 
-  {
+  public enum motionType {
     incremental, absolute
   }
 
@@ -95,7 +92,10 @@ public class Robot extends TimedRobot {
   public static Trajectory[] activeTrajectory;
 
   public static String activeTrajName = "Empty";
-  public static Trajectory[][] bufferTrajectory = new Trajectory[6][2];
+  public static Trajectory[] leftBufferTrajectory = new Trajectory[6];
+  public static Trajectory[] rightBufferTrajectory = new Trajectory[6];
+  public static int secondHatchIndex;
+  public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5" };
 
   public static String bufferTrajName = "Empty";
   public static String testTrajectoryName;
@@ -123,13 +123,21 @@ public class Robot extends TimedRobot {
   int test;
   public static boolean buildInProgress;
   public static int startPositionSelected;
+  public static int secondHatchSelected;
   public static boolean useUsb = true;
   public static boolean faceField = true;
   public static boolean invertY = true;
   public static boolean trajectoriesLoaded;
-  private int lastStartPositionSelected;
-  private int scanCounter;
-  private int jac;
+
+  public static int numberOfAutonomousCommands;
+  public static boolean startSettingsReady = false;
+  public static boolean startSettingsDone = false;
+  public static boolean readingRunning = false;
+
+  LoadFiles currentLoader = new LoadFiles();
+  LoadFiles oldLoader = null;
+  boolean firstTime = false;
+  public static String runningCommandName = "None";
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -147,8 +155,8 @@ public class Robot extends TimedRobot {
 
     autoChoosers = new AutoChoosers();
     // autoChoosers.init();
-    autonomousCommand = new Command[6];
-    autonomousCommandDone = new boolean[6];
+    autonomousCommand = new Command[10];
+    autonomousCommandDone = new boolean[10];
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
     // Pref.deleteUnused();
@@ -166,6 +174,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("InvertY", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
+    Timer.delay(.02);
+    SmartDashboard.putBoolean("StartSettingsReady", false);
+    SmartDashboard.putData(driveTrain);
+    // SmartDashboard.putData(elevator);
+    SmartDashboard.putData(robotRotate);
+
+    SmartDashboard.putData(Scheduler.getInstance());
   }
 
   /**
@@ -179,59 +194,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    scanCounter++;
-
-    startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-    if (isDisabled()&&!trajectoriesLoaded || startPositionSelected != lastStartPositionSelected) {
-
-      int i = 0;
-
-      if (startPositionSelected == 0) {
-        if (scanCounter >= 50) {
-          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.leftStartNames[i]);
-          i++;
-          scanCounter = 0;
-          if (i >= TrajDict.leftStartNames.length - 1) {
-            lastStartPositionSelected = startPositionSelected;
-            trajectoriesLoaded = true;
-          }
-        }
-      }
-      if (startPositionSelected == 1) {
-        if (scanCounter >= 50) {
-          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.leftCenterStartNames[i]);
-          i++;
-          scanCounter = 0;
-          if (i >= TrajDict.leftCenterStartNames.length - 1) {
-            lastStartPositionSelected = startPositionSelected;
-            trajectoriesLoaded = true;
-          }
-        }
-      }
-      
-      if (startPositionSelected == 2) {
-        if (scanCounter >= 50) {
-          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.rightCenterStartNames[i]);
-          i++;
-          scanCounter = 0;
-          if (i >= TrajDict.rightCenterStartNames.length - 1) {
-            lastStartPositionSelected = startPositionSelected;
-            trajectoriesLoaded = true;
-          }
-        }
-      }
-      if (startPositionSelected == 3) {
-        if (scanCounter >= 50) {
-          bufferTrajectory[i] = buildTrajectory.buildFileName(useUsb, TrajDict.rightStartNames[i]);
-          i++;
-          scanCounter = 0;
-          if (i >= TrajDict.rightStartNames.length - 1) {
-            lastStartPositionSelected = startPositionSelected;
-            trajectoriesLoaded = true;
-          }
-        }
-      }
-    }
+    updateStatus();
   }
 
   /**
@@ -241,11 +204,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+
   }
 
   @Override
   public void disabledPeriodic() {
     Scheduler.getInstance().run();
+    startSettingsReady = SmartDashboard.getBoolean("StartSettingsReady", false);
+
+    SmartDashboard.putBoolean("StartSettingsDone", startSettingsDone);
+    if (startSettingsDone) {
+      startSettingsDone = startSettingsReady;
+    }
+    if (startSettingsReady && !startSettingsDone && !readingRunning) {
+      readTrajFiles();
+      readingRunning = true;
+    }
   }
 
   /**
@@ -262,24 +236,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
+    Scheduler.getInstance().run();
+    Robot.runningCommandName = "None";
     autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
     startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+    if (startPositionSelected == 0)
+      autoTimeDelaySeconds = 0;
 
-    if (autoTimeDelaySeconds != 0) {
+    secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
 
-      autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
-
-    } else {
-      autonomousCommandDone[0] = true;
-    }
-    /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-     * switch(autoSelected) { case "My Auto": autonomousCommand = new
-     * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
-     * ExampleCommand(); break; }
-     */
+    autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
 
     // schedule the autonomous command (example)
     if (autonomousCommand[0] != null)
@@ -293,40 +260,58 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
-    if (autonomousCommandDone[0]) {
+    if (startPositionSelected != 0) {
 
       switch (startPositionSelected) {
-
-      case 0:
-        PathSelectAuto.CHAB1LC.build();
       case 1:
-        PathSelectAuto.CHAB1RC.build();
+        numberOfAutonomousCommands = AutoCommands.setLeftStart();
       case 2:
-        PathSelectAuto.LHAB1ToCS2.build();
+        numberOfAutonomousCommands = AutoCommands.setLeftCenterStart();
       case 3:
-        PathSelectAuto.RHAB1ToCS2.build();
+        numberOfAutonomousCommands = AutoCommands.setRightCenterStart();
+      case 4:
+        numberOfAutonomousCommands = AutoCommands.setRightStart();
 
       }
-autonomousCommand[1].start();
-if autonomousCommandDone[1]
-    }
 
+      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands);
+
+      if (autonomousCommandDone[0])
+        autonomousCommand[1].start();
+      if (autonomousCommandDone[1] && numberOfAutonomousCommands > 1)
+        autonomousCommand[2].start();
+      if (autonomousCommandDone[2] && numberOfAutonomousCommands > 2)
+        autonomousCommand[3].start();
+      if (autonomousCommandDone[3] && numberOfAutonomousCommands > 3)
+        autonomousCommand[4].start();
+      if (autonomousCommandDone[4] && numberOfAutonomousCommands > 4)
+        autonomousCommand[5].start();
+        if (autonomousCommandDone[5] && numberOfAutonomousCommands > 5)
+        autonomousCommand[6].start();
+      if (autonomousCommandDone[6] && numberOfAutonomousCommands > 6)
+        autonomousCommand[7].start();
+      if (autonomousCommandDone[7] && numberOfAutonomousCommands > 8)
+        autonomousCommand[8].start();
+
+    }
   }
 
   @Override
   public void teleopInit() {
+    Robot.runningCommandName = "None";
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    if (startPositionSelected != 0) {
+      for (int i = 0; i < numberOfAutonomousCommands; i++) {
 
-    for (int i = 0; i < 6; i++) {
+        if (autonomousCommand[1] != null) {
+          autonomousCommand[i].cancel();
+          autonomousCommandDone[i] = false;
+        }
 
-      if (autonomousCommand[1] != null) {
-        autonomousCommand[i].cancel();
-        autonomousCommandDone[i] = false;
       }
-
     }
   }
 
@@ -335,6 +320,7 @@ if autonomousCommandDone[1]
    */
   @Override
   public void teleopPeriodic() {
+
     Scheduler.getInstance().run();
     if (doTeleopPosition) {
       positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
@@ -365,7 +351,8 @@ if autonomousCommandDone[1]
       testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
       testTrajectoryDirection = AutoChoosers.trajectoryDirectionChooser.getSelected();
       if (activeTrajName != testTrajectoryName) {
-        activeTrajectory = buildTrajectory.buildFileName(useUsb, testTrajectoryName);
+        activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
+        activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
         Robot.logName = activeTrajName;
@@ -430,7 +417,12 @@ if autonomousCommandDone[1]
     driveTrain.updateStatus();
     limelightCamera.updateStatus();
     visionData.updateStatus();
-
+    SmartDashboard.putBoolean("BuildInProg", buildInProgress);
+    SmartDashboard.putBoolean("BuildOK", buildOK);
+    SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
+    SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+    SmartDashboard.putBoolean("AC0Dn", autonomousCommandDone[0]);
+    SmartDashboard.putString("Running Command", runningCommandName);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
@@ -453,11 +445,18 @@ if autonomousCommandDone[1]
     activeTrajectoryGains[3] = Pref.getPref("PathKt");// prefs.getDouble("PathTurn", 0);
   }
 
-  private void revConstantsFromPrefs() {
-    activeTrajectoryGains[0] = Pref.getPref("PathKpRev");// prefs.getDouble("PathP", 0);
-    activeTrajectoryGains[1] = Pref.getPref("PathKdRev");// prefs.getDouble("PathD", 0);
-    activeTrajectoryGains[2] = Pref.getPref("PathKaRev");// prefs.getDouble("PathA", 0);
-    activeTrajectoryGains[3] = Pref.getPref("PathKtRev");// prefs.getDouble("PathTurn", 0);
-  }
+  public void readTrajFiles() {
 
+    // currentLoader = new LoadFiles();
+
+    // if (!firstTime)
+    // oldLoader = currentLoader;
+    // else oldLoader.valid=false;
+    // firstTime = true;
+    Thread reader = new Thread(currentLoader);
+
+    reader.setDaemon(true);
+    if (!startSettingsDone)
+      reader.start();
+  }
 }

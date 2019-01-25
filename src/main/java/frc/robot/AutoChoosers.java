@@ -44,12 +44,12 @@ public class AutoChoosers {
 		SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
 
 		startPositionChooser = new SendableChooser<Integer>();
-
-		startPositionChooser.setDefaultOption("Left to LCS2", 0);
-		startPositionChooser.addOption("LCenter", 1);
-		startPositionChooser.addOption("RCenter", 2);
-		startPositionChooser.addOption("Right to RCS2", 3);
-		startPositionChooser.addOption("DriverControl", 4);
+        startPositionChooser.setDefaultOption("DriverControl", 0);
+		startPositionChooser.addOption("Left to LCS2", 1);
+		startPositionChooser.addOption("LCenter", 2);
+		startPositionChooser.addOption("RCenter", 3);
+		startPositionChooser.addOption("Right to RCS2", 4);
+		
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 
@@ -59,7 +59,7 @@ public class AutoChoosers {
 		secondHatchChooser.addOption("Cargo Ship 1", 1);
 		secondHatchChooser.addOption("Cargo Ship 2", 2);
 		secondHatchChooser.addOption("Cargo Ship 3", 3);
-		secondHatchChooser.addOption("End Cargo Ship Left", 4;
+		secondHatchChooser.addOption("End Cargo Ship Left", 4);
 		secondHatchChooser.addOption("End Cargo Ship Right", 5);
 
 		SmartDashboard.putData("Second Hatch", secondHatchChooser);

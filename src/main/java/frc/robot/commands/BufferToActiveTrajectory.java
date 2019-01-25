@@ -28,8 +28,8 @@ public class BufferToActiveTrajectory extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.activeTrajectory[0] = Robot.bufferTrajectory[myNumber][0];
-    Robot.activeTrajectory[1] = Robot.bufferTrajectory[myNumber][1];
+    Robot.activeTrajectory[0] = Robot.leftBufferTrajectory[myNumber];
+    Robot.activeTrajectory[1] = Robot.rightBufferTrajectory[myNumber];
     Robot.activeTrajName = Robot.bufferTrajName;
 
   }

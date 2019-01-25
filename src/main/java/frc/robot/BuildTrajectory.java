@@ -13,9 +13,9 @@ public class BuildTrajectory {
 
 	}
 
-	public Trajectory[] buildFileName(boolean usb, String name) {
+	public static Trajectory buildLeftFileName(boolean usb, String name) {
 		Robot.buildInProgress = true;
-		Trajectory buffer[] = new Trajectory[2];
+		Trajectory buffer = null;
 		Robot.buildOK = false;
 		String tempPath = null;
 		String filePath = "/home/lvuser/deploy/paths/";
@@ -23,10 +23,8 @@ public class BuildTrajectory {
 		String usbFilePath = "/U/Traj19CSV/";
 
 		// String leftExtension = ".left.pf1.csv";
-		// String rightExtension = ".right.pf1.csv";
 
 		String leftExtension = "_left.csv";
-		String rightExtension = "_right.csv";
 
 		if (usb)
 			tempPath = usbFilePath;
@@ -36,19 +34,50 @@ public class BuildTrajectory {
 		Robot.chosenFileName = "NONE";
 		Robot.chosenFileName = tempPath + name + leftExtension;
 		myLeftFile = new File(tempPath + name + leftExtension);
-		myRightFile = new File(tempPath + name + rightExtension);
 
-		if (myLeftFile.exists() && myRightFile.exists()) {
+		if (myLeftFile.exists()) {
 			Robot.bufferTrajName = "Loading";
-			buffer[0] = Pathfinder.readFromCSV(myLeftFile);
-			buffer[1] = Pathfinder.readFromCSV(myRightFile);
+
+			buffer = Pathfinder.readFromCSV(myLeftFile);
 
 			Robot.chosenFileName = tempPath + name + leftExtension;
 			Robot.buildOK = true;
 			Robot.bufferTrajName = name;
-			Robot.buildInProgress = false;
+
 		}
+		Robot.buildInProgress = false;
 		return buffer;
 
+	}
+
+	public static Trajectory buildRightFileName(boolean usb, String name) {
+		Robot.buildInProgress = true;
+		Trajectory buffer = null;
+		Robot.buildOK = false;
+		String tempPath = null;
+		String filePath = "/home/lvuser/deploy/paths/";
+
+		String usbFilePath = "/U/Traj19CSV/";
+
+		// String rightExtension = ".right.pf1.csv";
+
+		String rightExtension = "_right.csv";
+
+		if (usb)
+			tempPath = usbFilePath;
+		else
+			tempPath = filePath;
+
+		myRightFile = new File(tempPath + name + rightExtension);
+		if (myRightFile.exists()) {
+			buffer = Pathfinder.readFromCSV(myRightFile);
+
+			Robot.chosenFileName = tempPath + name + rightExtension;
+			Robot.buildOK = true;
+			Robot.bufferTrajName = name;
+
+		}
+		Robot.buildInProgress = false;
+		return buffer;
 	}
 }

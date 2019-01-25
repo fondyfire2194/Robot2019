@@ -9,6 +9,7 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import frc.robot.Robot;
+
 /**
  * Add your docs here.
  */
@@ -25,6 +26,7 @@ public class AutoWait extends TimedCommand {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.runningCommandName = "Auto Wait";
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,7 +37,7 @@ public class AutoWait extends TimedCommand {
   // Called once after timeout
   @Override
   protected void end() {
-    Robot.autonomousCommandDone[0]=true;
+    Robot.autonomousCommandDone[0] = true;
   }
 
   // Called when another command which requires one or more of the same

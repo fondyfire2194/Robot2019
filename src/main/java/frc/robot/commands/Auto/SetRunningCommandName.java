@@ -9,31 +9,25 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-
-
-
 /**
  * Add your docs here.
  */
-public class SetAutoCommandDone extends InstantCommand {
+public class SetRunningCommandName extends InstantCommand {
   /**
    * Add your docs here.
    */
-  int myNumber;
-  public SetAutoCommandDone(int number) {
-   
+  String myName;
+  public SetRunningCommandName(String name) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myNumber = number;
+    myName =name;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-
-    Robot.autonomousCommandDone[myNumber] = true;
-
+    Robot.runningCommandName = myName;
   }
 
 }
