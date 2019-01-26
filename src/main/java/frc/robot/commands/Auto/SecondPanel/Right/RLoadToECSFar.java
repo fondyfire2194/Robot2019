@@ -5,16 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.LHab1Start;
+package frc.robot.commands.Auto.SecondPanel.Right;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.TimeDelay;
 
-public class LHab1ToLCS2 extends CommandGroup {
+public class RLoadToECSFar extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LHab1ToLCS2() {
+  public RLoadToECSFar() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -31,6 +30,5 @@ public class LHab1ToLCS2 extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new TimeDelay(2));
   }
 }

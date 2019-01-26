@@ -5,18 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.CL1HabStart;
+package frc.robot.commands.Auto.SecondPanel.Right;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
-import frc.robot.Constants;
-import frc.robot.commands.RobotDriveToTarget;
 
-public class AdjustLoadApproach extends CommandGroup {
+public class RLoadToECSNear extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public AdjustLoadApproach() {
+  public RLoadToECSNear() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -33,10 +30,5 @@ public class AdjustLoadApproach extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    if (Math.abs(Robot.limelightCamera.getdegRotationToTarget()) > Constants.ANGLE_APPROACH_LIMIT) {
-      new RobotDriveToTarget(2, 1, Robot.limelightCamera.getdegRotationToTarget() < 4, 5);
-    }
-
   }
 }

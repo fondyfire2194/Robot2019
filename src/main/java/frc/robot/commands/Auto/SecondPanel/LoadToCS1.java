@@ -5,19 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.CL1HabStart;
+package frc.robot.commands.Auto.SecondPanel;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-
+import frc.robot.Robot;
+import frc.robot.commands.BufferToActiveTrajectory;
+import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.HatchPanels.*;
-import frc.robot.commands.Auto.*;
+import frc.robot.commands.RobotOrient;
+import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.HatchPanels.PlacePanel;
 
-public class CHab1ToLC extends CommandGroup {
+public class LoadToCS1 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public CHab1ToLC() {
+  public LoadToCS1(boolean side, int step) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -35,29 +38,24 @@ public class CHab1ToLC extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    /*
-     * Pathfinder always generates X moves starting at 0 in the plus direction from
-     * alliance wall toward the field. We can run the robot starting at the
-     * beginning or end of the generated trajectory leading with the front or rear
-     * of the robot. PathfinderTrajectory starts at the beginning of the trajectory
-     * and PathfinderReverseTrajectory from the end. A True entry means we want the
-     * front of the robot to lead and a False means we want the rear to lead.
-     */
+    addSequential(new BufferToActiveTrajectory(2));
 
-    /*
-     * Center start opposite left hatch. Position using vision. Attach panel. Build
-     * trajectory for next group
-     * 
-     * 
-     * 
-     */
+    addSequential(new PathfinderTrajectory(Robot.faceField, side));
+    if (side)
+    {
+      addSequential(new RobotOrient(-90, .5, false, 5));
+    }
+    if (!side)
+    {
+      addSequential(new RobotOrient(90, .5, false, 5));
+    }
 
-    addSequential(new SetRunningCommandName("Vision Move"));
-    addSequential(new RobotDriveToTarget(3, .5, false, 10));// position using vision correction
-    addSequential(new SetRunningCommandName("Place Panel"));
+    addSequential(new RobotDriveToTarget(5, .5, false, 10));
+
     addSequential(new PlacePanel());
 
-    addSequential(new SetAutoCommandDone(1));
+    addSequential(new SetAutoCommandDone(step));
+
 
   }
 }

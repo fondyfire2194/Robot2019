@@ -5,12 +5,12 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.RHab1Start;
+package frc.robot.commands.Auto.RHabStart;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class RC2ToRLD extends Command {
-  public RC2ToRLD() {
+public class RCS2ToRLoad extends Command {
+  public RCS2ToRLoad() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }

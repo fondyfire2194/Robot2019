@@ -5,15 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.LHab1Start;
+package frc.robot.commands.Auto.SecondPanel.Left;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class LLDToLC2 extends CommandGroup {
+public class LLoadToECSFar extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LLDToLC2() {
+  public LLoadToECSFar() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

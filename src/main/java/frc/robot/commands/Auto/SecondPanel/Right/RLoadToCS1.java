@@ -5,15 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.SecondPanel.Right;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
-public class MoveToLoadStation extends CommandGroup {
+
+public class RLoadToCS1 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToLoadStation(int step) {
+  public RLoadToCS1() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +30,5 @@ public class MoveToLoadStation extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
-    addSequential(new SetAutoCommandDone(step));
   }
 }

@@ -5,23 +5,35 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.CL1HabStart;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.TimeDelay;
-import frc.robot.commands.HatchPanels.*;
+import frc.robot.commands.RobotOrient;
 
-import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
-
-public class LCToLoadApproach extends CommandGroup {
+public class AutonomousOrient extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LCToLoadApproach() {
+
+  private double mySpeed;
+	private double myAngle;
+	private double myTimeout;
+	private int passCount;
+  private boolean myAccuracy;
+  private int myStep;
+
+
+  public AutonomousOrient(double angle, double speed, boolean accuracy, double timeout, int step) {
+
+    mySpeed = speed;
+		myAngle = angle;
+		myTimeout = timeout;
+    myAccuracy = accuracy;
+    myStep = step;
+    
+    addSequential(new RobotOrient(mySpeed, myAngle, myAccuracy, myTimeout));
+    addSequential(new SetAutoCommandDone(step));
+
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -38,22 +50,5 @@ public class LCToLoadApproach extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    /**
-     * Two curves to get C shape, Pathfinder can't change X direction Do reverse
-     * curve back and up Do reverse curve up and forward Do curve to load station
-     * Pick up panel Do reverse curve forward and left Position using vision Attach
-     * panel
-     */
-
-
-    addSequential(new BufferToActiveTrajectory(0));//rev to wall and left
-
-    addSequential(new PathfinderReverseTrajectory(Robot.faceField,Robot.invertY));// rev to wall and left
-
-    addSequential(new BufferToActiveTrajectory(1));//left and rev to field
-
-    addSequential(new PathfinderTrajectory(!Robot.faceField,!Robot.invertY));// left and reverse to field
-
-
- }
+  }
 }

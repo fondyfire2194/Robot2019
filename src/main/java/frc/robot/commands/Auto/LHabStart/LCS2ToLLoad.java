@@ -5,15 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.LHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
 import frc.robot.commands.*;
-public class MoveToLoadStation extends CommandGroup {
+import frc.robot.commands.Auto.SetAutoCommandDone;
+
+public class LCS2ToLLoad extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToLoadStation(int step) {
+  public LCS2ToLLoad() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +33,8 @@ public class MoveToLoadStation extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
-    addSequential(new SetAutoCommandDone(step));
+    addSequential(new BufferToActiveTrajectory(1));
+    addSequential(new PathfinderReverseTrajectory(Robot.faceField, !Robot.invertY));
+    addSequential(new SetAutoCommandDone(2));
   }
 }

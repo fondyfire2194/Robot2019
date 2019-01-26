@@ -274,7 +274,9 @@ public class Robot extends TimedRobot {
 
       }
 
-      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands);
+      boolean rightStart = startPositionSelected >=3;
+
+      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands, rightStart);
 
       if (autonomousCommandDone[0])
         autonomousCommand[1].start();

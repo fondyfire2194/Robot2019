@@ -5,15 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.LCHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
-public class MoveToLoadStation extends CommandGroup {
+import frc.robot.commands.PathfinderReverseTrajectory;
+import frc.robot.commands.PathfinderTrajectory;
+import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.TimeDelay;
+import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.HatchPanels.*;
+
+import frc.robot.Robot;
+import frc.robot.commands.BufferToActiveTrajectory;
+
+public class LCToLLoad extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToLoadStation(int step) {
+  public LCToLLoad() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +39,20 @@ public class MoveToLoadStation extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
-    addSequential(new SetAutoCommandDone(step));
-  }
+    /**
+     * Two curves to get C shape, Pathfinder can't change X direction Do reverse
+     * curve back and up Do reverse curve up and forward Do curve to load station
+     * Pick up panel Do reverse curve forward and left Position using vision Attach
+     * panel
+     */
+
+
+    addSequential(new BufferToActiveTrajectory(0));//rev to wall and left
+
+    addSequential(new PathfinderReverseTrajectory(Robot.faceField, !Robot.invertY));// rev to wall and left
+
+    addSequential(new SetAutoCommandDone(2));
+
+
+ }
 }

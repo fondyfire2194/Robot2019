@@ -8,12 +8,15 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
-public class MoveToLoadStation extends CommandGroup {
+import frc.robot.Robot;
+import frc.robot.Constants;
+import frc.robot.commands.RobotDriveToTarget;
+
+public class AdjustLoadApproach extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToLoadStation(int step) {
+  public AdjustLoadApproach() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +33,10 @@ public class MoveToLoadStation extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
-    addSequential(new SetAutoCommandDone(step));
+
+    if (Math.abs(Robot.limelightCamera.getdegRotationToTarget()) > Constants.ANGLE_APPROACH_LIMIT) {
+      new RobotDriveToTarget(2, 1, Robot.limelightCamera.getdegRotationToTarget() < 4, 5);
+    }
+
   }
 }

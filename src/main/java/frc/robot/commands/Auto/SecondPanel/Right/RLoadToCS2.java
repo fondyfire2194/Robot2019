@@ -5,15 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.CL1HabStart;
+package frc.robot.commands.Auto.SecondPanel.Right;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class LoadToCS2 extends CommandGroup {
+public class RLoadToCS2 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LoadToCS2() {
+  public RLoadToCS2() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());

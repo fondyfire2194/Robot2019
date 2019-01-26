@@ -5,15 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.RHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.Robot;
+import frc.robot.commands.BufferToActiveTrajectory;
+import frc.robot.commands.PathfinderTrajectory;
+import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.HatchPanels.PlacePanel;
 import frc.robot.commands.*;
-public class MoveToLoadStation extends CommandGroup {
+
+public class RHabToRCS2 extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToLoadStation(int step) {
+  public RHabToRCS2() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +37,11 @@ public class MoveToLoadStation extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
-    addSequential(new SetAutoCommandDone(step));
+    addSequential(new BufferToActiveTrajectory(0));
+    addSequential(new PathfinderTrajectory(Robot.faceField, Robot.invertY));
+    addSequential(new RobotOrient(-90, .5, true, 5));
+    addSequential(new RobotDriveToTarget(8, .5, false, 10));
+    addSequential(new PlacePanel());
+    addSequential(new SetAutoCommandDone(1));
   }
 }

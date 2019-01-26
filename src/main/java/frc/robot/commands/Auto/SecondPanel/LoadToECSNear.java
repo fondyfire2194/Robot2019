@@ -5,15 +5,20 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto;
+package frc.robot.commands.Auto.SecondPanel;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
-public class MoveToLoadStation extends CommandGroup {
+import frc.robot.commands.BufferToActiveTrajectory;
+import frc.robot.commands.PathfinderTrajectory;
+import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.RobotOrient;
+import frc.robot.commands.Auto.SetAutoCommandDone;
+
+public class LoadToECSNear extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToLoadStation(int step) {
+  public LoadToECSNear(boolean side, int step) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +35,13 @@ public class MoveToLoadStation extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
+
+    addSequential(new BufferToActiveTrajectory(2));
+    addSequential(new PathfinderTrajectory(false, side));
+    addSequential(new RobotOrient(0, .5, false, 5));
+    addSequential(new RobotDriveToTarget(10, .5, false, 10));
     addSequential(new SetAutoCommandDone(step));
+
+
   }
 }
