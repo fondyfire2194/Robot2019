@@ -14,60 +14,55 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.commands.Auto.*;
-import frc.robot.commands.Auto.CL1HabStart.*;
+
+
 public class AutoChoosers {
 
 	public static SendableChooser<Integer> startPositionChooser;
-	public static SendableChooser<Command> secondHatchChooser;
+	public static SendableChooser<Integer> secondHatchChooser;
 
 	public static SendableChooser<String> testTrajectoryChooser;
 	public static SendableChooser<Integer> trajectoryDirectionChooser;
 
 	public static SendableChooser<Double> timeDelayChooser;
 
-	 public AutoChoosers() {
+	public AutoChoosers() {
 		testTrajectoryChooser = new SendableChooser<String>();
 
-		// testTrajectoryChooser.setDefaultOption("Straight One", "StraightOne");
-		// testTrajectoryChooser.addOption("Curve One", "CurveOne");
-		// testTrajectoryChooser.addOption("Curve Two", "CurveTwo");
-		// testTrajectoryChooser.addOption("Curve Three", "CurveThree");
+		testTrajectoryChooser.setDefaultOption("Straight Line", "SimpleStraight");
 		testTrajectoryChooser.addOption("Right Turn", "SimpleRightTurn");
 		testTrajectoryChooser.addOption("Left Turn", "SimpleLeftTurn");
-		testTrajectoryChooser.setDefaultOption("Straight Line", "SimpleStraight");
 		testTrajectoryChooser.addOption("Field to Wall Test", "FieldToWallTest");
-		// testTrajectoryChooser.addOption("Left Hab to Cargo Ship", "LHabTOCS2");
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
 		trajectoryDirectionChooser = new SendableChooser<Integer>();
-		trajectoryDirectionChooser.setDefaultOption("FaceFieldMoveField", 0);
-		trajectoryDirectionChooser.addOption("FaceWallMoveField", 1);
-		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 2);
-		trajectoryDirectionChooser.addOption("FaceWallMoveWall", 3);
+		trajectoryDirectionChooser.setDefaultOption("FaceFieldMoveField", 1);
+		trajectoryDirectionChooser.addOption("FaceWallMoveField", 2);
+		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 3);
+		trajectoryDirectionChooser.addOption("FaceWallMoveWall", 4);
 		SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
 
-
-
 		startPositionChooser = new SendableChooser<Integer>();
-
-		startPositionChooser.setDefaultOption("Left to LCS2",0);
-		startPositionChooser.addOption("LCenter", 1);
-		startPositionChooser.addOption("RCenter", 2);
-		startPositionChooser.addOption("Right to RCS2",3);
-		startPositionChooser.addOption("DriverControl", 4);
-
-		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
+        startPositionChooser.setDefaultOption("DriverControl", 0);
+		startPositionChooser.addOption("Left to LCS2", 1);
+		startPositionChooser.addOption("LCenter", 2);
+		startPositionChooser.addOption("RCenter", 3);
+		startPositionChooser.addOption("Right to RCS2", 4);
 		
 
-		secondHatchChooser = new SendableChooser<Command>();
+		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 
-		secondHatchChooser.setDefaultOption("No Second Hatch", new DoNothing());
-		secondHatchChooser.addOption("LC1", new LC1ToLLD());
-		// secondHatchChooser.addOption("LC2", new LC2ToRLD());
+		secondHatchChooser = new SendableChooser<Integer>();
+
+		secondHatchChooser.setDefaultOption("No Second Hatch", 0);
+		secondHatchChooser.addOption("Cargo Ship 1", 1);
+		secondHatchChooser.addOption("Cargo Ship 2", 2);
+		secondHatchChooser.addOption("Cargo Ship 3", 3);
+		secondHatchChooser.addOption("End Cargo Ship Left", 4);
+		secondHatchChooser.addOption("End Cargo Ship Right", 5);
 
 		SmartDashboard.putData("Second Hatch", secondHatchChooser);
-
 
 		timeDelayChooser = new SendableChooser<Double>();
 
@@ -80,5 +75,5 @@ public class AutoChoosers {
 		timeDelayChooser.addOption("Six Seconds", 6.);
 		SmartDashboard.putData("Delay Chooser", timeDelayChooser);
 
-	 }
+	}
 }

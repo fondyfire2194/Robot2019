@@ -48,15 +48,12 @@ public class LCToLoadApproach extends CommandGroup {
 
     addSequential(new BufferToActiveTrajectory(0));//rev to wall and left
 
- 
     addSequential(new PathfinderReverseTrajectory(Robot.faceField,Robot.invertY));// rev to wall and left
 
     addSequential(new BufferToActiveTrajectory(1));//left and rev to field
 
-
     addSequential(new PathfinderTrajectory(!Robot.faceField,!Robot.invertY));// left and reverse to field
 
-    addSequential(new BufferToActiveTrajectory(2));//rev to wall and left
 
  }
 }

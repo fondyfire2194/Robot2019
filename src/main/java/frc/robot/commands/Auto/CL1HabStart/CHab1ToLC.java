@@ -8,14 +8,10 @@
 package frc.robot.commands.Auto.CL1HabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.TimeDelay;
-import frc.robot.commands.HatchPanels.*;
 
-import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
+import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.HatchPanels.*;
+import frc.robot.commands.Auto.*;
 
 public class CHab1ToLC extends CommandGroup {
   /**
@@ -42,28 +38,26 @@ public class CHab1ToLC extends CommandGroup {
     /*
      * Pathfinder always generates X moves starting at 0 in the plus direction from
      * alliance wall toward the field. We can run the robot starting at the
-     * beginning or end of the generated trajectory leading with the front or rear of
-     * the robot. PathfinderTrajectory starts at the beginning of the trajectory and
-     * PathfinderReverseTrajectory from the end. A True entry means we want the
+     * beginning or end of the generated trajectory leading with the front or rear
+     * of the robot. PathfinderTrajectory starts at the beginning of the trajectory
+     * and PathfinderReverseTrajectory from the end. A True entry means we want the
      * front of the robot to lead and a False means we want the rear to lead.
      */
 
     /*
-     * Center start opposite left hatch.
-     *  Position using vision. Attach panel.
-     * Build trajectory for next group
+     * Center start opposite left hatch. Position using vision. Attach panel. Build
+     * trajectory for next group
      * 
      * 
      * 
      */
 
-
-    addSequential(new RobotDriveToTarget(3, .5, false, 10));//position using vision correction
-        
+    addSequential(new SetRunningCommandName("Vision Move"));
+    addSequential(new RobotDriveToTarget(3, .5, false, 10));// position using vision correction
+    addSequential(new SetRunningCommandName("Place Panel"));
     addSequential(new PlacePanel());
 
-    
+    addSequential(new SetAutoCommandDone(1));
 
-    
   }
 }

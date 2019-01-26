@@ -15,10 +15,11 @@ import java.util.HashMap;
 
 public class TrajDict {
 
-public static String[] leftStartNames = {"A","B"};
-public static String[] leftCenterStartNames = {"A","B"};
-public static String[] rightCenterStartNames = {"A","B"};
-public static String[] rightStartNames = {"A","B"};
+public static String[] leftStartNames = {"SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn"};//,"SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn"};
+public static String[] leftCenterStartNames =  {"SimpleRightTurn","SimpleLeftTurn"};
+public static String[] rightCenterStartNames =  {"SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn"};
+public static String[] rightStartNames =  {"SimpleRightTurn","SimpleLeftTurn"};
+public static String[] secondHatchNames ={"SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn","SimpleLeftTurn","SimpleRightTurn"};
 
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
@@ -26,22 +27,7 @@ public static String[] rightStartNames = {"A","B"};
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
 		gainDict.put(leftStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("LSW_L", new Double[] { .4, 0., 0.02, 1. });
-		// gainDict.put("RSW_L", new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(leftStartNames[1], new Double[] { .4, 0., 0.02, 1. });
 
 	}
 	public static double[] getTrajGains(String name){

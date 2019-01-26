@@ -7,42 +7,33 @@
 
 package frc.robot.commands.Auto;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+
+
 
 /**
  * Add your docs here.
  */
-public class AutoWait extends TimedCommand {
+public class SetAutoCommandDone extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public AutoWait(double timeout) {
-    super(timeout);
+  int myNumber;
+  public SetAutoCommandDone(int number) {
+   
+    super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myNumber = number;
   }
 
-  // Called just before this Command runs the first time
+  // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.runningCommandName = "Auto Wait";
+
+    Robot.autonomousCommandDone[myNumber] = true;
+
   }
 
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
-  }
-
-  // Called once after timeout
-  @Override
-  protected void end() {
-    Robot.autonomousCommandDone[0] = true;
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-  }
 }

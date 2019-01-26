@@ -17,6 +17,7 @@ import frc.robot.commands.DoTeleopPosition;
 import frc.robot.commands.ResetEncoders;
 import frc.robot.commands.ResetGyro;
 import frc.robot.commands.DeleteAllPrefs;
+import frc.robot.commands.ReadStartSettings;
 import frc.robot.commands.Limelight.*;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.LimeLight;
@@ -76,6 +77,7 @@ public class OI {
     SmartDashboard.putData("LEDS Off", new SetLimelightLeds(LedMode.kforceOff) );
 
     SmartDashboard.putData("Toggle View", new ToggleCamMode());
+    SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
 
   }
 }

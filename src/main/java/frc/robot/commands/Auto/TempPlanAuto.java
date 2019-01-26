@@ -5,15 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.CL1HabStart;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.*;
 
-public class MoveToAndLoadPanel extends CommandGroup {
+public class TempPlanAuto extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MoveToAndLoadPanel() {
+  public TempPlanAuto(String name , double time) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,5 +31,9 @@ public class MoveToAndLoadPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+
+    addParallel (new SetRunningCommandName(name));
+    
+    addSequential(new TimeDelay(time));
   }
 }
