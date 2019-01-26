@@ -130,14 +130,15 @@ public class Robot extends TimedRobot {
   public static boolean trajectoriesLoaded;
 
   public static int numberOfAutonomousCommands;
-  public static boolean startSettingsReady = false;
+  public static double startSettingsReady = 0.;
   public static boolean startSettingsDone = false;
   public static boolean readingRunning = false;
 
   LoadFiles currentLoader = new LoadFiles();
-  LoadFiles oldLoader = null;
-  boolean firstTime = false;
+  boolean wasRunning = false;
   public static String runningCommandName = "None";
+  public static double readThreadStartTime = 0.;
+  public static boolean fileError;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -175,7 +176,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("StartSettingsReady", false);
+    SmartDashboard.putNumber("StartSettingsReady", 0.);
     SmartDashboard.putData(driveTrain);
     // SmartDashboard.putData(elevator);
     SmartDashboard.putData(robotRotate);
@@ -209,17 +210,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    Scheduler.getInstance().run();
-    startSettingsReady = SmartDashboard.getBoolean("StartSettingsReady", false);
 
-    SmartDashboard.putBoolean("StartSettingsDone", startSettingsDone);
-    if (startSettingsDone) {
-      startSettingsDone = startSettingsReady;
-    }
-    if (startSettingsReady && !startSettingsDone && !readingRunning) {
-      readTrajFiles();
-      readingRunning = true;
-    }
+    readTrajFiles();
   }
 
   /**
@@ -260,7 +252,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
-    if (startPositionSelected != 0) {
+    if (!fileError && startPositionSelected != 0) {
 
       switch (startPositionSelected) {
       case 1:
@@ -273,10 +265,9 @@ public class Robot extends TimedRobot {
         numberOfAutonomousCommands = AutoCommands.setRightStart();
 
       }
-
-      boolean rightStart = startPositionSelected >=3;
-
-      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands, rightStart);
+      boolean rightStart = startPositionSelected > 2;
+      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands,
+          rightStart);
 
       if (autonomousCommandDone[0])
         autonomousCommand[1].start();
@@ -288,7 +279,7 @@ public class Robot extends TimedRobot {
         autonomousCommand[4].start();
       if (autonomousCommandDone[4] && numberOfAutonomousCommands > 4)
         autonomousCommand[5].start();
-        if (autonomousCommandDone[5] && numberOfAutonomousCommands > 5)
+      if (autonomousCommandDone[5] && numberOfAutonomousCommands > 5)
         autonomousCommand[6].start();
       if (autonomousCommandDone[6] && numberOfAutonomousCommands > 6)
         autonomousCommand[7].start();
@@ -448,17 +439,27 @@ public class Robot extends TimedRobot {
   }
 
   public void readTrajFiles() {
-
-    // currentLoader = new LoadFiles();
-
-    // if (!firstTime)
-    // oldLoader = currentLoader;
-    // else oldLoader.valid=false;
-    // firstTime = true;
-    Thread reader = new Thread(currentLoader);
-
-    reader.setDaemon(true);
-    if (!startSettingsDone)
+    startSettingsReady = SmartDashboard.getNumber("StartSettingsReady", 0.);
+    SmartDashboard.putBoolean("StartSettingsDone", startSettingsDone);
+    SmartDashboard.putBoolean("SSR", startSettingsReady != 0.);
+    readingRunning = currentLoader.running;
+    readThreadStartTime = Timer.getFPGATimestamp();
+    if (startSettingsReady != 0. && !readingRunning) {
+      startSettingsDone = false;
+      currentLoader = new LoadFiles();
+      Thread reader = new Thread(currentLoader);
+      reader.setDaemon(true);
       reader.start();
+      wasRunning = true;
+    }
+    if (wasRunning && !readingRunning) {
+      SmartDashboard.putNumber("StartSettingsReady", 0.);
+      SmartDashboard.putNumber("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
+      startSettingsReady = 0.;
+      startSettingsDone = true;
+      fileError = currentLoader.error;
+      wasRunning = false;
+    }
   }
+
 }

@@ -11,87 +11,100 @@ package frc.robot;
  * Add your docs here.
  */
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.Arrays;
 
 public class LoadFiles implements Runnable {
-    public boolean valid = true;
-    public boolean done = false;
-    public boolean running = false;
+    public volatile boolean running = false;
+    public volatile boolean error = false;
     private String[] startNames;
-    
 
     public void run() {
         running = true;
+        error = false;
         for (int a = 0; a < Robot.bufferTrajectoryName.length; a++) {
             Robot.bufferTrajectoryName[a] = "Not Used";
             SmartDashboard.putString("Buffer " + String.valueOf(a), Robot.bufferTrajectoryName[a]);
         }
-        Robot.secondHatchIndex=0;
+        Robot.secondHatchIndex = 0;
         int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-        SmartDashboard.putNumber("LGTH",0);
-        if(startPositionSelected!=0){
-        startNames=getTraj(startPositionSelected);
-        SmartDashboard.putNumber("LGTH",startNames.length);
-        int i = 0;
-        while (valid && i < startNames.length) {
+        SmartDashboard.putNumber("LGTH", 0);
+        if (startPositionSelected != 0) {
+            startNames = getTraj(startPositionSelected);
 
-            loadLeftFile(startNames[i], i);
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException ex) {
+            int i = 0;
 
+            while (running && !error && i < startNames.length) {
+
+                error = loadLeftFile(startNames[i], i);
+                try {
+                    Thread.sleep(2);
+                } catch (InterruptedException ex) {
+
+                }
+                if (error)
+                    break;
+                error = loadRightFile(startNames[i], i);
+                if (error)
+                    break;
+                try {
+                    Thread.sleep(2);
+                } catch (InterruptedException ex) {
+
+                }
+
+                i++;
+
+                int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected();
+                if (secondHatchChosen != 0) {
+                    error = loadLeftSecondHatchFile(secondHatchChosen, i);
+                    if (error)
+                        break;
+                    error = loadRightSecondHatchFile(secondHatchChosen, i);
+                }
             }
-            loadRightFile(startNames[i], i);
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException ex) {
-
-            }
-
-            i++;
-
         }
-        int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected();
-        if(secondHatchChosen!=0)
-        loadSecondHatchFile(secondHatchChosen,i);
-       
-    }
-        done = true;
-        Robot.readingRunning = false;
-        // valid = false;
-        Robot.startSettingsDone = true;
-        Robot.startSettingsReady = false;
-
+        running = false;
     }
 
-    void loadLeftFile(String startName, int i) {
+    boolean loadLeftFile(String startName, int i) {
         Robot.leftBufferTrajectory[i] = BuildTrajectory.buildLeftFileName(Robot.useUsb, startName);
         Robot.bufferTrajectoryName[i] = startName;
         SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-
+        return !Robot.buildOK;
     }
 
-    void loadRightFile(String startName, int i) {
+    boolean loadRightFile(String startName, int i) {
         Robot.rightBufferTrajectory[i] = BuildTrajectory.buildRightFileName(Robot.useUsb, startName);
         Robot.bufferTrajectoryName[i] = startName;
         SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
+        return !Robot.buildOK;
+    }
+
+    boolean loadLeftSecondHatchFile(int secondHatchChosen, int number) {
+
+        String name = TrajDict.secondHatchNames[secondHatchChosen];
+        Robot.leftBufferTrajectory[number] = BuildTrajectory.buildLeftFileName(Robot.useUsb, name);
+        Robot.bufferTrajectoryName[number] = name;
+        SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[number]);
+
+        Robot.secondHatchIndex = number;
+        return !Robot.buildOK;
 
     }
 
-    void loadSecondHatchFile(int secondHatchChosen, int number) {
-        
+    boolean loadRightSecondHatchFile(int secondHatchChosen, int number) {
+
         String name = TrajDict.secondHatchNames[secondHatchChosen];
-        Robot.leftBufferTrajectory[number] = BuildTrajectory.buildLeftFileName(Robot.useUsb, name);
         Robot.rightBufferTrajectory[number] = BuildTrajectory.buildRightFileName(Robot.useUsb, name);
         Robot.bufferTrajectoryName[number] = name;
         SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[number]);
 
         Robot.secondHatchIndex = number;
+        return !Robot.buildOK;
 
     }
 
     String[] getTraj(int startPositionSelected) {
-       
+
         String[] startNames;
         switch (startPositionSelected) {
         case 0:
