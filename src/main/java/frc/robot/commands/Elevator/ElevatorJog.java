@@ -2,7 +2,7 @@ package frc.robot.commands.Elevator;
 
 import frc.robot.Robot;
 import frc.robot.Constants;
-import frc.robot.subsystems.Elevator;
+
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -35,8 +35,8 @@ public class ElevatorJog extends Command {
 			heightTarget = Robot.elevator.holdPositionInches + maxHeightIncrement * yValue;
 			if (heightTarget > Constants.ELEVATOR_MAX_HEIGHT)
 				Robot.elevator.holdPositionInches = Constants.ELEVATOR_MAX_HEIGHT;
-			if (heightTarget < Constants.ELEVATOR_PICKUP_POSITION_INCHES)
-				Robot.elevator.holdPositionInches = Constants.ELEVATOR_PICKUP_POSITION_INCHES;
+			if (heightTarget < Constants.ELEVATOR_LOWER_HATCH_INCHES)
+				Robot.elevator.holdPositionInches = Constants.ELEVATOR_LOWER_HATCH_INCHES;
 		}
 	}
 

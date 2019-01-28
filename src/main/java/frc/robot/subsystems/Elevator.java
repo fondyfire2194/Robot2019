@@ -70,13 +70,6 @@ public class Elevator extends Subsystem {
 		return getElevatorEncoderSpeedCountsPer100mS() / Constants.ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS;
 	}
 
-	public boolean getElevatorAboveSwitch() {
-		return getElevatorPositionInches() > (Constants.ELEVATOR_SWITCH_POSITION_INCHES - 4);
-	}
-
-	public boolean getElevatorAboveScale() {
-		return getElevatorPositionInches() > (Constants.ELEVATOR_SCALE_POSITION_INCHES - 4);
-	}
 
 	public void magicMotionElevator(double distance, double speedIPS) {
 		// elevator motor 775 Pro with 70:1 gear reduction and a 4096 count encoder

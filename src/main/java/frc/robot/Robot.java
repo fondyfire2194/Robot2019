@@ -15,11 +15,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotOrient;
 import frc.robot.commands.RobotDriveToTarget;
-
+import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.Compressor;
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.ChooseTrajectory;
 import frc.robot.BuildTrajectory;
@@ -27,6 +26,7 @@ import frc.robot.TrajDict;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.RobotRotate;
+import frc.robot.subsystems.AirCompressor;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
 import frc.robot.VisionData;
@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
   public static Elevator elevator;
+  public static AirCompressor airCompressor;
   public static SimpleCSVLogger simpleCSVLogger;
   public static LimeLight limelightCamera;
   public static VisionData visionData;
@@ -155,6 +156,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
+    elevator = new Elevator();
+    airCompressor = new AirCompressor();
     m_oi = new OI();
     simpleCSVLogger = new SimpleCSVLogger();
     limelightCamera = new LimeLight();
@@ -340,37 +343,37 @@ public class Robot extends TimedRobot {
       switch (testTrajectorySelection) {
       case 0:
         testTrajectoryName = TrajDict.leftStartNames[0];
-        forwardTrajectory=true;
+        forwardTrajectory = true;
         faceField = true;
         invertY = false;
         break;
       case 1:
         testTrajectoryName = TrajDict.leftStartNames[1];
-        forwardTrajectory=true;
+        forwardTrajectory = true;
         faceField = true;
         invertY = false;
         break;
       case 2:
         testTrajectoryName = TrajDict.leftCenterStartNames[0];
-        forwardTrajectory=true;
-                faceField = true;
+        forwardTrajectory = true;
+        faceField = true;
         invertY = false;
         break;
       case 3:
         testTrajectoryName = TrajDict.rightCenterStartNames[0];
-forwardTrajectory=true;
+        forwardTrajectory = true;
         faceField = true;
         invertY = true;
         break;
       case 4:
         testTrajectoryName = TrajDict.rightStartNames[0];
-        forwardTrajectory=true;
+        forwardTrajectory = true;
         faceField = true;
         invertY = true;
         break;
       case 5:
         testTrajectoryName = TrajDict.rightStartNames[1];
-        forwardTrajectory=true;
+        forwardTrajectory = true;
         faceField = true;
         invertY = true;
         break;
@@ -403,13 +406,10 @@ forwardTrajectory=true;
 
       useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-if(SmartDashboard.getBoolean("ReverseTrajectory",false))
-        new ChooseTrajectory(forwardTrajectory,faceField, invertY).start();
+      if (SmartDashboard.getBoolean("ReverseTrajectory", false))
+        new ChooseTrajectory(forwardTrajectory, faceField, invertY).start();
       else
-      new ChooseTrajectory(!forwardTrajectory,faceField, invertY).start();
-        
-
-      
+        new ChooseTrajectory(!forwardTrajectory, faceField, invertY).start();
 
       trajectoryRunning = true;
       doTeleopTrajectory = false;

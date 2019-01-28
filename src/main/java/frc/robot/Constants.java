@@ -30,27 +30,19 @@ public class Constants {
   public final static double MAX_TARGET_AREA = 6.5;
   public final static double ANGLE_APPROACH_LIMIT = 5.;
 
-  public static double ELEVATOR_PICKUP_POSITION_INCHES = .5;
-	public static double ELEVATOR_EXCHANGE_POSITION_INCHES = 3.5;
-	public static double ELEVATOR_AUTO_FIRST_POSITION_INCHES = 4.5;
-	public static double ELEVATOR_TRAVEL_POSITION_INCHES = 10;
-	public static double ELEVATOR_SWITCH_POSITION_INCHES = 26;
-	public static double ELEVATOR_SWITCH_HIGH_POSITION_INCHES = 34;
-	public static double ELEVATOR_SCALE_LOW_POSITION_INCHES = 65;
-	public static double ELEVATOR_SCALE_POSITION_INCHES = 85;
-	public static double ELEVATOR_PORTAL_POSITION_INCHES = 17;
+  public static double ELEVATOR_LOWER_HATCH_INCHES = 19;
+  public static double ELEVATOR_MID_ROCKET_INCHES = ELEVATOR_LOWER_HATCH_INCHES + 28;
+  public static double ELEVATOR_TOP_ROCKET_INCHES = ELEVATOR_MID_ROCKET_INCHES + 28;
   public static double ELEVATOR_POSITION_RATE = 40;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
-	// (in/sec) * enc Counts/in = enc counts / sec then divide by 10 for 100ms
-	public static double ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS = ELEVATOR_ENCODER_COUNTS_PER_INCH / 10;
-	// public static int ELEVATOR_ACCEL_RATE = 50;
+  // (in/sec) * enc Counts/in = enc counts / sec then divide by 10 for 100ms
+  public static double ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS = ELEVATOR_ENCODER_COUNTS_PER_INCH / 10;
 
-	public static double ELEVATOR_MIN_HEIGHT = -.50;
-	public static double ELEVATOR_MAX_HEIGHT = 89;
+  public static double ELEVATOR_MIN_HEIGHT = -.50;
+  public static double ELEVATOR_MAX_HEIGHT = 89;
   public static double ELEVATOR_IN_POSITION_BAND = 3;
-  
-  public static boolean usePathWeaver =true;
 
+  public static boolean usePathWeaver = true;
 
   private Constants() {
 

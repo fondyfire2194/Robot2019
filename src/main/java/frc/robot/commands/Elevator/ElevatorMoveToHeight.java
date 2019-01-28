@@ -2,11 +2,10 @@
 package frc.robot.commands.Elevator;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.Elevator;
 
-import edu.wpi.first.wpilibj.DriverStation;
+
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  *
@@ -15,8 +14,7 @@ public class ElevatorMoveToHeight extends Command {
 	private double myHeight;
 	private boolean atPosition;
 	private double atPositionBand = 3;
-	private int testCtr;
-	private int testCtr1;
+
 
 	public ElevatorMoveToHeight(double height) {
 		// Use requires() here to declare subsystem dependencies
@@ -29,8 +27,7 @@ public class ElevatorMoveToHeight extends Command {
 		Robot.elevator.moveIsUp = myHeight > Robot.elevator.holdPositionInches;
 		Robot.elevator.moveIsDown = myHeight < Robot.elevator.holdPositionInches;
 		Robot.elevator.holdPositionInches = myHeight;
-		//// SmartDashboard.putBoolean("ElMoveIsUp", moveIsUp);
-		// SmartDashboard.putBoolean("ElMoveIsDown", moveIsDown);
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run

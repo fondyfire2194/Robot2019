@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class HoldElevatorPositionMotionMagic extends Command {
 	private double lastHoldPositionInches;
-	private boolean firstTime;
 
 	public HoldElevatorPositionMotionMagic() {
 		// Use requires() here to declare subsystem dependencies

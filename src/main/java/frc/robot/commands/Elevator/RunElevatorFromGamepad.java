@@ -48,12 +48,6 @@ public class RunElevatorFromGamepad extends Command {
 		if (yValue < 0)
 			temp = -temp;
 		Robot.elevator.runElevatorMotor(-yValue);// y up gives a negative value
-		// if (yValue > 0)
-		// Robot.cubeHandler.holdPositionInches =
-		// Robot.cubeHandler.getElevatorPositionInches() + 2;
-		// else
-		// Robot.cubeHandler.holdPositionInches =
-		// Robot.cubeHandler.getElevatorPositionInches();
 
 	}
 
