@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-
+  private static int maxCommands = 10;
   public static Command[] autonomousCommand;
 
   public static Command autoTimeDelayCommand;
@@ -103,6 +103,7 @@ public class Robot extends TimedRobot {
 
   public static String bufferTrajName = "Empty";
   public static String testTrajectoryName;
+  public static int testTrajectorySelection;
   public static int testTrajectoryDirection;
 
   public static double[] activeTrajectoryGains = { 0, 0, 0, 0 };
@@ -129,8 +130,9 @@ public class Robot extends TimedRobot {
   public static int startPositionSelected = 0;;
   public static int secondHatchSelected = 0;;
   public static boolean useUsb = false;
-  public static boolean faceField = true;
-  public static boolean invertY = true;
+  public static boolean faceField;
+  public static boolean invertY;
+  public static boolean reverseTrajectory;
   public static boolean trajectoriesLoaded;
 
   public static int numberOfAutonomousCommands;
@@ -160,8 +162,8 @@ public class Robot extends TimedRobot {
 
     autoChoosers = new AutoChoosers();
     // autoChoosers.init();
-    autonomousCommand = new Command[10];
-    autonomousCommandDone = new boolean[10];
+    autonomousCommand = new Command[maxCommands];
+    autonomousCommandDone = new boolean[maxCommands];
 
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
@@ -177,7 +179,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("RevOrient", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("InvertY", false);
+    SmartDashboard.putBoolean("RevTrajectory", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
@@ -279,10 +281,11 @@ public class Robot extends TimedRobot {
     if (autonomousCommandDone[runningAutoCommand] && numberOfAutonomousCommands > runningAutoCommand) {
       autonomousCommandDone[runningAutoCommand] = false;
       runningAutoCommand++;
-      if(autonomousCommand[runningAutoCommand]!=null)
-      autonomousCommand[runningAutoCommand].start();
-   } 
-  if(runningAutoCommand > numberOfAutonomousCommands)numberOfAutonomousCommands=0;
+      if (autonomousCommand[runningAutoCommand] != null)
+        autonomousCommand[runningAutoCommand].start();
+    }
+    if (runningAutoCommand > numberOfAutonomousCommands)
+      numberOfAutonomousCommands = 0;
 
   }
 
@@ -294,14 +297,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     if (startPositionSelected != 0) {
-      for (int i = 0; i < numberOfAutonomousCommands; i++) {
-
-        if (autonomousCommand[1] != null) {
-          autonomousCommand[i].cancel();
-          autonomousCommandDone[i] = false;
-        }
-
-      }
+      cancelAllAuto();
     }
   }
 
@@ -338,8 +334,66 @@ public class Robot extends TimedRobot {
 
     if (doFileTrajectory) {
 
-      testTrajectoryName = AutoChoosers.testTrajectoryChooser.getSelected();
-      testTrajectoryDirection = AutoChoosers.trajectoryDirectionChooser.getSelected();
+      testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
+      reverseTrajectory = SmartDashboard.getBoolean("RevTrajectory", false);
+      switch (testTrajectorySelection) {
+      case 0:
+        testTrajectoryName = TrajDict.leftStartNames[0];
+        if (!reverseTrajectory)
+          testTrajectoryDirection = 1;
+        else
+          testTrajectoryDirection = 2;
+        faceField = true;
+        invertY = false;
+        break;
+      case 1:
+        testTrajectoryName = TrajDict.leftStartNames[1];
+        if (!reverseTrajectory)
+          testTrajectoryDirection = 2;
+        else
+          testTrajectoryDirection = 1;
+        faceField = true;
+        invertY = false;
+        break;
+      case 2:
+        testTrajectoryName = TrajDict.leftCenterStartNames[0];
+        if (!reverseTrajectory)
+          testTrajectoryDirection = 1;
+        else
+          testTrajectoryDirection = 2;
+        faceField = true;
+        invertY = false;
+        break;
+      case 3:
+        testTrajectoryName = TrajDict.rightCenterStartNames[0];
+        if (!reverseTrajectory)
+          testTrajectoryDirection = 1;
+        else
+          testTrajectoryDirection = 2;
+        faceField = true;
+        invertY = true;
+        break;
+      case 4:
+        testTrajectoryName = TrajDict.rightStartNames[0];
+        if (!reverseTrajectory)
+          testTrajectoryDirection = 1;
+        else
+          testTrajectoryDirection = 2;
+        faceField = true;
+        invertY = true;
+        break;
+      case 5:
+        testTrajectoryName = TrajDict.rightStartNames[1];
+        if (!reverseTrajectory)
+          testTrajectoryDirection = 2;
+        else
+          testTrajectoryDirection = 1;
+        faceField = true;
+        invertY = true;
+        break;
+      default:
+        break;
+      }
       if (activeTrajName != testTrajectoryName) {
         activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
         activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
@@ -363,31 +417,22 @@ public class Robot extends TimedRobot {
         constantsFromPrefs();
       else
         activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
-      int trajectoryDirectionChooser = AutoChoosers.trajectoryDirectionChooser.getSelected();
-      invertY = SmartDashboard.getBoolean("InvertY", false);
+
       useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-      switch (trajectoryDirectionChooser) {
+      switch (testTrajectoryDirection) {
 
-      case 1:// move forward into field
+      case 1:// move to field
         new PathfinderTrajectory(faceField, invertY).start();
         break;
-      case 2:// move reverse into field
-        new PathfinderTrajectory(!faceField, invertY).start();
-        break;
-      case 3:// move reverse to wall
+      case 2:// move reverse to wall
         new PathfinderReverseTrajectory(faceField, invertY).start();
-
-        break;
-      case 4:// move forward to wall
-        new PathfinderReverseTrajectory(!faceField, invertY).start();
         break;
 
       }
 
       trajectoryRunning = true;
       doTeleopTrajectory = false;
-      doFileTrajectory = false;
       doFileTrajectory = false;
     }
     doFileTrajectory = false;
@@ -407,7 +452,7 @@ public class Robot extends TimedRobot {
     driveTrain.updateStatus();
     limelightCamera.updateStatus();
     visionData.updateStatus();
-    
+
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
@@ -417,17 +462,29 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
-    // SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 :
-    // activeTrajectory[0].length());
     SmartDashboard.putString("FileChosen", chosenFileName);
     SmartDashboard.putString("FileInBuffer", bufferTrajName);
     SmartDashboard.putString("Active Trajectory", activeTrajName);
+    SmartDashboard.putBoolean("Invert Y", invertY);
+    SmartDashboard.putBoolean("Face Field", faceField);
 
     SmartDashboard.putNumber("AG0", activeTrajectoryGains[0]);
     SmartDashboard.putNumber("AG1", activeTrajectoryGains[1]);
     SmartDashboard.putNumber("AG2", activeTrajectoryGains[2]);
     SmartDashboard.putNumber("AG3", activeTrajectoryGains[3]);
 
+  }
+
+  public static void cancelAllAuto() {
+    Scheduler.getInstance().removeAll();
+    for (int i = 0; i < maxCommands; i++) {
+
+      if (autonomousCommand[1] != null) {
+        autonomousCommand[i].cancel();
+        autonomousCommandDone[i] = false;
+      }
+
+    }
   }
 
   private void constantsFromPrefs() {

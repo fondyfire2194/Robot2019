@@ -21,18 +21,20 @@ public class AutoChoosers {
 	public static SendableChooser<Integer> startPositionChooser;
 	public static SendableChooser<Integer> secondHatchChooser;
 
-	public static SendableChooser<String> testTrajectoryChooser;
+	public static SendableChooser<Integer> testTrajectoryChooser;
 	public static SendableChooser<Integer> trajectoryDirectionChooser;
 
 	public static SendableChooser<Double> timeDelayChooser;
 
 	public AutoChoosers() {
-		testTrajectoryChooser = new SendableChooser<String>();
+		testTrajectoryChooser = new SendableChooser<Integer>();
 
-		testTrajectoryChooser.setDefaultOption("Straight Line", "SimpleStraight");
-		testTrajectoryChooser.addOption("Right Turn", "SimpleRightTurn");
-		testTrajectoryChooser.addOption("Left Turn", "SimpleLeftTurn");
-		testTrajectoryChooser.addOption("Field to Wall Test", "FieldToWallTest");
+		testTrajectoryChooser.setDefaultOption("L " + TrajDict.leftStartNames[0], 0);
+		testTrajectoryChooser.addOption("L " + TrajDict.leftStartNames[1], 1);
+		testTrajectoryChooser.addOption("LC " + TrajDict.leftCenterStartNames[0],2);
+		testTrajectoryChooser.addOption("RC " + TrajDict.rightCenterStartNames[0], 3);
+		testTrajectoryChooser.addOption("R " + TrajDict.rightStartNames[0], 4);
+		testTrajectoryChooser.addOption("R " + TrajDict.rightStartNames[1],5);
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
@@ -41,7 +43,7 @@ public class AutoChoosers {
 		trajectoryDirectionChooser.addOption("FaceWallMoveField", 2);
 		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 3);
 		trajectoryDirectionChooser.addOption("FaceWallMoveWall", 4);
-		SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
+		// SmartDashboard.putData("Trajectory Direction Chooser", trajectoryDirectionChooser);
 
 		startPositionChooser = new SendableChooser<Integer>();
         startPositionChooser.setDefaultOption("DriverControl", 0);
