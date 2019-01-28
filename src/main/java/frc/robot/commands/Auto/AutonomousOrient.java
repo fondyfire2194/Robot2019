@@ -18,9 +18,9 @@ public class AutonomousOrient extends CommandGroup {
   private double mySpeed;
 	private double myAngle;
 	private double myTimeout;
-	private int passCount;
+	
   private boolean myAccuracy;
-  private int myStep;
+  
 
 
   public AutonomousOrient(double angle, double speed, boolean accuracy, double timeout, int step) {
@@ -29,7 +29,7 @@ public class AutonomousOrient extends CommandGroup {
 		myAngle = angle;
 		myTimeout = timeout;
     myAccuracy = accuracy;
-    myStep = step;
+    
     
     addSequential(new RobotOrient(mySpeed, myAngle, myAccuracy, myTimeout));
     addSequential(new SetAutoCommandDone(step));

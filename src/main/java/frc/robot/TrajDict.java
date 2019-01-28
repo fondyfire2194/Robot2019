@@ -15,12 +15,13 @@ import java.util.HashMap;
 
 public class TrajDict {
 
-public static String[] leftStartNames = {"SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn"};//,"SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn"};
-public static String[] leftCenterStartNames =  {"SimpleRightTurn","SimpleLeftTurn"};
-public static String[] rightCenterStartNames =  {"SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn"};
-public static String[] rightStartNames =  {"SimpleRightTurn","SimpleLeftTurn"};
-public static String[] secondHatchNames ={"SimpleRightTurn","SimpleLeftTurn","SimpleRightTurn","SimpleLeftTurn","SimpleLeftTurn","SimpleRightTurn"};
+public static String[] leftStartNames = {"LL1ToCS2","CS2ToTurn"};
+public static String[] leftCenterStartNames = {"CLEToLoad"};
+public static String[] rightCenterStartNames = {"CLEToLoad"};
+public static String[] rightStartNames =   {"LL1ToCS2","CS2ToTurn"};//
 
+
+public static String[] secondHatchNames = {"LoadToCS1","LoadToCS2","LoadToCS3","LoadToFarCenter"};
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 

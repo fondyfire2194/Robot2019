@@ -34,7 +34,7 @@ public class AutoCommands {
     public static int setLeftStart() {
         Robot.autonomousCommand[1] = new LHabToLCS2();
         Robot.autonomousCommand[2] = new LCS2ToLLoad();
-        Robot.autonomousCommand[3] = new AutonomousOrient(180, .5, true, 5, 3);
+        Robot.autonomousCommand[3] = new AutonomousOrient(180, .5, true, 2, 3);
         Robot.autonomousCommand[4] = new MoveToLoadStation(4);
         Robot.autonomousCommand[5] = new PickUpPanel(5);
         int numberOfCommands = 5;
@@ -93,7 +93,7 @@ public class AutoCommands {
             Robot.autonomousCommand[indexStart + 1] = new LoadToECSFar(side, indexStart + 1);
             break;
         }
-        return numberOfCommands +5;
+        return numberOfCommands +1;
     }
 
 }

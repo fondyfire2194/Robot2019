@@ -58,7 +58,7 @@ public class PathfinderNotifier {
 		thisTime = 0;
 		lastTime = 0;
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
-		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;///1000;
+		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;/// 1000;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -106,19 +106,22 @@ public class PathfinderNotifier {
 		double rightPct = 0;
 		double angleDifference = 0;
 		double turn = 0;
-		//convenience because gyro action is opposite of trajectory generation
+		// convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
-			SmartDashboard.putNumber("Switch Mode", switchMode);
+		double headingMultiplier = 1;
+		if (Constants.usePathWeaver)
+			headingMultiplier = -1;
+		SmartDashboard.putNumber("Switch Mode", switchMode);
 		switch (switchMode) {
 
 		case 1:
-		/**
-		 *  normal condition robot moves forward to field
-		 * standard Pathfinder trajectory use
-		 *  */
+			/**
+			 * normal condition robot moves forward to field standard Pathfinder trajectory
+			 * use
+			 */
 			left = Robot.driveTrain.leftDf.calculate(Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.rightDf.calculate(Robot.driveTrain.getRightFeet());
-			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = Constants.MINIMUM_START_PCT + left + turn;
@@ -134,7 +137,7 @@ public class PathfinderNotifier {
 			 */
 			right = Robot.driveTrain.leftDf.calculate(Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.rightDf.calculate(Robot.driveTrain.getLeftFeet());
-			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = Constants.MINIMUM_START_PCT + left + turn;
@@ -153,7 +156,7 @@ public class PathfinderNotifier {
 			 */
 			right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getLeftFeet());
-			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
@@ -161,17 +164,17 @@ public class PathfinderNotifier {
 			break;
 
 		case 4:
-		/**
-			 * robot moves backwards to field with Y invertd. This requires a negated drive command.
-			 * Side positions must be negated but not exchanged.The target
-			 * angle doesn't change but if this is the first move after startup, then the
-			 * gyro angle will be 180 off from normal and must be compensated somehow for
-			 * any future motions
+			/**
+			 * robot moves backwards to field with Y invertd. This requires a negated drive
+			 * command. Side positions must be negated but not exchanged.The target angle
+			 * doesn't change but if this is the first move after startup, then the gyro
+			 * angle will be 180 off from normal and must be compensated somehow for any
+			 * future motions
 			 * 
 			 */
 			right = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
-			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);

@@ -23,10 +23,10 @@ public class PathfinderReverseNotifier {
 	private static int switchMode;
 
 	public static void startNotifier(boolean faceField, boolean invertY) {
-				/**
+		/**
 		 * all moves are towards the wall and away from the field. Robot can move in its
-		 * forward or reverse direction. It can have its command angle inverted to mirror
-		 * Y it can have its sides inverted by following opposite side trajectory
+		 * forward or reverse direction. It can have its command angle inverted to
+		 * mirror Y it can have its sides inverted by following opposite side trajectory
 		 * 
 		 */
 
@@ -41,11 +41,10 @@ public class PathfinderReverseNotifier {
 		if (!myfaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
-
 		activeTrajectoryLength = Robot.activeTrajectory[0].length();
 		lastSegmentPosition = Robot.activeTrajectory[0].get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
-		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt/1000;
+		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt / 1000;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -82,19 +81,22 @@ public class PathfinderReverseNotifier {
 		double rightPct = 0;
 		double angleDifference = 0;
 		double turn = 0;
-		//convenience because gyro action is opposite of trajectory generation
+		// convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
+		double headingMultiplier = 1;
+		if (Constants.usePathWeaver)
+			headingMultiplier = -1;
 		SmartDashboard.putNumber("Switch RevMode", switchMode);
 		switch (switchMode) {
 
 		case 1:
-		/**
-		 *  normal condition robot moves forward to field
-		 * standard Pathfinder trajectory use
-		 *  */
-	    	left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
-		    right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
-			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			/**
+			 * normal condition robot moves forward to field standard Pathfinder trajectory
+			 * use
+			 */
+			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
+			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
+			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
@@ -110,7 +112,7 @@ public class PathfinderReverseNotifier {
 			 */
 			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
-			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
@@ -129,7 +131,7 @@ public class PathfinderReverseNotifier {
 			 */
 			left = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getRightFeet());
-			desired_heading = Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = (Constants.MINIMUM_START_PCT + left + turn);
@@ -137,17 +139,17 @@ public class PathfinderReverseNotifier {
 			break;
 
 		case 4:
-		/**
-			 * robot moves backwards to field with Y invertd. This requires a negated drive command.
-			 * Side positions nust be negated but not exchanged.The target
-			 * angle doesnt change but if this is the first move after startup, then the
-			 * gyro angle will be 180 off from normal and must be compensated somehow for
-			 * any future motions
+			/**
+			 * robot moves backwards to field with Y invertd. This requires a negated drive
+			 * command. Side positions nust be negated but not exchanged.The target angle
+			 * doesnt change but if this is the first move after startup, then the gyro
+			 * angle will be 180 off from normal and must be compensated somehow for any
+			 * future motions
 			 * 
 			 */
 			right = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getLeftFeet());
-			desired_heading = -Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
+			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = (Constants.MINIMUM_START_PCT + left + turn);
@@ -157,7 +159,6 @@ public class PathfinderReverseNotifier {
 		default:
 			break;
 		}
-
 
 		Robot.driveTrain.leftDriveOut(leftPct);
 		Robot.driveTrain.rightDriveOut(rightPct);

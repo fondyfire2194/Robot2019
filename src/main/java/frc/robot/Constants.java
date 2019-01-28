@@ -47,7 +47,9 @@ public class Constants {
 
 	public static double ELEVATOR_MIN_HEIGHT = -.50;
 	public static double ELEVATOR_MAX_HEIGHT = 89;
-	public static double ELEVATOR_IN_POSITION_BAND = 3;
+  public static double ELEVATOR_IN_POSITION_BAND = 3;
+  
+  public static boolean usePathWeaver =true;
 
 
   private Constants() {

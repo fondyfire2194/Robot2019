@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
   double autoTimeDelaySeconds;
 
   public static boolean[] autonomousCommandDone;
+  public static int runningAutoCommand;;
 
   boolean autoTimeDelayDone;
 
@@ -89,11 +90,14 @@ public class Robot extends TimedRobot {
   }
 
   public static boolean useGainPrefs = true;
-  public static Trajectory[] activeTrajectory;
+  public static Trajectory[] activeTrajectory = { null, null };
+  public static Trajectory activLeftTrajectory;
 
+  public static Trajectory activeRightTrajectory;
   public static String activeTrajName = "Empty";
   public static Trajectory[] leftBufferTrajectory = new Trajectory[6];
   public static Trajectory[] rightBufferTrajectory = new Trajectory[6];
+
   public static int secondHatchIndex;
   public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5" };
 
@@ -122,9 +126,9 @@ public class Robot extends TimedRobot {
   public static boolean robotMoveReverse;
   int test;
   public static boolean buildInProgress;
-  public static int startPositionSelected;
-  public static int secondHatchSelected;
-  public static boolean useUsb = true;
+  public static int startPositionSelected = 0;;
+  public static int secondHatchSelected = 0;;
+  public static boolean useUsb = false;
   public static boolean faceField = true;
   public static boolean invertY = true;
   public static boolean trajectoriesLoaded;
@@ -158,6 +162,7 @@ public class Robot extends TimedRobot {
     // autoChoosers.init();
     autonomousCommand = new Command[10];
     autonomousCommandDone = new boolean[10];
+
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
     // Pref.deleteUnused();
@@ -239,19 +244,6 @@ public class Robot extends TimedRobot {
     secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
 
     autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
-
-    // schedule the autonomous command (example)
-    if (autonomousCommand[0] != null)
-      autonomousCommand[0].start();
-  }
-
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
-
     if (!fileError && startPositionSelected != 0) {
 
       switch (startPositionSelected) {
@@ -269,24 +261,29 @@ public class Robot extends TimedRobot {
       numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands,
           rightStart);
 
-      if (autonomousCommandDone[0])
-        autonomousCommand[1].start();
-      if (autonomousCommandDone[1] && numberOfAutonomousCommands > 1)
-        autonomousCommand[2].start();
-      if (autonomousCommandDone[2] && numberOfAutonomousCommands > 2)
-        autonomousCommand[3].start();
-      if (autonomousCommandDone[3] && numberOfAutonomousCommands > 3)
-        autonomousCommand[4].start();
-      if (autonomousCommandDone[4] && numberOfAutonomousCommands > 4)
-        autonomousCommand[5].start();
-      if (autonomousCommandDone[5] && numberOfAutonomousCommands > 5)
-        autonomousCommand[6].start();
-      if (autonomousCommandDone[6] && numberOfAutonomousCommands > 6)
-        autonomousCommand[7].start();
-      if (autonomousCommandDone[7] && numberOfAutonomousCommands > 8)
-        autonomousCommand[8].start();
-
+      // schedule the autonomous command (example)
+      if (autonomousCommand[0] != null) {
+        autonomousCommand[0].start();
+        runningAutoCommand = 0;
+      }
     }
+  }
+
+  /**
+   * This function is called periodically during autonomous.
+   */
+  @Override
+  public void autonomousPeriodic() {
+    Scheduler.getInstance().run();
+
+    if (autonomousCommandDone[runningAutoCommand] && numberOfAutonomousCommands > runningAutoCommand) {
+      autonomousCommandDone[runningAutoCommand] = false;
+      runningAutoCommand++;
+      if(autonomousCommand[runningAutoCommand]!=null)
+      autonomousCommand[runningAutoCommand].start();
+   } 
+  if(runningAutoCommand > numberOfAutonomousCommands)numberOfAutonomousCommands=0;
+
   }
 
   @Override
@@ -410,16 +407,18 @@ public class Robot extends TimedRobot {
     driveTrain.updateStatus();
     limelightCamera.updateStatus();
     visionData.updateStatus();
+    
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
     SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
-    SmartDashboard.putBoolean("AC0Dn", autonomousCommandDone[0]);
-    SmartDashboard.putString("Running Command", runningCommandName);
+    SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
+    // SmartDashboard.putString("Running Command", runningCommandName);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
-    SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 : activeTrajectory[0].length());
+    // SmartDashboard.putNumber("TrajLen", activeTrajectory == null ? 0 :
+    // activeTrajectory[0].length());
     SmartDashboard.putString("FileChosen", chosenFileName);
     SmartDashboard.putString("FileInBuffer", bufferTrajName);
     SmartDashboard.putString("Active Trajectory", activeTrajName);
@@ -441,6 +440,7 @@ public class Robot extends TimedRobot {
   public void readTrajFiles() {
     startSettingsReady = SmartDashboard.getNumber("StartSettingsReady", 0.);
     SmartDashboard.putBoolean("StartSettingsDone", startSettingsDone);
+    SmartDashboard.putBoolean("File Error", fileError);
     SmartDashboard.putBoolean("SSR", startSettingsReady != 0.);
     readingRunning = currentLoader.running;
     readThreadStartTime = Timer.getFPGATimestamp();
@@ -452,12 +452,14 @@ public class Robot extends TimedRobot {
       reader.start();
       wasRunning = true;
     }
+    fileError = currentLoader.error || fileError & startSettingsReady != 0.;
+
     if (wasRunning && !readingRunning) {
       SmartDashboard.putNumber("StartSettingsReady", 0.);
       SmartDashboard.putNumber("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
       startSettingsReady = 0.;
       startSettingsDone = true;
-      fileError = currentLoader.error;
+
       wasRunning = false;
     }
   }

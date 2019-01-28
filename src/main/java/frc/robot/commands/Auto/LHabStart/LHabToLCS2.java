@@ -39,8 +39,8 @@ public class LHabToLCS2 extends CommandGroup {
 
     addSequential(new BufferToActiveTrajectory(0));
     addSequential(new PathfinderTrajectory(Robot.faceField, !Robot.invertY));
-    addSequential(new RobotOrient(90, .5, true, 5));
-    addSequential(new RobotDriveToTarget(8, .5, false, 10));
+    addSequential(new RobotOrient(-90, .5, true, 2));
+    addSequential(new RobotDriveToTarget(8, .5, false, 3));
     addSequential(new PlacePanel());
     addSequential(new SetAutoCommandDone(1));
   }

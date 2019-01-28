@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 /**
@@ -28,9 +29,10 @@ public class BufferToActiveTrajectory extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.activeTrajectory[0] = Robot.leftBufferTrajectory[myNumber];
-    Robot.activeTrajectory[1] = Robot.rightBufferTrajectory[myNumber];
-    Robot.activeTrajName = Robot.bufferTrajName;
+    Robot.activeTrajectory[0]= Robot.leftBufferTrajectory[myNumber];
+     Robot.activeTrajectory[1] = Robot.rightBufferTrajectory[myNumber];
+     Robot.activeTrajName = Robot.bufferTrajName;
+     SmartDashboard.putNumber("A2BL", Robot.activeTrajectory[0].length());
 
   }
 
