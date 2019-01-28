@@ -21,6 +21,7 @@ import frc.robot.commands.RobotOrient;
 import frc.robot.commands.RobotDriveToTarget;
 
 import frc.robot.commands.Auto.*;
+import frc.robot.commands.ChooseTrajectory;
 import frc.robot.BuildTrajectory;
 import frc.robot.TrajDict;
 import frc.robot.subsystems.DriveTrain;
@@ -132,7 +133,7 @@ public class Robot extends TimedRobot {
   public static boolean useUsb = false;
   public static boolean faceField;
   public static boolean invertY;
-  public static boolean reverseTrajectory;
+  public static boolean forwardTrajectory;
   public static boolean trajectoriesLoaded;
 
   public static int numberOfAutonomousCommands;
@@ -179,7 +180,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("RevOrient", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("RevTrajectory", false);
+    SmartDashboard.putBoolean("ReverseTrajectory", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
@@ -335,59 +336,41 @@ public class Robot extends TimedRobot {
     if (doFileTrajectory) {
 
       testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
-      reverseTrajectory = SmartDashboard.getBoolean("RevTrajectory", false);
+      forwardTrajectory = SmartDashboard.getBoolean("InvertTrajectory", false);
       switch (testTrajectorySelection) {
       case 0:
         testTrajectoryName = TrajDict.leftStartNames[0];
-        if (!reverseTrajectory)
-          testTrajectoryDirection = 1;
-        else
-          testTrajectoryDirection = 2;
+        forwardTrajectory=true;
         faceField = true;
         invertY = false;
         break;
       case 1:
         testTrajectoryName = TrajDict.leftStartNames[1];
-        if (!reverseTrajectory)
-          testTrajectoryDirection = 2;
-        else
-          testTrajectoryDirection = 1;
+        forwardTrajectory=true;
         faceField = true;
         invertY = false;
         break;
       case 2:
         testTrajectoryName = TrajDict.leftCenterStartNames[0];
-        if (!reverseTrajectory)
-          testTrajectoryDirection = 1;
-        else
-          testTrajectoryDirection = 2;
-        faceField = true;
+        forwardTrajectory=true;
+                faceField = true;
         invertY = false;
         break;
       case 3:
         testTrajectoryName = TrajDict.rightCenterStartNames[0];
-        if (!reverseTrajectory)
-          testTrajectoryDirection = 1;
-        else
-          testTrajectoryDirection = 2;
+forwardTrajectory=true;
         faceField = true;
         invertY = true;
         break;
       case 4:
         testTrajectoryName = TrajDict.rightStartNames[0];
-        if (!reverseTrajectory)
-          testTrajectoryDirection = 1;
-        else
-          testTrajectoryDirection = 2;
+        forwardTrajectory=true;
         faceField = true;
         invertY = true;
         break;
       case 5:
         testTrajectoryName = TrajDict.rightStartNames[1];
-        if (!reverseTrajectory)
-          testTrajectoryDirection = 2;
-        else
-          testTrajectoryDirection = 1;
+        forwardTrajectory=true;
         faceField = true;
         invertY = true;
         break;
@@ -420,16 +403,13 @@ public class Robot extends TimedRobot {
 
       useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-      switch (testTrajectoryDirection) {
+if(SmartDashboard.getBoolean("ReverseTrajectory",false))
+        new ChooseTrajectory(forwardTrajectory,faceField, invertY).start();
+      else
+      new ChooseTrajectory(!forwardTrajectory,faceField, invertY).start();
+        
 
-      case 1:// move to field
-        new PathfinderTrajectory(faceField, invertY).start();
-        break;
-      case 2:// move reverse to wall
-        new PathfinderReverseTrajectory(faceField, invertY).start();
-        break;
-
-      }
+      
 
       trajectoryRunning = true;
       doTeleopTrajectory = false;

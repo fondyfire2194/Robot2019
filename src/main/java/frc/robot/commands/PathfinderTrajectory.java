@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import frc.robot.PathfinderNotifier;
 import frc.robot.Robot;
-import frc.robot.subsystems.DriveTrain;
+
 import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -15,14 +15,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class PathfinderTrajectory extends Command {
 	private double startTime;
 	private int scanCounter;
-	private boolean myRobotMoveReverse;
-	private boolean myYInverted;
+	private boolean myFaceField;;
+	private boolean myInvertY;
 
-	public PathfinderTrajectory(boolean robotMoveReverse, boolean yInverted) {
+	public PathfinderTrajectory(boolean faceField, boolean invertY) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		myRobotMoveReverse = robotMoveReverse;
-		myYInverted = yInverted;
+		myFaceField = faceField;
+		myInvertY = invertY;
 		requires(Robot.driveTrain);
 	}
 
@@ -58,7 +58,7 @@ public class PathfinderTrajectory extends Command {
 		}
 		scanCounter = 0;
 		startTime = Timer.getFPGATimestamp();
-		PathfinderNotifier.startNotifier(myRobotMoveReverse, myYInverted);
+		PathfinderNotifier.startNotifier(myFaceField, myInvertY);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
