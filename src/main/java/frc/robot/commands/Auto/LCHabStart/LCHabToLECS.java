@@ -55,7 +55,7 @@ public class LCHabToLECS extends CommandGroup {
     addSequential(new SetRunningCommandName("Vision Move"));
     addSequential(new RobotDriveToTarget(10, .5, false, 10));// position using vision correction
     addSequential(new SetRunningCommandName("Place Panel"));
-    addSequential(new PlacePanel());
+    addSequential(new PlaceHatchPanel());
 
     addSequential(new SetAutoCommandDone(1));
 

@@ -37,7 +37,7 @@ public class RCHabToRECS extends CommandGroup {
     
     addSequential(new RobotDriveToTarget(10, .5, false, 10));//position using vision correction
         
-    addSequential(new PlacePanel());
+    addSequential(new PlaceHatchPanel());
     addSequential(new SetAutoCommandDone(1));
 
     

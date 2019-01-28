@@ -36,7 +36,7 @@ public class AutoCommands {
         Robot.autonomousCommand[2] = new LCS2ToLLoad();
         Robot.autonomousCommand[3] = new AutonomousOrient(180, .5, true, 2, 3);
         Robot.autonomousCommand[4] = new MoveToLoadStation(4);
-        Robot.autonomousCommand[5] = new PickUpPanel(5);
+        Robot.autonomousCommand[5] = new PickUpHatchPanel(5);
         int numberOfCommands = 5;
         return numberOfCommands;
     }
@@ -46,7 +46,7 @@ public class AutoCommands {
         Robot.autonomousCommand[2] = new LCToLLoad();
         Robot.autonomousCommand[3] = new AutonomousOrient(180, .5, true, 5, 3);
         Robot.autonomousCommand[4] = new MoveToLoadStation(4);
-        Robot.autonomousCommand[5] = new PickUpPanel(5);
+        Robot.autonomousCommand[5] = new PickUpHatchPanel(5);
         int numberOfCommands = 5;
         return numberOfCommands;
     }
@@ -56,7 +56,7 @@ public class AutoCommands {
         Robot.autonomousCommand[2] = new RCToRLoad();
         Robot.autonomousCommand[3] = new AutonomousOrient(180, .5, true, 5, 3);
         Robot.autonomousCommand[4] = new MoveToLoadStation(4);
-        Robot.autonomousCommand[5] = new PickUpPanel(5);
+        Robot.autonomousCommand[5] = new PickUpHatchPanel(5);
         int numberOfCommands = 5;
         return numberOfCommands;
     }
@@ -66,7 +66,7 @@ public class AutoCommands {
         Robot.autonomousCommand[2] = new RCS2ToRLoad();
         Robot.autonomousCommand[3] = new AutonomousOrient(180, .5, true, 5, 3);
         Robot.autonomousCommand[4] = new MoveToLoadStation(4);
-        Robot.autonomousCommand[5] = new PickUpPanel(5);
+        Robot.autonomousCommand[5] = new PickUpHatchPanel(5);
         int numberOfCommands = 5;
         return numberOfCommands;
     }

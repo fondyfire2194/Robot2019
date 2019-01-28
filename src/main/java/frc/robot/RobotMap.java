@@ -16,12 +16,14 @@ package frc.robot;
 public class RobotMap {
 
   public static final int AIR_COMPRESSOR = 0;
+  public static final int POWER_DISTRIBUTION_PANEL = 1;
   public static final int DRIVETRAIN_LEFT_TALON_ONE = 3;
   public static final int DRIVETRAIN_LEFT_TALON_TWO = 4;
   public static final int DRIVETRAIN_LEFT_TALON_THREE = 5;
   public static final int DRIVETRAIN_RIGHT_TALON_ONE = 6;
   public static final int DRIVETRAIN_RIGHT_TALON_TWO = 7;
   public static final int DRIVETRAIN_RIGHT_TALON_THREE = 8;
+  public static final int CARGO_MOTOR = 9;
   public static final int ELEVATOR_MOTOR = 12;
 
   // For example to map the left and right motors, you could define the

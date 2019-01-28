@@ -12,7 +12,7 @@ import frc.robot.Robot;
 import frc.robot.commands.BufferToActiveTrajectory;
 import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.Auto.SetAutoCommandDone;
-import frc.robot.commands.HatchPanels.PlacePanel;
+import frc.robot.commands.HatchPanels.PlaceHatchPanel;
 import frc.robot.commands.*;
 
 public class LHabToLCS2 extends CommandGroup {
@@ -41,7 +41,7 @@ public class LHabToLCS2 extends CommandGroup {
     addSequential(new PathfinderTrajectory(Robot.faceField, !Robot.invertY));
     addSequential(new RobotOrient(-90, .5, true, 2));
     addSequential(new RobotDriveToTarget(8, .5, false, 3));
-    addSequential(new PlacePanel());
+    addSequential(new PlaceHatchPanel());
     addSequential(new SetAutoCommandDone(1));
   }
 }

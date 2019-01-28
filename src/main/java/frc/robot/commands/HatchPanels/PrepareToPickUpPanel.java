@@ -8,14 +8,13 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
-import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.HatchPanels.*;
 
-public class PickUpPanel extends CommandGroup {
+public class PrepareToPickUpPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PickUpPanel(int step) {
+  public PrepareToPickUpPanel() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -32,13 +31,7 @@ public class PickUpPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-
-
-
-    // AddSequential(new PanelGrabber());
-    addSequential(new TimeDelay(2));
-    addSequential(new SetAutoCommandDone(step));
-}
+    addParallel(new ReleaseHatchPanel());
+    addParallel(new ExtendHatchPanel());
   }
-  
+}

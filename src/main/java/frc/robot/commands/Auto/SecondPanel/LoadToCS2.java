@@ -14,7 +14,7 @@ import frc.robot.commands.PathfinderTrajectory;
 import frc.robot.commands.RobotDriveToTarget;
 import frc.robot.commands.RobotOrient;
 import frc.robot.commands.Auto.SetAutoCommandDone;
-import frc.robot.commands.HatchPanels.PlacePanel;
+import frc.robot.commands.HatchPanels.PlaceHatchPanel;
 
 public class LoadToCS2 extends CommandGroup {
   /**
@@ -50,7 +50,7 @@ public class LoadToCS2 extends CommandGroup {
 
     addSequential(new RobotDriveToTarget(5, .5, false, 10));
 
-    addSequential(new PlacePanel());
+    addSequential(new PlaceHatchPanel());
 
     addSequential(new SetAutoCommandDone(step));
   }

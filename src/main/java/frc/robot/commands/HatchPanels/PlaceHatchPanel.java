@@ -8,13 +8,15 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
+import frc.robot.commands.HatchPanels.*;
+import frc.robot.commands.TimeDelay;
 
-public class PlacePanel extends CommandGroup {
+
+public class PlaceHatchPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PlacePanel() {
+  public PlaceHatchPanel() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -31,7 +33,12 @@ public class PlacePanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new TimeDelay(2));
+
+    addSequential(new ExtendHatchPanel());
+    addSequential(new TimeDelay(.5));
+    addSequential(new ReleaseHatchPanel());
+    addSequential(new TimeDelay(.5));
+    addSequential(new RetractHatchPanel());
 }
   }
   

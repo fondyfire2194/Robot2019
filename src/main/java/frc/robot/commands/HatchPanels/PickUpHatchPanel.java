@@ -5,23 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Auto.SecondPanel;
+package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.RobotOrient;
+import frc.robot.commands.*;
 import frc.robot.commands.Auto.SetAutoCommandDone;
-import frc.robot.commands.HatchPanels.PlaceHatchPanel;
-import frc.robot.commands.TimeDelay;
+import frc.robot.commands.HatchPanels.*;
 
-public class LoadToCS3 extends CommandGroup {
+public class PickUpHatchPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public LoadToCS3(boolean side, int step) {
+  public PickUpHatchPanel(int step) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -39,22 +34,14 @@ public class LoadToCS3 extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addSequential(new BufferToActiveTrajectory(2));
 
-    addSequential(new PathfinderTrajectory(Robot.faceField, side));
-    if (side) {
-      addSequential(new RobotOrient(-90, .5, false, 5));
-    }
-    if (!side) {
-      addSequential(new RobotOrient(90, .5, false, 5));
-    }
 
-    addSequential(new RobotDriveToTarget(5, .5, false, 10));
 
-    addSequential(new PlaceHatchPanel());
-
+  
+    addSequential(new GripHatchPanel());
+    addSequential(new TimeDelay(.5));
+    addSequential(new RetractHatchPanel());
     addSequential(new SetAutoCommandDone(step));
-
-
-  }
 }
+  }
+  
