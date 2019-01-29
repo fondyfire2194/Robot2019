@@ -8,15 +8,15 @@
 package frc.robot.commands.Auto.LCHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.PathfinderReverseTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.Trajectories.PathfinderReverseTrajectory;
+import frc.robot.commands.Trajectories.PathfinderTrajectory;
+import frc.robot.commands.Motion.RobotDriveToTarget;
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 import frc.robot.commands.HatchPanels.*;
 
 import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
+import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
 
 public class LCToLLoad extends CommandGroup {
   /**

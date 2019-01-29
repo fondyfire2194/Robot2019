@@ -15,8 +15,8 @@ import frc.robot.commands.DoFileTrajectory;
 import frc.robot.commands.DoTeleopRobotOrient;
 import frc.robot.commands.DoTeleopTrajectory;
 import frc.robot.commands.DoTeleopPosition;
-import frc.robot.commands.ResetEncoders;
-import frc.robot.commands.ResetGyro;
+import frc.robot.commands.Motion.ResetEncoders;
+import frc.robot.commands.Motion.ResetGyro;
 import frc.robot.commands.DeleteAllPrefs;
 
 import frc.robot.commands.Limelight.*;
@@ -25,66 +25,62 @@ import frc.robot.LimeLight;
 import frc.robot.Gamepad;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  
-	public JoystickButton elevatorToLowerHatch;
-	public JoystickButton elevatorToMidRocket;
-	public JoystickButton elevatorToTopRocket;
 
-  public JoystickButton jogElevator;
-  
-  public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
-  public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
-  
-  public OI(){
-    Timer.delay(.02);
+    public JoystickButton elevatorToLowerHatch;
+    public JoystickButton elevatorToMidRocket;
+    public JoystickButton elevatorToTopRocket;
 
-    SmartDashboard.putData(new ResetEncoders());
-    Timer.delay(.02);
-    SmartDashboard.putData(new ResetGyro());
-    Timer.delay(.02);
-    SmartDashboard.putData("OrientRobot", new DoTeleopRobotOrient());
-    Timer.delay(.02);
-    SmartDashboard.putData("DriveToTarget", new DoTeleopPosition());
+    public JoystickButton jogElevator;
 
-    
-    Timer.delay(.02);
-    SmartDashboard.putData("Tel Traj", new DoTeleopTrajectory());
-    Timer.delay(.02);
-    SmartDashboard.putData("File Traj", new DoFileTrajectory());
-    Timer.delay(.02);
-    SmartDashboard.putData("LEDS On", new SetLimelightLeds(LedMode.kforceOn) );
-    SmartDashboard.putData("LEDS Off", new SetLimelightLeds(LedMode.kforceOff) );
+    public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
+    public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
 
-    SmartDashboard.putData("Toggle View", new ToggleCamMode());
-    SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
-/**
- * Co driver controller
- * 
- */
+    public OI() {
+        Timer.delay(.02);
 
+        SmartDashboard.putData(new ResetEncoders());
+        Timer.delay(.02);
+        SmartDashboard.putData(new ResetGyro());
+        Timer.delay(.02);
+        SmartDashboard.putData("OrientRobot", new DoTeleopRobotOrient());
+        Timer.delay(.02);
+        SmartDashboard.putData("DriveToTarget", new DoTeleopPosition());
 
-elevatorToLowerHatch = gamepad.getButtonB();
+        Timer.delay(.02);
+        SmartDashboard.putData("Tel Traj", new DoTeleopTrajectory());
+        Timer.delay(.02);
+        SmartDashboard.putData("File Traj", new DoFileTrajectory());
+        Timer.delay(.02);
+        SmartDashboard.putData("LEDS On", new SetLimelightLeds(LedMode.kforceOn));
+        SmartDashboard.putData("LEDS Off", new SetLimelightLeds(LedMode.kforceOff));
 
-elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_LOWER_HATCH_INCHES));
+        SmartDashboard.putData("Toggle View", new ToggleCamMode());
+        SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
+        /**
+         * Co driver controller
+         * 
+         */
 
-elevatorToMidRocket = gamepad.getButtonY();
+        elevatorToLowerHatch = gamepad.getButtonB();
 
-elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_MID_ROCKET_INCHES));
+        elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_LOWER_HATCH_INCHES));
 
-elevatorToTopRocket = gamepad.getButtonX();
+        elevatorToMidRocket = gamepad.getButtonY();
 
-elevatorToTopRocket
-    .whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_TOP_ROCKET_INCHES));
+        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_MID_ROCKET_INCHES));
 
+        elevatorToTopRocket = gamepad.getButtonX();
 
+        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_TOP_ROCKET_INCHES));
 
-jogElevator = gamepad.getStartButton();
-jogElevator.whileHeld(new RunElevatorFromGamepad());
+        jogElevator = gamepad.getStartButton();
+        jogElevator.whileHeld(new RunElevatorFromGamepad());
 
-    } 
+    }
 }

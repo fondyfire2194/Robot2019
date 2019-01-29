@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Trajectories;
 
 import frc.robot.PathfinderNotifier;
 import frc.robot.Robot;

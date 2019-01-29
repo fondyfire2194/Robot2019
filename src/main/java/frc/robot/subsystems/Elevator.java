@@ -44,7 +44,7 @@ public class Elevator extends Subsystem {
 		elevatorMotor.setNeutralMode(NeutralMode.Brake);
 		elevatorMotor.configVoltageCompSaturation(12, 0);
 		elevatorMotor.enableVoltageCompensation(true);
-		elevatorSwitch = new DigitalInput(0);
+		elevatorSwitch = new DigitalInput(RobotMap.ELEVATOR_TRAVEL_SWITCH);
 		// Put methods for controlling this subsystem
 		// here. Call these from Commands.
 	}

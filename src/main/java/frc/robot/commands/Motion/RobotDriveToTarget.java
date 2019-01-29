@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.*;

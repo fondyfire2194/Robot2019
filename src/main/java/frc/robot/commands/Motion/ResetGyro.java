@@ -5,30 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-
-public class SettrajectoryGains extends InstantCommand {
+public class ResetGyro extends InstantCommand {
   /**
    * Add your docs here.
    */
-  private double[] myGains =  { 0, 0, 0, 0 };
-  public SettrajectoryGains(double[] gains) {
+  public ResetGyro() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myGains = gains;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.activeTrajectoryGains = myGains;
+    Robot.driveTrain.resetGyro();
   }
 
 }

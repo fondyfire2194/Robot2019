@@ -9,7 +9,7 @@ package frc.robot.commands.Auto.LHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.*;
+import frc.robot.commands.Trajectories.*;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 
 public class LCS2ToLLoad extends CommandGroup {

@@ -8,13 +8,13 @@
 package frc.robot.commands.Auto.RHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.Motion.RobotDriveToTarget;
 import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
+import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
+import frc.robot.commands.Trajectories.PathfinderTrajectory;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 import frc.robot.commands.HatchPanels.PlaceHatchPanel;
-import frc.robot.commands.*;
+import frc.robot.commands.Motion.*;
 
 public class RHabToRCS2 extends CommandGroup {
   /**

@@ -10,7 +10,7 @@ package frc.robot.commands.Auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
 import frc.robot.Constants;
-import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.Motion.RobotDriveToTarget;
 
 public class AdjustLoadApproach extends CommandGroup {
   /**

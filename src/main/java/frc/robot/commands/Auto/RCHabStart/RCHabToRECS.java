@@ -10,7 +10,7 @@ package frc.robot.commands.Auto.RCHabStart;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.Auto.SetAutoCommandDone;
-import frc.robot.commands.RobotDriveToTarget;
+import frc.robot.commands.Motion.RobotDriveToTarget;
 import frc.robot.commands.HatchPanels.*;
 
 public class RCHabToRECS extends CommandGroup {

@@ -9,8 +9,8 @@ package frc.robot.commands.Auto.RCHabStart;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.BufferToActiveTrajectory;
-import frc.robot.commands.PathfinderReverseTrajectory;
+import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
+import frc.robot.commands.Trajectories.PathfinderReverseTrajectory;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 
 public class RCToRLoad extends CommandGroup {

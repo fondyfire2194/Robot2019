@@ -5,28 +5,36 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.Trajectories;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class ResetEncoders extends InstantCommand {
+public class BufferToActiveTrajectory extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ResetEncoders() {
+  private int myNumber;
+  public BufferToActiveTrajectory(int number) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myNumber=number;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.driveTrain.resetEncoders();
+    Robot.activeTrajectory[0]= Robot.leftBufferTrajectory[myNumber];
+     Robot.activeTrajectory[1] = Robot.rightBufferTrajectory[myNumber];
+     Robot.activeTrajectoryGains = Robot.bufferTrajectoryGains[myNumber];
+     Robot.activeTrajName = Robot.bufferTrajName;
+     SmartDashboard.putNumber("A2BL", Robot.activeTrajectory[0].length());
+
   }
 
 }

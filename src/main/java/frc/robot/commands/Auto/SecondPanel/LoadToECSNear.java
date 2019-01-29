@@ -8,10 +8,10 @@
 package frc.robot.commands.Auto.SecondPanel;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.BufferToActiveTrajectory;
-import frc.robot.commands.PathfinderTrajectory;
-import frc.robot.commands.RobotDriveToTarget;
-import frc.robot.commands.RobotOrient;
+import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
+import frc.robot.commands.Trajectories.PathfinderTrajectory;
+import frc.robot.commands.Motion.RobotDriveToTarget;
+import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 
 public class LoadToECSNear extends CommandGroup {

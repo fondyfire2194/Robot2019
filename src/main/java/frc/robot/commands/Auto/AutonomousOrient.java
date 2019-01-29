@@ -8,7 +8,7 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.RobotOrient;
+import frc.robot.commands.Motion.RobotOrient;
 
 public class AutonomousOrient extends CommandGroup {
   /**
