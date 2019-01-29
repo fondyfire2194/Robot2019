@@ -11,6 +11,7 @@ package frc.robot;
  * Add your docs here.
  */
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.TrajDict;
 
 public class LoadFiles implements Runnable {
     public volatile boolean running = false;
@@ -76,6 +77,7 @@ public class LoadFiles implements Runnable {
 
         if (Robot.buildOK) {
             Robot.bufferTrajectoryName[i] = startName;
+            Robot.bufferTrajectoryGains[i] = TrajDict.getTrajGains(startName);
             SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
             SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i), Robot.rightBufferTrajectory[i].length());
 
@@ -87,6 +89,7 @@ public class LoadFiles implements Runnable {
 
         String name = TrajDict.secondHatchNames[secondHatchChosen];
         Robot.leftBufferTrajectory[number] = BuildTrajectory.buildLeftFileName(Robot.useUsb, name);
+        Robot.bufferTrajectoryGains[number] = TrajDict.getTrajGains(name);
         Robot.bufferTrajectoryName[number] = name;
         SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[number]);
         SmartDashboard.putNumber("Buffer L Lngth" + String.valueOf(number), Robot.leftBufferTrajectory[number].length());

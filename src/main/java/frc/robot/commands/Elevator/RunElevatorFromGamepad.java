@@ -37,8 +37,8 @@ public class RunElevatorFromGamepad extends Command {
 
 		double yValue;
 		double temp;
-		if (Math.abs(Robot.m_oi.co_driverController.getY()) > .1)
-			yValue = Robot.m_oi.co_driverController.getY();
+		if (Math.abs(Robot.m_oi.gamepad.getY()) > .1)
+			yValue = Robot.m_oi.gamepad.getY();
 		else
 			yValue = 0;
 		if (!Elevator.elevatorSwitch.get() && yValue > 0)// inhibit down move on bottom switch

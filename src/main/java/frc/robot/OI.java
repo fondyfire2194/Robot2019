@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DoFileTrajectory;
@@ -21,40 +22,23 @@ import frc.robot.commands.DeleteAllPrefs;
 import frc.robot.commands.Limelight.*;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.LimeLight;
+import frc.robot.Gamepad;
+import frc.robot.Constants;
+import frc.robot.commands.Elevator.*;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
-  // Joystick stick = new Joystick(port);
-  // Button button = new JoystickButton(stick, buttonNumber);
+  
+	public JoystickButton elevatorToLowerHatch;
+	public JoystickButton elevatorToMidRocket;
+	public JoystickButton elevatorToTopRocket;
 
-  // There are a few additional built in buttons you can use. Additionally,
-  // by subclassing Button you can create custom triggers and bind those to
-  // commands the same as any other Button.
-
-  //// TRIGGERING COMMANDS WITH BUTTONS
-  // Once you have a button, it's trivial to bind it to a button in one of
-  // three ways:
-
-  // Start the command when the button is pressed and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenPressed(new ExampleCommand());
-
-  // Run the command while the button is being held down and interrupt it once
-  // the button is released.
-  // button.whileHeld(new ExampleCommand());
-
-  // Start the command when the button is released and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenReleased(new ExampleCommand());
+  public JoystickButton jogElevator;
+  
   public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
-  public Joystick co_driverController = new Joystick(RobotMap.OI_CO_DRIVER_CONTROLLER);
+  public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
   
   public OI(){
     Timer.delay(.02);
@@ -78,6 +62,29 @@ public class OI {
 
     SmartDashboard.putData("Toggle View", new ToggleCamMode());
     SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
+/**
+ * Co driver controller
+ * 
+ */
 
-  }
+
+elevatorToLowerHatch = gamepad.getButtonB();
+
+elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_LOWER_HATCH_INCHES));
+
+elevatorToMidRocket = gamepad.getButtonY();
+
+elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_MID_ROCKET_INCHES));
+
+elevatorToTopRocket = gamepad.getButtonX();
+
+elevatorToTopRocket
+    .whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_TOP_ROCKET_INCHES));
+
+
+
+jogElevator = gamepad.getStartButton();
+jogElevator.whileHeld(new RunElevatorFromGamepad());
+
+    } 
 }

@@ -13,7 +13,7 @@ public class ChooseTrajectory extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public ChooseTrajectory(boolean forward, boolean faceField, boolean invertY) {
+  public ChooseTrajectory(boolean towardField, boolean faceField, boolean invertY) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,7 +30,7 @@ public class ChooseTrajectory extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    if (forward)
+    if (towardField)
       addSequential(new PathfinderTrajectory(faceField, invertY));
     else
       addSequential((new PathfinderReverseTrajectory(faceField, invertY)));

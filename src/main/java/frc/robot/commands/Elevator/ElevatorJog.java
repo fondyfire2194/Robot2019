@@ -26,8 +26,8 @@ public class ElevatorJog extends Command {
 	protected void execute() {
 		double yValue;
 
-		if (Math.abs(Robot.m_oi.co_driverController.getY()) > .1)
-			yValue = -Robot.m_oi.co_driverController.getY();
+		if (Math.abs(Robot.m_oi.gamepad.getY()) > .1)
+			yValue = -Robot.m_oi.gamepad.getY();
 		else
 			yValue = 0;
 
@@ -43,7 +43,7 @@ public class ElevatorJog extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
 
-		return Math.abs(Robot.m_oi.co_driverController.getY()) < .1;
+		return Math.abs(Robot.m_oi.gamepad.getY()) < .1;
 	}
 
 	// Called once after isFinished returns true
