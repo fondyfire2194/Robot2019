@@ -35,6 +35,10 @@ public class AutoChoosers {
 		testTrajectoryChooser.addOption("RC " + TrajDict.rightCenterStartNames[0], 3);
 		testTrajectoryChooser.addOption("R " + TrajDict.rightStartNames[0], 4);
 		testTrajectoryChooser.addOption("R " + TrajDict.rightStartNames[1],5);
+		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[0],6);
+		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[1],7);
+		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[2],8);
+		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[3],9);
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
