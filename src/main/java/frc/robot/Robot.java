@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Motion.RobotDriveToTarget;
 import frc.robot.RobotMap;
-import edu.wpi.first.wpilibj.Compressor;
+
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.Trajectories.ChooseTrajectory;
 import frc.robot.BuildTrajectory;
@@ -136,7 +136,7 @@ public class Robot extends TimedRobot {
   public static boolean buildInProgress;
   public static int startPositionSelected = 0;;
   public static int secondHatchSelected = 0;;
-  public static boolean useUsb = false;
+  public static boolean useUsb = true;
   public static boolean faceField;
   public static boolean invertY;
   public static boolean towardsFieldTrajectory;
@@ -162,7 +162,8 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
     elevator = new Elevator();
-    airCompressor = new AirCompressor();
+ 
+     airCompressor = new AirCompressor();
     pdp = new PowerPanel();
     gph = new GamePieceHandler();
     m_oi = new OI();
@@ -181,6 +182,11 @@ public class Robot extends TimedRobot {
     // Pref.deleteUnused();
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
+    for (int i = 0; i < Robot.bufferTrajectoryName.length; i++) {
+      Robot.bufferTrajectoryName[i] = "Not Used";
+      SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
+  }
+
     Timer.delay(.02);
     SmartDashboard.putNumber("Target Feet", 5);
     SmartDashboard.putNumber("Position FPS", 5);
@@ -194,9 +200,11 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
+    SmartDashboard.putBoolean("UseUSBTraj", true);
+    Timer.delay(.02);
     SmartDashboard.putNumber("StartSettingsReady", 0.);
     SmartDashboard.putData(driveTrain);
-    // SmartDashboard.putData(elevator);
+    SmartDashboard.putData(elevator);
     SmartDashboard.putData(robotRotate);
 
     SmartDashboard.putData(Scheduler.getInstance());
@@ -348,9 +356,9 @@ public class Robot extends TimedRobot {
      */
 
     if (doFileTrajectory) {
-
+useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
       testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
-      towardsFieldTrajectory = SmartDashboard.getBoolean("InvertTrajectory", false);
+      
       switch (testTrajectorySelection) {
       case 0:
         testTrajectoryName = TrajDict.leftStartNames[0];
@@ -392,8 +400,10 @@ public class Robot extends TimedRobot {
         break;
       }
       if (activeTrajName != testTrajectoryName) {
+        double startFiletime = Timer.getFPGATimestamp();
         activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
         activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
+        SmartDashboard.putNumber("USBTime ",Timer.getFPGATimestamp()-startFiletime);
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
         Robot.logName = activeTrajName;
@@ -417,10 +427,10 @@ public class Robot extends TimedRobot {
 
       useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-      if (SmartDashboard.getBoolean("ReverseTrajectory", false))
+       if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
         new ChooseTrajectory(towardsFieldTrajectory, faceField, invertY).start();
-      else
-        new ChooseTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
+       else
+         new ChooseTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
 
       trajectoryRunning = true;
       doTeleopTrajectory = false;

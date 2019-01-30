@@ -27,13 +27,16 @@ public static String[] secondHatchNames = {"LoadToCS1","LoadToCS2","LoadToCS3","
 
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
-		gainDict.put(leftStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(leftStartNames[1], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(leftCenterStartNames[0], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(leftStartNames[0], new Double[] { .1, 0., 0.02, 1. });
+		gainDict.put(leftStartNames[1], new Double[] { .2, 0., 0.02, 1. });
+		gainDict.put(leftCenterStartNames[0], new Double[] { .3, 0., 0.02, 1. });
 		gainDict.put(rightCenterStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(rightStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(rightStartNames[1], new Double[] { .4, 0., 0.02, 1. });
-
+		gainDict.put(rightStartNames[0], new Double[] { .5, 0., 0.02, 1. });
+		gainDict.put(rightStartNames[1], new Double[] { .6, 0., 0.02, 1. });
+		gainDict.put(secondHatchNames[0], new Double[] { .7, 0., 0.02, 1. });
+		gainDict.put(secondHatchNames[1], new Double[] { .8, 0., 0.02, 1. });
+		gainDict.put(secondHatchNames[2], new Double[] { .9, 0., 0.02, 1. });
+		gainDict.put(secondHatchNames[3], new Double[] { .99, 0., 0.02, 1. });
 	}
 	public static double[] getTrajGains(String name){
 	

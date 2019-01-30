@@ -58,7 +58,7 @@ public class SimpleCSVLogger {
 
 	long log_write_index;
 	String log_name = null;
-	String output_dir = "/U" + "/data_captures19/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDS19/"; // USB drive is mounted to /U on roboRIO
 	BufferedWriter log_file = null;
 	public boolean log_open = false;
 	int numberOfElements;

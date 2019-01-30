@@ -18,6 +18,7 @@ import frc.robot.commands.DoTeleopPosition;
 import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
 import frc.robot.commands.DeleteAllPrefs;
+import frc.robot.commands.Trajectories.*;
 
 import frc.robot.commands.Limelight.*;
 import frc.robot.LimelightControlMode.*;
@@ -62,6 +63,8 @@ public class OI {
 
         SmartDashboard.putData("Toggle View", new ToggleCamMode());
         SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
+
+        SmartDashboard.putData("BuffToAct",new BufferToActiveTrajectory(2));
         /**
          * Co driver controller
          * 

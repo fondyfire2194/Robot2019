@@ -13,14 +13,13 @@ public class BuildTrajectory {
 	static String tempPath = null;
 	static String filePath = "/home/lvuser/deploy/paths/";
 
-	static String usbFilePath = "/U/Traj19CSV/";
+	static String usbFilePath = "/U/DeepSpace19CSV/";
 
 	static String leftExtension = ".left.pf1.csv";
 
-	// static String leftExtension = "_left.csv";
 	static String rightExtension = ".right.pf1.csv";
 
-	// String rightExtension = "_right.csv";
+	
 
 	public BuildTrajectory() {
 

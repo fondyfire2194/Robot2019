@@ -56,26 +56,22 @@ public class DriveTrain extends Subsystem {
   public DriveTrain() {
     leftTalonOne = new TalonSRX(RobotMap.DRIVETRAIN_LEFT_TALON_ONE);
     leftTalonTwo = new TalonSRX(RobotMap.DRIVETRAIN_LEFT_TALON_TWO);
-    leftTalonThree = new TalonSRX(RobotMap.DRIVETRAIN_LEFT_TALON_THREE);
+
     rightTalonOne = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
     rightTalonTwo = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_TWO);
-    rightTalonThree = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_THREE);
-
-    leftTalonOne.setInverted(true);
-    leftTalonTwo.setInverted(true);
-    leftTalonThree.setInverted(true);
+    
+    rightTalonOne.setInverted(true);
+    rightTalonTwo.setInverted(true);
+ 
+    
 
     leftTalonTwo.set(ControlMode.Follower, RobotMap.DRIVETRAIN_LEFT_TALON_ONE);
-    leftTalonThree.set(ControlMode.Follower, RobotMap.DRIVETRAIN_LEFT_TALON_ONE);
-
     leftTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    leftTalonOne.setSensorPhase(true);
+    leftTalonOne.setSensorPhase(false);
 
     rightTalonTwo.set(ControlMode.Follower, RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
-    rightTalonThree.set(ControlMode.Follower, RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
-
     rightTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    rightTalonOne.setSensorPhase(true);
+    rightTalonOne.setSensorPhase(false);
 
     try {
       // imu = new AHRS(I2C.Port.kOnboard);
@@ -117,17 +113,13 @@ public class DriveTrain extends Subsystem {
     if (on) {
       leftTalonOne.setNeutralMode(NeutralMode.Brake);
       leftTalonTwo.setNeutralMode(NeutralMode.Brake);
-      leftTalonThree.setNeutralMode(NeutralMode.Brake);
-      rightTalonOne.setNeutralMode(NeutralMode.Brake);
+     rightTalonOne.setNeutralMode(NeutralMode.Brake);
       rightTalonTwo.setNeutralMode(NeutralMode.Brake);
-      rightTalonThree.setNeutralMode(NeutralMode.Brake);
     } else {
       leftTalonOne.setNeutralMode(NeutralMode.Coast);
       leftTalonTwo.setNeutralMode(NeutralMode.Coast);
-      leftTalonThree.setNeutralMode(NeutralMode.Coast);
       rightTalonOne.setNeutralMode(NeutralMode.Coast);
       rightTalonTwo.setNeutralMode(NeutralMode.Coast);
-      rightTalonThree.setNeutralMode(NeutralMode.Coast);
     }
   }
 
@@ -214,9 +206,9 @@ public class DriveTrain extends Subsystem {
     SD.putN2("RightCmd", getRightCommand());
     SD.putN2("LeftA Amps",leftTalonOne.getOutputCurrent());
     SD.putN2("LeftB Amps",leftTalonTwo.getOutputCurrent());
-    SD.putN2("LeftC Amps",leftTalonThree.getOutputCurrent());
+
     SD.putN2("RightA Amps",rightTalonOne.getOutputCurrent());
     SD.putN2("RightB Amps",rightTalonTwo.getOutputCurrent());
-    SD.putN2("RightC Amps",rightTalonThree.getOutputCurrent());
+
   }
 }

@@ -15,16 +15,16 @@ public class AirCompressor extends Subsystem {
 
 	public AirCompressor() {
 		compressor = new Compressor(RobotMap.AIR_COMPRESSOR);
-		compressor.setClosedLoopControl(true);
+
 	}
 
 	public void start() {
-		Robot.airCompressor.start();
-		
+		compressor.start();
+		compressor.setClosedLoopControl(true);
 	}
 
 	public void stop() {
-		Robot.airCompressor.stop();
+		compressor.stop();
 	}
 
 	public boolean pressureLow() {
@@ -36,7 +36,7 @@ public class AirCompressor extends Subsystem {
 	@Override
 	public void initDefaultCommand() {
 
-		setDefaultCommand(new StartCompressor());
+		 setDefaultCommand(new StartCompressor());
 	}
 
 	public boolean isRunning() {
