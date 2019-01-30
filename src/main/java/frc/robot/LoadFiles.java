@@ -26,11 +26,10 @@ public class LoadFiles implements Runnable {
             SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
         }
 
-        Robot.secondHatchIndex = 0;
         int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
         if (startPositionSelected < 0 || startPositionSelected > 4)
             startPositionSelected = 0;
-        SmartDashboard.putNumber("LGTH", 0);
+        // SmartDashboard.putNumber("LGTH", 0);
         if (startPositionSelected != 0) {
             startNames = getTraj(startPositionSelected);
 
@@ -39,30 +38,30 @@ public class LoadFiles implements Runnable {
             while (running && !error && i < startNames.length) {
 
                 error = loadLeftFile(startNames[i], i);
-                SmartDashboard.putBoolean("ERR", error);
 
                 if (!error) {
                     error = loadRightFile(startNames[i], i);
                     i++;
                 }
             }
+
             if (!error) {
-                int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected()-1;
-                SmartDashboard.putNumber("GH",i);
-                if (secondHatchChosen < 0 || secondHatchChosen > 4)
-                    secondHatchChosen = 0;
+                int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected() - 1;
                 if (secondHatchChosen >= 0) {
+
                     error = loadLeftSecondHatchFile(secondHatchChosen, i);
-                    SmartDashboard.putBoolean("ERR", error);
                     if (!error)
+
                         error = loadRightSecondHatchFile(secondHatchChosen, i);
                 }
+
             }
         }
         running = false;
     }
 
     boolean loadLeftFile(String startName, int i) {
+        Robot.buildOK = false;
         Robot.leftBufferTrajectory[i] = BuildTrajectory.buildLeftFileName(Robot.useUsb, startName);
         if (Robot.buildOK) {
             Robot.bufferTrajectoryName[i] = startName;
@@ -74,7 +73,7 @@ public class LoadFiles implements Runnable {
     }
 
     boolean loadRightFile(String startName, int i) {
-
+        Robot.buildOK = false;
         Robot.rightBufferTrajectory[i] = BuildTrajectory.buildRightFileName(Robot.useUsb, startName);
 
         if (Robot.buildOK) {
@@ -90,13 +89,13 @@ public class LoadFiles implements Runnable {
     boolean loadLeftSecondHatchFile(int secondHatchChosen, int number) {
 
         String name = TrajDict.secondHatchNames[secondHatchChosen];
-        SmartDashboard.putString("H2",name);
-        SmartDashboard.putNumber("H2N",number);
+        Robot.buildOK = false;
         Robot.leftBufferTrajectory[number] = BuildTrajectory.buildLeftFileName(Robot.useUsb, name);
-         Robot.bufferTrajectoryGains[number] = TrajDict.getTrajGains(name);
+        Robot.bufferTrajectoryGains[number] = TrajDict.getTrajGains(name);
         Robot.bufferTrajectoryName[number] = name;
         SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[secondHatchChosen]);
-        SmartDashboard.putNumber("Buffer L Lngth" + String.valueOf(number), Robot.leftBufferTrajectory[number].length());
+        SmartDashboard.putNumber("Buffer L Lngth" + String.valueOf(number),
+                Robot.leftBufferTrajectory[number].length());
 
         Robot.secondHatchIndex = number;
         return !Robot.buildOK;
@@ -106,10 +105,12 @@ public class LoadFiles implements Runnable {
     boolean loadRightSecondHatchFile(int secondHatchChosen, int number) {
 
         String name = TrajDict.secondHatchNames[secondHatchChosen];
+        Robot.buildOK = false;
         Robot.rightBufferTrajectory[number] = BuildTrajectory.buildRightFileName(Robot.useUsb, name);
         Robot.bufferTrajectoryName[number] = name;
         SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[number]);
-        SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(number), Robot.rightBufferTrajectory[number].length());
+        SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(number),
+                Robot.rightBufferTrajectory[number].length());
 
         Robot.secondHatchIndex = number;
         return !Robot.buildOK;

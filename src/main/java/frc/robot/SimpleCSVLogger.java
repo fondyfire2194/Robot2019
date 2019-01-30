@@ -58,7 +58,10 @@ public class SimpleCSVLogger {
 
 	long log_write_index;
 	String log_name = null;
+
 	String output_dir = "/U" + "/data_capturesDS19/"; // USB drive is mounted to /U on roboRIO
+	// String output_dir = "/home/lvuser/LogFiles/";
+
 	BufferedWriter log_file = null;
 	public boolean log_open = false;
 	int numberOfElements;
@@ -67,10 +70,8 @@ public class SimpleCSVLogger {
 	 * Determines a unique file name, and opens a file in the data captures
 	 * directory and writes the initial lines to it.
 	 * 
-	 * @param data_fields
-	 *            A set of strings for signal names to write into the file
-	 * @param units_fields
-	 *            A set of strings for signal units to write into the file
+	 * @param data_fields  A set of strings for signal names to write into the file
+	 * @param units_fields A set of strings for signal units to write into the file
 	 * @return 0 on successful log open, -1 on failure
 	 */
 	public int init(String subDir, String name, String[] data_fields, String[] units_fields) {
@@ -79,7 +80,7 @@ public class SimpleCSVLogger {
 			System.out.println("Warning - log is already open!");
 			return 0;
 		}
-		output_dir = "/U" + "/data_captures19/";
+		// output_dir = "/U" + "/data_captures19/";
 		output_dir += subDir + "/";
 		File file = new File(output_dir);
 		if (!file.exists()) {
@@ -148,10 +149,9 @@ public class SimpleCSVLogger {
 	 * Write a list of doubles to the output file, assuming it's open. Creates a new
 	 * line in the .csv log file.
 	 * 
-	 * @param data_elements
-	 *            Values to write (any number of doubles, each as its own argument).
-	 *            Should have the same number of arguments here as signal
-	 *            names/units set during the call to init()
+	 * @param data_elements Values to write (any number of doubles, each as its own
+	 *                      argument). Should have the same number of arguments here
+	 *                      as signal names/units set during the call to init()
 	 * @return 0 on write success, -1 on failure.
 	 */
 	public int writeData(double... data_elements) {

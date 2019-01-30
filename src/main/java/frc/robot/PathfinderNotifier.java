@@ -38,7 +38,6 @@ public class PathfinderNotifier {
 		 * Y it can have its sides inverted by following opposite side trajectory
 		 * 
 		 */
-
 		myfaceField = faceField;
 		myInvertY = invertY;
 		if (myfaceField && !myInvertY)

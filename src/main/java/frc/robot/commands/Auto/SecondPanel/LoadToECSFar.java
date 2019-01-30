@@ -13,6 +13,7 @@ import frc.robot.commands.Trajectories.PathfinderTrajectory;
 import frc.robot.commands.Motion.RobotDriveToTarget;
 import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.Robot;
 
 public class LoadToECSFar extends CommandGroup {
   /**
@@ -36,10 +37,10 @@ public class LoadToECSFar extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addSequential(new BufferToActiveTrajectory(2));
+    addSequential(new BufferToActiveTrajectory(Robot.secondHatchIndex));
     addSequential(new PathfinderTrajectory(false, side));
-    addSequential(new RobotOrient(0, .5, false, 5));
-    addSequential(new RobotDriveToTarget(10, .5, false, 10));
+    addSequential(new RobotOrient(0, .5, false, 3));
+    addSequential(new RobotDriveToTarget(10, .5, false, 3));
     addSequential(new SetAutoCommandDone(step));
     
   }

@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Motion.RobotDriveToTarget;
-import frc.robot.RobotMap;
 
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.Trajectories.ChooseTrajectory;
@@ -34,7 +33,6 @@ import frc.robot.AutoChoosers;
 import frc.robot.VisionData;
 import frc.robot.AutoCommands;
 import frc.robot.LimeLight;
-import frc.robot.LimelightControlMode.*;
 import frc.robot.LoadFiles;
 
 /**
@@ -113,9 +111,8 @@ public class Robot extends TimedRobot {
   public static int testTrajectoryDirection;
 
   public static double[] activeTrajectoryGains = { 0, 0, 0, 0 };
-  public static double[][]bufferTrajectoryGains = new double [6][4];
-  
-  public static boolean doTeleopTrajectory;
+  public static double[][] bufferTrajectoryGains = new double[6][4];
+
   public static boolean revTraj;
   public static boolean doFileTrajectory;
   public static boolean trajectoryRunning;
@@ -125,25 +122,25 @@ public class Robot extends TimedRobot {
       "LeftSegVel", "left", "ActLeftVel", "RightSegVel", "right", "ActRightVel", "turn" };
   public static String[] units = { "Number", "FT", "FT", "FT", "FT", "Deg", "Deg", "pct", "pct", "pct", "pct", "pct",
       "pct", "pct" };
-  public static boolean createTrajectoryRunFile = true;
+  public static boolean createTrajectoryRunFile = false;
   public static double trajectoryX;
   public static double trajectoryY;
   public static double trajectoryAngle;
   public static String trajFileName;
   public static String logName;
   public static boolean robotMoveReverse;
-  int test;
+  int test99;
   public static boolean buildInProgress;
   public static int startPositionSelected = 0;;
   public static int secondHatchSelected = 0;;
-  public static boolean useUsb = true;
+  public static boolean useUsb = false;
   public static boolean faceField;
   public static boolean invertY;
   public static boolean towardsFieldTrajectory;
   public static boolean trajectoriesLoaded;
 
   public static int numberOfAutonomousCommands;
-  public static double startSettingsReady = 0.;
+  public static boolean startSettingPB = false;
   public static boolean startSettingsDone = false;
   public static boolean readingRunning = false;
 
@@ -152,6 +149,8 @@ public class Robot extends TimedRobot {
   public static String runningCommandName = "None";
   public static double readThreadStartTime = 0.;
   public static boolean fileError;
+  private int scanCounter;
+  public static double autoStartTime;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -162,8 +161,8 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
     elevator = new Elevator();
- 
-     airCompressor = new AirCompressor();
+
+    airCompressor = new AirCompressor();
     pdp = new PowerPanel();
     gph = new GamePieceHandler();
     m_oi = new OI();
@@ -185,7 +184,7 @@ public class Robot extends TimedRobot {
     for (int i = 0; i < Robot.bufferTrajectoryName.length; i++) {
       Robot.bufferTrajectoryName[i] = "Not Used";
       SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-  }
+    }
 
     Timer.delay(.02);
     SmartDashboard.putNumber("Target Feet", 5);
@@ -200,18 +199,22 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("UseUSBTraj", true);
+    SmartDashboard.putBoolean("UseUSBTraj", false);
     Timer.delay(.02);
-    SmartDashboard.putNumber("StartSettingsReady", 0.);
+    SmartDashboard.putBoolean("StartSet", false);
+    Timer.delay(.02);
+
     SmartDashboard.putData(driveTrain);
     SmartDashboard.putData(elevator);
     SmartDashboard.putData(robotRotate);
-
+    SmartDashboard.putData(gph);
+    SmartDashboard.putData(airCompressor);
+    SmartDashboard.putData(pdp);
     SmartDashboard.putData(Scheduler.getInstance());
 
     bufferTrajectoryGains[0] = activeTrajectoryGains;
+    startPositionSelected = 0;
 
-    
   }
 
   /**
@@ -235,12 +238,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-
+    Scheduler.getInstance().removeAll();
+    cancelAllAuto();
   }
 
   @Override
   public void disabledPeriodic() {
-
     readTrajFiles();
   }
 
@@ -260,38 +263,9 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     Scheduler.getInstance().run();
     Robot.runningCommandName = "None";
-    autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
-
-    startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-    if (startPositionSelected == 0)
-      autoTimeDelaySeconds = 0;
-
-    secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
-
-    autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
-    if (!fileError && startPositionSelected != 0) {
-
-      switch (startPositionSelected) {
-      case 1:
-        numberOfAutonomousCommands = AutoCommands.setLeftStart();
-      case 2:
-        numberOfAutonomousCommands = AutoCommands.setLeftCenterStart();
-      case 3:
-        numberOfAutonomousCommands = AutoCommands.setRightCenterStart();
-      case 4:
-        numberOfAutonomousCommands = AutoCommands.setRightStart();
-
-      }
-      boolean rightStart = startPositionSelected > 2;
-      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands,
-          rightStart);
-
-      // schedule the autonomous command (example)
-      if (autonomousCommand[0] != null) {
-        autonomousCommand[0].start();
-        runningAutoCommand = 0;
-      }
-    }
+    autoStartTime = Timer.getFPGATimestamp();
+    // setUpAutoStart();
+ }
   }
 
   /**
@@ -306,6 +280,7 @@ public class Robot extends TimedRobot {
       runningAutoCommand++;
       if (autonomousCommand[runningAutoCommand] != null)
         autonomousCommand[runningAutoCommand].start();
+
     }
     if (runningAutoCommand > numberOfAutonomousCommands)
       numberOfAutonomousCommands = 0;
@@ -349,16 +324,10 @@ public class Robot extends TimedRobot {
       doTeleopOrient = false;
     }
 
-    /**
-     * 
-     * 
-     * 
-     */
-
     if (doFileTrajectory) {
-useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
+      useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
       testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
-      
+
       switch (testTrajectorySelection) {
       case 0:
         testTrajectoryName = TrajDict.leftStartNames[0];
@@ -403,7 +372,7 @@ useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
         double startFiletime = Timer.getFPGATimestamp();
         activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
         activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
-        SmartDashboard.putNumber("USBTime ",Timer.getFPGATimestamp()-startFiletime);
+        SmartDashboard.putNumber("USBTime ", Timer.getFPGATimestamp() - startFiletime);
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
         Robot.logName = activeTrajName;
@@ -427,18 +396,16 @@ useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
 
       useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-       if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
+      if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
         new ChooseTrajectory(towardsFieldTrajectory, faceField, invertY).start();
-       else
-         new ChooseTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
+      else
+        new ChooseTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
 
       trajectoryRunning = true;
-      doTeleopTrajectory = false;
       doFileTrajectory = false;
     }
     doFileTrajectory = false;
 
-    updateStatus();
   }
 
   /**
@@ -450,16 +417,48 @@ useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
   }
 
   public void updateStatus() {
-    driveTrain.updateStatus();
-    limelightCamera.updateStatus();
-    visionData.updateStatus();
+    scanCounter++;
+    switch (scanCounter) {
 
+    case 1:
+      driveTrain.updateStatus();
+      break;
+
+    case 2:
+      limelightCamera.updateStatus();
+      break;
+
+    case 3:
+      visionData.updateStatus();
+      break;
+
+    case 4:
+      robotUpdateStatus();
+      break;
+
+    case 5:
+      elevator.updateStatus();
+      break;
+
+    case 6:
+      gph.updateStatus();
+      break;
+
+    case 7:
+      airCompressor.updateStatus();
+      break;
+
+    default:
+      scanCounter = 0;
+    }
+  }
+
+  private void robotUpdateStatus() {
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
     SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
-    // SmartDashboard.putString("Running Command", runningCommandName);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
@@ -469,18 +468,17 @@ useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
     SmartDashboard.putBoolean("Invert Y", invertY);
     SmartDashboard.putBoolean("Face Field", faceField);
 
-    SmartDashboard.putNumber("AG0", activeTrajectoryGains[0]);
-    SmartDashboard.putNumber("AG1", activeTrajectoryGains[1]);
-    SmartDashboard.putNumber("AG2", activeTrajectoryGains[2]);
-    SmartDashboard.putNumber("AG3", activeTrajectoryGains[3]);
-
+    SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
+    SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
+    SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
+    SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
   }
 
   public static void cancelAllAuto() {
     Scheduler.getInstance().removeAll();
     for (int i = 0; i < maxCommands; i++) {
 
-      if (autonomousCommand[1] != null) {
+      if (autonomousCommand[i] != null) {
         autonomousCommand[i].cancel();
         autonomousCommandDone[i] = false;
       }
@@ -489,37 +487,70 @@ useUsb = SmartDashboard.getBoolean("UseUSBTraj",false);
   }
 
   private void constantsFromPrefs() {
-    activeTrajectoryGains[0] = Pref.getPref("PathKp");// prefs.getDouble("PathP", 0);
-    activeTrajectoryGains[1] = Pref.getPref("PathKd");// prefs.getDouble("PathD", 0);
-    activeTrajectoryGains[2] = Pref.getPref("PathKa");// prefs.getDouble("PathA", 0);
-    activeTrajectoryGains[3] = Pref.getPref("PathKt");// prefs.getDouble("PathTurn", 0);
+    activeTrajectoryGains[0] = Pref.getPref("PathKp");
+    activeTrajectoryGains[1] = Pref.getPref("PathKd");
+    activeTrajectoryGains[2] = Pref.getPref("PathKa");
+    activeTrajectoryGains[3] = Pref.getPref("PathKt");
   }
 
   public void readTrajFiles() {
-    startSettingsReady = SmartDashboard.getNumber("StartSettingsReady", 0.);
+    startSettingPB = SmartDashboard.getBoolean("StartSet", false);
+    useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
     SmartDashboard.putBoolean("StartSettingsDone", startSettingsDone);
     SmartDashboard.putBoolean("File Error", fileError);
-    SmartDashboard.putBoolean("SSR", startSettingsReady != 0.);
+    SmartDashboard.putBoolean("File Running", readingRunning);
     readingRunning = currentLoader.running;
     readThreadStartTime = Timer.getFPGATimestamp();
-    if (startSettingsReady != 0. && !readingRunning) {
-      startSettingsDone = false;
+    if (startSettingPB && !readingRunning) {
+      setUpAutoStart();
+      // startSettingsDone = false;
       currentLoader = new LoadFiles();
       Thread reader = new Thread(currentLoader);
       reader.setDaemon(true);
       reader.start();
       wasRunning = true;
     }
-    fileError = currentLoader.error || fileError & startSettingsReady != 0.;
+    fileError = currentLoader.error && currentLoader.running || fileError & !startSettingPB;
 
     if (wasRunning && !readingRunning) {
-      SmartDashboard.putNumber("StartSettingsReady", 0.);
-      SmartDashboard.putNumber("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
-      startSettingsReady = 0.;
+      startSettingPB = false;
+      SmartDashboard.putBoolean("StartSet", false);
+      SD.putN4("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
       startSettingsDone = true;
 
       wasRunning = false;
+
     }
   }
 
+  void setUpAutoStart() {
+    autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
+
+    startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+    if (startPositionSelected == 0)
+      autoTimeDelaySeconds = 0;
+
+    secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
+
+    autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
+    if (!fileError && startPositionSelected != 0) {
+
+      switch (startPositionSelected) {
+      case 1:
+        numberOfAutonomousCommands = AutoCommands.setLeftStart();
+      case 2:
+        numberOfAutonomousCommands = AutoCommands.setLeftCenterStart();
+      case 3:
+        numberOfAutonomousCommands = AutoCommands.setRightCenterStart();
+      case 4:
+        numberOfAutonomousCommands = AutoCommands.setRightStart();
+
+      }
+      boolean rightStart = startPositionSelected > 2;
+      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands,
+          rightStart);
+
+    }
+
+  }
 }

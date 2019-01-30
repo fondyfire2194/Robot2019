@@ -54,10 +54,11 @@ public class PathfinderTrajectory extends Command {
 		Robot.trajectoryRunning = true;
 		if (Robot.createTrajectoryRunFile) {
 			Robot.simpleCSVLogger.init("Trajectory", Robot.logName + " Fwd", Robot.names, Robot.units);
-			// Robot.simpleCSVLogger.writeData(P, I, D, V, A);
+			
 		}
 		scanCounter = 0;
 		startTime = Timer.getFPGATimestamp();
+		SmartDashboard.putNumber("AutoCheck",Timer.getFPGATimestamp()-Robot.autoStartTime);
 		PathfinderNotifier.startNotifier(myFaceField, myInvertY);
 	}
 

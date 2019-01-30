@@ -20,11 +20,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.JoystickArcadeDrive;
-import frc.robot.commands.JoystickArcadeDriveVision;
 import frc.robot.ReverseDistanceFollower;
 import frc.robot.SD;
 import frc.robot.Constants;
 import frc.robot.Pref;
+import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.*;
 
 /**
@@ -33,10 +33,8 @@ import jaci.pathfinder.followers.*;
 public class DriveTrain extends Subsystem {
   private TalonSRX leftTalonOne = null;
   private TalonSRX leftTalonTwo = null;
-  private TalonSRX leftTalonThree = null;
   private TalonSRX rightTalonOne = null;
   private TalonSRX rightTalonTwo = null;
-  private TalonSRX rightTalonThree = null;
   private static AHRS imu;
 
   public DistanceFollower leftDf = new DistanceFollower();
@@ -59,11 +57,9 @@ public class DriveTrain extends Subsystem {
 
     rightTalonOne = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
     rightTalonTwo = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_TWO);
-    
+
     rightTalonOne.setInverted(true);
     rightTalonTwo.setInverted(true);
- 
-    
 
     leftTalonTwo.set(ControlMode.Follower, RobotMap.DRIVETRAIN_LEFT_TALON_ONE);
     leftTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -113,7 +109,7 @@ public class DriveTrain extends Subsystem {
     if (on) {
       leftTalonOne.setNeutralMode(NeutralMode.Brake);
       leftTalonTwo.setNeutralMode(NeutralMode.Brake);
-     rightTalonOne.setNeutralMode(NeutralMode.Brake);
+      rightTalonOne.setNeutralMode(NeutralMode.Brake);
       rightTalonTwo.setNeutralMode(NeutralMode.Brake);
     } else {
       leftTalonOne.setNeutralMode(NeutralMode.Coast);
@@ -161,12 +157,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroYaw() {
-    // float temp = imu.getYaw() + gyroOffset;
-    // if(temp > 180)
-    //   temp-=180;
-    // if (temp < -180)
-    //    temp +=180;
-    return imu.getYaw();
+    return Pathfinder.boundHalfDegrees(imu.getYaw() + gyroOffset);
   }
 
   public double getGyroError() {
@@ -204,11 +195,11 @@ public class DriveTrain extends Subsystem {
     SD.putN1("GyroYaw", getGyroYaw());
     SD.putN2("LeftCmd", getLeftCommand());
     SD.putN2("RightCmd", getRightCommand());
-    SD.putN2("LeftA Amps",leftTalonOne.getOutputCurrent());
-    SD.putN2("LeftB Amps",leftTalonTwo.getOutputCurrent());
+    SD.putN2("LeftA Amps", leftTalonOne.getOutputCurrent());
+    SD.putN2("LeftB Amps", leftTalonTwo.getOutputCurrent());
 
-    SD.putN2("RightA Amps",rightTalonOne.getOutputCurrent());
-    SD.putN2("RightB Amps",rightTalonTwo.getOutputCurrent());
+    SD.putN2("RightA Amps", rightTalonOne.getOutputCurrent());
+    SD.putN2("RightB Amps", rightTalonTwo.getOutputCurrent());
 
   }
 }

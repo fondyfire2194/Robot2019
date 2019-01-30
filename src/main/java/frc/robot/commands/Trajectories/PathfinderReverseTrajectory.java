@@ -11,11 +11,11 @@ import frc.robot.Robot;
 public class PathfinderReverseTrajectory extends Command {
 	private boolean myFaceField;
 	private boolean myInvertY;
-	public PathfinderReverseTrajectory(boolean robotMoveReverse, boolean invertY) {
+	public PathfinderReverseTrajectory(boolean faceField, boolean invertY) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
-		myFaceField = robotMoveReverse;
+		myFaceField = faceField;
 		myInvertY = invertY;
 	}
 

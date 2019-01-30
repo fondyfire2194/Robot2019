@@ -10,7 +10,7 @@ package frc.robot.commands.Trajectories;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-
+import edu.wpi.first.wpilibj.Timer;
 /**
  * Add your docs here.
  */
@@ -34,6 +34,8 @@ public class BufferToActiveTrajectory extends InstantCommand {
      Robot.activeTrajectoryGains = Robot.bufferTrajectoryGains[myNumber];
      Robot.activeTrajName = Robot.bufferTrajName;
      SmartDashboard.putNumber("A2BL", Robot.activeTrajectory[0].length());
+
+
 
   }
 

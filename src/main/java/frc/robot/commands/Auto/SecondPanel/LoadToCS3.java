@@ -39,7 +39,7 @@ public class LoadToCS3 extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addSequential(new BufferToActiveTrajectory(2));
+    addSequential(new BufferToActiveTrajectory(Robot.secondHatchIndex));
 
     addSequential(new PathfinderTrajectory(Robot.faceField, side));
     if (side) {
