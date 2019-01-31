@@ -47,7 +47,7 @@ public class DriveTrain extends Subsystem {
   public double rightPositionTargetFt;
   public boolean useGyroComp;
   public double driveStraightAngle = 0;
-  public float gyroOffset = 0;
+  public static double gyroOffset = 0;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.

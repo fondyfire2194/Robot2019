@@ -5,28 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HatchPanels;
+package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.subsystems.DriveTrain;
 
-import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class ReleaseHatchPanel extends InstantCommand {
+public class SetGyroOffset extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ReleaseHatchPanel() {
+  double myOffsetAngle;
+
+  public SetGyroOffset(double offsetAngle) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myOffsetAngle = offsetAngle;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.releaseHatchPanel();
+    DriveTrain.gyroOffset = myOffsetAngle;
   }
 
 }

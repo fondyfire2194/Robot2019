@@ -8,12 +8,15 @@
 package frc.robot.commands.Trajectories;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
+import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.Motion.*;
 
-public class ChooseTrajectory extends CommandGroup {
+public class PickAndRunTrajectory extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public ChooseTrajectory(boolean towardField, boolean faceField, boolean invertY) {
+  public PickAndRunTrajectory(boolean towardField, boolean faceField, boolean invertY) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -30,10 +33,13 @@ public class ChooseTrajectory extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+    addSequential(new ResetEncoders());
     if (towardField)
       addSequential(new PathfinderTrajectory(faceField, invertY));
     else
       addSequential((new PathfinderReverseTrajectory(faceField, invertY)));
-
+      
+    if (Robot.runningAutoCommand != 0)
+      addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
   }
 }

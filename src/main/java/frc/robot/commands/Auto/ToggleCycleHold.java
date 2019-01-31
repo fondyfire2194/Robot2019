@@ -5,28 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HatchPanels;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-
 import frc.robot.Robot;
+
 /**
  * Add your docs here.
  */
-public class ReleaseHatchPanel extends InstantCommand {
+public class ToggleCycleHold extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ReleaseHatchPanel() {
+  
+  public ToggleCycleHold() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.releaseHatchPanel();
+    Robot.cycleHold = !Robot.cycleHold;
   }
 
 }

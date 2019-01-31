@@ -19,7 +19,7 @@ import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Motion.RobotDriveToTarget;
 
 import frc.robot.commands.Auto.*;
-import frc.robot.commands.Trajectories.ChooseTrajectory;
+import frc.robot.commands.Trajectories.PickAndRunTrajectory;
 import frc.robot.BuildTrajectory;
 import frc.robot.TrajDict;
 import frc.robot.subsystems.DriveTrain;
@@ -58,13 +58,14 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  private static int maxCommands = 10;
+  public static int maxCommands = 25;
   public static Command[] autonomousCommand;
 
   public static Command autoTimeDelayCommand;
   double autoTimeDelaySeconds;
 
   public static boolean[] autonomousCommandDone;
+  public static String[] autonomousCommandName;
   public static int runningAutoCommand;;
 
   boolean autoTimeDelayDone;
@@ -151,6 +152,9 @@ public class Robot extends TimedRobot {
   public static boolean fileError;
   private int scanCounter;
   public static double autoStartTime;
+  public static boolean cycleHold;
+  public static boolean autoAbort;
+  public static double sideAngle;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -172,19 +176,15 @@ public class Robot extends TimedRobot {
     buildTrajectory = new BuildTrajectory();
 
     autoChoosers = new AutoChoosers();
-    // autoChoosers.init();
     autonomousCommand = new Command[maxCommands];
     autonomousCommandDone = new boolean[maxCommands];
+    autonomousCommandName = new String[maxCommands];
 
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
     // Pref.deleteUnused();
     Pref.addMissing();
     SmartDashboard.putData(driveTrain);
-    for (int i = 0; i < Robot.bufferTrajectoryName.length; i++) {
-      Robot.bufferTrajectoryName[i] = "Not Used";
-      SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-    }
 
     Timer.delay(.02);
     SmartDashboard.putNumber("Target Feet", 5);
@@ -238,13 +238,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    Scheduler.getInstance().removeAll();
+
     cancelAllAuto();
+
   }
 
   @Override
   public void disabledPeriodic() {
     readTrajFiles();
+    updateStatus();
   }
 
   /**
@@ -265,7 +267,6 @@ public class Robot extends TimedRobot {
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
     // setUpAutoStart();
- }
   }
 
   /**
@@ -275,12 +276,17 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
+    if (Math.abs(m_oi.gamepad.getRightY()) > .8 && Math.abs(m_oi.gamepad.getLeftY()) > .8) {
+      cancelAllAuto();
+    }
+
     if (autonomousCommandDone[runningAutoCommand] && numberOfAutonomousCommands > runningAutoCommand) {
       autonomousCommandDone[runningAutoCommand] = false;
-      runningAutoCommand++;
-      if (autonomousCommand[runningAutoCommand] != null)
-        autonomousCommand[runningAutoCommand].start();
-
+      if (!cycleHold) {
+        runningAutoCommand++;
+        if (autonomousCommand[runningAutoCommand] != null)
+          autonomousCommand[runningAutoCommand].start();
+      }
     }
     if (runningAutoCommand > numberOfAutonomousCommands)
       numberOfAutonomousCommands = 0;
@@ -294,6 +300,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    DriveTrain.gyroOffset = 0;
     if (startPositionSelected != 0) {
       cancelAllAuto();
     }
@@ -306,106 +313,108 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     Scheduler.getInstance().run();
-    if (doTeleopPosition) {
-      positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
-      positionFPS = SmartDashboard.getNumber("Position FPS", 12);
-      new RobotDriveToTarget(positionTargetFt, positionFPS, false, 8).start();
-      doTeleopPosition = false;
-    }
-
-    if (doTeleopOrient) {
-      // sensors.resetGyro();
-
-      angleTarget = SmartDashboard.getNumber("Target Angle", 90);
-      if (SmartDashboard.getBoolean("ReverseOrient", false))
-        angleTarget = -angleTarget;
-      orientRate = SmartDashboard.getNumber("Orient Rate", .25);
-      new RobotOrient(angleTarget, orientRate, true, 30).start();
-      doTeleopOrient = false;
-    }
-
-    if (doFileTrajectory) {
-      useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
-      testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
-
-      switch (testTrajectorySelection) {
-      case 0:
-        testTrajectoryName = TrajDict.leftStartNames[0];
-        towardsFieldTrajectory = true;
-        faceField = true;
-        invertY = false;
-        break;
-      case 1:
-        testTrajectoryName = TrajDict.leftStartNames[1];
-        towardsFieldTrajectory = true;
-        faceField = true;
-        invertY = false;
-        break;
-      case 2:
-        testTrajectoryName = TrajDict.leftCenterStartNames[0];
-        towardsFieldTrajectory = true;
-        faceField = true;
-        invertY = false;
-        break;
-      case 3:
-        testTrajectoryName = TrajDict.rightCenterStartNames[0];
-        towardsFieldTrajectory = true;
-        faceField = true;
-        invertY = true;
-        break;
-      case 4:
-        testTrajectoryName = TrajDict.rightStartNames[0];
-        towardsFieldTrajectory = true;
-        faceField = true;
-        invertY = true;
-        break;
-      case 5:
-        testTrajectoryName = TrajDict.rightStartNames[1];
-        towardsFieldTrajectory = true;
-        faceField = true;
-        invertY = true;
-        break;
-      default:
-        break;
+    if (!DriverStation.getInstance().isFMSAttached()) {
+      if (doTeleopPosition) {
+        positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
+        positionFPS = SmartDashboard.getNumber("Position FPS", 12);
+        new RobotDriveToTarget(positionTargetFt, positionFPS, false, 8).start();
+        doTeleopPosition = false;
       }
-      if (activeTrajName != testTrajectoryName) {
-        double startFiletime = Timer.getFPGATimestamp();
-        activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
-        activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
-        SmartDashboard.putNumber("USBTime ", Timer.getFPGATimestamp() - startFiletime);
+
+      if (doTeleopOrient) {
+        // sensors.resetGyro();
+
+        angleTarget = SmartDashboard.getNumber("Target Angle", 90);
+        if (SmartDashboard.getBoolean("ReverseOrient", false))
+          angleTarget = -angleTarget;
+        orientRate = SmartDashboard.getNumber("Orient Rate", .25);
+        new RobotOrient(angleTarget, orientRate, true, 30).start();
+        doTeleopOrient = false;
+      }
+
+      if (doFileTrajectory) {
+        useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
+        testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
+
+        switch (testTrajectorySelection) {
+        case 0:
+          testTrajectoryName = TrajDict.leftStartNames[0];
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = false;
+          break;
+        case 1:
+          testTrajectoryName = TrajDict.leftStartNames[1];
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = false;
+          break;
+        case 2:
+          testTrajectoryName = TrajDict.leftCenterStartNames[0];
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = false;
+          break;
+        case 3:
+          testTrajectoryName = TrajDict.rightCenterStartNames[0];
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = true;
+          break;
+        case 4:
+          testTrajectoryName = TrajDict.rightStartNames[0];
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = true;
+          break;
+        case 5:
+          testTrajectoryName = TrajDict.rightStartNames[1];
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = true;
+          break;
+        default:
+          break;
+        }
+        if (activeTrajName != testTrajectoryName) {
+          double startFiletime = Timer.getFPGATimestamp();
+          activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
+          activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
+          SmartDashboard.putNumber("USBTime ", Timer.getFPGATimestamp() - startFiletime);
+          activeTrajName = testTrajectoryName;
+          SmartDashboard.putBoolean("FileOK", buildOK);
+          Robot.logName = activeTrajName;
+        } else
+          buildOK = true;
+        if (!buildOK) {
+
+          doFileTrajectory = false;
+          DriverStation.reportError("Error reading file", true);
+        }
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
         Robot.logName = activeTrajName;
-      } else
-        buildOK = true;
-      if (!buildOK) {
-
-        doFileTrajectory = false;
-        DriverStation.reportError("Error reading file", true);
       }
-      activeTrajName = testTrajectoryName;
-      SmartDashboard.putBoolean("FileOK", buildOK);
-      Robot.logName = activeTrajName;
-    }
 
-    if ((doFileTrajectory && buildOK)) {
-      if (useGainPrefs)
-        constantsFromPrefs();
-      else
-        activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
+      if ((doFileTrajectory && buildOK)) {
+        if (useGainPrefs)
+          constantsFromPrefs();
+        else
+          activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
 
-      useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
+        useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-      if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
-        new ChooseTrajectory(towardsFieldTrajectory, faceField, invertY).start();
-      else
-        new ChooseTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
+        if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
+          new PickAndRunTrajectory(towardsFieldTrajectory, faceField, invertY).start();
+        else
+          new PickAndRunTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
 
-      trajectoryRunning = true;
+        trajectoryRunning = true;
+        doFileTrajectory = false;
+      }
       doFileTrajectory = false;
-    }
-    doFileTrajectory = false;
 
+    }
   }
 
   /**
@@ -418,6 +427,7 @@ public class Robot extends TimedRobot {
 
   public void updateStatus() {
     scanCounter++;
+ 
     switch (scanCounter) {
 
     case 1:
@@ -433,6 +443,7 @@ public class Robot extends TimedRobot {
       break;
 
     case 4:
+    SmartDashboard.putNumber("SCCTR", scanCounter);
       robotUpdateStatus();
       break;
 
@@ -450,6 +461,7 @@ public class Robot extends TimedRobot {
 
     default:
       scanCounter = 0;
+      break;
     }
   }
 
@@ -457,7 +469,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
-    SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+    // SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
@@ -493,6 +505,22 @@ public class Robot extends TimedRobot {
     activeTrajectoryGains[3] = Pref.getPref("PathKt");
   }
 
+  private void resetBufferNames() {
+    for (int i = 0; i < bufferTrajectoryName.length; i++) {
+      bufferTrajectoryName[i] = "Not Used";
+
+      SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
+    }
+  }
+
+  private void resetCommandNames() {
+
+    for (int i = 0; i < maxCommands; i++) {
+      autonomousCommandName[i] = "Not Used";
+      SmartDashboard.putString("AutoCommand " + String.valueOf(i), Robot.autonomousCommandName[i]);
+    }
+  }
+
   public void readTrajFiles() {
     startSettingPB = SmartDashboard.getBoolean("StartSet", false);
     useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
@@ -524,32 +552,61 @@ public class Robot extends TimedRobot {
   }
 
   void setUpAutoStart() {
+    resetCommandNames();
+    resetBufferNames();
+
     autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
     startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
     if (startPositionSelected == 0)
       autoTimeDelaySeconds = 0;
-
     secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
 
     autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
+
+    autonomousCommandName[0] = "Time Delay";
     if (!fileError && startPositionSelected != 0) {
 
       switch (startPositionSelected) {
       case 1:
-        numberOfAutonomousCommands = AutoCommands.setLeftStart();
+        invertY = false;
+        sideAngle = 0;
+        numberOfAutonomousCommands = AutoCommands.setOutsideStart();
+        break;
       case 2:
-        numberOfAutonomousCommands = AutoCommands.setLeftCenterStart();
+        invertY = false;
+        sideAngle = 0;
+        numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+        break;
       case 3:
-        numberOfAutonomousCommands = AutoCommands.setRightCenterStart();
+        invertY = true;
+        sideAngle = 180;
+        numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+        break;
       case 4:
-        numberOfAutonomousCommands = AutoCommands.setRightStart();
-
+        invertY = true;
+        sideAngle = 180;
+        numberOfAutonomousCommands = AutoCommands.setOutsideStart();
+        break;
       }
-      boolean rightStart = startPositionSelected > 2;
-      numberOfAutonomousCommands = AutoCommands.secondHatchCommands(secondHatchSelected, numberOfAutonomousCommands,
-          rightStart);
 
+      int numberOfPickUpSecondHatchCommands = AutoCommands.pickUpSecondHatch(startPositionSelected,
+          numberOfAutonomousCommands);
+      SmartDashboard.putNumber("NPU", numberOfPickUpSecondHatchCommands);
+      numberOfAutonomousCommands = numberOfPickUpSecondHatchCommands;
+
+      int numberOfDeliverSecondHatchCommands = AutoCommands.deliverSecondHatch(secondHatchSelected,
+          numberOfAutonomousCommands);
+
+      numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
+      SmartDashboard.putNumber("NDU", numberOfAutonomousCommands);
+      SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+      AutoCommands.updateStatus(numberOfAutonomousCommands);
+
+      activLeftTrajectory = leftBufferTrajectory[0];
+      activeRightTrajectory = rightBufferTrajectory[0];
+      activeTrajName = bufferTrajectoryName[0];
+      activeTrajectoryGains = bufferTrajectoryGains[0];
     }
 
   }

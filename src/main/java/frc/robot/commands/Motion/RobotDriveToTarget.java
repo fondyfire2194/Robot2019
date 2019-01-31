@@ -2,6 +2,7 @@ package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.*;
+
 /**
  * use a trajectory. Specify the trajectory segment where vision should take the
  * place of gyro
@@ -52,12 +53,12 @@ public class RobotDriveToTarget extends Command {
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
 		Robot.isPositioning = true;
-		startingTargetAngle = Robot.robotRotate.getSetpoint();
+		startingTargetAngle = Robot.driveTrain.getGyroYaw();
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
 		decelerate = false;
 		slowDownFeet = Pref.getPref("DriveSldnDist");
-		
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -85,8 +86,7 @@ public class RobotDriveToTarget extends Command {
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
-		inVisionRange = remainingFtToHatch < startOfVisionPoint
-				&& remainingFtToHatch > endOfVisionPoint;
+		inVisionRange = remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint;
 
 		useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
 		useGyroComp = !useVisionComp;
@@ -96,23 +96,24 @@ public class RobotDriveToTarget extends Command {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 		}
 		if (useGyroComp)
-			 activeMotionComp = Robot.driveTrain.getCurrentComp();
+			activeMotionComp = Robot.driveTrain.getCurrentComp();
 
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
-
-	
 
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= (myEndpoint) || Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
+		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= (myEndpoint)
+				|| Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
+		if (Robot.runningAutoCommand != 0)
+			Robot.autonomousCommandDone[Robot.runningAutoCommand] = true;
 		Robot.driveTrain.arcadeDrive(0, 0);
 		Robot.isPositioning = false;
 		doneAccelerating = false;

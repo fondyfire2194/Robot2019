@@ -8,15 +8,17 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
 import frc.robot.commands.*;
 import frc.robot.commands.Auto.SetAutoCommandDone;
-import frc.robot.commands.HatchPanels.*;
+import frc.robot.commands.HatchPanels.GripHatchPanel;
+import frc.robot.commands.HatchPanels.RetractHatchPanel;
 
 public class PickUpHatchPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PickUpHatchPanel(int step) {
+  public PickUpHatchPanel() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -41,7 +43,7 @@ public class PickUpHatchPanel extends CommandGroup {
     addSequential(new GripHatchPanel());
     addSequential(new TimeDelay(.5));
     addSequential(new RetractHatchPanel());
-    addSequential(new SetAutoCommandDone(step));
+    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
 }
   }
   

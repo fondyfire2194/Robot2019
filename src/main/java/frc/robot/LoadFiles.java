@@ -123,19 +123,19 @@ public class LoadFiles implements Runnable {
         switch (startPositionSelected) {
         case 1:
             startNames = TrajDict.leftStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setLeftStart();
+            Robot.numberOfAutonomousCommands = AutoCommands.setOutsideStart();
             break;
         case 2:
             startNames = TrajDict.leftCenterStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setLeftCenterStart();
+            Robot.numberOfAutonomousCommands = AutoCommands.setMiddleStart();
             break;
         case 3:
             startNames = TrajDict.rightCenterStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setRightCenterStart();
+            Robot.numberOfAutonomousCommands = AutoCommands.setMiddleStart();
             break;
         case 4:
             startNames = TrajDict.rightStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setRightStart();
+            Robot.numberOfAutonomousCommands = AutoCommands.setOutsideStart();
             break;
         default:
             throw new RuntimeException("need to code more selections");

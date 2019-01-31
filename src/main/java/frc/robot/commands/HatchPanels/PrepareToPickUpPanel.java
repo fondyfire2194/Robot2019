@@ -8,7 +8,10 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.HatchPanels.*;
+import frc.robot.Robot;
+import frc.robot.commands.HatchPanels.ReleaseHatchPanel;
+import frc.robot.commands.HatchPanels.ExtendHatchPanel;
+import frc.robot.commands.Auto.SetAutoCommandDone;
 
 public class PrepareToPickUpPanel extends CommandGroup {
   /**
@@ -33,5 +36,7 @@ public class PrepareToPickUpPanel extends CommandGroup {
     // arm.
     addParallel(new ReleaseHatchPanel());
     addParallel(new ExtendHatchPanel());
+    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
+
   }
 }
