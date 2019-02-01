@@ -26,16 +26,26 @@ public class AutoChoosers {
 	public AutoChoosers() {
 		testTrajectoryChooser = new SendableChooser<Integer>();
 
-		testTrajectoryChooser.setDefaultOption("L " + TrajDict.leftStartNames[0], 0);
-		testTrajectoryChooser.addOption("L " + TrajDict.leftStartNames[1], 1);
-		testTrajectoryChooser.addOption("LC " + TrajDict.leftCenterStartNames[0], 2);
-		testTrajectoryChooser.addOption("RC " + TrajDict.rightCenterStartNames[0], 3);
-		testTrajectoryChooser.addOption("R " + TrajDict.rightStartNames[0], 4);
-		testTrajectoryChooser.addOption("R " + TrajDict.rightStartNames[1], 5);
-		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[0], 6);
-		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[1], 7);
-		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[2], 8);
-		testTrajectoryChooser.addOption(TrajDict.secondHatchNames[3], 9);
+		testTrajectoryChooser.setDefaultOption("L " + TrajDict.outsideStartNames[0], 0);
+		testTrajectoryChooser.addOption("R " + TrajDict.outsideStartNames[0], 1);
+		
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchPickupNames[0] ,2);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchPickupNames[0], 3);
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchPickupNames[1], 4);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchPickupNames[1], 5);
+
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[0], 6);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[0], 7);
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[1], 8);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[1], 9);
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[2], 10);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[2], 11);
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[3], 12);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[3], 13);
+
+
+
+
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 

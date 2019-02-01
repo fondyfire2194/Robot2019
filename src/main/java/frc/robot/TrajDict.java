@@ -15,28 +15,23 @@ import java.util.HashMap;
 
 public class TrajDict {
 
-public static String[] leftStartNames = {"LL1ToCS2","CS2ToTurn"};
-public static String[] leftCenterStartNames = {"CLEToLoad"};
-public static String[] rightCenterStartNames = {"CLEToLoad"};
-public static String[] rightStartNames =   {"LL1ToCS2","CS2ToTurn"};//
+public static String[] outsideStartNames = {"LL1ToCS2"};
 
+public static String[] secondHatchPickupNames = {"CS2ToTurn","CLEToLoad"};
 
-public static String[] secondHatchNames = {"LoadToCS1","LoadToCS2","LoadToCS3","LoadToFarCenter"};
+public static String[] secondHatchDeliveryNames = {"LoadToCS1","LoadToCS2","LoadToCS3","LoadToFarCenter"};
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
-		gainDict.put(leftStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(leftStartNames[1], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(leftCenterStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(rightCenterStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(rightStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(rightStartNames[1], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchNames[1], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchNames[2], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchNames[3], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(outsideStartNames[0], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(secondHatchPickupNames[0], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(secondHatchPickupNames[1], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .4, 0., 0.02, 1. });
 	}
 	public static double[] getTrajGains(String name){
 	

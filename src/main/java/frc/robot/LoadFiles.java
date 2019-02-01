@@ -16,7 +16,6 @@ import frc.robot.TrajDict;
 public class LoadFiles implements Runnable {
     public volatile boolean running = false;
     public volatile boolean error = false;
-    private String[] startNames;
 
     public void run() {
         running = true;
@@ -27,37 +26,42 @@ public class LoadFiles implements Runnable {
         }
 
         int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-        if (startPositionSelected < 0 || startPositionSelected > 4)
-            startPositionSelected = 0;
-        // SmartDashboard.putNumber("LGTH", 0);
-        if (startPositionSelected != 0) {
-            startNames = getTraj(startPositionSelected);
-
-            int i = 0;
-
-            while (running && !error && i < startNames.length) {
-
-                error = loadLeftFile(startNames[i], i);
-
-                if (!error) {
-                    error = loadRightFile(startNames[i], i);
-                    i++;
-                }
-            }
-
+        int i = 0;
+        switch (startPositionSelected) {
+        case 0:
+        case 2:
+        case 3:
+            break;
+        case 1:
+        case 4:
+            error = loadLeftFile(TrajDict.outsideStartNames[0], i);
             if (!error) {
-                int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected() - 1;
-                if (secondHatchChosen >= 0) {
+                error = loadRightFile(TrajDict.outsideStartNames[0], i);
+            }
+            i++;
+            break;
+        }
+        int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected();
+        if (startPositionSelected != 0 && secondHatchChosen != 0) {
 
-                    error = loadLeftSecondHatchFile(secondHatchChosen, i);
-                    if (!error)
+            int startPositionSelectedIndex = 0;
+            if (startPositionSelected == 2 || startPositionSelected == 3)
+                startPositionSelectedIndex = 1;
 
-                        error = loadRightSecondHatchFile(secondHatchChosen, i);
-                }
+            error = loadLeftFile(TrajDict.secondHatchPickupNames[startPositionSelectedIndex], i);
+            if (!error)
+                error = loadRightFile(TrajDict.secondHatchPickupNames[startPositionSelectedIndex], i);
 
+            i++;
+
+            error = loadLeftFile(TrajDict.secondHatchDeliveryNames[secondHatchChosen - 1], i);
+            if (!error) {
+                error = loadRightFile(TrajDict.secondHatchDeliveryNames[secondHatchChosen - 1], i);
             }
         }
+        Robot.secondHatchIndex = i;
         running = false;
+
     }
 
     boolean loadLeftFile(String startName, int i) {
@@ -84,63 +88,6 @@ public class LoadFiles implements Runnable {
 
         }
         return !Robot.buildOK;
-    }
-
-    boolean loadLeftSecondHatchFile(int secondHatchChosen, int number) {
-
-        String name = TrajDict.secondHatchNames[secondHatchChosen];
-        Robot.buildOK = false;
-        Robot.leftBufferTrajectory[number] = BuildTrajectory.buildLeftFileName(Robot.useUsb, name);
-        Robot.bufferTrajectoryGains[number] = TrajDict.getTrajGains(name);
-        Robot.bufferTrajectoryName[number] = name;
-        SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[secondHatchChosen]);
-        SmartDashboard.putNumber("Buffer L Lngth" + String.valueOf(number),
-                Robot.leftBufferTrajectory[number].length());
-
-        Robot.secondHatchIndex = number;
-        return !Robot.buildOK;
-
-    }
-
-    boolean loadRightSecondHatchFile(int secondHatchChosen, int number) {
-
-        String name = TrajDict.secondHatchNames[secondHatchChosen];
-        Robot.buildOK = false;
-        Robot.rightBufferTrajectory[number] = BuildTrajectory.buildRightFileName(Robot.useUsb, name);
-        Robot.bufferTrajectoryName[number] = name;
-        SmartDashboard.putString("Buffer " + String.valueOf(number), Robot.bufferTrajectoryName[number]);
-        SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(number),
-                Robot.rightBufferTrajectory[number].length());
-
-        Robot.secondHatchIndex = number;
-        return !Robot.buildOK;
-
-    }
-
-    String[] getTraj(int startPositionSelected) {
-
-        String[] startNames;
-        switch (startPositionSelected) {
-        case 1:
-            startNames = TrajDict.leftStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setOutsideStart();
-            break;
-        case 2:
-            startNames = TrajDict.leftCenterStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setMiddleStart();
-            break;
-        case 3:
-            startNames = TrajDict.rightCenterStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setMiddleStart();
-            break;
-        case 4:
-            startNames = TrajDict.rightStartNames;
-            Robot.numberOfAutonomousCommands = AutoCommands.setOutsideStart();
-            break;
-        default:
-            throw new RuntimeException("need to code more selections");
-        }
-        return startNames;
     }
 
 }

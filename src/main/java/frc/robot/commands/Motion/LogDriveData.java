@@ -15,9 +15,9 @@ public class LogDriveData extends Command {
 
 	private String[] names = { "Time", "Gyro Yaw", "LeftPct", "RightPct", "LeftOne Amps", "LeftOne Volts",
 			"LeftTwo Amps", "LeftTwo Volts", "RightA Amps", "RightA Volts", "RightB Amps", "RightB Volts", "Left Ft",
-			"Right Ft", "Left Vel", "Right Vel", "Battery" };
+			"Right Ft", "Left Vel", "Right Vel" };
 	private String[] units = { "mS", "Degrees", "PU", "PU", "Amps", "Volts", "Amps", "Volts", "Amps", "Volts", "Amps",
-			"Volts", "Ft", "Ft", "Ft/sec", "Ft/sec", "Volts" };
+			"Volts", "Ft", "Ft", "Ft/sec", "Ft/sec"};
 
 	public LogDriveData(String subDir, String typeName, double timeout) {
 		myTimeout = timeout;
@@ -51,7 +51,9 @@ public class LogDriveData extends Command {
 					Robot.driveTrain.rightTalonTwo.getOutputCurrent(),
 					Robot.driveTrain.rightTalonTwo.getMotorOutputVoltage(), Robot.driveTrain.getLeftFeet(),
 					Robot.driveTrain.getRightFeet(), Robot.driveTrain.getLeftFeetPerSecond(),
-					Robot.driveTrain.getRightFeetPerSecond(), Robot.pdp.getVoltage());
+					Robot.driveTrain.getRightFeetPerSecond()
+					// Robot.pdp.getVoltage());
+			);
 		}
 	}
 

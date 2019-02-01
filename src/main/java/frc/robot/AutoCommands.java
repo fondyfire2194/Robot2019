@@ -76,6 +76,9 @@ public class AutoCommands {
 
     public static int setOutsideStart() {
         int number = 1;
+        Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
+        Robot.autonomousCommandName[number] = "Reset Encoders and Gyro";
+        number++;
         Robot.autonomousCommand[number] = new PickAndRunTrajectory(true, false, Robot.invertY);
         Robot.autonomousCommandName[number] = "Trajectory To CS2 Line";
         number++;
@@ -92,6 +95,9 @@ public class AutoCommands {
 
     public static int setMiddleStart() {
         int number = 1;
+        Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
+        Robot.autonomousCommandName[number] = "Reset Encoders and Gyro";
+        number++;
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
         Robot.autonomousCommandName[number] = "Drive To Cargo Ship";
         number++;
@@ -191,9 +197,6 @@ public class AutoCommands {
             break;
 
         case 4:
-            Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, .5, true, 2);
-            Robot.autonomousCommandName[number] = "Orient To CS";
-            number++;
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
             Robot.autonomousCommandName[number] = "Drive To CS";
             number++;

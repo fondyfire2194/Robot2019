@@ -155,8 +155,9 @@ public class Robot extends TimedRobot {
   public static boolean cycleHold;
   public static boolean autoAbort;
   public static double sideAngle;
-  public static boolean createDriveRunFile;
-  public static boolean createElevatorRunFile;
+  public static boolean createDriveRunFile = true;
+  public static boolean createElevatorRunFile = true;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -230,6 +231,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     updateStatus();
+    SmartDashboard.putString("TBO", Robot.bufferTrajectoryName[0]);
+    SmartDashboard.putString("TB1", Robot.bufferTrajectoryName[1]);
+    SmartDashboard.putString("TB2", Robot.bufferTrajectoryName[2]);
   }
 
   /**
@@ -247,7 +251,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     readTrajFiles();
-    updateStatus();
+    if (m_oi.gamepad.getButtonStateA())
+      setUpAutoStart();
   }
 
   /**
@@ -267,7 +272,9 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
-    // setUpAutoStart();
+//setUpAutoStart();
+    //
+    autonomousCommand[0].start();
   }
 
   /**
@@ -287,6 +294,7 @@ public class Robot extends TimedRobot {
         runningAutoCommand++;
         if (autonomousCommand[runningAutoCommand] != null)
           autonomousCommand[runningAutoCommand].start();
+        runningCommandName = autonomousCommandName[runningAutoCommand];
       }
     }
     if (runningAutoCommand > numberOfAutonomousCommands)
@@ -339,41 +347,91 @@ public class Robot extends TimedRobot {
 
         switch (testTrajectorySelection) {
         case 0:
-          testTrajectoryName = TrajDict.leftStartNames[0];
+          testTrajectoryName = TrajDict.outsideStartNames[0];
           towardsFieldTrajectory = true;
-          faceField = true;
+          faceField = false;
           invertY = false;
           break;
         case 1:
-          testTrajectoryName = TrajDict.leftStartNames[1];
+          testTrajectoryName = TrajDict.outsideStartNames[0];
           towardsFieldTrajectory = true;
-          faceField = true;
-          invertY = false;
+          faceField = false;
+          invertY = true;
           break;
         case 2:
-          testTrajectoryName = TrajDict.leftCenterStartNames[0];
-          towardsFieldTrajectory = true;
+          testTrajectoryName = TrajDict.secondHatchPickupNames[0];
+          towardsFieldTrajectory = false;
           faceField = true;
           invertY = false;
           break;
         case 3:
-          testTrajectoryName = TrajDict.rightCenterStartNames[0];
-          towardsFieldTrajectory = true;
+          testTrajectoryName = TrajDict.secondHatchPickupNames[0];
+          towardsFieldTrajectory = false;
           faceField = true;
           invertY = true;
           break;
-        case 4:
-          testTrajectoryName = TrajDict.rightStartNames[0];
-          towardsFieldTrajectory = true;
+          case 4:
+          testTrajectoryName = TrajDict.secondHatchPickupNames[1];
+          towardsFieldTrajectory = false;
           faceField = true;
-          invertY = true;
+          invertY = false;
           break;
         case 5:
-          testTrajectoryName = TrajDict.rightStartNames[1];
-          towardsFieldTrajectory = true;
+          testTrajectoryName = TrajDict.secondHatchPickupNames[1];
+          towardsFieldTrajectory = false;
           faceField = true;
           invertY = true;
           break;
+
+          case 6:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[0];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = false;
+          break;
+        case 7:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[0];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = true;
+          break;
+          case 8:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[1];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = false;
+          break;
+        case 9:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[1];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = true;
+          break;
+          case 10:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[2];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = false;
+          break;
+        case 11:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[2];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = true;
+          break;
+          case 12:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[3];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = false;
+          break;
+        case 13:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[3];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = true;
+          break;
+
         default:
           break;
         }
@@ -428,7 +486,7 @@ public class Robot extends TimedRobot {
 
   public void updateStatus() {
     scanCounter++;
- 
+
     switch (scanCounter) {
 
     case 1:
@@ -444,7 +502,7 @@ public class Robot extends TimedRobot {
       break;
 
     case 4:
-    SmartDashboard.putNumber("SCCTR", scanCounter);
+      SmartDashboard.putNumber("SCCTR", scanCounter);
       robotUpdateStatus();
       break;
 
@@ -461,7 +519,8 @@ public class Robot extends TimedRobot {
       break;
 
     default:
-      scanCounter = 0;
+      if (scanCounter > 10)
+        scanCounter = 0;
       break;
     }
   }
@@ -472,6 +531,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
     // SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
+    SmartDashboard.putString("Running Cmd Name", runningCommandName);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
@@ -531,7 +591,7 @@ public class Robot extends TimedRobot {
     readingRunning = currentLoader.running;
     readThreadStartTime = Timer.getFPGATimestamp();
     if (startSettingPB && !readingRunning) {
-      setUpAutoStart();
+
       // startSettingsDone = false;
       currentLoader = new LoadFiles();
       Thread reader = new Thread(currentLoader);
@@ -546,7 +606,6 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("StartSet", false);
       SD.putN4("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
       startSettingsDone = true;
-
       wasRunning = false;
 
     }
@@ -554,7 +613,6 @@ public class Robot extends TimedRobot {
 
   void setUpAutoStart() {
     resetCommandNames();
-    resetBufferNames();
 
     autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
@@ -590,24 +648,27 @@ public class Robot extends TimedRobot {
         numberOfAutonomousCommands = AutoCommands.setOutsideStart();
         break;
       }
+      if (secondHatchSelected != 0) {
+        int numberOfPickUpSecondHatchCommands = AutoCommands.pickUpSecondHatch(startPositionSelected,
+            numberOfAutonomousCommands);
+        SmartDashboard.putNumber("NPU", numberOfPickUpSecondHatchCommands);
+        numberOfAutonomousCommands = numberOfPickUpSecondHatchCommands;
 
-      int numberOfPickUpSecondHatchCommands = AutoCommands.pickUpSecondHatch(startPositionSelected,
-          numberOfAutonomousCommands);
-      SmartDashboard.putNumber("NPU", numberOfPickUpSecondHatchCommands);
-      numberOfAutonomousCommands = numberOfPickUpSecondHatchCommands;
+        int numberOfDeliverSecondHatchCommands = AutoCommands.deliverSecondHatch(secondHatchSelected,
+            numberOfAutonomousCommands);
 
-      int numberOfDeliverSecondHatchCommands = AutoCommands.deliverSecondHatch(secondHatchSelected,
-          numberOfAutonomousCommands);
-
-      numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
+        numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
+      }
       SmartDashboard.putNumber("NDU", numberOfAutonomousCommands);
-      SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+
       AutoCommands.updateStatus(numberOfAutonomousCommands);
 
       activLeftTrajectory = leftBufferTrajectory[0];
       activeRightTrajectory = rightBufferTrajectory[0];
       activeTrajName = bufferTrajectoryName[0];
+
       activeTrajectoryGains = bufferTrajectoryGains[0];
+      SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     }
 
   }
