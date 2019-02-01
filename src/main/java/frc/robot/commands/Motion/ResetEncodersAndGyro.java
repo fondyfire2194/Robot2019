@@ -8,6 +8,8 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Robot;
+import frc.robot.commands.Auto.SetAutoCommandDone;
 import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
 
@@ -33,6 +35,7 @@ public class ResetEncodersAndGyro extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addParallel(new ResetEncoders());
-    addParallel(new ResetGyro());
+    addSequential(new ResetGyro());
+    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
   }
 }
