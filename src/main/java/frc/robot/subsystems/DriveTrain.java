@@ -31,11 +31,11 @@ import jaci.pathfinder.followers.*;
  * Add your docs here.
  */
 public class DriveTrain extends Subsystem {
-  private TalonSRX leftTalonOne = null;
-  private TalonSRX leftTalonTwo = null;
-  private TalonSRX rightTalonOne = null;
-  private TalonSRX rightTalonTwo = null;
-  private static AHRS imu;
+  public TalonSRX leftTalonOne = null;
+  public TalonSRX leftTalonTwo = null;
+  public TalonSRX rightTalonOne = null;
+  public TalonSRX rightTalonTwo = null;
+  public static AHRS imu;
 
   public DistanceFollower leftDf = new DistanceFollower();
   public DistanceFollower rightDf = new DistanceFollower();

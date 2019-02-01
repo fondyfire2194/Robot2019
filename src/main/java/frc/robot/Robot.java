@@ -155,7 +155,8 @@ public class Robot extends TimedRobot {
   public static boolean cycleHold;
   public static boolean autoAbort;
   public static double sideAngle;
-
+  public static boolean createDriveRunFile;
+  public static boolean createElevatorRunFile;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.

@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class Elevator extends Subsystem {
-	public static TalonSRX elevatorMotor = null;
+	public TalonSRX elevatorMotor = null;
 	// public double holdPositionEncoderCounts;
 	public double holdPositionInches;
 

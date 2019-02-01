@@ -20,20 +20,20 @@ public class RunElevatorFromGamepad extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Elevator.elevatorMotor.configNominalOutputForward(0, 0);
-		Elevator.elevatorMotor.configNominalOutputReverse(-0, 0);
-		Elevator.elevatorMotor.configPeakOutputForward(1, 0);
-		Elevator.elevatorMotor.configPeakOutputReverse(-1, 0);
+		Robot.elevator.elevatorMotor.configNominalOutputForward(0, 0);
+		Robot.elevator.elevatorMotor.configNominalOutputReverse(-0, 0);
+		Robot.elevator.elevatorMotor.configPeakOutputForward(1, 0);
+		Robot.elevator.elevatorMotor.configPeakOutputReverse(-1, 0);
 
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Elevator.elevatorMotor.configNominalOutputForward(0.0, 0);
-		Elevator.elevatorMotor.configNominalOutputReverse(0.0, 0);
-		Elevator.elevatorMotor.configPeakOutputForward(1, 0);
-		Elevator.elevatorMotor.configPeakOutputReverse(-1, 0);
+		Robot.elevator.elevatorMotor.configNominalOutputForward(0.0, 0);
+		Robot.elevator.elevatorMotor.configNominalOutputReverse(0.0, 0);
+		Robot.elevator.elevatorMotor.configPeakOutputForward(1, 0);
+		Robot.elevator.elevatorMotor.configPeakOutputReverse(-1, 0);
 
 		double yValue;
 		double temp;

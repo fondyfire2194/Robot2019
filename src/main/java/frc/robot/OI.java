@@ -18,7 +18,8 @@ import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
 import frc.robot.commands.DeleteAllPrefs;
 import frc.robot.commands.Trajectories.*;
-
+import frc.robot.commands.LogDriveData;
+import frc.robot.commands.LogElevatorData;
 import frc.robot.commands.Limelight.*;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.LimeLight;
@@ -61,6 +62,11 @@ public class OI {
         SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
 
         SmartDashboard.putData("BuffToAct",new BufferToActiveTrajectory(2));
+
+        SmartDashboard.putData("Log Drive", new LogDriveData("Drive", "Drive", 10));
+
+        
+        SmartDashboard.putData("Log Elevator", new LogElevatorData( 10));
         /**
          * Co driver controller
          * 
