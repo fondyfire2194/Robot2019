@@ -21,6 +21,7 @@ import frc.robot.commands.Trajectories.*;
 import frc.robot.commands.Motion.LogDriveData;
 import frc.robot.commands.Elevator.LogElevatorData;
 import frc.robot.commands.Limelight.*;
+import frc.robot.commands.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.LimeLight;
 import frc.robot.Gamepad;
@@ -69,6 +70,8 @@ public class OI {
         SmartDashboard.putData("Log Elevator", new LogElevatorData( 10));
 
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(0));
+
+        SmartDashboard.putData("Set Gyro Offset", new SetGyroOffset(180));
         /**
          * Co driver controller
          * 

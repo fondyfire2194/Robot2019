@@ -56,7 +56,7 @@ public class PathfinderNotifier {
 		timeSum = 0;
 		thisTime = 0;
 		lastTime = 0;
-		activeTrajectoryLength = Robot.activeTrajectory[0].length();
+		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
 		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;/// 1000;
 		_notifier.startPeriodic(periodic_time);
 	}

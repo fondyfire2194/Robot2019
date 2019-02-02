@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Motion.RobotDriveToTarget;
+import frc.robot.commands.Trajectories.PathfinderTrajectory;
 
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.Trajectories.PickAndRunTrajectory;
@@ -34,6 +35,8 @@ import frc.robot.VisionData;
 import frc.robot.AutoCommands;
 import frc.robot.LimeLight;
 import frc.robot.LoadFiles;
+import frc.robot.PathfinderNotifier;
+import frc.robot.PathfinderReverseNotifier;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -58,7 +61,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static int maxCommands = 25;
+  public static int maxCommands = 20;
   public static Command[] autonomousCommand;
 
   public static Command autoTimeDelayCommand;
@@ -95,17 +98,15 @@ public class Robot extends TimedRobot {
   }
 
   public static boolean useGainPrefs = true;
-  public static Trajectory[] activeTrajectory = { null, null };
-  public static Trajectory activLeftTrajectory;
-
+  
+  public static Trajectory activeLeftTrajectory;
   public static Trajectory activeRightTrajectory;
   public static String activeTrajName = "Empty";
   public static Trajectory[] leftBufferTrajectory = new Trajectory[6];
   public static Trajectory[] rightBufferTrajectory = new Trajectory[6];
-
-  public static int secondHatchIndex;
   public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5" };
 
+  public static int secondHatchIndex;
   public static String bufferTrajName = "Empty";
   public static String testTrajectoryName;
   public static int testTrajectorySelection;
@@ -123,7 +124,8 @@ public class Robot extends TimedRobot {
       "LeftSegVel", "left", "ActLeftVel", "RightSegVel", "right", "ActRightVel", "turn" };
   public static String[] units = { "Number", "FT", "FT", "FT", "FT", "Deg", "Deg", "pct", "pct", "pct", "pct", "pct",
       "pct", "pct" };
-  public static boolean createTrajectoryRunFile = false;
+  public static boolean createTrajectoryRunFile = true;
+  public static boolean createMultipleTrajectoryRunFile;
   public static double trajectoryX;
   public static double trajectoryY;
   public static double trajectoryAngle;
@@ -231,9 +233,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     updateStatus();
-    SmartDashboard.putString("TBO", Robot.bufferTrajectoryName[0]);
-    SmartDashboard.putString("TB1", Robot.bufferTrajectoryName[1]);
-    SmartDashboard.putString("TB2", Robot.bufferTrajectoryName[2]);
+
   }
 
   /**
@@ -243,17 +243,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-
+Scheduler.getInstance().run();
     cancelAllAuto();
 
   }
 
   @Override
   public void disabledPeriodic() {
-    readTrajFiles();
-    if (m_oi.gamepad.getButtonStateA())
+    
+    readTrajFiles(); 
+    
+  if(m_oi.gamepad.getButtonStateA())
       setUpAutoStart();
   }
+
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
@@ -274,6 +277,7 @@ public class Robot extends TimedRobot {
     autoStartTime = Timer.getFPGATimestamp();
 //setUpAutoStart();
     //
+
     autonomousCommand[0].start();
   }
 
@@ -310,9 +314,10 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     DriveTrain.gyroOffset = 0;
-    if (startPositionSelected != 0) {
+    PathfinderReverseNotifier.stopNotfier();
+    PathfinderNotifier.stopNotfier();
       cancelAllAuto();
-    }
+    
   }
 
   /**
@@ -431,14 +436,38 @@ public class Robot extends TimedRobot {
           faceField = false;
           invertY = true;
           break;
+        case 14:
+          testTrajectoryName = "StraightOne";
+          towardsFieldTrajectory =true;
+          faceField = true;
+          invertY = false;
+          break;
+        case 15:
+          testTrajectoryName = "StraightOne";
+          towardsFieldTrajectory = false;
+          faceField = true;
+          invertY = false;
+          break;
+        case 16:
+          testTrajectoryName = "CurveOne";
+          towardsFieldTrajectory = true;
+          faceField = true;
+          invertY = false;
+          break;
+        case 17:
+          testTrajectoryName = "CurveOne";
+          towardsFieldTrajectory = false;
+          faceField = true;
+          invertY = false;
+          break;
 
         default:
           break;
         }
         if (activeTrajName != testTrajectoryName) {
           double startFiletime = Timer.getFPGATimestamp();
-          activeTrajectory[0] = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
-          activeTrajectory[1] = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
+          activeLeftTrajectory = BuildTrajectory.buildLeftFileName(useUsb, testTrajectoryName);
+          activeRightTrajectory = BuildTrajectory.buildRightFileName(useUsb, testTrajectoryName);
           SmartDashboard.putNumber("USBTime ", Timer.getFPGATimestamp() - startFiletime);
           activeTrajName = testTrajectoryName;
           SmartDashboard.putBoolean("FileOK", buildOK);
@@ -465,7 +494,7 @@ public class Robot extends TimedRobot {
 
         if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
           new PickAndRunTrajectory(towardsFieldTrajectory, faceField, invertY).start();
-        else
+         else
           new PickAndRunTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
 
         trajectoryRunning = true;
@@ -540,6 +569,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Active Trajectory", activeTrajName);
     SmartDashboard.putBoolean("Invert Y", invertY);
     SmartDashboard.putBoolean("Face Field", faceField);
+    SmartDashboard.putBoolean("TrakFileDo", doFileTrajectory);
 
     SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
     SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
@@ -548,7 +578,10 @@ public class Robot extends TimedRobot {
   }
 
   public static void cancelAllAuto() {
+    Scheduler.getInstance().run();
     Scheduler.getInstance().removeAll();
+    driveTrain.leftDriveOut(0);
+    driveTrain.rightDriveOut(0);
     for (int i = 0; i < maxCommands; i++) {
 
       if (autonomousCommand[i] != null) {
@@ -592,7 +625,7 @@ public class Robot extends TimedRobot {
     readThreadStartTime = Timer.getFPGATimestamp();
     if (startSettingPB && !readingRunning) {
 
-      // startSettingsDone = false;
+     startSettingsDone = false;
       currentLoader = new LoadFiles();
       Thread reader = new Thread(currentLoader);
       reader.setDaemon(true);
@@ -663,7 +696,7 @@ public class Robot extends TimedRobot {
 
       AutoCommands.updateStatus(numberOfAutonomousCommands);
 
-      activLeftTrajectory = leftBufferTrajectory[0];
+      activeLeftTrajectory = leftBufferTrajectory[0];
       activeRightTrajectory = rightBufferTrajectory[0];
       activeTrajName = bufferTrajectoryName[0];
 

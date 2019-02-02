@@ -37,11 +37,13 @@ public class BuildTrajectory {
 
 		Robot.chosenFileName = "NONE";
 		Robot.chosenFileName = tempPath + name + leftExtension;
+		SmartDashboard.putString("None", Robot.chosenFileName);
 		if (Constants.usePathWeaver) {
 			myLeftFile = new File(tempPath + name + rightExtension);
 		} else {
 			myLeftFile = new File(tempPath + name + leftExtension);
 		}
+		
 		if (myLeftFile.exists()) {
 			Robot.bufferTrajName = "Loading";
 

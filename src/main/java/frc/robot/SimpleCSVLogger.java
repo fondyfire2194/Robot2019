@@ -80,7 +80,7 @@ public class SimpleCSVLogger {
 			System.out.println("Warning - log is already open!");
 			return 0;
 		}
-		// output_dir = "/U" + "/data_captures19/";
+		output_dir = "/U" + "/data_captures19/";
 		output_dir += subDir + "/";
 		File file = new File(output_dir);
 		if (!file.exists()) {

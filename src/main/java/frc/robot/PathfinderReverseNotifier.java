@@ -21,6 +21,7 @@ public class PathfinderReverseNotifier {
 	private static boolean myfaceField;
 	private static boolean myInvertY;
 	private static int switchMode;
+	private static int testCt;
 
 	public static void startNotifier(boolean faceField, boolean invertY) {
 		/**
@@ -41,10 +42,10 @@ public class PathfinderReverseNotifier {
 		if (!myfaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
-		activeTrajectoryLength = Robot.activeTrajectory[0].length();
-		lastSegmentPosition = Robot.activeTrajectory[0].get(activeTrajectoryLength - 1).position;
+		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
+		lastSegmentPosition = Robot.activeLeftTrajectory.get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
-		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt / 1000;
+		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt ;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -82,7 +83,7 @@ public class PathfinderReverseNotifier {
 		double angleDifference = 0;
 		double turn = 0;
 		// convenience because gyro action is opposite of trajectory generation
-		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
+		// double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
 		double headingMultiplier = 1;
 		if (Constants.usePathWeaver)
 			headingMultiplier = -1;
@@ -96,8 +97,8 @@ public class PathfinderReverseNotifier {
 			 */
 			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
-			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
-			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading());
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading + Robot.driveTrain.getGyroYaw());
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
 			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
@@ -112,8 +113,8 @@ public class PathfinderReverseNotifier {
 			 */
 			right = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getLeftFeet());
-			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
-			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading()));
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading + Robot.driveTrain.getGyroYaw());
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
 			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
@@ -131,8 +132,8 @@ public class PathfinderReverseNotifier {
 			 */
 			left = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getRightFeet());
-			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
-			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading());
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading + Robot.driveTrain.getGyroYaw());
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = (Constants.MINIMUM_START_PCT + left + turn);
 			rightPct = (Constants.MINIMUM_START_PCT + right - turn);
@@ -149,8 +150,8 @@ public class PathfinderReverseNotifier {
 			 */
 			right = Robot.driveTrain.revLeftDf.calculate(Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.revRightDf.calculate(Robot.driveTrain.getLeftFeet());
-			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
-			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
+			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading()));
+			angleDifference = Pathfinder.boundHalfDegrees(desired_heading + Robot.driveTrain.getGyroYaw());
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
 			leftPct = (Constants.MINIMUM_START_PCT + left + turn);
 			rightPct = (Constants.MINIMUM_START_PCT + right - turn);
@@ -159,7 +160,7 @@ public class PathfinderReverseNotifier {
 		default:
 			break;
 		}
-
+SmartDashboard.putNumber("RN", testCt++);
 		Robot.driveTrain.leftDriveOut(leftPct);
 		Robot.driveTrain.rightDriveOut(rightPct);
 

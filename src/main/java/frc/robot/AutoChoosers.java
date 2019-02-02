@@ -42,6 +42,10 @@ public class AutoChoosers {
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[2], 11);
 		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[3], 12);
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[3], 13);
+		testTrajectoryChooser.addOption("StraightOne", 14);
+		testTrajectoryChooser.addOption("Rev StraightOne", 15);
+		testTrajectoryChooser.addOption("CurveOne", 16);
+		testTrajectoryChooser.addOption("Rev CurveOne", 17);
 
 
 

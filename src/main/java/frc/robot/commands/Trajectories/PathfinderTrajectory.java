@@ -39,12 +39,12 @@ public class PathfinderTrajectory extends Command {
 		double V = 1 / Constants.MAX_ROBOT_FT_PER_SEC;
 		double A = Robot.activeTrajectoryGains[2];
 
-		Robot.driveTrain.leftDf.setTrajectory(Robot.activeTrajectory[0]);
-		Robot.driveTrain.rightDf.setTrajectory(Robot.activeTrajectory[1]);
-		Robot.driveTrain.leftPositionTargetFt = Robot.activeTrajectory[0]
-				.get(Robot.activeTrajectory[0].length() - 1).position;
-		Robot.driveTrain.rightPositionTargetFt = Robot.activeTrajectory[1]
-				.get(Robot.activeTrajectory[1].length() - 1).position;
+		Robot.driveTrain.leftDf.setTrajectory(Robot.activeLeftTrajectory);
+		Robot.driveTrain.rightDf.setTrajectory(Robot.activeRightTrajectory);
+		Robot.driveTrain.leftPositionTargetFt = Robot.activeLeftTrajectory
+				.get(Robot.activeLeftTrajectory.length() - 1).position;
+		Robot.driveTrain.rightPositionTargetFt = Robot.activeRightTrajectory
+				.get(Robot.activeRightTrajectory.length() - 1).position;
 
 		Robot.driveTrain.leftDf.configurePIDVA(P, I, D, V, A);
 		Robot.driveTrain.rightDf.configurePIDVA(P, I, D, V, A);
@@ -52,13 +52,14 @@ public class PathfinderTrajectory extends Command {
 		Robot.driveTrain.leftDf.reset();
 		Robot.driveTrain.rightDf.reset();
 		Robot.trajectoryRunning = true;
-		if (Robot.createTrajectoryRunFile && !Robot.simpleCSVLogger.log_open) {
+		startTime = Timer.getFPGATimestamp();
+		if (Robot.createTrajectoryRunFile) {
 			Robot.simpleCSVLogger.init("Trajectory", Robot.logName + " Fwd", Robot.names, Robot.units);
 
 		}
 		scanCounter = 0;
-		startTime = Timer.getFPGATimestamp();
-		SmartDashboard.putNumber("AutoCheck", Timer.getFPGATimestamp() - Robot.autoStartTime);
+		
+		SmartDashboard.putNumber("AutoCheck", Timer.getFPGATimestamp() - startTime);
 		PathfinderNotifier.startNotifier(myFaceField, myInvertY);
 	}
 
@@ -76,6 +77,8 @@ public class PathfinderTrajectory extends Command {
 	protected void end() {
 		PathfinderNotifier.stopNotfier();
 		Robot.trajectoryRunning = false;
+		Robot.driveTrain.leftDf.reset();
+		Robot.driveTrain.rightDf.reset();
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);

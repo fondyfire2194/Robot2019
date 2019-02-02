@@ -29,11 +29,11 @@ public class BufferToActiveTrajectory extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.activeTrajectory[0]= Robot.leftBufferTrajectory[myNumber];
-     Robot.activeTrajectory[1] = Robot.rightBufferTrajectory[myNumber];
+    Robot.activeLeftTrajectory= Robot.leftBufferTrajectory[myNumber];
+     Robot.activeRightTrajectory = Robot.rightBufferTrajectory[myNumber];
      Robot.activeTrajectoryGains = Robot.bufferTrajectoryGains[myNumber];
      Robot.activeTrajName = Robot.bufferTrajName;
-     SmartDashboard.putNumber("A2BL", Robot.activeTrajectory[0].length());
+     SmartDashboard.putNumber("A2BL", Robot.activeLeftTrajectory.length());
 
 
 

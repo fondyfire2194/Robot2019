@@ -11,6 +11,7 @@ import frc.robot.Robot;
 public class PathfinderReverseTrajectory extends Command {
 	private boolean myFaceField;
 	private boolean myInvertY;
+	
 	public PathfinderReverseTrajectory(boolean faceField, boolean invertY) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
@@ -22,19 +23,15 @@ public class PathfinderReverseTrajectory extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		Robot.driveTrain.resetEncoders();
-		// Robot.sensors.resetGyro();
-		// Robot.driveTrain.configOpenLoopAcceleration(0);
-		// Robot.driveTrain.configDriveNominalOut(0, driveSide.both);
-		// Robot.driveTrain.configDrivePeakout(driveTrain.MAX_ROBOT_FT_PER_SEC,
-		// driveSide.both);
+
 		double P = Robot.activeTrajectoryGains[0];
 		double I = 0;
 		double D = Robot.activeTrajectoryGains[1];
 		double V = 1 / Constants.MAX_ROBOT_FT_PER_SEC;
 		double A = Robot.activeTrajectoryGains[2];
 
-		Robot.driveTrain.revLeftDf.setTrajectory(Robot.activeTrajectory[0]);
-		Robot.driveTrain.revRightDf.setTrajectory(Robot.activeTrajectory[1]);
+		Robot.driveTrain.revLeftDf.setTrajectory(Robot.activeLeftTrajectory);
+		Robot.driveTrain.revRightDf.setTrajectory(Robot.activeRightTrajectory);
 
 		Robot.driveTrain.revLeftDf.configurePIDVA(P, I, D, V, A);
 		Robot.driveTrain.revRightDf.configurePIDVA(P, I, D, V, A);
