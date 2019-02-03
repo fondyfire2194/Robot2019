@@ -83,7 +83,7 @@ public class PathfinderTrajectory extends Command {
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
 		SmartDashboard.putNumber("Trajectory Time", Timer.getFPGATimestamp() - startTime);
-		if (Robot.simpleCSVLogger.log_open)
+		
 			Robot.simpleCSVLogger.close();
 	}
 

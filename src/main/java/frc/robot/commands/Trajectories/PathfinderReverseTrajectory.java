@@ -63,7 +63,7 @@ public class PathfinderReverseTrajectory extends Command {
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
-		if (Robot.simpleCSVLogger.log_open)
+		
 			Robot.simpleCSVLogger.close();
 	}
 

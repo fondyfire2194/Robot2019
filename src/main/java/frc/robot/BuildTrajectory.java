@@ -13,7 +13,7 @@ public class BuildTrajectory {
 	static String tempPath = null;
 	static String filePath = "/home/lvuser/deploy/paths/";
 
-	static String usbFilePath = "/U/DeepSpace19CSV/";
+	static String usbFilePath = "/U/DeepSpace/PathWeaver/output/";
 
 	static String leftExtension = ".left.pf1.csv";
 
@@ -52,6 +52,7 @@ public class BuildTrajectory {
 			SmartDashboard.putString("CFN", Robot.chosenFileName);
 			Robot.buildOK = true;
 			Robot.bufferTrajName = name;
+			SmartDashboard.putNumber("BuffLgth",buffer.length());
 
 		}
 		Robot.buildInProgress = false;

@@ -37,6 +37,7 @@ import frc.robot.LimeLight;
 import frc.robot.LoadFiles;
 import frc.robot.PathfinderNotifier;
 import frc.robot.PathfinderReverseNotifier;
+import frc.robot.LoadAllFiles;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -102,9 +103,9 @@ public class Robot extends TimedRobot {
   public static Trajectory activeLeftTrajectory;
   public static Trajectory activeRightTrajectory;
   public static String activeTrajName = "Empty";
-  public static Trajectory[] leftBufferTrajectory = new Trajectory[6];
-  public static Trajectory[] rightBufferTrajectory = new Trajectory[6];
-  public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5" };
+  public static Trajectory[] leftBufferTrajectory = new Trajectory[8];
+  public static Trajectory[] rightBufferTrajectory = new Trajectory[8];
+  public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5","7" };
 
   public static int secondHatchIndex;
   public static String bufferTrajName = "Empty";
@@ -136,7 +137,7 @@ public class Robot extends TimedRobot {
   public static boolean buildInProgress;
   public static int startPositionSelected = 0;;
   public static int secondHatchSelected = 0;;
-  public static boolean useUsb = false;
+  public static boolean useUsb = true;
   public static boolean faceField;
   public static boolean invertY;
   public static boolean towardsFieldTrajectory;
@@ -147,6 +148,7 @@ public class Robot extends TimedRobot {
   public static boolean startSettingsDone = false;
   public static boolean readingRunning = false;
 
+  // LoadAllFiles currentLoader = new LoadAllFiles();
   LoadFiles currentLoader = new LoadFiles();
   boolean wasRunning = false;
   public static String runningCommandName = "None";
@@ -203,11 +205,11 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("UseUSBTraj", false);
+    SmartDashboard.putBoolean("UseUSBTraj", true);
     Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
-
+    SmartDashboard.putBoolean("CreateTrajFile",false);    
     SmartDashboard.putData(driveTrain);
     SmartDashboard.putData(elevator);
     SmartDashboard.putData(robotRotate);
@@ -347,6 +349,7 @@ Scheduler.getInstance().run();
       }
 
       if (doFileTrajectory) {
+        createTrajectoryRunFile= SmartDashboard.getBoolean("CreateTrajFile",false);
         useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
         testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
 
