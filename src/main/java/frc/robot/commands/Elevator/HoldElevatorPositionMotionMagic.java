@@ -2,7 +2,6 @@ package frc.robot.commands.Elevator;
 
 import frc.robot.Robot;
 import frc.robot.Pref;
-import frc.robot.subsystems.Elevator;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;

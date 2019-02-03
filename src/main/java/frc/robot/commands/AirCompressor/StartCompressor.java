@@ -1,10 +1,7 @@
 package frc.robot.commands.AirCompressor;
 
 import frc.robot.Robot;
-import frc.robot.RobotMap;
-import frc.robot.commands.AirCompressor.*;
-import frc.robot.subsystems.AirCompressor;
-import edu.wpi.first.wpilibj.Compressor;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**

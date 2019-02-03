@@ -16,7 +16,6 @@ import frc.robot.commands.DoTeleopRobotOrient;
 import frc.robot.commands.DoTeleopPosition;
 import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
-import frc.robot.commands.DeleteAllPrefs;
 import frc.robot.commands.Trajectories.*;
 import frc.robot.commands.Motion.LogDriveData;
 import frc.robot.commands.Elevator.LogElevatorData;
