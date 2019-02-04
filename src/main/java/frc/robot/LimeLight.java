@@ -353,7 +353,8 @@ public class LimeLight {
         double t = thor.getDouble(0.0);
         return t;
     }
-       /**
+
+    /**
      * Combined bounding box height
      * 
      * @return
@@ -362,8 +363,15 @@ public class LimeLight {
         NetworkTableEntry tvert = m_table.getEntry("tvert");
         double t = tvert.getDouble(0.0);
         return t;
-    }  
-    
+    }
+
+    public double getPerspectiveAngle() {
+        double originalRatio = 77.0 / 35.0;
+        double currentRatio = getBoundingBoxWidth() / getBoundingBoxHeight();
+        double ratio = Math.min(1, currentRatio / originalRatio);
+        return Math.toDegrees(Math.acos(ratio));
+    }
+
     public void updateStatus() {
         SmartDashboard.putBoolean("VisionTarget", Robot.limelightCamera.getIsTargetFound());
         SD.putN2("DegToTarget", Robot.limelightCamera.getdegRotationToTarget());
@@ -372,6 +380,7 @@ public class LimeLight {
         SD.putN2("BndBoxHeight", Robot.limelightCamera.getBoundingBoxHeight());
         SD.putN1("Pipeline Latency", Robot.limelightCamera.getPipelineLatency());
         SD.putN("Pipeline #", getPipeline());
+        SD.putN1("PerspAngle",getPerspectiveAngle());
 
     }
 }

@@ -164,6 +164,8 @@ public class Robot extends TimedRobot {
   public static String driveUniqueLogName;
   public static String trajectoryLogName = "/U" + "/data_capturesDS19/Trajectory/T";
   public static String trajectoryUniqueLogName;
+  public static boolean useVisionComp;
+  public static double activeMotionComp;
 
   /**
    * This function is run when the robot is first started up and should be used

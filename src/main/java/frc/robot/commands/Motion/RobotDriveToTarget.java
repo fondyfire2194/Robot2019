@@ -13,7 +13,7 @@ public class RobotDriveToTarget extends Command {
 	private double myTimeout;
 	private double rampIncrement;
 	private boolean useGyroComp;
-	private boolean useVisionComp;
+	
 
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
@@ -88,11 +88,11 @@ public class RobotDriveToTarget extends Command {
 
 		inVisionRange = remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint;
 
-		useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
-		useGyroComp = !useVisionComp;
+		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
+		useGyroComp = !Robot.useVisionComp;
 
-		if (useVisionComp) {
-			activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+		if (Robot.useVisionComp) {
+			Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 		}
 		if (useGyroComp)
