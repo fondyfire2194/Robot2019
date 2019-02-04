@@ -361,36 +361,42 @@ public class Robot extends TimedRobot {
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 1:
           testTrajectoryName = TrajDict.outsideStartNames[0];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = true;
+          useGainPrefs = true;
           break;
         case 2:
           testTrajectoryName = TrajDict.secondHatchPickupNames[0];
           towardsFieldTrajectory = false;
           faceField = true;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 3:
           testTrajectoryName = TrajDict.secondHatchPickupNames[0];
           towardsFieldTrajectory = false;
           faceField = true;
           invertY = true;
+          useGainPrefs = true;
           break;
         case 4:
           testTrajectoryName = TrajDict.secondHatchPickupNames[1];
           towardsFieldTrajectory = false;
           faceField = true;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 5:
           testTrajectoryName = TrajDict.secondHatchPickupNames[1];
           towardsFieldTrajectory = false;
           faceField = true;
           invertY = true;
+          useGainPrefs = true;
           break;
 
         case 6:
@@ -398,72 +404,84 @@ public class Robot extends TimedRobot {
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 7:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[0];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = true;
+          useGainPrefs = true;
           break;
         case 8:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[1];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 9:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[1];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = true;
+          useGainPrefs = true;
           break;
         case 10:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[2];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 11:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[2];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = true;
+          useGainPrefs = true;
           break;
         case 12:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[3];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 13:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[3];
           towardsFieldTrajectory = true;
           faceField = false;
           invertY = true;
+          useGainPrefs = true;
           break;
         case 14:
           testTrajectoryName = "StraightOne";
           towardsFieldTrajectory = true;
           faceField = true;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 15:
           testTrajectoryName = "StraightOne";
           towardsFieldTrajectory = false;
           faceField = true;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 16:
           testTrajectoryName = "CurveOne";
           towardsFieldTrajectory = true;
           faceField = true;
           invertY = false;
+          useGainPrefs = true;
           break;
         case 17:
           testTrajectoryName = "CurveOne";
           towardsFieldTrajectory = false;
           faceField = true;
           invertY = false;
+          useGainPrefs = true;
           break;
 
         default:
