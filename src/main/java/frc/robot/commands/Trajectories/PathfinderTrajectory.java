@@ -54,11 +54,13 @@ public class PathfinderTrajectory extends Command {
 		Robot.trajectoryRunning = true;
 		startTime = Timer.getFPGATimestamp();
 		if (Robot.createTrajectoryRunFile) {
-			Robot.simpleCSVLogger.init("Trajectory", Robot.logName + " Fwd", Robot.names, Robot.units);
+			
+			String name =  Robot.trajectoryUniqueLogName + Robot.logName + ".csv";
+			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
 
 		}
 		scanCounter = 0;
-		
+
 		SmartDashboard.putNumber("AutoCheck", Timer.getFPGATimestamp() - startTime);
 		PathfinderNotifier.startNotifier(myFaceField, myInvertY);
 	}
@@ -83,8 +85,8 @@ public class PathfinderTrajectory extends Command {
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
 		SmartDashboard.putNumber("Trajectory Time", Timer.getFPGATimestamp() - startTime);
-		
-			Robot.simpleCSVLogger.close();
+
+		Robot.simpleCSVLogger2194.close();
 	}
 
 	// Called when another command which requires one or more of the same

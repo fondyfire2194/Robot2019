@@ -40,8 +40,10 @@ public class PathfinderReverseTrajectory extends Command {
 		Robot.driveTrain.revRightDf.reset();
 
 		Robot.trajectoryRunning = true;
-		if (Robot.createTrajectoryRunFile && !Robot.simpleCSVLogger.log_open)
-			Robot.simpleCSVLogger.init("Trajectory", Robot.logName + "Rev", Robot.names, Robot.units);
+		String name =  Robot.trajectoryUniqueLogName + Robot.logName + ".csv";	
+		if (Robot.createTrajectoryRunFile)
+	
+			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
 
 		PathfinderReverseNotifier.startNotifier(myFaceField, myInvertY);
 
@@ -64,7 +66,7 @@ public class PathfinderReverseTrajectory extends Command {
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
 		
-			Robot.simpleCSVLogger.close();
+			Robot.simpleCSVLogger2194.close();
 	}
 
 	// Called when another command which requires one or more of the same

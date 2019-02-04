@@ -22,7 +22,7 @@ import frc.robot.commands.Elevator.LogElevatorData;
 import frc.robot.commands.Limelight.*;
 import frc.robot.commands.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
-import frc.robot.LimeLight;
+import frc.robot.commands.Limelight.LogVisionData;;
 import frc.robot.Gamepad;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
@@ -63,10 +63,12 @@ public class OI {
 
         SmartDashboard.putData("BuffToAct",new BufferToActiveTrajectory(2));
 
-        SmartDashboard.putData("Log Drive", new LogDriveData("Drive", "Drive", 10));
+        SmartDashboard.putData("Log Drive", new LogDriveData(10));
 
         
         SmartDashboard.putData("Log Elevator", new LogElevatorData( 10));
+ 
+        SmartDashboard.putData("Log Vsion", new LogVisionData(5));
 
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(0));
 

@@ -196,7 +196,7 @@ public class PathfinderNotifier {
 			 * 
 			 */
 
-			Robot.simpleCSVLogger.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
+			Robot.simpleCSVLogger2194.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
 					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
 					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
 					Robot.driveTrain.getGyroYaw(),

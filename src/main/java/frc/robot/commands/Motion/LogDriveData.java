@@ -3,43 +3,43 @@ package frc.robot.commands.Motion;
 import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * 
  */
-public class LogDriveData extends Command {
-	private double startTime, myTimeout;
-	private String myTypeName;
-	private String mySubDir;
+public class LogDriveData extends TimedCommand {
+	private double startTime;
+	private String names = "Time,GyroYaw,LeftPct,RightPct,Left1Amps,Left2Volts,LeftTwoAmps,LeftTwoVolts,RightAAmps,RightAVolts,RightBAmps,RightBVolts,LeftFt,RightFt,LeftVel,RightVel\n";
+	private String units = "mS,Deg,PU,PU,Amps,Volts,Amps,Volts,Amps,Volts,Amps,Volts,Ft,Ft,Ftpersec,Ftpersec\n";
+	String output_dir = "/U" + "/data_capturesDS19/Drive/"; // USB drive is mounted to /U on roboRIO
+	String name1 = "Drive";
+	String name = output_dir + name1;
 
-	private String[] names = { "Time", "Gyro Yaw", "LeftPct", "RightPct", "LeftOne Amps", "LeftOne Volts",
-			"LeftTwo Amps", "LeftTwo Volts", "RightA Amps", "RightA Volts", "RightB Amps", "RightB Volts", "Left Ft",
-			"Right Ft", "Left Vel", "Right Vel" };
-	private String[] units = { "mS", "Degrees", "PU", "PU", "Amps", "Volts", "Amps", "Volts", "Amps", "Volts", "Amps",
-			"Volts", "Ft", "Ft", "Ft/sec", "Ft/sec"};
-
-	public LogDriveData(String subDir, String typeName, double timeout) {
-		myTimeout = timeout;
-		myTypeName = typeName;
-		mySubDir = subDir;
+	public LogDriveData(double timeout) {
+		super(timeout);
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 	}
 
 	// Called just before this Command runs the first time
+
 	protected void initialize() {
-		setTimeout(myTimeout);
-		Robot.createTrajectoryRunFile = false;
-		Robot.createDriveRunFile = true;
-		Robot.simpleCSVLogger.init(mySubDir, myTypeName, names, units);
+		// double temp = (int) Timer.getFPGATimestamp();
+		// name += String.valueOf(temp) + ".csv";
+		name = Robot.driveUniqueLogName;
+		SmartDashboard.putString("CSVDRName",name);
+
+		// log_name = output_dir + "log_" + name + ".csv"
+		if (Robot.createDriveRunFile)
+			Robot.simpleCSVLogger2194.init(name, names, units);
 		startTime = Timer.getFPGATimestamp();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (Robot.createDriveRunFile) {
-			Robot.simpleCSVLogger.writeData((Timer.getFPGATimestamp() - startTime) * 1000,
+			Robot.simpleCSVLogger2194.writeData((Timer.getFPGATimestamp() - startTime) * 1000,
 					Robot.driveTrain.getGyroYaw(), Robot.driveTrain.leftTalonOne.getMotorOutputPercent(),
 					Robot.driveTrain.rightTalonOne.getMotorOutputPercent(),
 					Robot.driveTrain.leftTalonOne.getOutputCurrent(),
@@ -52,7 +52,7 @@ public class LogDriveData extends Command {
 					Robot.driveTrain.rightTalonTwo.getMotorOutputVoltage(), Robot.driveTrain.getLeftFeet(),
 					Robot.driveTrain.getRightFeet(), Robot.driveTrain.getLeftFeetPerSecond(),
 					Robot.driveTrain.getRightFeetPerSecond()
-					// Robot.pdp.getVoltage());
+			// Robot.pdp.getVoltage());
 			);
 		}
 	}
@@ -64,9 +64,9 @@ public class LogDriveData extends Command {
 
 	// Called once after timeout
 	protected void end() {
-		if (Robot.createDriveRunFile && Robot.simpleCSVLogger.log_open) {
-			Robot.simpleCSVLogger.close();
-			Robot.createDriveRunFile = false;
+		if (Robot.createDriveRunFile) {
+			Robot.simpleCSVLogger2194.close();
+			
 		}
 	}
 

@@ -9,7 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Robot;
 /*
  *******************************************************************************************
  * Copyright (C) 2017 FRC Team 1736 Robot Casserole - www.robotcasserole.org
@@ -28,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *  If you happen to end up using our software to make money, that is wonderful!
  *   Robot Casserole is always looking for more sponsors, so we'd be very appreciative
  *   if you would consider donating to our club to help further STEM education.
- */
+ *
 
 /**
  * DESCRIPTION: <br>
@@ -55,14 +56,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * 
  */
 
-public class SimpleCSVLogger {
+public class SimpleCSVLogger2194 {
 
 	long log_write_index;
 	String log_name = null;
-	String output_dir = "/U" + "/data_captures/DS19/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDS19/"; // USB drive is mounted to /U on roboRIO
 	BufferedWriter log_file = null;
 	public boolean log_open = false;
 	int numberOfElements;
+	double startTime=0.;
+	String uniqueID;
 
 	/**
 	 * Determines a unique file name, and opens a file in the data captures
@@ -74,70 +77,56 @@ public class SimpleCSVLogger {
 	 *            A set of strings for signal units to write into the file
 	 * @return 0 on successful log open, -1 on failure
 	 */
-	public int init(String subDir, String name, String[] data_fields, String[] units_fields) {
+	public int init(String name, String data_fields, String units_fields) {
+	
+		SmartDashboard.putString("CSVName",name);
+			
+		
+
+		// double temp = (int)Timer.getFPGATimestamp();
+		startTime= Timer.getFPGATimestamp();
+		// uniqueID = String.valueOf(temp);
 
 		if (log_open) {
 			System.out.println("Warning - log is already open!");
 			
 			return 0;
 		}
-		output_dir = "/U" + "/data_capturesDS19/";
-		output_dir += subDir + "/";
-	
+
+	SmartDashboard.putNumber("CSV1T",Timer.getFPGATimestamp()-startTime);
 		File file = new File(output_dir);
 		if (!file.exists()) {
-			SmartDashboard.putNumber("CSV",6);
+			
+			SmartDashboard.putNumber("CSV2T",Timer.getFPGATimestamp()-startTime);
 			if (file.mkdir()) {
 				System.out.println("Directory is created!");
-			
+				SmartDashboard.putNumber("CSV3T",Timer.getFPGATimestamp()-startTime);
 			} else {
 				System.out.println("Failed to create directory!");
-				
+				SmartDashboard.putNumber("CSV4T",Timer.getFPGATimestamp()-startTime);
 			}
 		}
 	
 		log_open = false;
 		
 		System.out.println("Initalizing Log file...");
-		numberOfElements = data_fields.length;
+		// numberOfElements = data_fields.length;
 		try {
 			// Reset state variables
 			log_write_index = 0;
-
+			SmartDashboard.putNumber("CSV5T",Timer.getFPGATimestamp()-startTime);
 			// Determine a unique file name
-			log_name = output_dir + "log_" + getDateTimeString() + name + ".csv";
-
+			// log_name = output_dir + "log_" + name + ".csv";
+			SmartDashboard.putNumber("CSV6T",Timer.getFPGATimestamp()-startTime);
 			// Open File
-			FileWriter fstream = new FileWriter(log_name, true);
+			FileWriter fstream = new FileWriter(name, true);
 			log_file = new BufferedWriter(fstream);
+			SmartDashboard.putNumber("CSV7T",Timer.getFPGATimestamp()-startTime);
+			SmartDashboard.putNumber("CSV8T",Timer.getFPGATimestamp()-startTime);
+			log_file.write(data_fields);
 
-			// Write user-defined header line
-			String comma = ",";
-			int pass = 0;
-			for (String header_txt : data_fields) {
-				if (pass == numberOfElements - 1)
-					comma = "";
-				else
-					comma = ",";
-				pass++;
-				log_file.write(header_txt + comma);
-			}
-			// End of line
-			log_file.write("\n");
-
-			// Write user-defined units line
-			pass = 0;
-			comma = ",";
-			for (String header_txt : units_fields) {
-				if (pass == numberOfElements - 1)
-					comma = "";
-				else
-					comma = ",";
-				pass++;
-				log_file.write(header_txt + comma);
-			}
-			// End of line
-			log_file.write("\n");
+		log_file.write(units_fields);
+			SmartDashboard.putNumber("CSV9T",Timer.getFPGATimestamp()-startTime);
 
 		}
 		// Catch ALL the errors!!!
@@ -146,6 +135,7 @@ public class SimpleCSVLogger {
 			
 			return -1;
 		}
+		SmartDashboard.putNumber("CSV10T",Timer.getFPGATimestamp()-startTime);
 		System.out.println("done!");
 		log_open = true;
 		return 0;
@@ -237,6 +227,7 @@ public class SimpleCSVLogger {
 
 		if (log_open == false) {
 			System.out.println("Warning - Log is not yet opened, nothing to close.");
+			
 			return 0;
 		}
 
@@ -247,16 +238,12 @@ public class SimpleCSVLogger {
 		// Catch ALL the errors!!!
 		catch (IOException e) {
 			System.out.println("Error Closing Log File: " + e.getMessage());
+			SmartDashboard.putNumber("CSV7",6);
 			return -1;
 		}
 		return 0;
 
 	}
 
-	private String getDateTimeString() {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
-		df.setTimeZone(TimeZone.getTimeZone("US/Central"));
-		return df.format(new Date());
-	}
 
 }

@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
   public static GamePieceHandler gph;
   public static AirCompressor airCompressor;
   public static PowerPanel pdp;
-  public static SimpleCSVLogger simpleCSVLogger;
+  public static SimpleCSVLogger2194 simpleCSVLogger2194;
   public static LimeLight limelightCamera;
   public static VisionData visionData;
   public static AutoChoosers autoChoosers;
@@ -99,13 +99,13 @@ public class Robot extends TimedRobot {
   }
 
   public static boolean useGainPrefs = true;
-  
+
   public static Trajectory activeLeftTrajectory;
   public static Trajectory activeRightTrajectory;
   public static String activeTrajName = "Empty";
   public static Trajectory[] leftBufferTrajectory = new Trajectory[8];
   public static Trajectory[] rightBufferTrajectory = new Trajectory[8];
-  public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5","7" };
+  public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5", "7" };
 
   public static int secondHatchIndex;
   public static String bufferTrajName = "Empty";
@@ -121,10 +121,8 @@ public class Robot extends TimedRobot {
   public static boolean trajectoryRunning;
   public static boolean buildOK;
 
-  public static String[] names = { "Step", "LeftCmd", "LeftFt", "RightCmd", "RightFt", "AngleCmd", "Angle",
-      "LeftSegVel", "left", "ActLeftVel", "RightSegVel", "right", "ActRightVel", "turn" };
-  public static String[] units = { "Number", "FT", "FT", "FT", "FT", "Deg", "Deg", "pct", "pct", "pct", "pct", "pct",
-      "pct", "pct" };
+  public static String names = "Step,LeftCmd,LeftFt,RightCmd,RightFt,AngleCmd,AngleAct, LeftSegVel,left,ActLeftVel,RightSegVel,right,ActRightVel,turn\n";
+  public static String units = "NumberFT,FT,FT,FT,FT,Deg,Deg,pct,pct,pct,pct,pct,pct,pct\n";
   public static boolean createTrajectoryRunFile = true;
   public static boolean createMultipleTrajectoryRunFile;
   public static double trajectoryX;
@@ -161,6 +159,11 @@ public class Robot extends TimedRobot {
   public static double sideAngle;
   public static boolean createDriveRunFile = true;
   public static boolean createElevatorRunFile = true;
+  public static boolean createVisionRunFile = true;
+  public static String driveLogName = "/U" + "/data_capturesDS19/Drive/Drive";
+  public static String driveUniqueLogName;
+  public static String trajectoryLogName = "/U" + "/data_capturesDS19/Trajectory/T";
+  public static String trajectoryUniqueLogName;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -176,7 +179,7 @@ public class Robot extends TimedRobot {
     pdp = new PowerPanel();
     gph = new GamePieceHandler();
     m_oi = new OI();
-    simpleCSVLogger = new SimpleCSVLogger();
+    simpleCSVLogger2194 = new SimpleCSVLogger2194();
     limelightCamera = new LimeLight();
     visionData = new VisionData();
     buildTrajectory = new BuildTrajectory();
@@ -209,7 +212,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("CreateTrajFile",false);    
+    SmartDashboard.putBoolean("CreateTrajFile", false);
     SmartDashboard.putData(driveTrain);
     SmartDashboard.putData(elevator);
     SmartDashboard.putData(robotRotate);
@@ -245,20 +248,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
     cancelAllAuto();
 
   }
 
   @Override
   public void disabledPeriodic() {
-    
-    readTrajFiles(); 
-    
-  if(m_oi.gamepad.getButtonStateA())
+
+    readTrajFiles();
+
+    if (m_oi.gamepad.getButtonStateA())
       setUpAutoStart();
   }
-
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
@@ -277,7 +279,7 @@ Scheduler.getInstance().run();
     Scheduler.getInstance().run();
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
-//setUpAutoStart();
+    // setUpAutoStart();
     //
 
     autonomousCommand[0].start();
@@ -318,8 +320,8 @@ Scheduler.getInstance().run();
     DriveTrain.gyroOffset = 0;
     PathfinderReverseNotifier.stopNotfier();
     PathfinderNotifier.stopNotfier();
-      cancelAllAuto();
-    
+    cancelAllAuto();
+
   }
 
   /**
@@ -349,7 +351,7 @@ Scheduler.getInstance().run();
       }
 
       if (doFileTrajectory) {
-        createTrajectoryRunFile= SmartDashboard.getBoolean("CreateTrajFile",false);
+        createTrajectoryRunFile = SmartDashboard.getBoolean("CreateTrajFile", true);
         useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
         testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
 
@@ -378,7 +380,7 @@ Scheduler.getInstance().run();
           faceField = true;
           invertY = true;
           break;
-          case 4:
+        case 4:
           testTrajectoryName = TrajDict.secondHatchPickupNames[1];
           towardsFieldTrajectory = false;
           faceField = true;
@@ -391,7 +393,7 @@ Scheduler.getInstance().run();
           invertY = true;
           break;
 
-          case 6:
+        case 6:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[0];
           towardsFieldTrajectory = true;
           faceField = false;
@@ -403,7 +405,7 @@ Scheduler.getInstance().run();
           faceField = false;
           invertY = true;
           break;
-          case 8:
+        case 8:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[1];
           towardsFieldTrajectory = true;
           faceField = false;
@@ -415,7 +417,7 @@ Scheduler.getInstance().run();
           faceField = false;
           invertY = true;
           break;
-          case 10:
+        case 10:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[2];
           towardsFieldTrajectory = true;
           faceField = false;
@@ -427,7 +429,7 @@ Scheduler.getInstance().run();
           faceField = false;
           invertY = true;
           break;
-          case 12:
+        case 12:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[3];
           towardsFieldTrajectory = true;
           faceField = false;
@@ -441,7 +443,7 @@ Scheduler.getInstance().run();
           break;
         case 14:
           testTrajectoryName = "StraightOne";
-          towardsFieldTrajectory =true;
+          towardsFieldTrajectory = true;
           faceField = true;
           invertY = false;
           break;
@@ -474,7 +476,7 @@ Scheduler.getInstance().run();
           SmartDashboard.putNumber("USBTime ", Timer.getFPGATimestamp() - startFiletime);
           activeTrajName = testTrajectoryName;
           SmartDashboard.putBoolean("FileOK", buildOK);
-          Robot.logName = activeTrajName;
+          logName = activeTrajName;
         } else
           buildOK = true;
         if (!buildOK) {
@@ -497,7 +499,7 @@ Scheduler.getInstance().run();
 
         if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
           new PickAndRunTrajectory(towardsFieldTrajectory, faceField, invertY).start();
-         else
+        else
           new PickAndRunTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
 
         trajectoryRunning = true;
@@ -570,6 +572,7 @@ Scheduler.getInstance().run();
     SmartDashboard.putString("FileChosen", chosenFileName);
     SmartDashboard.putString("FileInBuffer", bufferTrajName);
     SmartDashboard.putString("Active Trajectory", activeTrajName);
+    SmartDashboard.putBoolean("LogOpen", simpleCSVLogger2194.log_open);
     SmartDashboard.putBoolean("Invert Y", invertY);
     SmartDashboard.putBoolean("Face Field", faceField);
     SmartDashboard.putBoolean("TrakFileDo", doFileTrajectory);
@@ -578,6 +581,7 @@ Scheduler.getInstance().run();
     SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
     SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
     SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
+    createUniqueLogName();
   }
 
   public static void cancelAllAuto() {
@@ -628,7 +632,7 @@ Scheduler.getInstance().run();
     readThreadStartTime = Timer.getFPGATimestamp();
     if (startSettingPB && !readingRunning) {
 
-     startSettingsDone = false;
+      startSettingsDone = false;
       currentLoader = new LoadFiles();
       Thread reader = new Thread(currentLoader);
       reader.setDaemon(true);
@@ -707,5 +711,11 @@ Scheduler.getInstance().run();
       SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     }
 
+  }
+
+  public static void createUniqueLogName() {
+    double temp = (int) Timer.getFPGATimestamp();
+    driveUniqueLogName = driveLogName + String.valueOf(temp) + ".csv";
+    trajectoryUniqueLogName = trajectoryLogName + String.valueOf(temp);
   }
 }
