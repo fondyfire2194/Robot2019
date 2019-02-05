@@ -49,7 +49,7 @@ public class Pref {
     prefDict.put("PathKaRev", .02);
     prefDict.put("PathKtRev", .2);
 
-    prefDict.put("VisionKp", .01);
+    prefDict.put("VisionKp", .002);
     prefDict.put("JSTwistKp", .2);
 
     prefDict.put("ElevatorMMKf", .75);

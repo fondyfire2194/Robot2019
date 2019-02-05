@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 public class LogVisionData extends TimedCommand {
 	private double startTime;
 	private String names = "Time,LeftFt,RightFt,SpeedFPS,GyroYaw,BoxHt,BoxWdth,BoxDist,LLAngle,PerspAngle,TgtSen\n";
-	private String units = "mS,Ft,Ft,FPS,Deg,Px,Px,Ft,Deg,Deg,T/F\n";
+	private String units = "mS,Ft,Ft,FPS,Deg,Px,Px,Ft,Deg,Deg,T_F\n";
 	String output_dir = "/U" + "/data_capturesDS19/Vision/"; // USB drive is mounted to /U on roboRIO
 String name1 = "Vision";
 String name = output_dir + name1;
