@@ -1,6 +1,7 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 
 /**
@@ -58,7 +59,7 @@ public class RobotDriveToTarget extends Command {
 		doneAccelerating = false;
 		decelerate = false;
 		slowDownFeet = Pref.getPref("DriveSldnDist");
-
+        Robot.activeMotionComp=0.;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -86,19 +87,22 @@ public class RobotDriveToTarget extends Command {
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
-		inVisionRange = remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint;
+		inVisionRange = true;//remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint;
 
 		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
 		useGyroComp = !Robot.useVisionComp;
 
 		if (Robot.useVisionComp) {
 			Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
-			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
-		}
-		if (useGyroComp)
-			activeMotionComp = Robot.driveTrain.getCurrentComp();
+			// Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
-		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
+		}
+		// if (useGyroComp)	{
+		// 	activeMotionComp = Robot.driveTrain.getCurrentComp();
+		// }
+		SmartDashboard.putBoolean("Use Gyro Comp", useGyroComp);
+		SmartDashboard.putNumber("Use Comp",Robot.activeMotionComp);
+		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
 
 	}
 

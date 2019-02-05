@@ -101,6 +101,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
+    SmartDashboard.putNumber("UTurn",turnValue);
     leftDriveOut(throttleValue + turnValue);
     rightDriveOut(throttleValue - turnValue);
   }

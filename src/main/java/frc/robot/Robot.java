@@ -580,6 +580,8 @@ public class Robot extends TimedRobot {
   }
 
   private void robotUpdateStatus() {
+    double amc = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+SmartDashboard.putNumber("Uamc",amc);
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);

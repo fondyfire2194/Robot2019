@@ -68,7 +68,7 @@ public class OI {
         
         SmartDashboard.putData("Log Elevator", new LogElevatorData( 10));
  
-        SmartDashboard.putData("Log Vsion", new LogVisionData(5));
+        SmartDashboard.putData("Log Vsion", new LogVisionData(15));
 
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(0));
 
