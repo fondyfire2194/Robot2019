@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
+import frc.robot.commands.Motion.RobotOrientToVision;
 import frc.robot.commands.Motion.RobotDriveToTarget;
 import frc.robot.commands.Trajectories.PathfinderTrajectory;
 
@@ -27,6 +28,8 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.RobotRotate;
+import frc.robot.subsystems.RotateToVision;
+
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
 import jaci.pathfinder.Trajectory;
@@ -50,6 +53,7 @@ import frc.robot.LoadAllFiles;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
+  public static RotateToVision rotateToVision;
   public static Elevator elevator;
   public static GamePieceHandler gph;
   public static AirCompressor airCompressor;
@@ -84,6 +88,7 @@ public class Robot extends TimedRobot {
   public static boolean orientRunning;
   public static boolean reverseOrient;
   public static boolean doTeleopOrient;
+  public static boolean doTeleopVisionOrient;
   public static boolean doTeleopPosition;
 
   public static double targetPosition;
@@ -175,6 +180,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
+    rotateToVision = new RotateToVision();
     elevator = new Elevator();
 
     airCompressor = new AirCompressor();
@@ -351,6 +357,13 @@ public class Robot extends TimedRobot {
         new RobotOrient(angleTarget, orientRate, true, 30).start();
         doTeleopOrient = false;
       }
+      if (doTeleopVisionOrient) {
+
+        orientRate = SmartDashboard.getNumber("Orient Rate", .25);
+        new RobotOrientToVision(orientRate, 30).start();
+        doTeleopVisionOrient = false;
+      }
+
 
       if (doFileTrajectory) {
         createTrajectoryRunFile = SmartDashboard.getBoolean("CreateTrajFile", true);
@@ -581,7 +594,6 @@ public class Robot extends TimedRobot {
 
   private void robotUpdateStatus() {
     double amc = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
-SmartDashboard.putNumber("Uamc",amc);
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
 import frc.robot.Pref;
-import frc.robot.LimeLight;
+
 
 /**
  *
@@ -19,7 +19,7 @@ import frc.robot.LimeLight;
  */
 public class RobotOrientToVision extends Command {
 	private double mySpeed;
-	private double myAngle;
+
 	private double myTimeout;
 	private int passCount;
 	private boolean inPosition;
@@ -28,18 +28,18 @@ public class RobotOrientToVision extends Command {
 	private double rampIncrement;
 	private double startTime;
 	private double rampTime;
-	private double angleError;
+	
 	
 
-	public RobotOrientToVision(double angle, double speed, double timeout) {
+	public RobotOrientToVision( double speed, double timeout) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		requires(Robot.robotRotate);
+		requires(Robot.rotateToVision);
 		requires(Robot.driveTrain);
 
 
 		mySpeed = speed;
-		myAngle = angle;
+
 		myTimeout = timeout;
 	
 	}
@@ -58,22 +58,18 @@ public class RobotOrientToVision extends Command {
 		 * 
 		 * command = - 170, actual = 160 error = - 330 adjusted error 30 so error + 360
 		 */
-		angleError = myAngle - Robot.driveTrain.getGyroYaw();
-		if (angleError > 180)
-			angleError -= 360;
-		if (angleError < -180)
-			angleError = 360;
+
 
 		// if (angleError > 0)
-		double Kp = Pref.getPref("RotateKp");//Robot.prefs.getDouble("RotateKp",015);
-		double Ki = Pref.getPref("RotateKi");//Robot.prefs.getDouble("RotateKi",0.0001);
-		double Kd = Pref.getPref("RotateKd");//Robot.prefs.getDouble("RotateKd",01);
-		double Kf = Pref.getPref("RotateKf");//Robot.prefs.getDouble("RotateKf",.8);
+		double Kp = Pref.getPref("RotateKp");
+		double Ki = Pref.getPref("RotateKi");
+		double Kd = Pref.getPref("RotateKd");
+		double Kf = Pref.getPref("RotateKf");
 
-        Robot.robotRotate.setPIDF(Kp,0,Kd,Kf);
-		Robot.robotRotate.setMaxOut(Constants.MINIMUM_START_PCT);
-		Robot.robotRotate.setSetpoint(myAngle);
-		Robot.robotRotate.enablePID();
+        Robot.rotateToVision.setPIDF(Kp,0,Kd,Kf);
+		Robot.rotateToVision.setMaxOut(Constants.MINIMUM_START_PCT);
+		Robot.rotateToVision.setSetpoint(0.);
+		Robot.rotateToVision.enablePID();
 		Robot.orientRunning = true;
 		setTimeout(myTimeout);
 		currentMaxSpeed = Constants.MINIMUM_START_PCT;
@@ -97,15 +93,10 @@ public class RobotOrientToVision extends Command {
 				SmartDashboard.putNumber("Ramptime", rampTime);
 			}
 		}
-
-		double currentPIDOut = Robot.robotRotate.loopOutput;
-		if(Robot.limelightCamera.getIsTargetFound()){
-			double visionGain = currentPIDOut/Math.abs(Robot.limelightCamera.getdegRotationToTarget());
-			
-		}
-		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"));//Robot.prefs.getDouble("RotateIzone",2));
+		
+		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"));
 			Robot.robotRotate.getPIDController()
-					.setI(Pref.getPref("RotateKi"));//Robot.prefs.getDouble("RotateKi",.005));
+					.setI(Pref.getPref("RotateKi"));
 
 		
 		inPosition = Robot.limelightCamera.getIsTargetFound()&&Math.abs(Robot.limelightCamera.getdegRotationToTarget())<1;
@@ -115,7 +106,7 @@ public class RobotOrientToVision extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return passCount > 15 && (isTimedOut() || inPosition);
+		return !Robot.limelightCamera.getIsTargetFound() ||(passCount > 15 && (isTimedOut() || inPosition));
 	}
 
 	// Called once after isFinished returns true

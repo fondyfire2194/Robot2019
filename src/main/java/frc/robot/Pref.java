@@ -39,6 +39,11 @@ public class Pref {
     prefDict.put("RotateKd", .0);
     prefDict.put("RotateIzone", 3.);
 
+    prefDict.put("VisionRotKp", 0.2);
+    prefDict.put("VisionRotKi", .0001);
+    prefDict.put("VisionRotKd", .0);
+    prefDict.put("VisionRotIzone", 3.);
+
     prefDict.put("PathKp", 0.2);
     prefDict.put("PathKd", 0.);
     prefDict.put("PathKa", .02);
@@ -56,11 +61,7 @@ public class Pref {
     prefDict.put("ElevatorMMKp", .2);
     prefDict.put("ElevatorMMKi", 0.);
     prefDict.put("ElevatorMMKd", 0.);
-    // down values no longer used - same as up
-    prefDict.put("ElevatorDownMMKf", .4);
-    prefDict.put("ElevatorDownMMKp", .09);
-    prefDict.put("ElevatorDownMMKi", 0.);
-    prefDict.put("ElevatorDownMMKd", 0.);
+   
   }
   
 

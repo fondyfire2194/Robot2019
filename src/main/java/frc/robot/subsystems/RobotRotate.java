@@ -58,15 +58,10 @@ public class RobotRotate extends PIDSubsystem {
 		// setDefaultCommand(new MySpecialCommand());
 	}
 
-	boolean useVision = false;
-
 	@Override
 	protected double returnPIDInput() {
-		if (!useVision)
-			return Robot.driveTrain.getGyroYaw();
-		else
-			return Robot.limelightCamera.getdegRotationToTarget();
-			
+		return Robot.driveTrain.getGyroYaw();
+
 		// return Robot.mAnalogGyro.getAngle();
 		// return Robot.sensors.imu.getYaw();
 		// Return your input value for the PID loop
@@ -76,16 +71,8 @@ public class RobotRotate extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		 double temp = 0;
-		// if (Math.abs(output) < Constants.MINIMUM_START_PCT) {
-		// 	temp = Constants.MINIMUM_START_PCT;
-		// 	if (output < 0)
-		// 		temp = -temp;
-		// } else
-			temp = output;
-		loopOutput = temp;
-		Robot.driveTrain.leftDriveOut(temp);
-		Robot.driveTrain.rightDriveOut(-temp);
+		Robot.driveTrain.leftDriveOut(output);
+		Robot.driveTrain.rightDriveOut(-output);
 	}
 
 	public void enablePID() {
