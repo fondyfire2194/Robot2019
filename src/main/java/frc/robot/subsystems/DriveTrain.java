@@ -26,7 +26,7 @@ import frc.robot.Constants;
 import frc.robot.Pref;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.*;
-
+import frc.robot.commands.JoystickArcadeDriveVision;
 /**
  * Add your docs here.
  */
@@ -101,20 +101,25 @@ public class DriveTrain extends Subsystem {
   }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
-    SmartDashboard.putNumber("UTurn",turnValue);
     leftDriveOut(throttleValue + turnValue);
     rightDriveOut(throttleValue - turnValue);
   }
 
-  public void setDriveBrakeOn(boolean on) {
+  public void setLeftSideDriveBrakeOn(boolean on) {
     if (on) {
       leftTalonOne.setNeutralMode(NeutralMode.Brake);
       leftTalonTwo.setNeutralMode(NeutralMode.Brake);
-      rightTalonOne.setNeutralMode(NeutralMode.Brake);
-      rightTalonTwo.setNeutralMode(NeutralMode.Brake);
     } else {
       leftTalonOne.setNeutralMode(NeutralMode.Coast);
       leftTalonTwo.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
+  public void setRightSideDriveBrakeOn(boolean on) {
+    if (on) {
+      rightTalonOne.setNeutralMode(NeutralMode.Brake);
+      rightTalonTwo.setNeutralMode(NeutralMode.Brake);
+    } else {
       rightTalonOne.setNeutralMode(NeutralMode.Coast);
       rightTalonTwo.setNeutralMode(NeutralMode.Coast);
     }
@@ -161,6 +166,14 @@ public class DriveTrain extends Subsystem {
     return Pathfinder.boundHalfDegrees(imu.getYaw() + gyroOffset);
   }
 
+  public boolean isRotating() {
+    return imu.isRotating();
+  }
+
+  public boolean isMoving() {
+    return imu.isMoving();
+  }
+
   public double getGyroError() {
     return imu.getYaw() - driveStraightAngle;
   }
@@ -186,7 +199,16 @@ public class DriveTrain extends Subsystem {
       return 0;
   }
 
+  public boolean getLeftSideStalled() {
+    return leftTalonOne.getOutputCurrent() > Constants.DRIVE_SIDE_STALL_DETECT;
+  }
+
+  public boolean getRightSideStalled() {
+    return rightTalonOne.getOutputCurrent() > Constants.DRIVE_SIDE_STALL_DETECT;
+  }
+
   public void updateStatus() {
+
     SmartDashboard.putNumber("LeftEncoder", getLeftEncoderCount());
     SmartDashboard.putNumber("RightEncoder", getRightEncoderCount());
     SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());

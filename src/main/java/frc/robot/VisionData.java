@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import jaci.pathfinder.Pathfinder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Add your docs here.
@@ -17,6 +19,7 @@ public class VisionData {
     public double[] distanceFeet;
     public double[] validTargetAngles;
     private double atTargetAngle = 5.;
+    
 
     public VisionData() {
         boxHeight = new int[] { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90 };
@@ -49,20 +52,25 @@ public class VisionData {
 
     }
 
-    public double targetAngleError() {
+    
+    public double atTargetAngle() {
         double temp = 999;
-        for (int i = 0; i < validTargetAngles.length; i++) {
-            if(Math.abs(Robot.driveTrain.getGyroYaw() - validTargetAngles[i]) < atTargetAngle){ 
-                temp =  validTargetAngles[i] - Robot.driveTrain.getGyroYaw();
-                i=99; 
-            }               
+        boolean angleFound = false;
+        int i = -1;
+        while (i < validTargetAngles.length - 1 && !angleFound) {
+            i++;            
+            angleFound = Math.abs(Robot.driveTrain.getGyroYaw() - validTargetAngles[i]) < atTargetAngle;       
+            if (angleFound){
+                temp = validTargetAngles[i];
+                break;
+            }
         }
         return temp;
     }
 
     public void updateStatus() {
         SD.putN1("TargetDistance", calculateDistance());
-        SD.putN1("TargetAngleErr", targetAngleError());
+        
     }
 
 }

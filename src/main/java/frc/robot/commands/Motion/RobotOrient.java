@@ -48,7 +48,7 @@ public class RobotOrient extends Command {
 	@Override
 	protected void initialize() {
 
-		rampIncrement = mySpeed / 10;
+		rampIncrement = mySpeed ;
 		/*
 		 * error = command - actual. Needs adjusting if outside =+/-180
 		 * 
@@ -65,10 +65,10 @@ public class RobotOrient extends Command {
 			angleError = 360;
 
 		// if (angleError > 0)
-		double Kp = Pref.getPref("RotateKp");//Robot.prefs.getDouble("RotateKp",015);
-		double Ki = Pref.getPref("RotateKi");//Robot.prefs.getDouble("RotateKi",0.0001);
-		double Kd = Pref.getPref("RotateKd");//Robot.prefs.getDouble("RotateKd",01);
-		double Kf = Pref.getPref("RotateKf");//Robot.prefs.getDouble("RotateKf",.8);
+		double Kp = Pref.getPref("RotateKp");
+		double Ki = Pref.getPref("RotateKi");
+		double Kd = Pref.getPref("RotateKd");
+		double Kf = Pref.getPref("RotateKf");
 
         Robot.robotRotate.setPIDF(Kp,0,Kd,Kf);
 		Robot.robotRotate.setMaxOut(Constants.MINIMUM_START_PCT);
@@ -97,9 +97,9 @@ public class RobotOrient extends Command {
 				SmartDashboard.putNumber("Ramptime", rampTime);
 			}
 		}
-		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"));//Robot.prefs.getDouble("RotateIzone",2));
+		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"));
 			Robot.robotRotate.getPIDController()
-					.setI(Pref.getPref("RotateKi"));//Robot.prefs.getDouble("RotateKi",.005));
+					.setI(Pref.getPref("RotateKi"));
 
 		if (myAccuracy)
 			inPosition = Robot.robotRotate.inPosition();

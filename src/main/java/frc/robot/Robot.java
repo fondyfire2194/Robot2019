@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Motion.RobotOrientToVision;
 import frc.robot.commands.Motion.RobotDriveToTarget;
-import frc.robot.commands.Trajectories.PathfinderTrajectory;
+
 
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.Trajectories.PickAndRunTrajectory;
@@ -40,7 +40,7 @@ import frc.robot.LimeLight;
 import frc.robot.LoadFiles;
 import frc.robot.PathfinderNotifier;
 import frc.robot.PathfinderReverseNotifier;
-import frc.robot.LoadAllFiles;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -200,7 +200,7 @@ public class Robot extends TimedRobot {
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
     // Pref.deleteUnused();
-    Pref.addMissing();
+    // Pref.addMissing();
     SmartDashboard.putData(driveTrain);
 
     Timer.delay(.02);
@@ -210,7 +210,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putNumber("Orient Rate", orientRate);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("RevOrient", false);
+    SmartDashboard.putBoolean("ReverseOrient", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("ReverseTrajectory", false);
     Timer.delay(.02);
@@ -338,7 +338,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+
     Scheduler.getInstance().run();
+
     if (!DriverStation.getInstance().isFMSAttached()) {
       if (doTeleopPosition) {
         positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
@@ -558,6 +560,7 @@ public class Robot extends TimedRobot {
 
     case 1:
       driveTrain.updateStatus();
+      robotRotate.updateStatus();
       break;
 
     case 2:

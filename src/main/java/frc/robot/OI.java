@@ -29,6 +29,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.HatchPanels.*;
 import frc.robot.commands.Cargo.*;
+import frc.robot.commands.JoystickArcadeDriveVision;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -51,6 +52,8 @@ public class OI {
     public JoystickButton intakeCargo;
     public JoystickButton deliverCargo;
     public JoystickButton stopCargoHandler;
+
+    public JoystickButton driveToVision;
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
@@ -139,6 +142,10 @@ public class OI {
 
         stopCargoHandler = new JoystickButton(driverController, 5);
         stopCargoHandler.whenPressed(new StopCargoMotor());
+
+        driveToVision = new JoystickButton(driverController,1);
+        driveToVision.whileHeld(new JoystickArcadeDriveVision());
+        //(new JoystickArcadeDriveVision());
 
     }
 }

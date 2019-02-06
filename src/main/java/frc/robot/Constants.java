@@ -29,6 +29,7 @@ public class Constants {
   public final static double WHEELBASE_WIDTH = 2.1;
   public final static double MAX_TARGET_AREA = 6.5;
   public final static double ANGLE_APPROACH_LIMIT = 5.;
+  public final static double DRIVE_SIDE_STALL_DETECT = 20.;
 
   public static double ELEVATOR_LOWER_HATCH_INCHES = 19;
   public static double ELEVATOR_MID_ROCKET_INCHES = ELEVATOR_LOWER_HATCH_INCHES + 28;

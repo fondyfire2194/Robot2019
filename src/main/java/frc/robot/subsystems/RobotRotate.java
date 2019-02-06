@@ -117,7 +117,7 @@ public class RobotRotate extends PIDSubsystem {
 		SD.putN1("Setpoint", getSetpoint());
 		SmartDashboard.putBoolean("Rotate Enabled?", isEnabled());
 		SD.putN1("Orient Error", getError());
-
+SD.putN3("RROut",getPIDController().get());
 		SD.putN("Rot Output", loopOutput);
 
 	}

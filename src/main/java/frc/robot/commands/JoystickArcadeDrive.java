@@ -33,7 +33,8 @@ public class JoystickArcadeDrive extends Command {
       throttleValue = 0;
     if (Math.abs(turnValue) < .15)
       turnValue = 0;
-    Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Pref.getPref("JSTwistKp"));//Robot.prefs.getDouble("JSTwistKp", .2));
+    Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Pref.getPref("JSTwistKp"));// Robot.prefs.getDouble("JSTwistKp",
+                                                                                       // .2));
   }
 
   // Make this return true when this Command no longer needs to run execute()
