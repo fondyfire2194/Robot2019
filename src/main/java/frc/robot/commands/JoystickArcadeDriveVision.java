@@ -52,7 +52,7 @@ public class JoystickArcadeDriveVision extends Command {
     boolean robotOnLine = closestTargetAngle != 999;
 
     if (!robotOnLine) {
-
+      SmartDashboard.putBoolean("Locked",false);
       turnValue = Robot.m_oi.driverController.getTwist() * Pref.getPref("JSTwistKp");
 
       if (Math.abs(throttleValue) < .15) {
@@ -63,6 +63,7 @@ public class JoystickArcadeDriveVision extends Command {
       }
     }
     else {
+      SmartDashboard.putBoolean("Locked",true);
       turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
     }
     if (Robot.driveTrain.getLeftSideStalled()) {
@@ -110,6 +111,7 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.arcadeDrive(0, 0);
     Robot.driveTrain.setLeftSideDriveBrakeOn(true);
     Robot.driveTrain.setRightSideDriveBrakeOn(true);
+    SmartDashboard.putBoolean("Locked",false);
   }
 
   // Called when another command which requires one or more of the same
