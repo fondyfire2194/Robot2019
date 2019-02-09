@@ -42,7 +42,7 @@ public class PlaceHatchPanel extends CommandGroup {
     addSequential(new ReleaseHatchPanel());
     addSequential(new TimeDelay(.5));
     addSequential(new RetractHatchPanel());
-    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
+    addSequential(new SetAutoCommandDone(0));
 }
   }
   

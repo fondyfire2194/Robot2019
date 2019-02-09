@@ -34,8 +34,8 @@ public class ResetEncodersAndGyro extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addParallel(new ResetEncoders());
+    addSequential(new ResetEncoders());
     addSequential(new ResetGyro());
-    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
+    addSequential(new SetAutoCommandDone(0));
   }
 }

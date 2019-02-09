@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   public static Command autoTimeDelayCommand;
   double autoTimeDelaySeconds;
 
-  public static boolean[] autonomousCommandDone;
+  public static boolean autonomousCommandDone;
   public static String[] autonomousCommandName;
   public static int runningAutoCommand;;
 
@@ -138,9 +138,9 @@ public class Robot extends TimedRobot {
   public static boolean robotMoveReverse;
   int test99;
   public static boolean buildInProgress;
-  public static int startPositionSelected = 0;;
-  public static int secondHatchSelected = 0;;
-  public static boolean useUsb = true;
+  public static int startPositionSelected = 0;
+  public static int secondHatchSelected = 0;
+  public static boolean useUsb = false;
   public static boolean faceField;
   public static boolean invertY;
   public static boolean towardsFieldTrajectory;
@@ -171,6 +171,7 @@ public class Robot extends TimedRobot {
   public static String trajectoryUniqueLogName;
   public static boolean useVisionComp;
   public static double activeMotionComp;
+  public static boolean autoRunning;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -194,7 +195,6 @@ public class Robot extends TimedRobot {
 
     autoChoosers = new AutoChoosers();
     autonomousCommand = new Command[maxCommands];
-    autonomousCommandDone = new boolean[maxCommands];
     autonomousCommandName = new String[maxCommands];
 
     prefs = Preferences.getInstance();
@@ -216,7 +216,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("UseUSBTraj", true);
+    SmartDashboard.putBoolean("UseUSBTraj",false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
@@ -289,9 +289,12 @@ public class Robot extends TimedRobot {
     autoStartTime = Timer.getFPGATimestamp();
     // setUpAutoStart();
     //
-
+if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected() !=0){
     autonomousCommand[0].start();
+    runningAutoCommand=0;
+    autoRunning=true;
   }
+}
 
   /**
    * This function is called periodically during autonomous.
@@ -303,19 +306,25 @@ public class Robot extends TimedRobot {
     if (Math.abs(m_oi.gamepad.getRightY()) > .8 && Math.abs(m_oi.gamepad.getLeftY()) > .8) {
       cancelAllAuto();
     }
+      if(m_oi.gamepad.getButtonStateA())cycleHold=true;
+      if(m_oi.gamepad.getButtonStateB())cycleHold=false;
 
-    if (autonomousCommandDone[runningAutoCommand] && numberOfAutonomousCommands > runningAutoCommand) {
-      autonomousCommandDone[runningAutoCommand] = false;
+    if (autonomousCommandDone &&numberOfAutonomousCommands > runningAutoCommand) {
+    
       if (!cycleHold) {
+         autonomousCommandDone = false;
         runningAutoCommand++;
         if (autonomousCommand[runningAutoCommand] != null)
           autonomousCommand[runningAutoCommand].start();
         runningCommandName = autonomousCommandName[runningAutoCommand];
       }
     }
-    if (runningAutoCommand > numberOfAutonomousCommands)
+    if (runningAutoCommand > numberOfAutonomousCommands){
       numberOfAutonomousCommands = 0;
-
+      runningAutoCommand=0;
+      autonomousCommandDone=false;
+      autoRunning=false;
+    }
   }
 
   @Override
@@ -596,11 +605,12 @@ public class Robot extends TimedRobot {
   }
 
   private void robotUpdateStatus() {
-    double amc = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+    SmartDashboard.putBoolean("AutoStepDone",autonomousCommandDone);
+    SmartDashboard.putBoolean("AutoHold",cycleHold);
+    SmartDashboard.putBoolean("LAutoRng", autoRunning);
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
     SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
-    // SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
     SmartDashboard.putString("Running Cmd Name", runningCommandName);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
@@ -612,7 +622,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("LogOpen", simpleCSVLogger2194.log_open);
     SmartDashboard.putBoolean("Invert Y", invertY);
     SmartDashboard.putBoolean("Face Field", faceField);
-    SmartDashboard.putBoolean("TrakFileDo", doFileTrajectory);
+    SmartDashboard.putBoolean("TrajFileDo", doFileTrajectory);
 
     SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
     SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
@@ -622,6 +632,9 @@ public class Robot extends TimedRobot {
   }
 
   public static void cancelAllAuto() {
+    autoRunning=false;
+    autonomousCommandDone=false;
+    cycleHold=false;
     Scheduler.getInstance().run();
     Scheduler.getInstance().removeAll();
     driveTrain.leftDriveOut(0);
@@ -630,7 +643,7 @@ public class Robot extends TimedRobot {
 
       if (autonomousCommand[i] != null) {
         autonomousCommand[i].cancel();
-        autonomousCommandDone[i] = false;
+        
       }
 
     }

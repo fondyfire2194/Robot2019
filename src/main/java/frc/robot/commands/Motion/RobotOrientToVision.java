@@ -118,7 +118,7 @@ public class RobotOrientToVision extends Command {
 
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
-
+		Robot.autonomousCommandDone = true;
 	}
 
 	// Called when another command which requires one or more of the same

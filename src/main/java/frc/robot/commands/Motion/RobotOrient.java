@@ -116,8 +116,8 @@ public class RobotOrient extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		if (Robot.runningAutoCommand != 0)
-		Robot.autonomousCommandDone[Robot.runningAutoCommand] = true;
+	
+		Robot.autonomousCommandDone = true;
 		Robot.robotRotate.setMaxOut(Constants.MINIMUM_START_PCT);
 		Robot.robotRotate.disable();
 		Robot.orientRunning = false;

@@ -39,7 +39,7 @@ public class PickAndRunTrajectory extends CommandGroup {
     else
       addSequential((new PathfinderReverseTrajectory(faceField, invertY)));
       
-    if (Robot.runningAutoCommand != 0)
-      addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
+    
+      addSequential(new SetAutoCommandDone(0));
   }
 }

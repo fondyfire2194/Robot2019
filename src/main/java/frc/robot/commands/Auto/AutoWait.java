@@ -37,7 +37,7 @@ public class AutoWait extends TimedCommand {
   // Called once after timeout
   @Override
   protected void end() {
-    Robot.autonomousCommandDone[Robot.runningAutoCommand] = true;
+    Robot.autonomousCommandDone = true;
   }
 
   // Called when another command which requires one or more of the same

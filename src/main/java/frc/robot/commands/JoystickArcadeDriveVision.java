@@ -97,6 +97,8 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
 
+    SmartDashboard.putNumber("GyroErrorVision",Robot.visionData.getGyroAngleError());
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -112,6 +114,7 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.setLeftSideDriveBrakeOn(true);
     Robot.driveTrain.setRightSideDriveBrakeOn(true);
     SmartDashboard.putBoolean("Locked",false);
+    SmartDashboard.putNumber("GyroErrorVision",9999);
   }
 
   // Called when another command which requires one or more of the same

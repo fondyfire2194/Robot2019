@@ -60,7 +60,7 @@ public class AutoCommands {
         Robot.autonomousCommandName[number] = "Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanel();
-        Robot.autonomousCommandName[number] = "Place Panel";
+        Robot.autonomousCommandName[number] = "Place Panel";Robot.secondHatchIndex=1;
         return number;
     }
 
@@ -74,6 +74,7 @@ public class AutoCommands {
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanel();
         Robot.autonomousCommandName[number] = "Place Panel";
+        Robot.secondHatchIndex=0;
         return number;
 
     }
@@ -97,7 +98,7 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
         Robot.autonomousCommandName[number] = "Move To Load Station";
         number++;
-        Robot.autonomousCommand[5] = new PickUpHatchPanel();
+        Robot.autonomousCommand[number] = new PickUpHatchPanel();
         Robot.autonomousCommandName[number] = "Pick Up Panel";
         break;
         case 2:
@@ -108,7 +109,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
             Robot.autonomousCommandName[number] = "Move To Load Station";
             number++;
-            Robot.autonomousCommand[5] = new PickUpHatchPanel();
+            Robot.autonomousCommand[number] = new PickUpHatchPanel();
             Robot.autonomousCommandName[number] = "Pick Up Panel";
             break;
         }

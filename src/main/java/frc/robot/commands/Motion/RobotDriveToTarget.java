@@ -14,7 +14,6 @@ public class RobotDriveToTarget extends Command {
 	private double myTimeout;
 	private double rampIncrement;
 	private boolean useGyroComp;
-	
 
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
@@ -59,7 +58,7 @@ public class RobotDriveToTarget extends Command {
 		doneAccelerating = false;
 		decelerate = false;
 		slowDownFeet = Pref.getPref("DriveSldnDist");
-        Robot.activeMotionComp=0.;
+		Robot.activeMotionComp = 0.;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -87,7 +86,8 @@ public class RobotDriveToTarget extends Command {
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
-		inVisionRange = true;//remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint;
+		inVisionRange = true;// remainingFtToHatch < startOfVisionPoint && remainingFtToHatch >
+								// endOfVisionPoint;
 
 		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
 		useGyroComp = !Robot.useVisionComp;
@@ -97,11 +97,11 @@ public class RobotDriveToTarget extends Command {
 			// Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
 		}
-		// if (useGyroComp)	{
-		// 	activeMotionComp = Robot.driveTrain.getCurrentComp();
+		// if (useGyroComp) {
+		// activeMotionComp = Robot.driveTrain.getCurrentComp();
 		// }
 		SmartDashboard.putBoolean("Use Gyro Comp", useGyroComp);
-		SmartDashboard.putNumber("Use Comp",Robot.activeMotionComp);
+		SmartDashboard.putNumber("Use Comp", Robot.activeMotionComp);
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
 
 	}
@@ -116,8 +116,8 @@ public class RobotDriveToTarget extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		if (Robot.runningAutoCommand != 0)
-			Robot.autonomousCommandDone[Robot.runningAutoCommand] = true;
+
+		Robot.autonomousCommandDone = true;
 		Robot.driveTrain.arcadeDrive(0, 0);
 		Robot.isPositioning = false;
 		doneAccelerating = false;

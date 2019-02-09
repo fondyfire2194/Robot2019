@@ -7,9 +7,11 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.Pref;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JoystickArcadeDrive extends Command {
   public JoystickArcadeDrive() {
@@ -28,13 +30,15 @@ public class JoystickArcadeDrive extends Command {
   protected void execute() {
     double throttleValue = -Robot.m_oi.driverController.getY();
     double turnValue = Robot.m_oi.driverController.getTwist();
+    SmartDashboard.putNumber("Lout", throttleValue);
 
     if (Math.abs(throttleValue) < .15)
       throttleValue = 0;
     if (Math.abs(turnValue) < .15)
       turnValue = 0;
-    Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Pref.getPref("JSTwistKp"));// Robot.prefs.getDouble("JSTwistKp",
-                                                                                       // .2));
+    if (!Robot.autoRunning)
+      Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Pref.getPref("JSTwistKp"));// Robot.prefs.getDouble("JSTwistKp",
+                                                                                         // .2));
   }
 
   // Make this return true when this Command no longer needs to run execute()

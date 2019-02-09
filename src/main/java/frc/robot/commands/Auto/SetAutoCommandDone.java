@@ -8,6 +8,7 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 
@@ -32,8 +33,8 @@ public class SetAutoCommandDone extends InstantCommand {
   @Override
   protected void initialize() {
 
-    Robot.autonomousCommandDone[myNumber] = true;
-
+    Robot.autonomousCommandDone = true;
+SmartDashboard.putNumber("RGNr", myNumber);
   }
 
 }

@@ -8,6 +8,7 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
 /**
@@ -30,6 +31,7 @@ public class SetGyroOffset extends InstantCommand {
   @Override
   protected void initialize() {
     DriveTrain.gyroOffset = myOffsetAngle;
+    Robot.autonomousCommandDone=true;
   }
 
 }

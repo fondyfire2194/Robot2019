@@ -93,14 +93,17 @@ public class DriveTrain extends Subsystem {
   }
 
   public void leftDriveOut(double speed) {
+    SmartDashboard.putNumber("LDout",speed);
     leftTalonOne.set(ControlMode.PercentOutput, speed);
   }
 
   public void rightDriveOut(double speed) {
+    SmartDashboard.putNumber("Rout",speed);
     rightTalonOne.set(ControlMode.PercentOutput, speed);
   }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
+    SmartDashboard.putNumber("LDAout",throttleValue);
     leftDriveOut(throttleValue + turnValue);
     rightDriveOut(throttleValue - turnValue);
   }

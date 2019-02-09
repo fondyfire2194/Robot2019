@@ -43,7 +43,7 @@ public class PickUpHatchPanel extends CommandGroup {
     addSequential(new GripHatchPanel());
     addSequential(new TimeDelay(.5));
     addSequential(new RetractHatchPanel());
-    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
+    addSequential(new SetAutoCommandDone(0));
 }
   }
   

@@ -65,6 +65,10 @@ public class VisionData {
         }
         return temp;
     }
+    public double getGyroAngleError(){
+
+        return atTargetAngle - Robot.driveTrain.getGyroYaw();
+    }
 
     public void updateStatus() {
         SD.putN1("TargetDistance", calculateDistance());
