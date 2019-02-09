@@ -36,6 +36,6 @@ public class ResetEncodersAndGyro extends CommandGroup {
     // arm.
     addSequential(new ResetEncoders());
     addSequential(new ResetGyro());
-    addSequential(new SetAutoCommandDone(0));
+    addSequential(new SetAutoCommandDone());
   }
 }

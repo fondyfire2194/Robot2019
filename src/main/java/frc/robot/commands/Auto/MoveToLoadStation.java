@@ -31,6 +31,6 @@ public class MoveToLoadStation extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new RobotDriveToTarget(5, .5, false, 10));
-    addSequential(new SetAutoCommandDone(step));
+    addSequential(new SetAutoCommandDone());
   }
 }

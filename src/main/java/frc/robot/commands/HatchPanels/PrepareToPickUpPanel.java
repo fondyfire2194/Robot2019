@@ -36,7 +36,7 @@ public class PrepareToPickUpPanel extends CommandGroup {
     // arm.
     addParallel(new ReleaseHatchPanel());
     addParallel(new ExtendHatchPanel());
-    addSequential(new SetAutoCommandDone(Robot.runningAutoCommand));
+    addSequential(new SetAutoCommandDone());
 
   }
 }

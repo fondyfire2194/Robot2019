@@ -20,13 +20,13 @@ public class SetAutoCommandDone extends InstantCommand {
   /**
    * Add your docs here.
    */
-  int myNumber;
-  public SetAutoCommandDone(int number) {
+  
+  public SetAutoCommandDone() {
    
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myNumber = number;
+  
   }
 
   // Called once when the command executes
@@ -34,7 +34,7 @@ public class SetAutoCommandDone extends InstantCommand {
   protected void initialize() {
 
     Robot.autonomousCommandDone = true;
-SmartDashboard.putNumber("RGNr", myNumber);
+
   }
 
 }

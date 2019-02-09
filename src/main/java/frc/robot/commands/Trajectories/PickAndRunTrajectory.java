@@ -40,6 +40,6 @@ public class PickAndRunTrajectory extends CommandGroup {
       addSequential((new PathfinderReverseTrajectory(faceField, invertY)));
       
     
-      addSequential(new SetAutoCommandDone(0));
+      addSequential(new SetAutoCommandDone());
   }
 }
