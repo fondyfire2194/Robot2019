@@ -48,32 +48,33 @@ public class AutoCommands {
     public static int setOutsideStart() {
         int number = 1;
         Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
-        Robot.autonomousCommandName[number] = "Reset Encoders and Gyro";
+        Robot.autonomousCommandName[number] = "1 - Reset Encoders and Gyro";
         number++;
         Robot.autonomousCommand[number] = new PickAndRunTrajectory(true, false, Robot.invertY);
-        Robot.autonomousCommandName[number] = "Trajectory To CS2 Line";
+        Robot.autonomousCommandName[number] = "2 - Trajectory To CS2 Line";
         number++;
         Robot.autonomousCommand[number] = new SetGyroOffset(180);
-        Robot.autonomousCommandName[number] = "Set Gyro Offset";
+        Robot.autonomousCommandName[number] = "3 - Set Gyro Offset";
         number++;
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-        Robot.autonomousCommandName[number] = "Drive To Cargo Ship";
+        Robot.autonomousCommandName[number] = "4 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanel();
-        Robot.autonomousCommandName[number] = "Place Panel";Robot.secondHatchIndex=1;
+        Robot.autonomousCommandName[number] = "5 - Place Panel";
+        Robot.secondHatchIndex=1;
         return number;
     }
 
     public static int setMiddleStart() {
         int number = 1;
         Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
-        Robot.autonomousCommandName[number] = "Reset Encoders and Gyro";
+        Robot.autonomousCommandName[number] = "1 - Reset Encoders and Gyro";
         number++;
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-        Robot.autonomousCommandName[number] = "Drive To Cargo Ship";
+        Robot.autonomousCommandName[number] = "2 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanel();
-        Robot.autonomousCommandName[number] = "Place Panel";
+        Robot.autonomousCommandName[number] = "3 - Place Panel";
         Robot.secondHatchIndex=0;
         return number;
 
@@ -83,34 +84,39 @@ public class AutoCommands {
 
     public static int pickUpSecondHatch(int start, int indexStart) {
         int number = indexStart + 1;
-        Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchIndex);
-        Robot.autonomousCommandName[number] = "Set Move to Load Station Trajectory";
-        number++;
-        Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
-        Robot.autonomousCommandName[number] = "Move to Load Station Trajectory";
-        number++;
-        switch (start) {
+         switch (start) {
         case 1:
         case 4:
+        SmartDashboard.putNumber("WTH",Robot.secondHatchIndex);
+        Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchIndex-1);
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Set Trajectory To CS";
+        number++;
+
+        Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Move to Load Station Trajectory";
+        number++;
         Robot.autonomousCommand[number] = new RobotOrient(180, .5, true, 3);
-        Robot.autonomousCommandName[number] = "Orient to Load Station";
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Orient to Load Station";
         number++;
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-        Robot.autonomousCommandName[number] = "Move To Load Station";
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Move To Load Station";
         number++;
         Robot.autonomousCommand[number] = new PickUpHatchPanel();
-        Robot.autonomousCommandName[number] = "Pick Up Panel";
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Pick Up Panel";
         break;
         case 2:
         case 3:
+            Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
+            Robot.autonomousCommandName[number] = String.valueOf(number) +" - Move to Load Station Trajectory";
+            number++;
             Robot.autonomousCommand[number] = new RobotOrient(180, .5, true, 3);
-            Robot.autonomousCommandName[number] = "Orient to Load Station";
+            Robot.autonomousCommandName[number] = String.valueOf(number) +" - Orient to Load Station";
             number++;
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-            Robot.autonomousCommandName[number] = "Move To Load Station";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Move To Load Station";
             number++;
             Robot.autonomousCommand[number] = new PickUpHatchPanel();
-            Robot.autonomousCommandName[number] = "Pick Up Panel";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Pick Up Panel";
             break;
         }
         return number;
@@ -123,10 +129,10 @@ public class AutoCommands {
         int number = indexStart;
         number++;
         Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchIndex + 1);
-        Robot.autonomousCommandName[number] = "Set Trajectory To CS";
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Set Trajectory To CS";
         number++;
         Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
-        Robot.autonomousCommandName[number] = "Trajectory To CS";
+        Robot.autonomousCommandName[number] = String.valueOf(number) +" - Trajectory To CS";
         number++;
 
         switch (hatchSelected) {
@@ -134,28 +140,28 @@ public class AutoCommands {
         case 1:
         case 2:
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, .5, true, 2);
-            Robot.autonomousCommandName[number] = "Orient To CS";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Orient To CS";
             number++;
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-            Robot.autonomousCommandName[number] = "Drive To CS";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Drive To CS";
             number++;
             Robot.autonomousCommand[number] = new PlaceHatchPanel();
-            Robot.autonomousCommandName[number] = "Place Panel";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Place Panel";
             break;
         case 3:
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-            Robot.autonomousCommandName[number] = "Drive To CS";
+            Robot.autonomousCommandName[number] = String.valueOf(number) +" - Drive To CS";
             number++;
             Robot.autonomousCommand[number] = new PlaceHatchPanel();
-            Robot.autonomousCommandName[number] = "Place Panel";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Place Panel";
             break;
 
         case 4:
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
-            Robot.autonomousCommandName[number] = "Drive To CS";
+            Robot.autonomousCommandName[number] =String.valueOf(number) + " - Drive To CS";
             number++;
             Robot.autonomousCommand[number] = new PlaceHatchPanel();
-            Robot.autonomousCommandName[number] = "Place Panel";
+            Robot.autonomousCommandName[number] = String.valueOf(number) +" - Place Panel";
 
         }
         return number;

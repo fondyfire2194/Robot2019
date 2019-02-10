@@ -34,6 +34,13 @@ public class Constants {
   public static double ELEVATOR_LOWER_HATCH_INCHES = 19;
   public static double ELEVATOR_MID_ROCKET_INCHES = ELEVATOR_LOWER_HATCH_INCHES + 28;
   public static double ELEVATOR_TOP_ROCKET_INCHES = ELEVATOR_MID_ROCKET_INCHES + 28;
+  public static double ELEVATOR_CARGO_PICKUP_INCHES = 12;
+  public static double ELEVATOR_LOWER_ROCKET_CARGO_INCHES =  28;
+  public static double ELEVATOR__MID_ROCKET_CARGO_INCHES =  28;
+  public static double ELEVATOR_UPPER_ROCKET_CARGO_INCHES =  28;
+
+
+
   public static double ELEVATOR_POSITION_RATE = 40;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
   // (in/sec) * enc Counts/in = enc counts / sec then divide by 10 for 100ms

@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
   public static BuildTrajectory buildTrajectory;
   public static int maxCommands = 20;
   public static Command[] autonomousCommand;
-
+public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;
   double autoTimeDelaySeconds;
 
@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
   public static boolean useVisionComp;
   public static double activeMotionComp;
   public static boolean autoRunning;
-
+private double commandStartTime;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -196,6 +196,7 @@ public class Robot extends TimedRobot {
     autoChoosers = new AutoChoosers();
     autonomousCommand = new Command[maxCommands];
     autonomousCommandName = new String[maxCommands];
+    
 
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
@@ -287,6 +288,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
+    commandStartTime = autoStartTime;
     // setUpAutoStart();
     //
 if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected() !=0){
@@ -310,13 +312,19 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
       if(m_oi.gamepad.getButtonStateB())cycleHold=false;
 
     if (autonomousCommandDone &&numberOfAutonomousCommands > runningAutoCommand) {
-    
+      
+    commandTimes[runningAutoCommand] = Timer.getFPGATimestamp()-commandStartTime;
+       SmartDashboard.putNumber("CMDTime" + String.valueOf(runningAutoCommand),commandTimes[runningAutoCommand]); 
       if (!cycleHold) {
          autonomousCommandDone = false;
+   
+         commandStartTime =Timer.getFPGATimestamp();
         runningAutoCommand++;
         if (autonomousCommand[runningAutoCommand] != null)
           autonomousCommand[runningAutoCommand].start();
         runningCommandName = autonomousCommandName[runningAutoCommand];
+    cycleHold = true;
+      
       }
     }
     if (runningAutoCommand > numberOfAutonomousCommands){

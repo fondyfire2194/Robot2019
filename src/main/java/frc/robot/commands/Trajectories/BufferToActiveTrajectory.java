@@ -29,6 +29,7 @@ public class BufferToActiveTrajectory extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
+    SmartDashboard.putNumber("MyN",myNumber);
     Robot.activeLeftTrajectory= Robot.leftBufferTrajectory[myNumber];
      Robot.activeRightTrajectory = Robot.rightBufferTrajectory[myNumber];
      Robot.activeTrajectoryGains = Robot.bufferTrajectoryGains[myNumber];

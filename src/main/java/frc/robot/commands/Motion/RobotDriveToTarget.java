@@ -50,6 +50,7 @@ public class RobotDriveToTarget extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
+		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
 		Robot.isPositioning = true;
