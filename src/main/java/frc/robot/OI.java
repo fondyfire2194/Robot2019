@@ -80,7 +80,7 @@ public class OI {
         SmartDashboard.putData("Toggle View", new ToggleCamMode());
         SmartDashboard.putData("Toggle Stream", new ToggleStreamMode());
 
-        SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(2));
+        SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(1));
 
         SmartDashboard.putData("Log Drive", new LogDriveData(10));
 

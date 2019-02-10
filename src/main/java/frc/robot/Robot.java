@@ -19,7 +19,6 @@ import frc.robot.commands.Motion.RobotOrient;
 import frc.robot.commands.Motion.RobotOrientToVision;
 import frc.robot.commands.Motion.RobotDriveToTarget;
 
-
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.Trajectories.PickAndRunTrajectory;
 import frc.robot.BuildTrajectory;
@@ -40,7 +39,7 @@ import frc.robot.LimeLight;
 import frc.robot.LoadFiles;
 import frc.robot.PathfinderNotifier;
 import frc.robot.PathfinderReverseNotifier;
-
+import frc.robot.LimelightControlMode.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -68,7 +67,7 @@ public class Robot extends TimedRobot {
   public static BuildTrajectory buildTrajectory;
   public static int maxCommands = 20;
   public static Command[] autonomousCommand;
-public static double[] commandTimes = new double[maxCommands];
+  public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;
   double autoTimeDelaySeconds;
 
@@ -122,9 +121,12 @@ public static double[] commandTimes = new double[maxCommands];
   public static double[][] bufferTrajectoryGains = new double[6][4];
 
   public static boolean revTraj;
+
   public static boolean doFileTrajectory;
   public static boolean trajectoryRunning;
   public static boolean buildOK;
+  public static int currentTrajectorySegment;
+  public static boolean trajectoryPulse;
 
   public static String names = "Step,LeftCmd,LeftFt,RightCmd,RightFt,AngleCmd,AngleAct, LeftSegVel,left,ActLeftVel,RightSegVel,right,ActRightVel,turn\n";
   public static String units = "NumberFT,FT,FT,FT,FT,Deg,Deg,pct,pct,pct,pct,pct,pct,pct\n";
@@ -172,7 +174,8 @@ public static double[] commandTimes = new double[maxCommands];
   public static boolean useVisionComp;
   public static double activeMotionComp;
   public static boolean autoRunning;
-private double commandStartTime;
+  private double commandStartTime;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -196,7 +199,6 @@ private double commandStartTime;
     autoChoosers = new AutoChoosers();
     autonomousCommand = new Command[maxCommands];
     autonomousCommandName = new String[maxCommands];
-    
 
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
@@ -217,7 +219,7 @@ private double commandStartTime;
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("UseUSBTraj",false);
+    SmartDashboard.putBoolean("UseUSBTraj", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
@@ -290,13 +292,14 @@ private double commandStartTime;
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
     // setUpAutoStart();
+ 
     //
-if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected() !=0){
-    autonomousCommand[0].start();
-    runningAutoCommand=0;
-    autoRunning=true;
+    if (autonomousCommand[0] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
+      autonomousCommand[0].start();
+      runningAutoCommand = 0;
+      autoRunning = true;
+    }
   }
-}
 
   /**
    * This function is called periodically during autonomous.
@@ -308,30 +311,45 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
     if (Math.abs(m_oi.gamepad.getRightY()) > .8 && Math.abs(m_oi.gamepad.getLeftY()) > .8) {
       cancelAllAuto();
     }
-      if(m_oi.gamepad.getButtonStateA())cycleHold=true;
-      if(m_oi.gamepad.getButtonStateB())cycleHold=false;
+    if (m_oi.gamepad.getButtonStateA())
+      cycleHold = true;
+    if (m_oi.gamepad.getButtonStateB())
+      cycleHold = false;
 
-    if (autonomousCommandDone &&numberOfAutonomousCommands > runningAutoCommand) {
-      
-    commandTimes[runningAutoCommand] = Timer.getFPGATimestamp()-commandStartTime;
-       SmartDashboard.putNumber("CMDTime" + String.valueOf(runningAutoCommand),commandTimes[runningAutoCommand]); 
+    if (autonomousCommandDone && numberOfAutonomousCommands > runningAutoCommand) {
+
+      commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
+      SmartDashboard.putNumber("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
       if (!cycleHold) {
-         autonomousCommandDone = false;
-   
-         commandStartTime =Timer.getFPGATimestamp();
+        autonomousCommandDone = false;
+        commandStartTime = Timer.getFPGATimestamp();
         runningAutoCommand++;
         if (autonomousCommand[runningAutoCommand] != null)
           autonomousCommand[runningAutoCommand].start();
         runningCommandName = autonomousCommandName[runningAutoCommand];
-    cycleHold = true;
-      
       }
     }
-    if (runningAutoCommand > numberOfAutonomousCommands){
+      if ((startPositionSelected == 1 || startPositionSelected == 4) && runningAutoCommand == 2 && trajectoryPulse) {
+        limelightCamera.setLEDMode(LedMode.kforceOn);
+      
+      }
+      if ((startPositionSelected == 1 || startPositionSelected == 4) && secondHatchSelected == 3
+          && runningAutoCommand == 12 && trajectoryPulse) {
+        limelightCamera.setLEDMode(LedMode.kforceOn);
+      }
+      
+      if ((startPositionSelected == 2 || startPositionSelected == 3) && secondHatchSelected == 3
+          && runningAutoCommand == 9 && trajectoryPulse) {
+        limelightCamera.setLEDMode(LedMode.kforceOn);
+        SmartDashboard.putNumber("SPPS1",startPositionSelected);
+      }
+
+    
+    if (runningAutoCommand > numberOfAutonomousCommands) {
       numberOfAutonomousCommands = 0;
-      runningAutoCommand=0;
-      autonomousCommandDone=false;
-      autoRunning=false;
+      runningAutoCommand = 0;
+      autonomousCommandDone = false;
+      autoRunning = false;
     }
   }
 
@@ -354,7 +372,6 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
    */
   @Override
   public void teleopPeriodic() {
-
 
     Scheduler.getInstance().run();
 
@@ -382,7 +399,6 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
         new RobotOrientToVision(orientRate, 30).start();
         doTeleopVisionOrient = false;
       }
-
 
       if (doFileTrajectory) {
         createTrajectoryRunFile = SmartDashboard.getBoolean("CreateTrajFile", true);
@@ -539,6 +555,7 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
         Robot.logName = activeTrajName;
+
       }
 
       if ((doFileTrajectory && buildOK)) {
@@ -613,8 +630,10 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
   }
 
   private void robotUpdateStatus() {
-    SmartDashboard.putBoolean("AutoStepDone",autonomousCommandDone);
-    SmartDashboard.putBoolean("AutoHold",cycleHold);
+    SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
+    SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
+    SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
+    SmartDashboard.putBoolean("AutoHold", cycleHold);
     SmartDashboard.putBoolean("LAutoRng", autoRunning);
     SmartDashboard.putBoolean("BuildInProg", buildInProgress);
     SmartDashboard.putBoolean("BuildOK", buildOK);
@@ -640,9 +659,9 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
   }
 
   public static void cancelAllAuto() {
-    autoRunning=false;
-    autonomousCommandDone=false;
-    cycleHold=false;
+    autoRunning = false;
+    autonomousCommandDone = false;
+    cycleHold = false;
     Scheduler.getInstance().run();
     Scheduler.getInstance().removeAll();
     driveTrain.leftDriveOut(0);
@@ -651,7 +670,7 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
 
       if (autonomousCommand[i] != null) {
         autonomousCommand[i].cancel();
-        
+
       }
 
     }
@@ -705,7 +724,7 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
       SD.putN4("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
       startSettingsDone = true;
       wasRunning = false;
-
+      // setUpAutoStart();
     }
   }
 
@@ -721,7 +740,7 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
 
     autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
 
-    autonomousCommandName[0] = "Time Delay";
+    autonomousCommandName[0] = "0- Time Delay";
     if (!fileError && startPositionSelected != 0) {
 
       switch (startPositionSelected) {
@@ -734,11 +753,13 @@ if(autonomousCommand[0]!=null && AutoChoosers.startPositionChooser.getSelected()
         invertY = false;
         sideAngle = 0;
         numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+        limelightCamera.setLEDMode(LedMode.kforceOn);
         break;
       case 3:
         invertY = true;
         sideAngle = 180;
         numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+        limelightCamera.setLEDMode(LedMode.kforceOn);
         break;
       case 4:
         invertY = true;

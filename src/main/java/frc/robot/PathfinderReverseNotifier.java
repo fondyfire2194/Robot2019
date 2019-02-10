@@ -76,6 +76,7 @@ public class PathfinderReverseNotifier {
 	 */
 	private static void runReverseTrajectory() {
 		passCounter--;
+		Robot.currentTrajectorySegment = activeTrajectoryLength-1- passCounter;
 		double left = 0;
 		double right = 0;
 		double leftPct = 0;

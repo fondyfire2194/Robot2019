@@ -3,7 +3,7 @@ package frc.robot.commands.Motion;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
-
+import frc.robot.LimelightControlMode.*;
 /**
  * use a trajectory. Specify the trajectory segment where vision should take the
  * place of gyro
@@ -50,6 +50,7 @@ public class RobotDriveToTarget extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
+		Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
 		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
@@ -126,7 +127,7 @@ public class RobotDriveToTarget extends Command {
 		Robot.robotRotate.setSetpoint(startingTargetAngle);
 		currentMaxSpeed = 0;
 		inVisionRange = false;
-
+		Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
 	}
 
 	// Called when another command which requires one or more of the same

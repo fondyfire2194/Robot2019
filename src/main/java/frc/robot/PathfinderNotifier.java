@@ -98,7 +98,7 @@ public class PathfinderNotifier {
 		 *
 		 */
 		segmentCounter++;
-
+        Robot.currentTrajectorySegment = segmentCounter;
 		double left = 0;
 		double right = 0;
 		double leftPct = 0;

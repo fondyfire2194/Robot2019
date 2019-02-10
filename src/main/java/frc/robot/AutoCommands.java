@@ -88,11 +88,10 @@ public class AutoCommands {
         case 1:
         case 4:
         SmartDashboard.putNumber("WTH",Robot.secondHatchIndex);
-        Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchIndex-1);
+        Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchIndex);
         Robot.autonomousCommandName[number] = String.valueOf(number) +" - Set Trajectory To CS";
         number++;
-
-        Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
+       Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
         Robot.autonomousCommandName[number] = String.valueOf(number) +" - Move to Load Station Trajectory";
         number++;
         Robot.autonomousCommand[number] = new RobotOrient(180, .5, true, 3);

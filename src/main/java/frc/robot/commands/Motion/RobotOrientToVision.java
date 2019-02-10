@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants;
 import frc.robot.Pref;
-
+import frc.robot.LimelightControlMode.*;
 
 /**
  *
@@ -47,7 +47,7 @@ public class RobotOrientToVision extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-
+		Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
 		rampIncrement = mySpeed / 10;
 		/*
 		 * error = command - actual. Needs adjusting if outside =+/-180
@@ -115,7 +115,7 @@ public class RobotOrientToVision extends Command {
 		Robot.robotRotate.setMaxOut(Constants.MINIMUM_START_PCT);
 		Robot.robotRotate.disable();
 		Robot.orientRunning = false;
-
+		Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
 		Robot.autonomousCommandDone = true;
