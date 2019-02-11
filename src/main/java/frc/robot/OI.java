@@ -67,6 +67,8 @@ public class OI {
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
     public Gamepad gamepad_test = new Gamepad(RobotMap.OI_TEST_CONTROLLER);
+
+
     public OI() {
         Timer.delay(.02);
 
@@ -158,14 +160,11 @@ public class OI {
         presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
         presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
 
+        if(gamepad_test.getDPadLeft()) new PickUpCargo(.5).start();
 
-        intakeCargo = new JoystickButton(driverController, 3);
-        intakeCargo.whenPressed(new PickUpCargo(.5));
+        if(gamepad_test.getDPadRight()) new DeliverCargo(.5).start();
 
-        deliverCargo = new JoystickButton(driverController, 4);
-        deliverCargo.whenPressed(new DeliverCargo(.5));
-
-        stopCargoHandler = new JoystickButton(driverController, 5);
+        stopCargoHandler = gamepad_test.getBackButton();
         stopCargoHandler.whenPressed(new StopCargoMotor());
 
         driveToVision = new JoystickButton(driverController,1);
