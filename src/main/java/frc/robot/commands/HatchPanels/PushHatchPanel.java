@@ -8,25 +8,32 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-
 import frc.robot.Robot;
+
 /**
  * Add your docs here.
  */
-public class ReleaseHatchPanel extends InstantCommand {
+public class PushHatchPanel extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ReleaseHatchPanel() {
+  boolean myPush;
+
+  public PushHatchPanel(boolean push) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myPush = push;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.releaseHatchPanel();
+    if (myPush) {
+      Robot.gph.pushHatchPanel();
+    } else {
+      Robot.gph.retractPusher();
+    }
   }
 
 }

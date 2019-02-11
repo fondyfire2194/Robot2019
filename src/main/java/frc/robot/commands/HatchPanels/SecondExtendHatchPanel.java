@@ -13,20 +13,27 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class RetractHatchPanel extends InstantCommand {
+public class SecondExtendHatchPanel extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public RetractHatchPanel() {
+  boolean myExtend;
+
+  public SecondExtendHatchPanel(boolean extend) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myExtend = extend;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.retractHatchPanel();
+    if (myExtend) {
+      Robot.gph.secondExtendHatchPanel();
+    } else {
+      Robot.gph.secondRetractHatchPanel();
+    }
   }
 
 }

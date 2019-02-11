@@ -35,7 +35,7 @@ public class RobotMap {
 
   public static final int OI_DRIVER_CONTROLLER = 0;
   public static final int OI_CO_DRIVER_CONTROLLER = 1;
-
+  public static final int OI_TEST_CONTROLLER = 2;
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:
   // public static int rangefinderPort = 1;

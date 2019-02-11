@@ -4,7 +4,6 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.SD;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -16,16 +15,24 @@ public class GamePieceHandler extends Subsystem {
 	public static TalonSRX cargoMotor;
 	public DoubleSolenoid hatchCoverGripper;
 	public DoubleSolenoid hatchCoverExtend;
+	public DoubleSolenoid hatchCoverSecondExtend;
+	public DoubleSolenoid hatchCoverPusher;
 
-public GamePieceHandler(){
+	public GamePieceHandler() {
 
-   cargoMotor= new TalonSRX(RobotMap.CARGO_MOTOR);
+		cargoMotor = new TalonSRX(RobotMap.CARGO_MOTOR);
 
-   hatchCoverGripper = new DoubleSolenoid(1,0);
-   hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
+		hatchCoverGripper = new DoubleSolenoid(1, 0);
+		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 
-   hatchCoverExtend = new DoubleSolenoid(2,3);
-   hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+		hatchCoverExtend = new DoubleSolenoid(2, 3);
+		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+
+		hatchCoverSecondExtend = new DoubleSolenoid(4, 5);
+		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
+
+		hatchCoverPusher = new DoubleSolenoid(6, 7);
+		hatchCoverPusher.set(DoubleSolenoid.Value.kForward);
 
 	}
 
@@ -33,38 +40,52 @@ public GamePieceHandler(){
 	// here. Call these from Commands.
 
 	public void initDefaultCommand() {
-		
 
 	}
 
-	public void stopCargoMotor(){
-	    cargoMotor.set(ControlMode.PercentOutput, 0);	
+	public void stopCargoMotor() {
+		cargoMotor.set(ControlMode.PercentOutput, 0);
 	}
-	
+
 	public void pickUpCargo(double speed) {
-		cargoMotor.set(ControlMode.PercentOutput, speed);	
+		cargoMotor.set(ControlMode.PercentOutput, speed);
 	}
 
 	public void deliverCargo(double speed) {
-		cargoMotor.set(ControlMode.PercentOutput, -speed);	
+		cargoMotor.set(ControlMode.PercentOutput, -speed);
 	}
-
 
 	public void gripHatchPanel() {
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 	}
+
 	public void releaseHatchPanel() {
 		hatchCoverGripper.set(DoubleSolenoid.Value.kReverse);
 	}
 
 	public void extendHatchPanel() {
-	hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
-
+		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
 	}
+
 	public void retractHatchPanel() {
 		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
 	}
 
+	public void secondExtendHatchPanel() {
+		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
+	}
+
+	public void secondRetractHatchPanel() {
+		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+	}
+
+	public void pushHatchPanel() {
+		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
+	}
+
+	public void retractPusher() {
+		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+	}
 
 	public void updateStatus() {
 	}

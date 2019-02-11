@@ -59,7 +59,7 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
         Robot.autonomousCommandName[number] = "4 - Drive To Cargo Ship";
         number++;
-        Robot.autonomousCommand[number] = new PlaceHatchPanel();
+        Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
         Robot.autonomousCommandName[number] = "5 - Place Panel";
         Robot.secondHatchIndex=1;
         return number;
@@ -73,7 +73,7 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
         Robot.autonomousCommandName[number] = "2 - Drive To Cargo Ship";
         number++;
-        Robot.autonomousCommand[number] = new PlaceHatchPanel();
+        Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
         Robot.autonomousCommandName[number] = "3 - Place Panel";
         Robot.secondHatchIndex=0;
         return number;
@@ -144,14 +144,14 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
             Robot.autonomousCommandName[number] =String.valueOf(number) + " - Drive To CS";
             number++;
-            Robot.autonomousCommand[number] = new PlaceHatchPanel();
+            Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
             Robot.autonomousCommandName[number] =String.valueOf(number) + " - Place Panel";
             break;
         case 3:
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) +" - Drive To CS";
             number++;
-            Robot.autonomousCommand[number] = new PlaceHatchPanel();
+            Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
             Robot.autonomousCommandName[number] =String.valueOf(number) + " - Place Panel";
             break;
 
@@ -159,7 +159,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
             Robot.autonomousCommandName[number] =String.valueOf(number) + " - Drive To CS";
             number++;
-            Robot.autonomousCommand[number] = new PlaceHatchPanel();
+            Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
             Robot.autonomousCommandName[number] = String.valueOf(number) +" - Place Panel";
 
         }

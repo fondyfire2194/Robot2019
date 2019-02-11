@@ -18,16 +18,26 @@ public class GripHatchPanel extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public GripHatchPanel() {
+  boolean myGrip;
+  public GripHatchPanel(boolean grip) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myGrip=grip;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
+    if(myGrip){
     Robot.gph.gripHatchPanel();
+    }
+    else{
+      Robot.gph.releaseHatchPanel();
+    }
+    
+
+    
   }
 
 }

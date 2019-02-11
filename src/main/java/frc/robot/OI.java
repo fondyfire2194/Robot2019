@@ -44,10 +44,19 @@ public class OI {
 
     public JoystickButton captureHatchCover;
     public JoystickButton releaseHatchCover;
-    public JoystickButton presentHatchCover;
+    public JoystickButton extendHatchCover;
     public JoystickButton retractHatchCover;
+
+    public JoystickButton secondExtendHatchCover;
+    public JoystickButton secondRetractHatchCover;
+
+    public JoystickButton pushHatchCover;
+    public JoystickButton retractPusher;
+
+
     public JoystickButton captureAndRetractHatchCover;
-    public JoystickButton presentAndReleaseHatchCover;
+    public JoystickButton presentAndReleaseHatchCoverShip;
+    public JoystickButton presentAndReleaseHatchCoverRocket;  
 
     public JoystickButton intakeCargo;
     public JoystickButton deliverCargo;
@@ -57,7 +66,7 @@ public class OI {
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
-
+    public Gamepad gamepad_test = new Gamepad(RobotMap.OI_TEST_CONTROLLER);
     public OI() {
         Timer.delay(.02);
 
@@ -98,41 +107,57 @@ public class OI {
 
         elevatorToLowerHatch = gamepad.getButtonB();
 
-        elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_LOWER_HATCH_INCHES));
+        elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
 
         elevatorToMidRocket = gamepad.getButtonY();
 
-        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_MID_ROCKET_INCHES));
+        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
 
         elevatorToTopRocket = gamepad.getButtonX();
 
-        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_TOP_ROCKET_INCHES));
+        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
 
         jogElevator = gamepad.getStartButton();
         jogElevator.whileHeld(new RunElevatorFromGamepad());
 
         /**
-         * Hatch covers
+         * Teat Controller
          * 
          */
 
-        captureHatchCover = gamepad.getLeftShoulder();
-        captureHatchCover.whenPressed(new GripHatchPanel());
+        captureHatchCover = gamepad_test.getLeftShoulder();
+        captureHatchCover.whenPressed(new GripHatchPanel(true));
 
-        releaseHatchCover = gamepad.getRightShoulder();
-        releaseHatchCover.whenPressed(new ReleaseHatchPanel());
+        releaseHatchCover = gamepad_test.getLeftTriggerClick();
+        releaseHatchCover.whenPressed(new GripHatchPanel(false));
 
-        presentHatchCover = gamepad.getLeftShoulder();
-        presentHatchCover.whenPressed(new ExtendHatchPanel());
+        extendHatchCover = gamepad_test.getRightShoulder();
+        extendHatchCover.whenPressed(new ExtendHatchPanel(true));
 
-        retractHatchCover = gamepad.getRightShoulder();
-        retractHatchCover.whenPressed(new ReleaseHatchPanel());
+        retractHatchCover = gamepad_test.getRightTriggerClick();
+        retractHatchCover.whenPressed(new ExtendHatchPanel(false));
 
-        captureAndRetractHatchCover = new JoystickButton(driverController, 1);
+        secondExtendHatchCover = gamepad_test.getButtonY();
+        secondExtendHatchCover.whenPressed(new ExtendHatchPanel(true));
+
+        secondRetractHatchCover = gamepad_test.getButtonA();
+        secondRetractHatchCover.whenPressed(new ExtendHatchPanel(false));
+
+       pushHatchCover = gamepad_test.getButtonB();
+       pushHatchCover.whenPressed(new PushHatchPanel(true));
+
+       retractPusher = gamepad_test.getButtonX();
+       retractPusher.whenPressed(new PushHatchPanel(false));
+
+        captureAndRetractHatchCover = gamepad_test.getLeftTriggerClick();
         captureAndRetractHatchCover.whenPressed(new PickUpHatchPanel());
 
-        presentAndReleaseHatchCover = new JoystickButton(driverController, 2);
-        presentAndReleaseHatchCover.whenPressed(new PlaceHatchPanel());
+        presentAndReleaseHatchCoverShip = gamepad_test.getRightTriggerClick();
+        presentAndReleaseHatchCoverShip.whenPressed(new PlaceHatchPanelShip());
+
+        presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
+        presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
+
 
         intakeCargo = new JoystickButton(driverController, 3);
         intakeCargo.whenPressed(new PickUpCargo(.5));
@@ -145,7 +170,7 @@ public class OI {
 
         driveToVision = new JoystickButton(driverController,1);
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
-        //(new JoystickArcadeDriveVision());
+        
 
     }
 }

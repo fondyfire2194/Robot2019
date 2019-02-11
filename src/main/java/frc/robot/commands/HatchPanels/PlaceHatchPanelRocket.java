@@ -15,11 +15,11 @@ import frc.robot.commands.TimeDelay;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 
 
-public class PlaceHatchPanel extends CommandGroup {
+public class PlaceHatchPanelRocket extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PlaceHatchPanel() {
+  public PlaceHatchPanelRocket() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -37,12 +37,14 @@ public class PlaceHatchPanel extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addSequential(new ExtendHatchPanel());
+    addSequential(new ExtendHatchPanel(true));
     addSequential(new TimeDelay(.5));
-    addSequential(new ReleaseHatchPanel());
+    addSequential(new GripHatchPanel(false));
     addSequential(new TimeDelay(.5));
-    addSequential(new RetractHatchPanel());
-    addSequential(new SetAutoCommandDone());
+    addSequential(new PushHatchPanel(true));
+    addSequential(new TimeDelay(.5));
+    addSequential(new PushHatchPanel(false));
+    addSequential(new ExtendHatchPanel(false));
 }
   }
   

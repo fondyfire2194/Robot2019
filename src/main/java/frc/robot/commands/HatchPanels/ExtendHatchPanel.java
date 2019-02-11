@@ -9,6 +9,7 @@ package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+
 /**
  * Add your docs here.
  */
@@ -16,16 +17,23 @@ public class ExtendHatchPanel extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ExtendHatchPanel() {
+  boolean myExtend;
+
+  public ExtendHatchPanel(boolean extend) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myExtend = extend;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.extendHatchPanel();
+    if (myExtend) {
+      Robot.gph.extendHatchPanel();
+    } else {
+      Robot.gph.retractHatchPanel();
+    }
   }
 
 }

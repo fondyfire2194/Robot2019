@@ -12,7 +12,7 @@ import frc.robot.Robot;
 import frc.robot.commands.*;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 import frc.robot.commands.HatchPanels.GripHatchPanel;
-import frc.robot.commands.HatchPanels.RetractHatchPanel;
+
 
 public class PickUpHatchPanel extends CommandGroup {
   /**
@@ -35,14 +35,9 @@ public class PickUpHatchPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-
-
-
-  
-    addSequential(new GripHatchPanel());
+ 
+    addSequential(new GripHatchPanel(true));
     addSequential(new TimeDelay(.5));
-    addSequential(new RetractHatchPanel());
     addSequential(new SetAutoCommandDone());
 }
   }

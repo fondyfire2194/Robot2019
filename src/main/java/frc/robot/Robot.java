@@ -269,8 +269,13 @@ public class Robot extends TimedRobot {
 
     readTrajFiles();
 
-    if (m_oi.gamepad.getButtonStateA())
+    if (m_oi.gamepad.getButtonStateA()){
       setUpAutoStart();
+      Robot.gph.retractPusher();
+      Robot.gph.gripHatchPanel();
+      Robot.gph.retractHatchPanel();
+      Robot.gph.secondRetractHatchPanel();
+    }
   }
 
   /**

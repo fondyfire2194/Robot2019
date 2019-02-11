@@ -8,17 +8,18 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.HatchPanels.*;
+import frc.robot.commands.*;
 import frc.robot.Robot;
-import frc.robot.commands.HatchPanels.ExtendHatchPanel;
-import frc.robot.commands.HatchPanels.PushHatchPanel;
-import frc.robot.commands.HatchPanels.GripHatchPanel;
-import frc.robot.commands.HatchPanels.PushHatchPanel;
+import frc.robot.commands.TimeDelay;
+import frc.robot.commands.Auto.SetAutoCommandDone;
 
-public class PrepareToPickUpPanel extends CommandGroup {
+
+public class PlaceHatchPanelShip extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PrepareToPickUpPanel() {
+  public PlaceHatchPanelShip() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -35,11 +36,11 @@ public class PrepareToPickUpPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addParallel(new GripHatchPanel(false));
-    addParallel(new ExtendHatchPanel(false));
-    addParallel(new SecondExtendHatchPanel(false)); 
-    addParallel(new PushHatchPanel(false));
 
-
-  }
+ 
+    addSequential(new GripHatchPanel(false));
+    addSequential(new TimeDelay(.5));
+    addSequential(new SetAutoCommandDone());
 }
+  }
+  
