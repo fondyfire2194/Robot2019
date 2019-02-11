@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.Teleop;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -13,23 +13,20 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class SetGyroOffset extends InstantCommand {
+public class DoTeleopPosition extends InstantCommand {
   /**
    * Add your docs here.
    */
-  float myOffset;
-
-  public SetGyroOffset(float offset) {
+  public DoTeleopPosition() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myOffset = offset;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.driveTrain.gyroOffset = myOffset;
+    Robot.doTeleopPosition=true;
   }
 
 }

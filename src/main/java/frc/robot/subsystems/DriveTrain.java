@@ -19,14 +19,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.JoystickArcadeDrive;
+import frc.robot.commands.Teleop.JoystickArcadeDrive;
 import frc.robot.ReverseDistanceFollower;
 import frc.robot.SD;
 import frc.robot.Constants;
 import frc.robot.Pref;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.*;
-import frc.robot.commands.JoystickArcadeDriveVision;
+import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 /**
  * Add your docs here.
  */

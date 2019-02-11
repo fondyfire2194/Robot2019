@@ -11,17 +11,17 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.DoFileTrajectory;
-import frc.robot.commands.DoTeleopRobotOrient;
-import frc.robot.commands.DoTeleopRotateToVision;
-import frc.robot.commands.DoTeleopPosition;
+import frc.robot.commands.Teleop.DoFileTrajectory;
+import frc.robot.commands.Teleop.DoTeleopRobotOrient;
+import frc.robot.commands.Teleop.DoTeleopRotateToVision;
+import frc.robot.commands.Teleop.DoTeleopPosition;
 import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
 import frc.robot.commands.Trajectories.*;
 import frc.robot.commands.Motion.LogDriveData;
 import frc.robot.commands.Elevator.LogElevatorData;
 import frc.robot.commands.Limelight.*;
-import frc.robot.commands.SetGyroOffset;
+import frc.robot.commands.Auto.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.commands.Limelight.LogVisionData;;
 import frc.robot.Gamepad;
@@ -29,7 +29,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.HatchPanels.*;
 import frc.robot.commands.Cargo.*;
-import frc.robot.commands.JoystickArcadeDriveVision;
+import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 
 /**
  * This class is the glue that binds the controls on the physical operator
