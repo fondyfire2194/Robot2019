@@ -18,7 +18,7 @@ public class VisionData {
     public int[] boxHeight;
     public double[] distanceFeet;
     public double[] validTargetAngles;
-    private double atTargetAngle = 5.;
+    private double atTargetAngleTolerance = 5.;
 
     public VisionData() {
         boxHeight = new int[] { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90 };
@@ -57,7 +57,7 @@ public class VisionData {
         int i = -1;
         while (i < validTargetAngles.length - 1 && !angleFound) {
             i++;
-            angleFound = Math.abs(Robot.driveTrain.getGyroYaw() - validTargetAngles[i]) < atTargetAngle;
+            angleFound = Math.abs(Robot.driveTrain.getGyroYaw() - validTargetAngles[i]) < atTargetAngleTolerance;
             if (angleFound) {
                 temp = validTargetAngles[i];
                 break;
@@ -67,13 +67,14 @@ public class VisionData {
     }
     public double getGyroAngleError(){
 
-        return atTargetAngle - Robot.driveTrain.getGyroYaw();
+        return atTargetAngle() - Robot.driveTrain.getGyroYaw();
     }
 
     public void updateStatus() {
         SD.putN1("TargetDistance", calculateDistance());
         SmartDashboard.putBoolean("AtTargetAngle", atTargetAngle() != 999);
-
+        SD.putN1("VisionTargetAngle", atTargetAngle());
+        SD.putN3("GyroTargetError", getGyroAngleError());
     }
 
 }

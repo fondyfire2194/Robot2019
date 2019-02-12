@@ -55,17 +55,6 @@ public class HoldElevatorPositionMotionMagic extends Command {
 	protected void execute() {
 
 		if (Robot.elevator.holdPositionInches != lastHoldPositionInches) {
-
-			// } else {
-			// 	Robot.elevator.elevatorMotor.config_kF(0,
-			// 	Pref.getPref("ElevatorDownMMKf"), 0);
-			// 	Robot.elevator.elevatorMotor.config_kP(0,
-			// 	Pref.getPref("ElevatorDownMMKp"), 0);
-			// 	Robot.elevator.elevatorMotor.config_kI(0,
-			// 	Pref.getPref("ElevatorDownMMKi"), 0);
-			// 	Robot.elevator.elevatorMotor.config_kD(0,
-			// 	Pref.getPref("ElevatorDownMMKd"), 0);
-			// }
 			Robot.elevator.magicMotionElevator(Robot.elevator.holdPositionInches,
 					Constants.ELEVATOR_POSITION_RATE);
 			lastHoldPositionInches = Robot.elevator.holdPositionInches;
