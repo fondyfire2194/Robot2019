@@ -33,6 +33,18 @@ public class HoldElevatorPositionMotionMagic extends Command {
 		Robot.elevator.elevatorMotor.configPeakOutputReverse(-1, 0);
 		Robot.elevator.elevatorMotor.configNominalOutputForward(0, 0);
 		Robot.elevator.elevatorMotor.configNominalOutputReverse(0, 0);
+		Robot.elevator.elevatorMotor.selectProfileSlot(0, 0);
+
+		
+			Robot.elevator.elevatorMotor.config_kF(0,
+					Pref.getPref("ElevatorMMKf"),0);
+			Robot.elevator.elevatorMotor.config_kP(0,
+			Pref.getPref("ElevatorMMKp"),  0);
+			Robot.elevator.elevatorMotor.config_kI(0,
+			Pref.getPref("ElevatorMMKi"), 0);
+			Robot.elevator.elevatorMotor.config_kD(0,
+			Pref.getPref("ElevatorMMKd"), 0);
+
 
 		Robot.elevator.holdPositionInches = Robot.elevator.getElevatorPositionInches();
 		Robot.elevator.lastHoldPositionInches = Robot.elevator.holdPositionInches + .01;
@@ -44,27 +56,16 @@ public class HoldElevatorPositionMotionMagic extends Command {
 
 		if (Robot.elevator.holdPositionInches != lastHoldPositionInches) {
 
-			Robot.elevator.elevatorMotor.selectProfileSlot(0, 0);
-
-			if (Robot.elevator.moveIsUp) {
-				Robot.elevator.elevatorMotor.config_kF(0,
-						Pref.getPref("ElevatorMMKf"),0);
-				Robot.elevator.elevatorMotor.config_kP(0,
-				Pref.getPref("ElevatorMMKp"),  0);
-				Robot.elevator.elevatorMotor.config_kI(0,
-				Pref.getPref("ElevatorMMKi"), 0);
-				Robot.elevator.elevatorMotor.config_kD(0,
-				Pref.getPref("ElevatorMMKd"), 0);
-			} else {
-				Robot.elevator.elevatorMotor.config_kF(0,
-				Pref.getPref("ElevatorDownMMKf"), 0);
-				Robot.elevator.elevatorMotor.config_kP(0,
-				Pref.getPref("ElevatorDownMMKp"), 0);
-				Robot.elevator.elevatorMotor.config_kI(0,
-				Pref.getPref("ElevatorDownMMKi"), 0);
-				Robot.elevator.elevatorMotor.config_kD(0,
-				Pref.getPref("ElevatorDownMMKd"), 0);
-			}
+			// } else {
+			// 	Robot.elevator.elevatorMotor.config_kF(0,
+			// 	Pref.getPref("ElevatorDownMMKf"), 0);
+			// 	Robot.elevator.elevatorMotor.config_kP(0,
+			// 	Pref.getPref("ElevatorDownMMKp"), 0);
+			// 	Robot.elevator.elevatorMotor.config_kI(0,
+			// 	Pref.getPref("ElevatorDownMMKi"), 0);
+			// 	Robot.elevator.elevatorMotor.config_kD(0,
+			// 	Pref.getPref("ElevatorDownMMKd"), 0);
+			// }
 			Robot.elevator.magicMotionElevator(Robot.elevator.holdPositionInches,
 					Constants.ELEVATOR_POSITION_RATE);
 			lastHoldPositionInches = Robot.elevator.holdPositionInches;

@@ -234,6 +234,7 @@ public class Robot extends TimedRobot {
 
     bufferTrajectoryGains[0] = activeTrajectoryGains;
     startPositionSelected = 0;
+    elevator.holdPositionInches=0;
 
   }
 

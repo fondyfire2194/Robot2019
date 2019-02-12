@@ -19,7 +19,6 @@ import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
 import frc.robot.commands.Trajectories.*;
 import frc.robot.commands.Motion.LogDriveData;
-import frc.robot.commands.Elevator.LogElevatorData;
 import frc.robot.commands.Limelight.*;
 import frc.robot.commands.Auto.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
@@ -102,6 +101,8 @@ public class OI {
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(0));
 
         SmartDashboard.putData("Set Gyro Offset", new SetGyroOffset(180));
+
+        SmartDashboard.putData("Reset Elevator", new ResetElevatorPosition());
         /**
          * Co driver controller
          * 
@@ -113,11 +114,11 @@ public class OI {
 
         elevatorToMidRocket = gamepad.getButtonY();
 
-        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
+        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_LOWER_CARGO_INCHES));
 
         elevatorToTopRocket = gamepad.getButtonX();
 
-        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
+        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
 
         jogElevator = gamepad.getStartButton();
         jogElevator.whileHeld(new RunElevatorFromGamepad());

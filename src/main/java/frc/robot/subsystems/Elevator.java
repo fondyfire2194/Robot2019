@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.commands.Elevator.*;
 
 public class Elevator extends Subsystem {
 	public TalonSRX elevatorMotor = null;
@@ -51,7 +52,7 @@ public class Elevator extends Subsystem {
 
 	public void initDefaultCommand() {
 		// setDefaultCommand(new RunElevatorFromGamepad());
-		// setDefaultCommand(new HoldElevatorPositionMotionMagic());
+		setDefaultCommand(new HoldElevatorPositionMotionMagic());
 	}
 
 	public int getElevatorEncoderPosition() {
@@ -98,7 +99,7 @@ public class Elevator extends Subsystem {
 
 		int cruiseVelocity = (int) (speedIPS * Constants.ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS);
 
-		int acceleration = 0;
+		int acceleration = cruiseVelocity*2;
 
 
 		elevatorMotor.configMotionCruiseVelocity(cruiseVelocity, 0);

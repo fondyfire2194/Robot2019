@@ -31,19 +31,19 @@ public class Constants {
   public final static double ANGLE_APPROACH_LIMIT = 5.;
   public final static double DRIVE_SIDE_STALL_DETECT = 20.;
 
-  public static double ALL_LOWER_HATCH_INCHES = 19;
+  public static double ALL_LOWER_HATCH_INCHES = 0;
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
-  public static double SHIP_CARGO_INCHES = 33;
+  public static double SHIP_CARGO_INCHES = 13;
 
-  public static double CARGO_PICKUP_INCHES = 12;
-  public static double ROCKET_LOWER_CARGO_INCHES =  28;
-  public static double ROVKET_MID_CARGO_INCHES =  28;
-  public static double ROCKET_UPPER_CARGO_INCHES =  28;
+  public static double CARGO_PICKUP_INCHES = 0;
+  public static double ROCKET_LOWER_CARGO_INCHES =  8;
+  public static double ROCKET_MID_CARGO_INCHES =  ROCKET_LOWER_CARGO_INCHES +28;
+  public static double ROCKET_UPPER_CARGO_INCHES =  ROCKET_MID_CARGO_INCHES + 28;
 
 
 
-  public static double ELEVATOR_POSITION_RATE = 40;// in per sec
+  public static double ELEVATOR_POSITION_RATE = 10;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
   // (in/sec) * enc Counts/in = enc counts / sec then divide by 10 for 100ms
   public static double ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS = ELEVATOR_ENCODER_COUNTS_PER_INCH / 10;
