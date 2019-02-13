@@ -8,8 +8,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.AutoChoosers;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
 
@@ -18,14 +20,15 @@ public class Elevator extends Subsystem {
 	// public double holdPositionEncoderCounts;
 	public double holdPositionInches;
 
-	public static DigitalInput elevatorSwitch;
-
+	// public static DigitalInput elevatorSwitch;
+	public static AnalogTrigger elevatorSwitch;
 	public boolean brakeState;
 
 	public boolean elevatorTooHigh;
 	public boolean elevatorTooLow;
 	public boolean moveIsUp;
 	public boolean moveIsDown;
+	public boolean elevatorOnSwitch;
 
 	public double elevatorTargetPosition;
 	private boolean switchWasSeen;
@@ -36,7 +39,6 @@ public class Elevator extends Subsystem {
 	public boolean elevatorMoveInProgress;
 	private int switchCounter;
 
-
 	public Elevator() {
 		elevatorMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR);
 		elevatorMotor.setInverted(true);
@@ -45,7 +47,11 @@ public class Elevator extends Subsystem {
 		elevatorMotor.setNeutralMode(NeutralMode.Brake);
 		elevatorMotor.configVoltageCompSaturation(12, 0);
 		elevatorMotor.enableVoltageCompensation(true);
-		elevatorSwitch = new DigitalInput(RobotMap.ELEVATOR_TRAVEL_SWITCH);
+		elevatorSwitch = new AnalogTrigger(RobotMap.ELEVATOR_TRAVEL_SWITCH);
+		elevatorSwitch.setAveraged(true);
+		elevatorSwitch.setLimitsVoltage(1.0, 5.5);
+
+		// elevatorSwitch = new DigitalInput(RobotMap.ELEVATOR_TRAVEL_SWITCH);
 		// Put methods for controlling this subsystem
 		// here. Call these from Commands.
 	}
@@ -70,7 +76,6 @@ public class Elevator extends Subsystem {
 	public double getElevatorSpeedInchesPerSecond() {
 		return getElevatorEncoderSpeedCountsPer100mS() / Constants.ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS;
 	}
-
 
 	public void magicMotionElevator(double distance, double speedIPS) {
 		// elevator motor 775 Pro with 70:1 gear reduction and a 4096 count encoder
@@ -99,8 +104,7 @@ public class Elevator extends Subsystem {
 
 		int cruiseVelocity = (int) (speedIPS * Constants.ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS);
 
-		int acceleration = cruiseVelocity*2;
-
+		int acceleration = cruiseVelocity * 2;
 
 		elevatorMotor.configMotionCruiseVelocity(cruiseVelocity, 0);
 		elevatorMotor.configMotionAcceleration(acceleration, 0);
@@ -126,6 +130,8 @@ public class Elevator extends Subsystem {
 	}
 
 	public void updateStatus() {
+
+		elevatorOnSwitch = !elevatorSwitch.getInWindow();
 		// check for elevator unable to reach position for 250 * 20ms = 5 sec
 		if (elevatorMotor.getOutputCurrent() > 6)
 			elevatorHiCurrent++;
@@ -136,30 +142,7 @@ public class Elevator extends Subsystem {
 
 		elevatorTooLow = getElevatorPositionInches() <= Constants.ELEVATOR_MIN_HEIGHT;
 		elevatorTooHigh = getElevatorPositionInches() >= Constants.ELEVATOR_MAX_HEIGHT;
-
-		SD.putN1("Elevator Amps", elevatorMotor.getOutputCurrent());
-		SD.putN1("Elevator Inches", getElevatorPositionInches());
-
-		SmartDashboard.putBoolean("Elevator Too Low", elevatorTooLow);
-		SmartDashboard.putBoolean("Elevator Too High", elevatorTooHigh);
-		SmartDashboard.putBoolean("Elev In Pos", inPosition());
-		SmartDashboard.putNumber("Elevator Encoder", elevatorMotor.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Elevator EncCtsPer100ms", elevatorMotor.getSelectedSensorVelocity(0));
-		SD.putN1("Elevator Target", elevatorTargetPosition);
-		SD.putN1("Elevator Hold", holdPositionInches);
-		SD.putN1("Elevator Last Hold", lastHoldPositionInches);
-		SD.putN1("Elevator Pct V", elevatorMotor.getMotorOutputPercent());
-		SD.putN1("Elevator Speed IPS", getElevatorSpeedInchesPerSecond());
-		SD.putN1("ElI", elevatorMotor.getIntegralAccumulator(0));
-		SD.putN1("El Talon Temp", elevatorMotor.getTemperature());
-		SmartDashboard.putBoolean("Elevator Switch", !elevatorSwitch.get());
-		SmartDashboard.putBoolean("Switch Was Seen", switchWasSeen);
-		SmartDashboard.putNumber("ELHIAMPS", elevatorHiCurrent);
-		SmartDashboard.putBoolean("ElMoveIsUp", moveIsUp);
-		SmartDashboard.putBoolean("ElMoveIsDown", moveIsDown);
-		SmartDashboard.putNumber("ELHIAMPS", elevatorHiCurrent);
-
-		if (!elevatorSwitch.get())
+		if (elevatorOnSwitch)
 			switchCounter++;
 		else
 			switchCounter = 0;
@@ -170,6 +153,29 @@ public class Elevator extends Subsystem {
 			switchWasSeen = true;
 		}
 		if (switchWasSeen)
-			switchWasSeen = !elevatorSwitch.get();
+			switchWasSeen = elevatorOnSwitch;
+		SD.putN1("Elevator Inches", getElevatorPositionInches());
+		SmartDashboard.putBoolean("Elevator Too Low", elevatorTooLow);
+		SmartDashboard.putBoolean("Elevator Too High", elevatorTooHigh);
+		SD.putN1("Elevator Target", elevatorTargetPosition);
+		SD.putN1("Elevator Speed IPS", getElevatorSpeedInchesPerSecond());
+		SD.putN1("Elev Talon Temp", elevatorMotor.getTemperature());
+		SmartDashboard.putBoolean("Elevator Switch", elevatorOnSwitch);
+
+		
+		if( AutoChoosers.debugChooser.getSelected()==3){
+		SD.putN1("Elevator Amps", elevatorMotor.getOutputCurrent());
+		SmartDashboard.putBoolean("Elev In Pos", inPosition());
+		SmartDashboard.putNumber("Elevator Encoder", elevatorMotor.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Elevator EncCtsPer100ms", elevatorMotor.getSelectedSensorVelocity(0));
+		SD.putN1("Elevator Hold", holdPositionInches);
+		SD.putN1("Elevator Last Hold", lastHoldPositionInches);
+		SD.putN1("Elevator Pct V", elevatorMotor.getMotorOutputPercent());
+		SD.putN1("ElI", elevatorMotor.getIntegralAccumulator(0));
+		SmartDashboard.putBoolean("Switch Was Seen", switchWasSeen);
+		SmartDashboard.putNumber("ELHIAMPS", elevatorHiCurrent);
+
+		}
+
 	}
 }

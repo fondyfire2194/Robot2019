@@ -4,6 +4,8 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import frc.robot.AutoChoosers;
+import frc.robot.SD;
 
 /**
  *
@@ -48,11 +50,13 @@ public class PowerPanel extends Subsystem {
 	}
 
 	public void updateStatus() {
-		// SmartDashboard.putNumber("Energy Used", getTotalEnergy());
-		// SmartDashboard.putNumber("Amps Total", getTotalCurrent());
-		// SmartDashboard.putNumber("Channel 0", getChannelCurrent(0));
-		// SmartDashboard.putNumber("Channel 1", getChannelCurrent(1));
-		// SmartDashboard.putNumber("Channel 2", getChannelCurrent(2));
-		// SmartDashboard.putNumber("Channel 3", getChannelCurrent(3));
+		if (AutoChoosers.debugChooser.getSelected() == 5) {
+			SD.putN1("Energy Used", getTotalEnergy());
+			SD.putN1("Amps Total", getTotalCurrent());
+			SD.putN1("Channel 0", getChannelCurrent(0));
+			SD.putN1("Channel 1", getChannelCurrent(1));
+			SD.putN1("Channel 2", getChannelCurrent(2));
+			SD.putN1("Channel 3", getChannelCurrent(3));
+		}
 	}
 }

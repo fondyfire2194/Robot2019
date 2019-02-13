@@ -151,6 +151,9 @@ public class Robot extends TimedRobot {
   public static int numberOfAutonomousCommands;
   public static boolean startSettingPB = false;
   public static boolean startSettingsDone = false;
+  public static boolean setAutoStartPB = false;
+  public static boolean autoSetupRunning = false;
+  public static boolean setAutoStartDone = false;
   public static boolean readingRunning = false;
 
   // LoadAllFiles currentLoader = new LoadAllFiles();
@@ -221,6 +224,8 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseUSBTraj", false);
     Timer.delay(.02);
+    SmartDashboard.putBoolean("SetAuto", false);
+    Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("CreateTrajFile", false);
@@ -234,7 +239,7 @@ public class Robot extends TimedRobot {
 
     bufferTrajectoryGains[0] = activeTrajectoryGains;
     startPositionSelected = 0;
-    elevator.holdPositionInches=0;
+    elevator.holdPositionInches = 0;
 
   }
 
@@ -270,13 +275,13 @@ public class Robot extends TimedRobot {
 
     readTrajFiles();
 
-    if (m_oi.gamepad.getButtonStateA()){
-      setUpAutoStart();
-      Robot.gph.retractPusher();
-      Robot.gph.gripHatchPanel();
-      Robot.gph.retractHatchPanel();
-      Robot.gph.secondRetractHatchPanel();
-    }
+    // if (m_oi.gamepad.getButtonStateA()) {
+    setUpAutoStart();
+    Robot.gph.retractPusher();
+    Robot.gph.gripHatchPanel();
+    Robot.gph.retractHatchPanel();
+    Robot.gph.secondRetractHatchPanel();
+
   }
 
   /**
@@ -298,7 +303,7 @@ public class Robot extends TimedRobot {
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
     // setUpAutoStart();
- 
+
     //
     if (autonomousCommand[0] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
       autonomousCommand[0].start();
@@ -335,22 +340,21 @@ public class Robot extends TimedRobot {
         runningCommandName = autonomousCommandName[runningAutoCommand];
       }
     }
-      if ((startPositionSelected == 1 || startPositionSelected == 4) && runningAutoCommand == 2 && trajectoryPulse) {
-        limelightCamera.setLEDMode(LedMode.kforceOn);
-      
-      }
-      if ((startPositionSelected == 1 || startPositionSelected == 4) && secondHatchSelected == 3
-          && runningAutoCommand == 12 && trajectoryPulse) {
-        limelightCamera.setLEDMode(LedMode.kforceOn);
-      }
-      
-      if ((startPositionSelected == 2 || startPositionSelected == 3) && secondHatchSelected == 3
-          && runningAutoCommand == 9 && trajectoryPulse) {
-        limelightCamera.setLEDMode(LedMode.kforceOn);
-        SmartDashboard.putNumber("SPPS1",startPositionSelected);
-      }
+    if ((startPositionSelected == 1 || startPositionSelected == 4) && runningAutoCommand == 2 && trajectoryPulse) {
+      limelightCamera.setLEDMode(LedMode.kforceOn);
 
-    
+    }
+    if ((startPositionSelected == 1 || startPositionSelected == 4) && secondHatchSelected == 3
+        && runningAutoCommand == 12 && trajectoryPulse) {
+      limelightCamera.setLEDMode(LedMode.kforceOn);
+    }
+
+    if ((startPositionSelected == 2 || startPositionSelected == 3) && secondHatchSelected == 3
+        && runningAutoCommand == 9 && trajectoryPulse) {
+      limelightCamera.setLEDMode(LedMode.kforceOn);
+      SmartDashboard.putNumber("SPPS1", startPositionSelected);
+    }
+
     if (runningAutoCommand > numberOfAutonomousCommands) {
       numberOfAutonomousCommands = 0;
       runningAutoCommand = 0;
@@ -636,32 +640,35 @@ public class Robot extends TimedRobot {
   }
 
   private void robotUpdateStatus() {
-    SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
-    SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
-    SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
     SmartDashboard.putBoolean("AutoHold", cycleHold);
     SmartDashboard.putBoolean("LAutoRng", autoRunning);
-    SmartDashboard.putBoolean("BuildInProg", buildInProgress);
-    SmartDashboard.putBoolean("BuildOK", buildOK);
-    SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
-    SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
     SmartDashboard.putString("Running Cmd Name", runningCommandName);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
-    SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
-    SmartDashboard.putBoolean("OrientRng", orientRunning);
-    SmartDashboard.putString("FileChosen", chosenFileName);
-    SmartDashboard.putString("FileInBuffer", bufferTrajName);
-    SmartDashboard.putString("Active Trajectory", activeTrajName);
-    SmartDashboard.putBoolean("LogOpen", simpleCSVLogger2194.log_open);
-    SmartDashboard.putBoolean("Invert Y", invertY);
-    SmartDashboard.putBoolean("Face Field", faceField);
-    SmartDashboard.putBoolean("TrajFileDo", doFileTrajectory);
 
-    SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
-    SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
-    SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
-    SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
     createUniqueLogName();
+
+    if (AutoChoosers.debugChooser.getSelected() == 1) {
+      SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
+      SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
+      SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
+      SmartDashboard.putBoolean("BuildInProg", buildInProgress);
+      SmartDashboard.putBoolean("BuildOK", buildOK);
+      SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
+      SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
+      SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
+      SmartDashboard.putBoolean("OrientRng", orientRunning);
+      SmartDashboard.putString("FileChosen", chosenFileName);
+      SmartDashboard.putString("FileInBuffer", bufferTrajName);
+      SmartDashboard.putString("Active Trajectory", activeTrajName);
+      SmartDashboard.putBoolean("LogOpen", simpleCSVLogger2194.log_open);
+      SmartDashboard.putBoolean("Invert Y", invertY);
+      SmartDashboard.putBoolean("Face Field", faceField);
+      SmartDashboard.putBoolean("TrajFileDo", doFileTrajectory);
+      SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
+      SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
+      SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
+      SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
+    }
   }
 
   public static void cancelAllAuto() {
@@ -735,67 +742,80 @@ public class Robot extends TimedRobot {
   }
 
   void setUpAutoStart() {
-    resetCommandNames();
+    if (startSettingsDone)
+      setAutoStartPB = SmartDashboard.getBoolean("SetAuto", false);
+    else
+      SmartDashboard.putBoolean("SetAuto", false);
+    SmartDashboard.putBoolean("AutoStartSetupDone", setAutoStartDone);
+    SmartDashboard.putBoolean("AutoSetupRunning", autoSetupRunning);
 
-    autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
+    if (setAutoStartPB & startSettingsDone && !autoSetupRunning) {
+      resetCommandNames();
+      autoSetupRunning = true;
+      autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
-    startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-    if (startPositionSelected == 0)
-      autoTimeDelaySeconds = 0;
-    secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
+      startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
+      if (startPositionSelected == 0)
+        autoTimeDelaySeconds = 0;
+      secondHatchSelected = AutoChoosers.secondHatchChooser.getSelected();
 
-    autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
+      autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
 
-    autonomousCommandName[0] = "0- Time Delay";
-    if (!fileError && startPositionSelected != 0) {
+      autonomousCommandName[0] = "0- Time Delay";
+      if (!fileError && startPositionSelected != 0) {
 
-      switch (startPositionSelected) {
-      case 1:
-        invertY = false;
-        sideAngle = 0;
-        numberOfAutonomousCommands = AutoCommands.setOutsideStart();
-        break;
-      case 2:
-        invertY = false;
-        sideAngle = 0;
-        numberOfAutonomousCommands = AutoCommands.setMiddleStart();
-        limelightCamera.setLEDMode(LedMode.kforceOn);
-        break;
-      case 3:
-        invertY = true;
-        sideAngle = 180;
-        numberOfAutonomousCommands = AutoCommands.setMiddleStart();
-        limelightCamera.setLEDMode(LedMode.kforceOn);
-        break;
-      case 4:
-        invertY = true;
-        sideAngle = 180;
-        numberOfAutonomousCommands = AutoCommands.setOutsideStart();
-        break;
+        switch (startPositionSelected) {
+        case 1:
+          invertY = false;
+          sideAngle = 0;
+          numberOfAutonomousCommands = AutoCommands.setOutsideStart();
+          break;
+        case 2:
+          invertY = false;
+          sideAngle = 0;
+          numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+          limelightCamera.setLEDMode(LedMode.kforceOn);
+          break;
+        case 3:
+          invertY = true;
+          sideAngle = 180;
+          numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+          limelightCamera.setLEDMode(LedMode.kforceOn);
+          break;
+        case 4:
+          invertY = true;
+          sideAngle = 180;
+          numberOfAutonomousCommands = AutoCommands.setOutsideStart();
+          break;
+        }
+        if (secondHatchSelected != 0) {
+          int numberOfPickUpSecondHatchCommands = AutoCommands.pickUpSecondHatch(startPositionSelected,
+              numberOfAutonomousCommands);
+          SmartDashboard.putNumber("NPU", numberOfPickUpSecondHatchCommands);
+          numberOfAutonomousCommands = numberOfPickUpSecondHatchCommands;
+
+          int numberOfDeliverSecondHatchCommands = AutoCommands.deliverSecondHatch(secondHatchSelected,
+              numberOfAutonomousCommands);
+
+          numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
+        }
+        SmartDashboard.putNumber("NDU", numberOfAutonomousCommands);
+
+        AutoCommands.updateStatus(numberOfAutonomousCommands);
+
+        activeLeftTrajectory = leftBufferTrajectory[0];
+        activeRightTrajectory = rightBufferTrajectory[0];
+        activeTrajName = bufferTrajectoryName[0];
+
+        activeTrajectoryGains = bufferTrajectoryGains[0];
+        SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+
+        autoSetupRunning = false;
+        setAutoStartDone = true;
+        setAutoStartPB = false;
+        SmartDashboard.putBoolean("SetAuto", false);
       }
-      if (secondHatchSelected != 0) {
-        int numberOfPickUpSecondHatchCommands = AutoCommands.pickUpSecondHatch(startPositionSelected,
-            numberOfAutonomousCommands);
-        SmartDashboard.putNumber("NPU", numberOfPickUpSecondHatchCommands);
-        numberOfAutonomousCommands = numberOfPickUpSecondHatchCommands;
-
-        int numberOfDeliverSecondHatchCommands = AutoCommands.deliverSecondHatch(secondHatchSelected,
-            numberOfAutonomousCommands);
-
-        numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
-      }
-      SmartDashboard.putNumber("NDU", numberOfAutonomousCommands);
-
-      AutoCommands.updateStatus(numberOfAutonomousCommands);
-
-      activeLeftTrajectory = leftBufferTrajectory[0];
-      activeRightTrajectory = rightBufferTrajectory[0];
-      activeTrajName = bufferTrajectoryName[0];
-
-      activeTrajectoryGains = bufferTrajectoryGains[0];
-      SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     }
-
   }
 
   public static void createUniqueLogName() {

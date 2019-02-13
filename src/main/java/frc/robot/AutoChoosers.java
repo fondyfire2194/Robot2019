@@ -23,6 +23,8 @@ public class AutoChoosers {
 
 	public static SendableChooser<Double> timeDelayChooser;
 
+	public static SendableChooser<Integer> debugChooser;
+
 	public AutoChoosers() {
 		testTrajectoryChooser = new SendableChooser<Integer>();
 
@@ -46,10 +48,6 @@ public class AutoChoosers {
 		testTrajectoryChooser.addOption("Rev StraightOne", 15);
 		testTrajectoryChooser.addOption("CurveOne", 16);
 		testTrajectoryChooser.addOption("Rev CurveOne", 17);
-
-
-
-
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
@@ -90,6 +88,22 @@ public class AutoChoosers {
 		timeDelayChooser.addOption("Five Seconds", 5.);
 		timeDelayChooser.addOption("Six Seconds", 6.);
 		SmartDashboard.putData("Delay Chooser", timeDelayChooser);
+
+		debugChooser = new SendableChooser<Integer>();
+
+		debugChooser.setDefaultOption("None",0);
+		debugChooser.addOption("Robot",1);
+		debugChooser.addOption("DriveTrain",2);
+		debugChooser.addOption("Elevator",3);
+		debugChooser.addOption("GamePieceHandler",4);
+		debugChooser.addOption("PowerPanel",5);
+		debugChooser.addOption("RobotRotate",6);
+		debugChooser.addOption("RotateToVision",7);
+		debugChooser.addOption("VisionData", 8);
+
+		SmartDashboard.putData("Debug", debugChooser);	
+
+
 
 	}
 }

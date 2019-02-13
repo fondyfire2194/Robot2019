@@ -27,6 +27,8 @@ import frc.robot.Pref;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.*;
 import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
+import frc.robot.AutoChoosers;
+
 /**
  * Add your docs here.
  */
@@ -93,17 +95,17 @@ public class DriveTrain extends Subsystem {
   }
 
   public void leftDriveOut(double speed) {
-    SmartDashboard.putNumber("LDout",speed);
+    SmartDashboard.putNumber("LDout", speed);
     leftTalonOne.set(ControlMode.PercentOutput, speed);
   }
 
   public void rightDriveOut(double speed) {
-    SmartDashboard.putNumber("Rout",speed);
+    SmartDashboard.putNumber("Rout", speed);
     rightTalonOne.set(ControlMode.PercentOutput, speed);
   }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
-    SmartDashboard.putNumber("LDAout",throttleValue);
+    SmartDashboard.putNumber("LDAout", throttleValue);
     leftDriveOut(throttleValue + turnValue);
     rightDriveOut(throttleValue - turnValue);
   }
@@ -212,20 +214,25 @@ public class DriveTrain extends Subsystem {
 
   public void updateStatus() {
 
-    SmartDashboard.putNumber("LeftEncoder", getLeftEncoderCount());
-    SmartDashboard.putNumber("RightEncoder", getRightEncoderCount());
     SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());
     SmartDashboard.putNumber("Left ft per s", getLeftFeetPerSecond());
     SD.putN2("LeftFeet", getLeftFeet());
     SD.putN2("RightFeet", getRightFeet());
     SD.putN1("GyroYaw", getGyroYaw());
-    SD.putN2("LeftCmd", getLeftCommand());
-    SD.putN2("RightCmd", getRightCommand());
-    SD.putN2("LeftA Amps", leftTalonOne.getOutputCurrent());
-    SD.putN2("LeftB Amps", leftTalonTwo.getOutputCurrent());
 
-    SD.putN2("RightA Amps", rightTalonOne.getOutputCurrent());
-    SD.putN2("RightB Amps", rightTalonTwo.getOutputCurrent());
+    if (AutoChoosers.debugChooser.getSelected() == 2) {
+
+      SD.putN2("LeftCmd", getLeftCommand());
+      SD.putN2("RightCmd", getRightCommand());
+      SD.putN2("LeftA Amps", leftTalonOne.getOutputCurrent());
+      SD.putN2("LeftB Amps", leftTalonTwo.getOutputCurrent());
+
+      SD.putN2("RightA Amps", rightTalonOne.getOutputCurrent());
+      SD.putN2("RightB Amps", rightTalonTwo.getOutputCurrent());
+      SmartDashboard.putNumber("LeftEncoder", getLeftEncoderCount());
+      SmartDashboard.putNumber("RightEncoder", getRightEncoderCount());
+
+    }
 
   }
 }

@@ -41,7 +41,7 @@ public class RunElevatorFromGamepad extends Command {
 			yValue = Robot.m_oi.gamepad.getY();
 		else
 			yValue = 0;
-		if (!Elevator.elevatorSwitch.get() && yValue > 0)// inhibit down move on bottom switch
+		if (!Robot.elevator.elevatorOnSwitch && yValue > 0)// inhibit down move on bottom switch
 			yValue = 0;
 		// square joystick and preserve sign
 		temp = yValue * yValue;

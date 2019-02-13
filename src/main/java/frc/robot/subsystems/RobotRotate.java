@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.SD;
 import frc.robot.Constants;
+import frc.robot.AutoChoosers;
 
 /**
  *
@@ -113,12 +114,15 @@ public class RobotRotate extends PIDSubsystem {
 	}
 
 	public void updateStatus() {
-		SmartDashboard.putBoolean("RotateInPos", inPosition());
-		SD.putN1("Setpoint", getSetpoint());
-		SmartDashboard.putBoolean("Rotate Enabled?", isEnabled());
-		SD.putN1("Orient Error", getError());
-SD.putN3("RROut",getPIDController().get());
-		SD.putN("Rot Output", loopOutput);
 
+		if (AutoChoosers.debugChooser.getSelected() == 6) {
+			SmartDashboard.putBoolean("RotateInPos", inPosition());
+			SD.putN1("Setpoint", getSetpoint());
+			SmartDashboard.putBoolean("Rotate Enabled?", isEnabled());
+			SD.putN1("Orient Error", getError());
+			SD.putN3("RROut", getPIDController().get());
+			SD.putN("Rot Output", loopOutput);
+
+		}
 	}
 }

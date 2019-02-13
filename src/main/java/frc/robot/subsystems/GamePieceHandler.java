@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.SD;
+import frc.robot.AutoChoosers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -21,7 +23,7 @@ public class GamePieceHandler extends Subsystem {
 	public GamePieceHandler() {
 
 		cargoMotor = new TalonSRX(RobotMap.CARGO_MOTOR);
-
+		cargoMotor.setNeutralMode(NeutralMode.Brake);
 		hatchCoverGripper = new DoubleSolenoid(1, 0);
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 
@@ -88,5 +90,11 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void updateStatus() {
+		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
+		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
+		if (AutoChoosers.debugChooser.getSelected() == 4) {
+			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());
+
+		}
 	}
 }

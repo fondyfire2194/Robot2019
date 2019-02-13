@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import jaci.pathfinder.Pathfinder;
+import frc.robot.AutoChoosers;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -65,16 +65,32 @@ public class VisionData {
         }
         return temp;
     }
-    public double getGyroAngleError(){
 
+    public double getGyroAngleError() {
         return atTargetAngle() - Robot.driveTrain.getGyroYaw();
     }
 
+    private boolean sameAngleSigns() {
+        boolean temp1 = getGyroAngleError() >= 0 && Robot.limelightCamera.getdegRotationToTarget() >= 0;
+        boolean temp2 = getGyroAngleError() < 0 && Robot.limelightCamera.getdegRotationToTarget() < 0;
+
+        return temp1 || temp2;
+    }
+
+    public boolean validTarget() {
+        return Robot.limelightCamera.getIsTargetFound() && atTargetAngle() != 999;
+
+    }
+
     public void updateStatus() {
-        SD.putN1("TargetDistance", calculateDistance());
-        SmartDashboard.putBoolean("AtTargetAngle", atTargetAngle() != 999);
-        SD.putN1("VisionTargetAngle", atTargetAngle());
-        SD.putN3("GyroTargetError", getGyroAngleError());
+
+        if (AutoChoosers.debugChooser.getSelected() == 8) {
+            SD.putN1("TargetDistance", calculateDistance());
+            SmartDashboard.putBoolean("AtTargetAngle", atTargetAngle() != 999);
+            SD.putN1("VisionTargetAngle", atTargetAngle());
+            SD.putN3("GyroTargetError", getGyroAngleError());
+            SmartDashboard.putBoolean("SameSigns", sameAngleSigns());
+        }
     }
 
 }
