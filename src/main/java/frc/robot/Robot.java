@@ -603,9 +603,8 @@ public class Robot extends TimedRobot {
     switch (scanCounter) {
 
     case 1:
-      driveTrain.updateStatus();
-      robotRotate.updateStatus();
-      break;
+    robotUpdateStatus();
+     break;
 
     case 2:
       limelightCamera.updateStatus();
@@ -617,7 +616,7 @@ public class Robot extends TimedRobot {
 
     case 4:
       SmartDashboard.putNumber("SCCTR", scanCounter);
-      robotUpdateStatus();
+      driveTrain.updateStatus();
       break;
 
     case 5:
@@ -628,12 +627,21 @@ public class Robot extends TimedRobot {
       gph.updateStatus();
       break;
 
-    case 7:
+      case 7:
       airCompressor.updateStatus();
+      break;
+      case 8:
+      robotRotate.updateStatus();
+      break;
+      case 9:
+      rotateToVision.updateStatus();
+      break;
+      case 10:
+      visionData.updateStatus();
       break;
 
     default:
-      if (scanCounter > 10)
+      if (scanCounter > 15)
         scanCounter = 0;
       break;
     }
