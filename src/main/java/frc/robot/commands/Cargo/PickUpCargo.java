@@ -28,7 +28,7 @@ public class PickUpCargo extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.pickUpCargo(mySpeed);
+    Robot.gph.pickUpCargo(-mySpeed);
   }
 
 }

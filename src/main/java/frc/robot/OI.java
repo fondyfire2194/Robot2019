@@ -51,14 +51,13 @@ public class OI {
 
     public JoystickButton pushHatchCover;
     public JoystickButton retractPusher;
-
+    public JoystickButton pickUpCargo;
+    public JoystickButton deliverCargo;
 
     public JoystickButton captureAndRetractHatchCover;
     public JoystickButton presentAndReleaseHatchCoverShip;
     public JoystickButton presentAndReleaseHatchCoverRocket;  
 
-    public JoystickButton intakeCargo;
-    public JoystickButton deliverCargo;
     public JoystickButton stopCargoHandler;
 
     public JoystickButton driveToVision;
@@ -103,11 +102,17 @@ public class OI {
         SmartDashboard.putData("Set Gyro Offset", new SetGyroOffset(180));
 
         SmartDashboard.putData("Reset Elevator", new ResetElevatorPosition());
+        
+        
+        
         /**
          * Co driver controller
          * 
          */
+        stopCargoHandler = gamepad_test.getBackButton();
+        stopCargoHandler.whenPressed(new StopCargoMotor());
 
+	
         elevatorToLowerHatch = gamepad.getButtonB();
 
         elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
@@ -124,27 +129,38 @@ public class OI {
         jogElevator.whileHeld(new RunElevatorFromGamepad());
 
         /**
-         * Teat Controller
+         * Test Controller
          * 
          */
 
+
+        
         captureHatchCover = gamepad_test.getLeftShoulder();
         captureHatchCover.whenPressed(new GripHatchPanel(true));
 
         releaseHatchCover = gamepad_test.getLeftTriggerClick();
         releaseHatchCover.whenPressed(new GripHatchPanel(false));
 
+        
         extendHatchCover = gamepad_test.getRightShoulder();
         extendHatchCover.whenPressed(new ExtendHatchPanel(true));
 
         retractHatchCover = gamepad_test.getRightTriggerClick();
         retractHatchCover.whenPressed(new ExtendHatchPanel(false));
 
-        secondExtendHatchCover = gamepad_test.getButtonY();
-        secondExtendHatchCover.whenPressed(new ExtendHatchPanel(true));
+        // secondExtendHatchCover = gamepad_test.getButtonY();
+        // secondExtendHatchCover.whenPressed(new ExtendHatchPanel(true));
 
-        secondRetractHatchCover = gamepad_test.getButtonA();
-        secondRetractHatchCover.whenPressed(new ExtendHatchPanel(false));
+        // secondRetractHatchCover = gamepad_test.getButtonA();
+        // secondRetractHatchCover.whenPressed(new ExtendHatchPanel(false));
+
+        pickUpCargo = gamepad_test.getButtonY();
+        pickUpCargo.whenPressed(new PickUpCargo(.5));
+        
+        deliverCargo  = gamepad_test.getButtonA();
+        deliverCargo.whenPressed(new DeliverCargo(.5));
+        
+        
 
        pushHatchCover = gamepad_test.getButtonB();
        pushHatchCover.whenPressed(new PushHatchPanel(true));
@@ -161,13 +177,8 @@ public class OI {
         presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
         presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
 
-        if(gamepad_test.getDPadLeft()) new PickUpCargo(.5).start();
 
-        if(gamepad_test.getDPadRight()) new DeliverCargo(.5).start();
-
-        stopCargoHandler = gamepad_test.getBackButton();
-        stopCargoHandler.whenPressed(new StopCargoMotor());
-
+ 
         driveToVision = new JoystickButton(driverController,1);
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
         

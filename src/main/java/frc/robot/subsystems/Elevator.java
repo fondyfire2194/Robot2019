@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.AutoChoosers;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
-
+import frc.robot.commands.Cargo.*;
+import frc.robot.Robot;
 public class Elevator extends Subsystem {
 	public TalonSRX elevatorMotor = null;
 	// public double holdPositionEncoderCounts;
@@ -131,7 +132,7 @@ public class Elevator extends Subsystem {
 
 	public void updateStatus() {
 
-		elevatorOnSwitch = !elevatorSwitch.getInWindow();
+    	elevatorOnSwitch = !elevatorSwitch.getInWindow();
 		// check for elevator unable to reach position for 250 * 20ms = 5 sec
 		if (elevatorMotor.getOutputCurrent() > 6)
 			elevatorHiCurrent++;
