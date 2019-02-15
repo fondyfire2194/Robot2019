@@ -70,7 +70,7 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
         Robot.autonomousCommandName[number] = "1 - Reset Encoders and Gyro";
         number++;
-        Robot.autonomousCommand[number] = new RobotDriveToTarget(8., 5, false, 3);
+        Robot.autonomousCommand[number] = new RobotDriveToTarget(11.5, 6, false, 3);
         Robot.autonomousCommandName[number] = "2 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanelShip();

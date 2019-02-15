@@ -178,6 +178,7 @@ public class Robot extends TimedRobot {
   public static double activeMotionComp;
   public static boolean autoRunning;
   private double commandStartTime;
+  public static boolean limelightOnEnd = true;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -319,7 +320,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
-    if (Math.abs(m_oi.gamepad.getRightY()) > .8 && Math.abs(m_oi.gamepad.getLeftY()) > .8) {
+    if (m_oi.abortAuto.get()) {
       cancelAllAuto();
     }
     if (m_oi.gamepad.getButtonStateA())
@@ -400,7 +401,7 @@ public class Robot extends TimedRobot {
         if (SmartDashboard.getBoolean("ReverseOrient", false))
           angleTarget = -angleTarget;
         orientRate = SmartDashboard.getNumber("Orient Rate", .25);
-        new RobotOrient(angleTarget, orientRate, true, 30).start();
+        new RobotOrient(angleTarget, orientRate, true, 5).start();
         doTeleopOrient = false;
       }
       if (doTeleopVisionOrient) {

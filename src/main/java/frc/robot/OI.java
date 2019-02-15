@@ -53,6 +53,7 @@ public class OI {
     public JoystickButton retractPusher;
     public JoystickButton pickUpCargo;
     public JoystickButton deliverCargo;
+    public JoystickButton abortAuto;
 
     public JoystickButton captureAndRetractHatchCover;
     public JoystickButton presentAndReleaseHatchCoverShip;
@@ -103,7 +104,7 @@ public class OI {
 
         SmartDashboard.putData("Reset Elevator", new ResetElevatorPosition());
         
-        
+        abortAuto = new JoystickButton(driverController, 7);
         
         /**
          * Co driver controller
@@ -119,11 +120,11 @@ public class OI {
 
         elevatorToMidRocket = gamepad.getButtonY();
 
-        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_UPPER_CARGO_INCHES));
+        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.SHIP_CARGO_INCHES));
 
         elevatorToTopRocket = gamepad.getButtonX();
 
-        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
+        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
 
         jogElevator = gamepad.getStartButton();
         jogElevator.whileHeld(new RunElevatorFromGamepad());

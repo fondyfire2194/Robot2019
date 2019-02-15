@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
+
 /**
  * use a trajectory. Specify the trajectory segment where vision should take the
  * place of gyro
@@ -95,8 +96,11 @@ public class RobotDriveToTarget extends Command {
 		useGyroComp = !Robot.useVisionComp;
 
 		if (Robot.useVisionComp) {
-			Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
-			// Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+			if (Robot.limelightOnEnd) {
+				Robot.activeMotionComp = -Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+			} else {
+				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+			}
 
 		}
 		// if (useGyroComp) {

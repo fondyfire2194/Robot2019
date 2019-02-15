@@ -40,7 +40,7 @@ public class Pref {
     prefDict.put("RotateIzone", 3.);
 
     prefDict.put("VisionRotKp", 0.2);
-    prefDict.put("VisionRotKi", .0001);
+    prefDict.put("VisionRotKi", .000);
     prefDict.put("VisionRotKd", .0);
     prefDict.put("VisionRotIzone", 3.);
 
