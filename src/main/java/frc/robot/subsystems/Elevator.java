@@ -67,7 +67,7 @@ public class Elevator extends Subsystem {
 	}
 
 	public double getElevatorPositionInches() {
-		return Math.round(elevatorMotor.getSelectedSensorPosition(0) / Constants.ELEVATOR_ENCODER_COUNTS_PER_INCH);
+		return elevatorMotor.getSelectedSensorPosition(0) / Constants.ELEVATOR_ENCODER_COUNTS_PER_INCH;
 	}
 
 	public int getElevatorEncoderSpeedCountsPer100mS() {
@@ -117,10 +117,10 @@ public class Elevator extends Subsystem {
 	}
 
 	public void runElevatorMotor(double speed) {
-		if (elevatorTooLow && speed < 0)
-			speed = 0;
-		if (elevatorTooHigh && speed > 0)
-			speed = 0;
+		// if (elevatorTooLow && speed < 0)
+		// 	speed = 0;
+		// if (elevatorTooHigh && speed > 0)
+		// 	speed = 0;
 		SmartDashboard.putNumber("speed", speed);
 		elevatorMotor.set(ControlMode.PercentOutput, speed);
 	}
@@ -155,7 +155,7 @@ public class Elevator extends Subsystem {
 		}
 		if (switchWasSeen)
 			switchWasSeen = elevatorOnSwitch;
-		SD.putN1("Elevator Inches", getElevatorPositionInches());
+		SD.putN2("Elevator Inches", getElevatorPositionInches());
 		SmartDashboard.putBoolean("Elevator Too Low", elevatorTooLow);
 		SmartDashboard.putBoolean("Elevator Too High", elevatorTooHigh);
 		SD.putN1("Elevator Target", elevatorTargetPosition);

@@ -119,11 +119,11 @@ public class OI {
 
         elevatorToMidRocket = gamepad.getButtonY();
 
-        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_LOWER_CARGO_INCHES));
+        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_UPPER_CARGO_INCHES));
 
         elevatorToTopRocket = gamepad.getButtonX();
 
-        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
+        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
 
         jogElevator = gamepad.getStartButton();
         jogElevator.whileHeld(new RunElevatorFromGamepad());

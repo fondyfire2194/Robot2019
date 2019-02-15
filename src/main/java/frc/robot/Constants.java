@@ -43,7 +43,7 @@ public class Constants {
 
 
 
-  public static double ELEVATOR_POSITION_RATE = 10;// in per sec
+  public static double ELEVATOR_POSITION_RATE = 30;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
   // (in/sec) * enc Counts/in = enc counts / sec then divide by 10 for 100ms
   public static double ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS = ELEVATOR_ENCODER_COUNTS_PER_INCH / 10;
