@@ -28,20 +28,17 @@ public class RobotOrientToVision extends Command {
 	private double rampIncrement;
 	private double startTime;
 	private double rampTime;
-	
-	
 
-	public RobotOrientToVision( double speed, double timeout) {
+	public RobotOrientToVision(double speed, double timeout) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.rotateToVision);
 		requires(Robot.driveTrain);
 
-
 		mySpeed = speed;
 
 		myTimeout = timeout;
-	
+
 	}
 
 	// Called just before this Command runs the first time
@@ -59,14 +56,13 @@ public class RobotOrientToVision extends Command {
 		 * command = - 170, actual = 160 error = - 330 adjusted error 30 so error + 360
 		 */
 
-
 		// if (angleError > 0)
 		double Kp = Pref.getPref("RotateKp");
 		double Ki = Pref.getPref("RotateKi");
 		double Kd = Pref.getPref("RotateKd");
 		double Kf = Pref.getPref("RotateKf");
 
-        Robot.rotateToVision.setPIDF(Kp,0,Kd,Kf);
+		Robot.rotateToVision.setPIDF(Kp, 0, Kd, Kf);
 		Robot.rotateToVision.setMaxOut(Constants.MINIMUM_START_PCT);
 		Robot.rotateToVision.setSetpoint(0.);
 		Robot.rotateToVision.enablePID();
@@ -74,7 +70,7 @@ public class RobotOrientToVision extends Command {
 		setTimeout(myTimeout);
 		currentMaxSpeed = Constants.MINIMUM_START_PCT;
 		passCount = 0;
-		
+
 		startTime = Timer.getFPGATimestamp();
 		doneAccelerating = false;
 	}
@@ -93,20 +89,24 @@ public class RobotOrientToVision extends Command {
 				SmartDashboard.putNumber("Ramptime", rampTime);
 			}
 		}
-		
-		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"));
-			Robot.robotRotate.getPIDController()
-					.setI(Pref.getPref("RotateKi"));
 
-		
-		inPosition = Robot.limelightCamera.getIsTargetFound()&&Math.abs(Robot.limelightCamera.getdegRotationToTarget())<1;
-		
+		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"))
+			;
+		Robot.robotRotate.getPIDController().setI(Pref.getPref("RotateKi"));
+
+		if (Robot.limelightOnEnd) {
+			inPosition = Robot.limelightCamera.getIsTargetFound()
+					&& Math.abs(Robot.limelightCamera.getdegVerticalToTarget()) < 1;
+		} else {
+			inPosition = Robot.limelightCamera.getIsTargetFound()
+					&& Math.abs(Robot.limelightCamera.getdegRotationToTarget()) < 1;
+		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return !Robot.limelightCamera.getIsTargetFound() ||(passCount > 15 && (isTimedOut() || inPosition));
+		return !Robot.limelightCamera.getIsTargetFound() || (passCount > 15 && (isTimedOut() || inPosition));
 	}
 
 	// Called once after isFinished returns true
