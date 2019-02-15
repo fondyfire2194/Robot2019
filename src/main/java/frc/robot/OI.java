@@ -22,7 +22,7 @@ import frc.robot.commands.Motion.LogDriveData;
 import frc.robot.commands.Limelight.*;
 import frc.robot.commands.Auto.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
-import frc.robot.commands.Limelight.LogVisionData;;
+import frc.robot.commands.Limelight.LogVisionData;
 import frc.robot.Gamepad;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
