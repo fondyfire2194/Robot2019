@@ -24,6 +24,7 @@ import frc.robot.commands.Auto.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.commands.Limelight.LogVisionData;
 import frc.robot.Gamepad;
+import frc.robot.ButtonBox;
 import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.HatchPanels.*;
@@ -36,9 +37,16 @@ import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
  */
 public class OI {
 
-    public JoystickButton elevatorToLowerHatch;
-    public JoystickButton elevatorToMidRocket;
-    public JoystickButton elevatorToTopRocket;
+    public JoystickButton elevatorToAllLowerHatch;
+    public JoystickButton elevatorToMidRocketHatch;
+    public JoystickButton elevatorToTopRocketHatch;
+
+    public JoystickButton elevatorToRocketLowerHatch;
+    public JoystickButton elevatorToShipCargo;
+    public JoystickButton elevatorToLowerRocketCargo;
+    public JoystickButton elevatorToMidRocketCargo;
+    public JoystickButton elevatorToTopRocketCargo;
+   
     public JoystickButton jogElevator;
 
     public JoystickButton captureHatchCover;
@@ -63,8 +71,10 @@ public class OI {
 
     public JoystickButton driveToVision;
 
+
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
+    public ButtonBox buttonBox = new ButtonBox(RobotMap.BUTTON_BOX);
     public Gamepad gamepad_test = new Gamepad(RobotMap.OI_TEST_CONTROLLER);
 
 
@@ -113,18 +123,33 @@ public class OI {
         stopCargoHandler = gamepad_test.getBackButton();
         stopCargoHandler.whenPressed(new StopCargoMotor());
 
+        /**
+         * 
+         * 
+         * Button box
+         */
+        elevatorToRocketLowerHatch = buttonBox.getButtonB();
 	
-        elevatorToLowerHatch = gamepad.getButtonB();
+        elevatorToAllLowerHatch = buttonBox.getButtonRT();
+        elevatorToMidRocketHatch = buttonBox.getButtonA();
+        elevatorToTopRocketHatch = buttonBox.getButtonLT();
 
-        elevatorToLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
+        elevatorToShipCargo = buttonBox.getButtonR1();
+        elevatorToLowerRocketCargo = buttonBox.getButtonY();
+        elevatorToMidRocketCargo = buttonBox.getButtonX();
+        elevatorToTopRocketCargo = buttonBox.getButtonL1();
 
-        elevatorToMidRocket = gamepad.getButtonY();
+        elevatorToRocketLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
+       
 
-        elevatorToMidRocket.whenPressed(new SetElevatorTargetHeight(Constants.SHIP_CARGO_INCHES));
-
-        elevatorToTopRocket = gamepad.getButtonX();
-
-        elevatorToTopRocket.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
+       elevatorToAllLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
+       elevatorToMidRocketHatch.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
+       elevatorToTopRocketHatch.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
+ 
+       elevatorToShipCargo.whenPressed(new SetElevatorTargetHeight(Constants.SHIP_CARGO_INCHES));
+       elevatorToLowerRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_LOWER_CARGO_INCHES));
+       elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
+       elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
         jogElevator = gamepad.getStartButton();
         jogElevator.whileHeld(new RunElevatorFromGamepad());
@@ -182,6 +207,8 @@ public class OI {
  
         driveToVision = new JoystickButton(driverController,1);
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
+        
+
         
 
     }

@@ -34,12 +34,11 @@ public class Constants {
   public static double ALL_LOWER_HATCH_INCHES = 0;
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
-  public static double SHIP_CARGO_INCHES = 13;
 
-  public static double CARGO_PICKUP_INCHES = 0;
+  public static double SHIP_CARGO_INCHES = 13;
   public static double ROCKET_LOWER_CARGO_INCHES =  8;
   public static double ROCKET_MID_CARGO_INCHES =  ROCKET_LOWER_CARGO_INCHES +28;
-  public static double ROCKET_UPPER_CARGO_INCHES =  ROCKET_MID_CARGO_INCHES + 28;
+  public static double ROCKET_TOP_CARGO_INCHES =  ROCKET_MID_CARGO_INCHES + 28;
 
 
 
