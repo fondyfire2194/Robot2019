@@ -8,9 +8,7 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.HatchPanels.*;
-import frc.robot.commands.*;
-import frc.robot.Robot;
+
 import frc.robot.commands.TimeDelay;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 

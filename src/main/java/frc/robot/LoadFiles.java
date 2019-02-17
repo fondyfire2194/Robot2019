@@ -20,10 +20,16 @@ public class LoadFiles implements Runnable {
     public void run() {
         running = true;
         error = false;
+        Robot.activeTrajName= "Not Used";
+        SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
+        SmartDashboard.putNumber("ActTrajLngth", 0);
+ 
         for (int i = 0; i < Robot.bufferTrajectoryName.length; i++) {
             Robot.bufferTrajectoryName[i] = "Not Used";
             SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-        }
+            SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i),0);
+            SmartDashboard.putNumber("BufferR Lngth" + String.valueOf(i),0);
+        } 
 
         int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
         int i = 0;
@@ -42,7 +48,7 @@ public class LoadFiles implements Runnable {
             break;
         }
         int secondHatchChosen = AutoChoosers.secondHatchChooser.getSelected();
-        if (startPositionSelected != 0 && secondHatchChosen != 0) {
+        if (!error && startPositionSelected != 0 && secondHatchChosen != 0) {
 
             int startPositionSelectedIndex = 0;
             if (startPositionSelected == 2 || startPositionSelected == 3)
@@ -65,12 +71,18 @@ public class LoadFiles implements Runnable {
     }
 
     boolean loadLeftFile(String startName, int i) {
+
         Robot.buildOK = false;
-        Robot.leftBufferTrajectory[i] = BuildTrajectory.buildLeftFileName(Robot.useUsb, startName);
-        if (Robot.buildOK) {
-            Robot.bufferTrajectoryName[i] = startName;
-            SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-            SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i), Robot.leftBufferTrajectory[i].length());
+        if (i == 0) {
+            Robot.activeLeftTrajectory = BuildTrajectory.buildLeftFileName(Robot.useUsb, startName);
+        } else {
+            Robot.leftBufferTrajectory[i - 1] = BuildTrajectory.buildLeftFileName(Robot.useUsb, startName);
+        }
+        if (Robot.buildOK && i != 0) {
+            Robot.bufferTrajectoryName[i - 1] = startName;
+            SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
+            SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i - 1),
+                    Robot.leftBufferTrajectory[i - 1].length());
 
         }
         return !Robot.buildOK;
@@ -78,14 +90,25 @@ public class LoadFiles implements Runnable {
 
     boolean loadRightFile(String startName, int i) {
         Robot.buildOK = false;
-        Robot.rightBufferTrajectory[i] = BuildTrajectory.buildRightFileName(Robot.useUsb, startName);
+        if (i == 0) {
+            Robot.activeRightTrajectory = BuildTrajectory.buildRightFileName(Robot.useUsb, startName);
+        } else {
+            Robot.rightBufferTrajectory[i - 1] = BuildTrajectory.buildRightFileName(Robot.useUsb, startName);
+        }
 
         if (Robot.buildOK) {
-            Robot.bufferTrajectoryName[i] = startName;
-            Robot.bufferTrajectoryGains[i] = TrajDict.getTrajGains(startName);
-            SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-            SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i), Robot.rightBufferTrajectory[i].length());
-
+            if (i == 0) {
+                Robot.activeTrajName = startName;
+                Robot.activeTrajectoryGains = TrajDict.getTrajGains(startName);
+                SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
+                SmartDashboard.putNumber("ActTrajLngth", Robot.activeLeftTrajectory.length());
+            } else {
+                Robot.bufferTrajectoryName[i - 1] = startName;
+                Robot.bufferTrajectoryGains[i - 1] = TrajDict.getTrajGains(startName);
+                SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
+                SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i - 1),
+                        Robot.rightBufferTrajectory[i - 1].length());
+            }
         }
         return !Robot.buildOK;
     }

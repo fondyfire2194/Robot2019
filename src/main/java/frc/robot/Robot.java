@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static int maxCommands = 20;
+  public static int maxCommands = 16;
   public static Command[] autonomousCommand;
   public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;
@@ -107,9 +107,9 @@ public class Robot extends TimedRobot {
   public static Trajectory activeLeftTrajectory;
   public static Trajectory activeRightTrajectory;
   public static String activeTrajName = "Empty";
-  public static Trajectory[] leftBufferTrajectory = new Trajectory[8];
-  public static Trajectory[] rightBufferTrajectory = new Trajectory[8];
-  public static String[] bufferTrajectoryName = { "0", "1", "2", "3", "4", "5", "7" };
+  public static Trajectory[] leftBufferTrajectory = new Trajectory[2];
+  public static Trajectory[] rightBufferTrajectory = new Trajectory[2];
+  public static String[] bufferTrajectoryName = { "0", "1"};
 
   public static int secondHatchIndex;
   public static String bufferTrajName = "Empty";
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
   public static int testTrajectoryDirection;
 
   public static double[] activeTrajectoryGains = { 0, 0, 0, 0 };
-  public static double[][] bufferTrajectoryGains = new double[6][4];
+  public static double[][] bufferTrajectoryGains = new double[2][4];
 
   public static boolean revTraj;
 
@@ -147,7 +147,6 @@ public class Robot extends TimedRobot {
   public static boolean invertY;
   public static boolean towardsFieldTrajectory;
   public static boolean trajectoriesLoaded;
-
   public static int numberOfAutonomousCommands;
   public static boolean startSettingPB = false;
   public static boolean startSettingsDone = false;
@@ -165,6 +164,7 @@ public class Robot extends TimedRobot {
   private int scanCounter;
   public static double autoStartTime;
   public static boolean cycleHold;
+  public static boolean skipHold;
   public static boolean autoAbort;
   public static double sideAngle;
   public static boolean createDriveRunFile = true;
@@ -231,10 +231,10 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("CreateTrajFile", false);
     SmartDashboard.putData(driveTrain);
-    SmartDashboard.putData(elevator);
-    SmartDashboard.putData(robotRotate);
-    SmartDashboard.putData(gph);
-    SmartDashboard.putData(airCompressor);
+    // SmartDashboard.putData(elevator);
+    // SmartDashboard.putData(robotRotate);
+    // SmartDashboard.putData(gph);
+    // SmartDashboard.putData(airCompressor);
     SmartDashboard.putData(pdp);
     SmartDashboard.putData(Scheduler.getInstance());
 
@@ -667,7 +667,6 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("OrientRng", orientRunning);
       SmartDashboard.putString("FileChosen", chosenFileName);
       SmartDashboard.putString("FileInBuffer", bufferTrajName);
-      SmartDashboard.putString("Active Trajectory", activeTrajName);
       SmartDashboard.putBoolean("LogOpen", simpleCSVLogger2194.log_open);
       SmartDashboard.putBoolean("Invert Y", invertY);
       SmartDashboard.putBoolean("Face Field", faceField);
@@ -704,14 +703,6 @@ public class Robot extends TimedRobot {
     activeTrajectoryGains[3] = Pref.getPref("PathKt");
   }
 
-  private void resetBufferNames() {
-    for (int i = 0; i < bufferTrajectoryName.length; i++) {
-      bufferTrajectoryName[i] = "Not Used";
-
-      SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-    }
-  }
-
   private void resetCommandNames() {
 
     for (int i = 0; i < maxCommands; i++) {
@@ -721,6 +712,7 @@ public class Robot extends TimedRobot {
   }
 
   public void readTrajFiles() {
+    SmartDashboard.putBoolean("RRng", readingRunning);
     startSettingPB = SmartDashboard.getBoolean("StartSet", false);
     useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
     SmartDashboard.putBoolean("StartSettingsDone", startSettingsDone);
@@ -745,7 +737,7 @@ public class Robot extends TimedRobot {
       SD.putN4("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
       startSettingsDone = true;
       wasRunning = false;
-      // setUpAutoStart();
+      System.gc();
     }
   }
 
@@ -811,12 +803,7 @@ public class Robot extends TimedRobot {
 
         AutoCommands.updateStatus(numberOfAutonomousCommands);
 
-        activeLeftTrajectory = leftBufferTrajectory[0];
-        activeRightTrajectory = rightBufferTrajectory[0];
-        activeTrajName = bufferTrajectoryName[0];
-
-        activeTrajectoryGains = bufferTrajectoryGains[0];
-        SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+         SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
 
         autoSetupRunning = false;
         setAutoStartDone = true;
