@@ -655,10 +655,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
 
     createUniqueLogName();
-SmartDashboard.putBoolean("BB X", m_oi.buttonBox.getDPadLeft());
-SmartDashboard.putNumber("BB 123L", m_oi.buttonBox.getLT());
-SmartDashboard.putNumber("BB 123R", m_oi.buttonBox.getRT());
-    if (AutoChoosers.debugChooser.getSelected() == 1) {
+   if (AutoChoosers.debugChooser.getSelected() == 1) {
       SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
       SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
       SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
@@ -759,9 +756,10 @@ SmartDashboard.putNumber("BB 123R", m_oi.buttonBox.getRT());
       SmartDashboard.putBoolean("SetAuto", false);
     SmartDashboard.putBoolean("AutoStartSetupDone", setAutoStartDone);
     SmartDashboard.putBoolean("AutoSetupRunning", autoSetupRunning);
-
+    SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     if (setAutoStartPB & startSettingsDone && !autoSetupRunning) {
       resetCommandNames();
+      numberOfAutonomousCommands=0;
       autoSetupRunning = true;
       autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
