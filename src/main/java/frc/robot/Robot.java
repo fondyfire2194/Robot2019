@@ -800,7 +800,7 @@ public class Robot extends TimedRobot {
         if (secondHatchSelected != 0) {
           int numberOfPickUpSecondHatchCommands = AutoCommands.pickUpSecondHatch(startPositionSelected,
               numberOfAutonomousCommands);
-          SmartDashboard.putNumber("NPU", numberOfPickUpSecondHatchCommands);
+
           numberOfAutonomousCommands = numberOfPickUpSecondHatchCommands;
 
           int numberOfDeliverSecondHatchCommands = AutoCommands.deliverSecondHatch(secondHatchSelected,
@@ -808,7 +808,6 @@ public class Robot extends TimedRobot {
 
           numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
         }
-        SmartDashboard.putNumber("NDU", numberOfAutonomousCommands);
 
         AutoCommands.updateStatus(numberOfAutonomousCommands);
 
