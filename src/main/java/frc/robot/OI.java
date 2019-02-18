@@ -30,6 +30,7 @@ import frc.robot.commands.Elevator.*;
 import frc.robot.commands.HatchPanels.*;
 import frc.robot.commands.Cargo.*;
 import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
+import frc.robot.commands.AirCompressor.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -113,6 +114,10 @@ public class OI {
         SmartDashboard.putData("Set Gyro Offset", new SetGyroOffset(180));
 
         SmartDashboard.putData("Reset Elevator", new ResetElevatorPosition());
+
+        SmartDashboard.putData("StartCompressor", new StartCompressor());
+
+        SmartDashboard.putData("StopCompressor", new StopCompressor());
         
         abortAuto = new JoystickButton(driverController, 7);
         

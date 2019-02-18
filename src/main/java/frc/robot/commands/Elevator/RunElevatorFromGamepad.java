@@ -43,6 +43,8 @@ public class RunElevatorFromGamepad extends Command {
 			yValue = 0;
 		if (Robot.elevator.elevatorOnSwitch && yValue > 0)// inhibit down move on bottom switch
 			yValue = 0;
+		if(Robot.elevator.getElevatorPositionInches() <10. && yValue > 0)	
+		yValue = yValue/5;
 		// square joystick and preserve sign
 		temp = yValue * yValue;
 		if (yValue < 0)

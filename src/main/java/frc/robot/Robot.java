@@ -206,7 +206,7 @@ public class Robot extends TimedRobot {
 
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
-    // Pref.deleteUnused();
+    Pref.deleteUnused();
     // Pref.addMissing();
     SmartDashboard.putData(driveTrain);
 

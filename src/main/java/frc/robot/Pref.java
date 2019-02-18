@@ -30,13 +30,13 @@ public class Pref {
   public static HashMap<String, Double> prefDict = new HashMap<>();
 
   static {
-    prefDict.put("DriveStraighKp", .03);
+    prefDict.put("DriveStraightKp", .03);
     prefDict.put("DrivePositionKp", .03);
     prefDict.put("DriveSldnDist", 2.);
 
-    prefDict.put("RotateKp", 0.2);
-    prefDict.put("RotateKi", .0001);
-    prefDict.put("RotateKd", .0);
+    prefDict.put("RotateKp", 0.005);
+    prefDict.put("RotateKi", .0);
+    prefDict.put("RotateKd", .005);
     prefDict.put("RotateIzone", 3.);
 
     prefDict.put("VisionRotKp", 0.2);

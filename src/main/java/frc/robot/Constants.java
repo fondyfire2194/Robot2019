@@ -48,7 +48,7 @@ public class Constants {
   public static double ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS = ELEVATOR_ENCODER_COUNTS_PER_INCH / 10;
 
   public static double ELEVATOR_MIN_HEIGHT = -.50;
-  public static double ELEVATOR_MAX_HEIGHT = 89;
+  public static double ELEVATOR_MAX_HEIGHT = 69;
   public static double ELEVATOR_IN_POSITION_BAND = 3;
 
   public static boolean usePathWeaver = true;

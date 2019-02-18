@@ -8,7 +8,7 @@ import frc.robot.AutoChoosers;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +18,7 @@ public class GamePieceHandler extends Subsystem {
 	public DoubleSolenoid hatchCoverGripper;
 	public DoubleSolenoid hatchCoverExtend;
 	public DoubleSolenoid hatchCoverSecondExtend;
-	public DoubleSolenoid hatchCoverPusher;
+	public Solenoid hatchCoverPusher;
 
 	public GamePieceHandler() {
 
@@ -33,8 +33,8 @@ public class GamePieceHandler extends Subsystem {
 		hatchCoverSecondExtend = new DoubleSolenoid(4, 5);
 		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
 
-		hatchCoverPusher = new DoubleSolenoid(6, 7);
-		hatchCoverPusher.set(DoubleSolenoid.Value.kForward);
+		hatchCoverPusher = new Solenoid(6);
+		hatchCoverPusher.set(false);
 
 	}
 
@@ -82,11 +82,11 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void pushHatchPanel() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
+		hatchCoverPusher.set(true);
 	}
 
 	public void retractPusher() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+		hatchCoverPusher.set(false);
 	}
 
 	public void updateStatus() {
