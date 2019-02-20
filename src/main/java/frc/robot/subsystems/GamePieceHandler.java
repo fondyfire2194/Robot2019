@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,6 +20,9 @@ public class GamePieceHandler extends Subsystem {
 	public DoubleSolenoid hatchCoverExtend;
 	public DoubleSolenoid hatchCoverSecondExtend;
 	public Solenoid hatchCoverPusher;
+	private int gripperCounter;
+	private int extenderCounter;
+	private int secondExtenderCounter;
 
 	public GamePieceHandler() {
 
@@ -45,6 +49,11 @@ public class GamePieceHandler extends Subsystem {
 
 	}
 
+	public double getDriverSlider(){
+		double temp = (Robot.m_oi.driverController.getThrottle() + 1)/2;
+		return temp;
+	}
+
 	public void stopCargoMotor() {
 		cargoMotor.set(ControlMode.PercentOutput, 0);
 	}
@@ -59,26 +68,44 @@ public class GamePieceHandler extends Subsystem {
 
 	public void gripHatchPanel() {
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
+		gripperCounter = 0;
 	}
 
 	public void releaseHatchPanel() {
 		hatchCoverGripper.set(DoubleSolenoid.Value.kReverse);
+		gripperCounter = 0;
+	}
+
+	private void gripHatchPanelOff() {
+		hatchCoverGripper.set(DoubleSolenoid.Value.kOff);
 	}
 
 	public void extendHatchPanel() {
 		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
+		extenderCounter = 0;
 	}
 
 	public void retractHatchPanel() {
 		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+		extenderCounter = 0;
+	}
+
+	public void extenderOff(){
+		hatchCoverExtend.set(DoubleSolenoid.Value.kOff);
 	}
 
 	public void secondExtendHatchPanel() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
+		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kForward);
+		secondExtenderCounter = 0;
 	}
 
 	public void secondRetractHatchPanel() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
+		secondExtenderCounter = 0;
+	}
+
+	public void secondExtenderOff(){
+		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kOff);
 	}
 
 	public void pushHatchPanel() {
@@ -90,8 +117,24 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void updateStatus() {
+		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
+		   gripperCounter++;
+		if(gripperCounter>20) {
+			gripHatchPanelOff();
+		}
+		if (hatchCoverExtend.get() != DoubleSolenoid.Value.kOff)
+		   extenderCounter++;
+		if(extenderCounter>20) {
+			extenderOff();
+		}
+		if (hatchCoverSecondExtend.get() != DoubleSolenoid.Value.kOff)
+		   secondExtenderCounter++;
+		if(secondExtenderCounter>20) {
+			secondExtenderOff();
+		}
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
 		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
+		SD.putN2("Sldr", getDriverSlider());
 		if (AutoChoosers.debugChooser.getSelected() == 4) {
 			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());
 

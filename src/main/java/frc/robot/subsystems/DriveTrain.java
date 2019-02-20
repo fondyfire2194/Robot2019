@@ -50,6 +50,7 @@ public class DriveTrain extends Subsystem {
   public boolean useGyroComp;
   public double driveStraightAngle = 0;
   public static double gyroOffset = 0;
+  public static boolean useVelocityLoop;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -66,10 +67,23 @@ public class DriveTrain extends Subsystem {
     leftTalonTwo.set(ControlMode.Follower, RobotMap.DRIVETRAIN_LEFT_TALON_ONE);
     leftTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     leftTalonOne.setSensorPhase(false);
-
+    setLeftSideDriveBrakeOn(true);
     rightTalonTwo.set(ControlMode.Follower, RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
     rightTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     rightTalonOne.setSensorPhase(false);
+    setRightSideDriveBrakeOn(true);
+
+    leftTalonOne.selectProfileSlot(0, 0);
+    leftTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
+    leftTalonOne.config_kP(0, Pref.getPref("DriveVelKp"), 0);
+    leftTalonOne.config_kI(0, Pref.getPref("DriveVelKi"), 0);
+    leftTalonOne.config_kD(0, Pref.getPref("DriveVelKd"), 0);
+    
+    rightTalonOne.selectProfileSlot(0, 0);
+    rightTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
+    rightTalonOne.config_kP(0, Pref.getPref("DriveVelKp"), 0);
+    rightTalonOne.config_kI(0, Pref.getPref("DriveVelKi"), 0);
+    rightTalonOne.config_kD(0, Pref.getPref("DriveVelKd"), 0);
 
     try {
       // imu = new AHRS(I2C.Port.kOnboard);
@@ -95,13 +109,21 @@ public class DriveTrain extends Subsystem {
   }
 
   public void leftDriveOut(double speed) {
-    SmartDashboard.putNumber("LDout", speed);
-    leftTalonOne.set(ControlMode.PercentOutput, speed);
+    if (!useVelocityLoop) {
+      leftTalonOne.set(ControlMode.PercentOutput, speed);
+    } else {
+      leftTalonOne.selectProfileSlot(0, 0);
+      leftTalonOne.set(ControlMode.Velocity, speed*Constants.MAX_ENC_CTS_PER_100MS);
+    }
   }
 
   public void rightDriveOut(double speed) {
-    SmartDashboard.putNumber("Rout", speed);
-    rightTalonOne.set(ControlMode.PercentOutput, speed);
+    if (!useVelocityLoop) {
+      rightTalonOne.set(ControlMode.PercentOutput, speed);
+    } else {
+      rightTalonOne.selectProfileSlot(0, 0);
+      rightTalonOne.set(ControlMode.Velocity, speed*Constants.MAX_ENC_CTS_PER_100MS);
+    }
   }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
@@ -219,6 +241,7 @@ public class DriveTrain extends Subsystem {
     SD.putN2("LeftFeet", getLeftFeet());
     SD.putN2("RightFeet", getRightFeet());
     SD.putN1("GyroYaw", getGyroYaw());
+    useVelocityLoop = SmartDashboard.getBoolean("DriveCloseLoop", false);
 
     if (AutoChoosers.debugChooser.getSelected() == 2) {
 

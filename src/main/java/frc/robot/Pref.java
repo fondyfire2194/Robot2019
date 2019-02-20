@@ -57,10 +57,16 @@ public class Pref {
     prefDict.put("VisionKp", .002);
     prefDict.put("JSTwistKp", .2);
 
-    prefDict.put("ElevatorMMKf", .75);
-    prefDict.put("ElevatorMMKp", .2);
+    prefDict.put("ElevatorMMKf", .6);
+    prefDict.put("ElevatorMMKp", .7);
     prefDict.put("ElevatorMMKi", 0.);
-    prefDict.put("ElevatorMMKd", 0.);
+    prefDict.put("ElevatorMMKd", 2.0);
+
+    prefDict.put("DriveVelKf",.002);
+    prefDict.put("DriveVelKp",.001);
+    prefDict.put("DriveVelKi",.0);
+    prefDict.put("DriveVelKd",.0);
+    
    
   }
   

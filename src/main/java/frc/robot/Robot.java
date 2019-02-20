@@ -230,6 +230,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("CreateTrajFile", false);
+    Timer.delay(.02);
+    SmartDashboard.putBoolean("DriveCloseLoop", false);
+    
     SmartDashboard.putData(driveTrain);
     // SmartDashboard.putData(elevator);
     // SmartDashboard.putData(robotRotate);
@@ -268,6 +271,10 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     Scheduler.getInstance().run();
     cancelAllAuto();
+    Robot.gph.retractPusher();
+    Robot.gph.gripHatchPanel();
+    Robot.gph.retractHatchPanel();
+    Robot.gph.secondRetractHatchPanel();
 
   }
 
@@ -278,10 +285,6 @@ public class Robot extends TimedRobot {
 
     // if (m_oi.gamepad.getButtonStateA()) {
     setUpAutoStart();
-    Robot.gph.retractPusher();
-    Robot.gph.gripHatchPanel();
-    Robot.gph.retractHatchPanel();
-    Robot.gph.secondRetractHatchPanel();
 
   }
 

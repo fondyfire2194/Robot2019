@@ -180,10 +180,10 @@ public class OI {
         retractHatchCover.whenPressed(new ExtendHatchPanel(false));
 
         // secondExtendHatchCover = gamepad_test.getButtonY();
-        // secondExtendHatchCover.whenPressed(new ExtendHatchPanel(true));
+        // secondExtendHatchCover.whenPressed(new SecondExtendHatchPanel(true));
 
         // secondRetractHatchCover = gamepad_test.getButtonA();
-        // secondRetractHatchCover.whenPressed(new ExtendHatchPanel(false));
+        // secondRetractHatchCover.whenPressed(new SecondExtendHatchPanel(false));
 
         pickUpCargo = gamepad_test.getButtonY();
         pickUpCargo.whenPressed(new PickUpCargo(.5));
