@@ -50,7 +50,7 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public double getDriverSlider(){
-		double temp = (Robot.m_oi.driverController.getThrottle() + 1)/2;
+		double temp = (1 - Robot.m_oi.driverController.getThrottle())/2;
 		return temp;
 	}
 
@@ -119,17 +119,17 @@ public class GamePieceHandler extends Subsystem {
 	public void updateStatus() {
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
 		   gripperCounter++;
-		if(gripperCounter>20) {
+		if(gripperCounter>2) {
 			gripHatchPanelOff();
 		}
 		if (hatchCoverExtend.get() != DoubleSolenoid.Value.kOff)
 		   extenderCounter++;
-		if(extenderCounter>20) {
+		if(extenderCounter>2) {
 			extenderOff();
 		}
 		if (hatchCoverSecondExtend.get() != DoubleSolenoid.Value.kOff)
 		   secondExtenderCounter++;
-		if(secondExtenderCounter>20) {
+		if(secondExtenderCounter>2) {
 			secondExtenderOff();
 		}
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());

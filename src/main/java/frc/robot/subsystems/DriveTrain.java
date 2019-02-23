@@ -78,7 +78,7 @@ public class DriveTrain extends Subsystem {
     leftTalonOne.config_kP(0, Pref.getPref("DriveVelKp"), 0);
     leftTalonOne.config_kI(0, Pref.getPref("DriveVelKi"), 0);
     leftTalonOne.config_kD(0, Pref.getPref("DriveVelKd"), 0);
-    
+
     rightTalonOne.selectProfileSlot(0, 0);
     rightTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
     rightTalonOne.config_kP(0, Pref.getPref("DriveVelKp"), 0);
@@ -113,7 +113,7 @@ public class DriveTrain extends Subsystem {
       leftTalonOne.set(ControlMode.PercentOutput, speed);
     } else {
       leftTalonOne.selectProfileSlot(0, 0);
-      leftTalonOne.set(ControlMode.Velocity, speed*Constants.MAX_ENC_CTS_PER_100MS);
+      leftTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     }
   }
 
@@ -122,7 +122,7 @@ public class DriveTrain extends Subsystem {
       rightTalonOne.set(ControlMode.PercentOutput, speed);
     } else {
       rightTalonOne.selectProfileSlot(0, 0);
-      rightTalonOne.set(ControlMode.Velocity, speed*Constants.MAX_ENC_CTS_PER_100MS);
+      rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     }
   }
 
@@ -210,12 +210,10 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getLeftCommand() {
-
     return leftTalonOne.getMotorOutputPercent();
   }
 
   public double getRightCommand() {
-
     return rightTalonOne.getMotorOutputPercent();
   }
 
@@ -227,11 +225,11 @@ public class DriveTrain extends Subsystem {
   }
 
   public boolean getLeftSideStalled() {
-    return leftTalonOne.getOutputCurrent() > Constants.DRIVE_SIDE_STALL_DETECT;
+    return leftTalonOne.getOutputCurrent() > Pref.getPref("DriveStall");
   }
 
   public boolean getRightSideStalled() {
-    return rightTalonOne.getOutputCurrent() > Constants.DRIVE_SIDE_STALL_DETECT;
+    return rightTalonOne.getOutputCurrent() >  Pref.getPref("DriveStall");
   }
 
   public void updateStatus() {
@@ -254,7 +252,9 @@ public class DriveTrain extends Subsystem {
       SD.putN2("RightB Amps", rightTalonTwo.getOutputCurrent());
       SmartDashboard.putNumber("LeftEncoder", getLeftEncoderCount());
       SmartDashboard.putNumber("RightEncoder", getRightEncoderCount());
-
+      SmartDashboard.putNumber("VelKf", 1 / Constants.MAX_ENC_CTS_PER_100MS);
+SmartDashboard.putBoolean("LSStall", getLeftSideStalled());
+SmartDashboard.putBoolean("TSStall", getRightSideStalled());
     }
 
   }

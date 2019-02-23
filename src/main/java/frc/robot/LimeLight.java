@@ -18,7 +18,7 @@ public class LimeLight {
     private String m_tableName;
     private Boolean isConnected = false;
     private double _hearBeatPeriod = 0.1;
-
+    final Double[] defVal = new Double[]{0.0,0.0,0.0,0.0,0.0,0.0};
     class PeriodicRunnable implements java.lang.Runnable {
         public void run() {
             resetPilelineLatency();
@@ -141,6 +141,14 @@ public class LimeLight {
         return l;
     }
 
+    public double getCamtranX() {
+        Double[] camtran = m_table.getEntry("camtran").getDoubleArray(defVal);
+        return camtran[0];
+    }
+    public double getCamtranZ() {
+        Double[] camtran = m_table.getEntry("camtran").getDoubleArray(defVal);
+        return camtran[2];
+    }
     private void resetPilelineLatency() {
         m_table.getEntry("tl").setValue(0.0);
     }
@@ -381,6 +389,9 @@ public class LimeLight {
         SD.putN1("Pipeline Latency", Robot.limelightCamera.getPipelineLatency());
         SD.putN("Pipeline #", getPipeline());
         SD.putN1("PerspAngle",getPerspectiveAngle());
+        SD.putN1("3d X", getCamtranX());
+        SD.putN1("TargetDistance", getCamtranZ());
+        
 
     }
 }

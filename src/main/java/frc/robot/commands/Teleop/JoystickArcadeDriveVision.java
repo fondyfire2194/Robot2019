@@ -40,6 +40,8 @@ public class JoystickArcadeDriveVision extends Command {
   protected void initialize() {
     leftOverCurrentCount = 0;
     rightOverCurrentCount = 0;
+    leftStalled = false;
+    rightStalled = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -65,7 +67,7 @@ public class JoystickArcadeDriveVision extends Command {
       SmartDashboard.putBoolean("Locked", true);
 
       if (Robot.limelightOnEnd) {
-        turnValue = -Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+        turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
       } else {
         turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
       }

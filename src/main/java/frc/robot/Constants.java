@@ -29,7 +29,7 @@ public class Constants {
   public final static double WHEELBASE_WIDTH = 2.1;
   public final static double MAX_TARGET_AREA = 6.5;
   public final static double ANGLE_APPROACH_LIMIT = 5.;
-  public final static double DRIVE_SIDE_STALL_DETECT = 20.;
+  public final static double DRIVE_SIDE_STALL_DETECT = 5.;
 
   public static double ALL_LOWER_HATCH_INCHES = 0;
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;

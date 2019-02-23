@@ -62,14 +62,14 @@ public class Pref {
     prefDict.put("ElevatorMMKi", 0.);
     prefDict.put("ElevatorMMKd", 2.0);
 
-    prefDict.put("DriveVelKf",.002);
-    prefDict.put("DriveVelKp",.001);
-    prefDict.put("DriveVelKi",.0);
-    prefDict.put("DriveVelKd",.0);
-    
-   
+    prefDict.put("DriveVelKf", 2.07);// 1023/Constants.MAX_ENC_CTS_PER_100MS
+    prefDict.put("DriveVelKp", .001);
+    prefDict.put("DriveVelKi", .0);
+    prefDict.put("DriveVelKd", .0);
+
+    prefDict.put("DriveStall",5.);
+
   }
-  
 
   public static void ensureRioPrefs() {
     // init();
@@ -83,7 +83,7 @@ public class Pref {
     String[] myArray = v.toArray(new String[v.size()]);
 
     for (int i = 0; i < v.size(); i++) {
-      boolean doNotDelete = myArray[i].equals(".type");
+      boolean doNotDelete = false;// myArray[i].equals(".type");
 
       if (!doNotDelete && !prefDict.containsKey(myArray[i]) && Robot.prefs.containsKey(myArray[1])) {
         Robot.prefs.remove(myArray[i]);

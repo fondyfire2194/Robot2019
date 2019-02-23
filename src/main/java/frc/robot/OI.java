@@ -199,14 +199,14 @@ public class OI {
        retractPusher = gamepad_test.getButtonX();
        retractPusher.whenPressed(new PushHatchPanel(false));
 
-        captureAndRetractHatchCover = gamepad_test.getLeftTriggerClick();
-        captureAndRetractHatchCover.whenPressed(new PickUpHatchPanel());
+        // captureAndRetractHatchCover = gamepad_test.getLeftTriggerClick();
+        // captureAndRetractHatchCover.whenPressed(new PickUpHatchPanel());
 
-        presentAndReleaseHatchCoverShip = gamepad_test.getRightTriggerClick();
-        presentAndReleaseHatchCoverShip.whenPressed(new PlaceHatchPanelShip());
+        // presentAndReleaseHatchCoverShip = gamepad_test.getRightTriggerClick();
+        // presentAndReleaseHatchCoverShip.whenPressed(new PlaceHatchPanelShip());
 
-        presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
-        presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
+        // presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
+        // presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
 
 
  

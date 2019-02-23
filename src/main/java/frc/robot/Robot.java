@@ -186,6 +186,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    prefs = Preferences.getInstance();
+    // Pref.deleteAllPrefs();
+    // Pref.deleteUnused();
+    Pref.addMissing();
+
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
     rotateToVision = new RotateToVision();
@@ -204,10 +209,6 @@ public class Robot extends TimedRobot {
     autonomousCommand = new Command[maxCommands];
     autonomousCommandName = new String[maxCommands];
 
-    prefs = Preferences.getInstance();
-    // Pref.deleteAllPrefs();
-    Pref.deleteUnused();
-    // Pref.addMissing();
     SmartDashboard.putData(driveTrain);
 
     Timer.delay(.02);
