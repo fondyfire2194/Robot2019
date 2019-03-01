@@ -175,7 +175,12 @@ public class SimpleCSVLogger2194 {
 			}
 
 			// End of line
+			line_to_write = line_to_write.substring(0,line_to_write.length()-1);
+		
 			line_to_write = line_to_write.concat("\n");
+	
+
+		
 
 			// write constructed string out to file
 			log_file.write(line_to_write);

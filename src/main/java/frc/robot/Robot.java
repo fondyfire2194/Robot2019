@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
   public static boolean buildInProgress;
   public static int startPositionSelected = 0;
   public static int secondHatchSelected = 0;
-  public static boolean useUsb = false;
+  public static boolean useUsb = true;
   public static boolean faceField;
   public static boolean invertY;
   public static boolean towardsFieldTrajectory;
@@ -819,7 +819,10 @@ public class Robot extends TimedRobot {
 
   public static void createUniqueLogName() {
     double temp = (int) Timer.getFPGATimestamp();
-    driveUniqueLogName = driveLogName + String.valueOf(temp) + ".csv";
-    trajectoryUniqueLogName = trajectoryLogName + String.valueOf(temp);
+     String tempString = String.valueOf(temp);
+    String tempString1 = tempString.substring(0,tempString.length()-2);
+    
+    driveUniqueLogName = driveLogName + tempString1 + ".csv";
+   trajectoryUniqueLogName = trajectoryLogName + tempString1;
   }
 }
