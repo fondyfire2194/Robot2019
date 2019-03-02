@@ -65,7 +65,7 @@ public class LoadFiles implements Runnable {
                 error = loadRightFile(TrajDict.secondHatchDeliveryNames[secondHatchChosen - 1], i);
             }
         }
-        Robot.secondHatchIndex = i;
+        Robot.secondHatchIndex = 0;
         running = false;
 
     }

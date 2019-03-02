@@ -63,7 +63,7 @@ public class Pref {
     prefDict.put("ElevatorMMKd", 2.0);
 
     prefDict.put("DriveVelKf", 2.07);// 1023/Constants.MAX_ENC_CTS_PER_100MS
-    prefDict.put("DriveVelKp", .001);
+    prefDict.put("DriveVelKp", 5.);
     prefDict.put("DriveVelKi", .0);
     prefDict.put("DriveVelKd", .0);
 

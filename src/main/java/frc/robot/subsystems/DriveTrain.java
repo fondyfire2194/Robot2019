@@ -233,7 +233,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void updateStatus() {
-
+    SmartDashboard.putNumber("GyOff", gyroOffset);
     SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());
     SmartDashboard.putNumber("Left ft per s", getLeftFeetPerSecond());
     SD.putN2("LeftFeet", getLeftFeet());

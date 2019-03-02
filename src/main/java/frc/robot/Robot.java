@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static int maxCommands = 16;
+  public static int maxCommands = 20;
   public static Command[] autonomousCommand;
   public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
   public static String activeTrajName = "Empty";
   public static Trajectory[] leftBufferTrajectory = new Trajectory[2];
   public static Trajectory[] rightBufferTrajectory = new Trajectory[2];
-  public static String[] bufferTrajectoryName = { "0", "1"};
+  public static String[] bufferTrajectoryName = { "0", "1" };
 
   public static int secondHatchIndex;
   public static String bufferTrajName = "Empty";
@@ -233,7 +233,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("CreateTrajFile", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("DriveCloseLoop", false);
-    
+
     SmartDashboard.putData(driveTrain);
     // SmartDashboard.putData(elevator);
     // SmartDashboard.putData(robotRotate);
@@ -608,8 +608,8 @@ public class Robot extends TimedRobot {
     switch (scanCounter) {
 
     case 1:
-    robotUpdateStatus();
-     break;
+      robotUpdateStatus();
+      break;
 
     case 2:
       limelightCamera.updateStatus();
@@ -632,16 +632,16 @@ public class Robot extends TimedRobot {
       gph.updateStatus();
       break;
 
-      case 7:
+    case 7:
       airCompressor.updateStatus();
       break;
-      case 8:
+    case 8:
       robotRotate.updateStatus();
       break;
-      case 9:
+    case 9:
       rotateToVision.updateStatus();
       break;
-      case 10:
+    case 10:
       visionData.updateStatus();
       break;
 
@@ -659,7 +659,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
 
     createUniqueLogName();
-   if (AutoChoosers.debugChooser.getSelected() == 1) {
+    if (AutoChoosers.debugChooser.getSelected() == 1) {
       SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
       SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
       SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
@@ -755,7 +755,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
     if (setAutoStartPB & startSettingsDone && !autoSetupRunning) {
       resetCommandNames();
-      numberOfAutonomousCommands=0;
+      numberOfAutonomousCommands = 0;
+      driveTrain.gyroOffset = 0;
       autoSetupRunning = true;
       autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
@@ -768,7 +769,7 @@ public class Robot extends TimedRobot {
 
       autonomousCommandName[0] = "0- Time Delay";
       if (!fileError && startPositionSelected != 0) {
-
+        SmartDashboard.putNumber("Start Position", startPositionSelected);
         switch (startPositionSelected) {
         case 1:
           invertY = false;
@@ -807,7 +808,7 @@ public class Robot extends TimedRobot {
 
         AutoCommands.updateStatus(numberOfAutonomousCommands);
 
-         SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
+        SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
 
         autoSetupRunning = false;
         setAutoStartDone = true;
@@ -819,10 +820,10 @@ public class Robot extends TimedRobot {
 
   public static void createUniqueLogName() {
     double temp = (int) Timer.getFPGATimestamp();
-     String tempString = String.valueOf(temp);
-    String tempString1 = tempString.substring(0,tempString.length()-2);
-    
+    String tempString = String.valueOf(temp);
+    String tempString1 = tempString.substring(0, tempString.length() - 2);
+
     driveUniqueLogName = driveLogName + tempString1 + ".csv";
-   trajectoryUniqueLogName = trajectoryLogName + tempString1;
+    trajectoryUniqueLogName = trajectoryLogName + tempString1;
   }
 }

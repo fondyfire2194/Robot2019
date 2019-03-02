@@ -15,31 +15,32 @@ import java.util.HashMap;
 
 public class TrajDict {
 
-public static String[] outsideStartNames = {"LL1ToCS2"};
+	public static String[] outsideStartNames = { "LL1ToCS2" };
 
-public static String[] secondHatchPickupNames = {"CS2ToTurn","CLEToLoad"};
+	public static String[] secondHatchPickupNames = { "CS2ToTurn", "CLEToLoad" };
 
-public static String[] secondHatchDeliveryNames = {"LoadToCS1","LoadToCS2","LoadToCS3","LoadToFarCenter"};
+	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2", "LoadToCS3", "LoadToFarCenter" };
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
-		gainDict.put(outsideStartNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchPickupNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchPickupNames[1], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .4, 0., 0.02, 1. });
-		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .4, 0., 0.02, 1. });
+		gainDict.put(outsideStartNames[0], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(secondHatchPickupNames[0], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(secondHatchPickupNames[1], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .7, .1, 0.07, .2 });
 	}
-	public static double[] getTrajGains(String name){
-	
-	   Double[] temp = gainDict.get(name);
-	     double[] temp1 = new double[4];
-	   for (int i =0;i<4;i++){
-		 temp1[i] = temp[i];
-	   }
-       return temp1;
+
+	public static double[] getTrajGains(String name) {
+
+		Double[] temp = gainDict.get(name);
+		double[] temp1 = new double[4];
+		for (int i = 0; i < 4; i++) {
+			temp1[i] = temp[i];
+		}
+		return temp1;
 	}
 }

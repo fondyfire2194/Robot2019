@@ -110,6 +110,7 @@ public class PathfinderNotifier {
 		double headingMultiplier = 1;
 		if (Constants.usePathWeaver)
 			headingMultiplier = -1;
+		SmartDashboard.putNumber("Heading Multi", headingMultiplier);
 		SmartDashboard.putNumber("Switch Mode", switchMode);
 		switch (switchMode) {
 
@@ -196,13 +197,19 @@ public class PathfinderNotifier {
 			 * 
 			 */
 
-			Robot.simpleCSVLogger2194.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
-					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
-					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
+			Robot.simpleCSVLogger2194.writeData(
+					(double) segmentCounter, 
+					Robot.driveTrain.leftDf.getSegment().position,
+					Robot.driveTrain.getLeftFeet(),
+					Robot.driveTrain.rightDf.getSegment().position,
+					Robot.driveTrain.getRightFeet(), 
+					Pathfinder.boundHalfDegrees(desired_heading),
 					Robot.driveTrain.getGyroYaw(),
-					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, leftPct,
+					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, 
+					left,
 					Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
-					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, rightPct,
+					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, 
+					right,
 					Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC, turn);
 		}
 

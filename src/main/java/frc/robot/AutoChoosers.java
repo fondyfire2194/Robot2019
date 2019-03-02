@@ -30,8 +30,8 @@ public class AutoChoosers {
 
 		testTrajectoryChooser.setDefaultOption("L " + TrajDict.outsideStartNames[0], 0);
 		testTrajectoryChooser.addOption("R " + TrajDict.outsideStartNames[0], 1);
-		
-		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchPickupNames[0] ,2);
+
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchPickupNames[0], 2);
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchPickupNames[0], 3);
 		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchPickupNames[1], 4);
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchPickupNames[1], 5);
@@ -91,19 +91,17 @@ public class AutoChoosers {
 
 		debugChooser = new SendableChooser<Integer>();
 
-		debugChooser.setDefaultOption("None",0);
-		debugChooser.addOption("Robot",1);
-		debugChooser.addOption("DriveTrain",2);
-		debugChooser.addOption("Elevator",3);
-		debugChooser.addOption("GamePieceHandler",4);
-		debugChooser.addOption("PowerPanel",5);
-		debugChooser.addOption("RobotRotate",6);
-		debugChooser.addOption("RotateToVision",7);
+		debugChooser.setDefaultOption("None", 0);
+		debugChooser.addOption("Robot", 1);
+		debugChooser.addOption("DriveTrain", 2);
+		debugChooser.addOption("Elevator", 3);
+		debugChooser.addOption("GamePieceHandler", 4);
+		debugChooser.addOption("PowerPanel", 5);
+		debugChooser.addOption("RobotRotate", 6);
+		debugChooser.addOption("RotateToVision", 7);
 		debugChooser.addOption("VisionData", 8);
 
-		SmartDashboard.putData("Debug", debugChooser);	
-
-
+		SmartDashboard.putData("Debug", debugChooser);
 
 	}
 }
