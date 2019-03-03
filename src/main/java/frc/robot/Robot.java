@@ -569,7 +569,7 @@ public class Robot extends TimedRobot {
         }
         activeTrajName = testTrajectoryName;
         SmartDashboard.putBoolean("FileOK", buildOK);
-        Robot.logName = activeTrajName;
+        logName = activeTrajName;
 
       }
 
@@ -805,7 +805,7 @@ public class Robot extends TimedRobot {
 
           numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
         }
-
+        logName  = activeTrajName;
         AutoCommands.updateStatus(numberOfAutonomousCommands);
 
         SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
