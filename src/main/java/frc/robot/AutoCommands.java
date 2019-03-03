@@ -103,7 +103,7 @@ public class AutoCommands {
             break;
         case 2:
         case 3:
-            Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, false, Robot.invertY);
+            Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, true, Robot.invertY);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move to Load Station Trajectory";
             number++;
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 3);
