@@ -46,7 +46,7 @@ public class OI {
     public JoystickButton elevatorToLowerRocketCargo;
     public JoystickButton elevatorToMidRocketCargo;
     public JoystickButton elevatorToTopRocketCargo;
-   
+
     public JoystickButton jogElevator;
 
     public JoystickButton captureHatchCover;
@@ -65,18 +65,16 @@ public class OI {
 
     public JoystickButton captureAndRetractHatchCover;
     public JoystickButton presentAndReleaseHatchCoverShip;
-    public JoystickButton presentAndReleaseHatchCoverRocket;  
+    public JoystickButton presentAndReleaseHatchCoverRocket;
 
     public JoystickButton stopCargoHandler;
 
     public JoystickButton driveToVision;
 
-
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
     public ButtonBox buttonBox = new ButtonBox(RobotMap.BUTTON_BOX);
     public Gamepad gamepad_test = new Gamepad(RobotMap.OI_TEST_CONTROLLER);
-
 
     public OI() {
         Timer.delay(.02);
@@ -115,9 +113,9 @@ public class OI {
         SmartDashboard.putData("StartCompressor", new StartCompressor());
 
         SmartDashboard.putData("StopCompressor", new StopCompressor());
-        
+
         abortAuto = new JoystickButton(driverController, 7);
-        
+
         /**
          * Co driver controller
          * 
@@ -131,7 +129,7 @@ public class OI {
          * Button box
          */
         elevatorToRocketLowerHatch = buttonBox.getButtonB();
-	
+
         elevatorToAllLowerHatch = buttonBox.getButtonRT();
         elevatorToMidRocketHatch = buttonBox.getButtonA();
         elevatorToTopRocketHatch = buttonBox.getButtonLT();
@@ -142,16 +140,15 @@ public class OI {
         elevatorToTopRocketCargo = buttonBox.getButtonL1();
 
         elevatorToRocketLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
-       
 
-       elevatorToAllLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
-       elevatorToMidRocketHatch.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
-       elevatorToTopRocketHatch.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
- 
-       elevatorToShipCargo.whenPressed(new SetElevatorTargetHeight(Constants.SHIP_CARGO_INCHES));
-       elevatorToLowerRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_LOWER_CARGO_INCHES));
-       elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
-       elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
+        elevatorToAllLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
+        elevatorToMidRocketHatch.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_HATCH_INCHES));
+        elevatorToTopRocketHatch.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_HATCH_INCHES));
+
+        elevatorToShipCargo.whenPressed(new SetElevatorTargetHeight(Constants.SHIP_CARGO_INCHES));
+        elevatorToLowerRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_LOWER_CARGO_INCHES));
+        elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
+        elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
         jogElevator = gamepad.getStartButton();
         jogElevator.whileHeld(new RunElevatorFromGamepad());
@@ -161,15 +158,12 @@ public class OI {
          * 
          */
 
-
-        
         captureHatchCover = gamepad_test.getLeftShoulder();
         captureHatchCover.whenPressed(new GripHatchPanel(true));
 
         releaseHatchCover = gamepad_test.getLeftTriggerClick();
         releaseHatchCover.whenPressed(new GripHatchPanel(false));
 
-        
         extendHatchCover = gamepad_test.getRightShoulder();
         extendHatchCover.whenPressed(new ExtendHatchPanel(true));
 
@@ -184,17 +178,15 @@ public class OI {
 
         pickUpCargo = gamepad_test.getButtonY();
         pickUpCargo.whenPressed(new PickUpCargo(.5));
-        
-        deliverCargo  = gamepad_test.getButtonA();
+
+        deliverCargo = gamepad_test.getButtonA();
         deliverCargo.whenPressed(new DeliverCargo(.5));
-        
-        
 
-       pushHatchCover = gamepad_test.getButtonB();
-       pushHatchCover.whenPressed(new PushHatchPanel(true));
+        pushHatchCover = gamepad_test.getButtonB();
+        pushHatchCover.whenPressed(new PushHatchPanel(true));
 
-       retractPusher = gamepad_test.getButtonX();
-       retractPusher.whenPressed(new PushHatchPanel(false));
+        retractPusher = gamepad_test.getButtonX();
+        retractPusher.whenPressed(new PushHatchPanel(false));
 
         // captureAndRetractHatchCover = gamepad_test.getLeftTriggerClick();
         // captureAndRetractHatchCover.whenPressed(new PickUpHatchPanel());
@@ -205,13 +197,9 @@ public class OI {
         // presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
         // presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
 
-
- 
-        driveToVision = new JoystickButton(driverController,1);
+        driveToVision = new JoystickButton(driverController, 1);
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
-        
-
-        
+        driveToVision.whenReleased(new DelayOffLeds(2.));
 
     }
 }
