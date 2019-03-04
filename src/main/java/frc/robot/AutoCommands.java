@@ -92,10 +92,10 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, true, Robot.invertY);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move to Load Station Trajectory";
             number++;
-            Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 3);
+            Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 1.5);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station";
             number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(3,Constants.POSITION_RATE, false, 3);
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(12,Constants.POSITION_RATE, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station";
             number++;
             Robot.autonomousCommand[number] = new PickUpHatchPanel();

@@ -104,7 +104,7 @@ public class OI {
 
         SmartDashboard.putData("Log Elevator", new LogElevatorData(10));
 
-        SmartDashboard.putData("Log Vision", new LogVisionData(15));
+        SmartDashboard.putData("Log Vision", new LogVisionData(10));
 
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(0));
 

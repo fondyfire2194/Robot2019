@@ -77,8 +77,6 @@ public class JoystickArcadeDriveVision extends Command {
 
 if (Robot.limelightCamera.getIsTargetFound())
       targetWasSeen = true;
-    if (targetWasSeen)
-      targetWasSeen = throttleValue != 0;
 
     inVisionRange = Robot.limelightCamera.getIsTargetFound()
         && Robot.limelightCamera.getTargetArea() < Constants.MAX_TARGET_AREA;
@@ -140,7 +138,11 @@ if (Robot.limelightCamera.getIsTargetFound())
 
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
-
+    // SmartDashboard.putBoolean("TWS", targetWasSeen);
+    // SmartDashboard.putBoolean("TIVR",inVisionRange);
+    // SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
+    // SmartDashboard.putNumber("TDSA",Robot.driveTrain.driveStraightAngle);
+    // SmartDashboard.putNumber("TVAl", turnValue);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -155,7 +157,8 @@ if (Robot.limelightCamera.getIsTargetFound())
     Robot.driveTrain.arcadeDrive(0, 0);
     Robot.driveTrain.setLeftSideDriveBrakeOn(true);
     Robot.driveTrain.setRightSideDriveBrakeOn(true);
-
+    targetWasSeen=false;
+    tooCloseForCamera = false;
   }
 
   // Called when another command which requires one or more of the same

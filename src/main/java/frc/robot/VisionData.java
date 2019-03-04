@@ -51,45 +51,12 @@ public class VisionData {
 
     }
 
-    public double atTargetAngle() {
-        double temp = 999;
-        boolean angleFound = false;
-        int i = -1;
-        while (i < validTargetAngles.length - 1 && !angleFound) {
-            i++;
-            angleFound = Math.abs(Robot.driveTrain.getGyroYaw() - validTargetAngles[i]) < atTargetAngleTolerance;
-            if (angleFound) {
-                temp = validTargetAngles[i];
-                break;
-            }
-        }
-        return temp;
-    }
 
-    public double getGyroAngleError() {
-        return atTargetAngle() - Robot.driveTrain.getGyroYaw();
-    }
-
-    private boolean sameAngleSigns() {
-        boolean temp1 = getGyroAngleError() >= 0 && Robot.limelightCamera.getdegRotationToTarget() >= 0;
-        boolean temp2 = getGyroAngleError() < 0 && Robot.limelightCamera.getdegRotationToTarget() < 0;
-
-        return temp1 || temp2;
-    }
-
-    public boolean validTarget() {
-        return Robot.limelightCamera.getIsTargetFound() && atTargetAngle() != 999;
-
-    }
 
     public void updateStatus() {
-
+      SD.putN1("TargetDistance", calculateDistance());
         if (AutoChoosers.debugChooser.getSelected() == 8) {
-            SD.putN1("TargetDistance", calculateDistance());
-            SmartDashboard.putBoolean("AtTargetAngle", atTargetAngle() != 999);
-            SD.putN1("VisionTargetAngle", atTargetAngle());
-            SD.putN3("GyroTargetError", getGyroAngleError());
-            SmartDashboard.putBoolean("SameSigns", sameAngleSigns());
+           
         }
     }
 
