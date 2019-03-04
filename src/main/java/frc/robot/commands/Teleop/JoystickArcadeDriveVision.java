@@ -10,15 +10,18 @@ package frc.robot.commands.Teleop;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.Pref;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JoystickArcadeDriveVision extends Command {
   private int leftOverCurrentCount;
   private int rightOverCurrentCount;
   private int overCurrentCountMax = 10;
-  private double gyroOffLimit = 5.;
   private boolean leftStalled;
   private boolean rightStalled;
+  private boolean targetWasSeen;
+  private boolean insideCameraRange;
+  private boolean inVisionRange;
 
   public JoystickArcadeDriveVision() {
     requires(Robot.driveTrain);
@@ -42,6 +45,8 @@ public class JoystickArcadeDriveVision extends Command {
     rightOverCurrentCount = 0;
     leftStalled = false;
     rightStalled = false;
+    targetWasSeen = false;
+    inVisionRange = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -50,28 +55,37 @@ public class JoystickArcadeDriveVision extends Command {
 
     double turnValue = 0;
     double throttleValue = -Robot.m_oi.driverController.getY();
-    double closestTargetAngle = Robot.visionData.atTargetAngle();
-    boolean robotOnLine = closestTargetAngle != 999;
+    if (Math.abs(throttleValue) < .15) {
+      throttleValue = 0;
+    }
 
-    if (!robotOnLine) {
-      SmartDashboard.putBoolean("Locked", false);
+    if (Robot.limelightCamera.getIsTargetFound())
+      targetWasSeen = true;
+    if (targetWasSeen)
+      targetWasSeen = throttleValue != 0;
+
+    inVisionRange = Robot.limelightCamera.getIsTargetFound()
+        && Robot.limelightCamera.getTargetArea() < Constants.MAX_TARGET_AREA;
+
+    if (!Robot.limelightCamera.getIsTargetFound())
       turnValue = Robot.m_oi.driverController.getTwist() * Pref.getPref("JSTwistKp");
 
-      if (Math.abs(throttleValue) < .15) {
-        throttleValue = 0;
-      }
-      if (Math.abs(turnValue) < .15) {
-        turnValue = 0;
-      }
-    } else {
-      SmartDashboard.putBoolean("Locked", true);
+    insideCameraRange = targetWasSeen && Robot.limelightCamera.getTargetArea() < Constants.MAX_TARGET_AREA;
+    // in vision zone keep gyro target angle current in case need to switch
+    // over to gyro
+
+    if (inVisionRange) {
+      Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
       if (Robot.limelightOnEnd) {
-        turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+        turnValue = -Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
       } else {
-        turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+        turnValue = - Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
       }
     }
+    if (insideCameraRange || targetWasSeen && !Robot.limelightCamera.getIsTargetFound())
+      turnValue = Robot.driveTrain.getCurrentComp();
+
     if (Robot.driveTrain.getLeftSideStalled()) {
       leftOverCurrentCount++;
     } else {
@@ -103,8 +117,6 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
 
-    SmartDashboard.putNumber("GyroErrorVision", Robot.visionData.getGyroAngleError());
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -119,8 +131,7 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.arcadeDrive(0, 0);
     Robot.driveTrain.setLeftSideDriveBrakeOn(true);
     Robot.driveTrain.setRightSideDriveBrakeOn(true);
-    SmartDashboard.putBoolean("Locked", false);
-    SmartDashboard.putNumber("GyroErrorVision", 9999);
+
   }
 
   // Called when another command which requires one or more of the same

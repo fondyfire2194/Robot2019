@@ -23,6 +23,7 @@ public class GamePieceHandler extends Subsystem {
 	private int gripperCounter;
 	private int extenderCounter;
 	private int secondExtenderCounter;
+	private boolean stopCargoIntake;
 
 	public GamePieceHandler() {
 
@@ -63,6 +64,7 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void deliverCargo(double speed) {
+		stopCargoIntake = false;
 		cargoMotor.set(ControlMode.PercentOutput, -speed);
 	}
 
@@ -117,6 +119,8 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void updateStatus() {
+		if(cargoMotor.getOutputCurrent() > 10.) stopCargoIntake=true;
+        if(stopCargoIntake)stopCargoMotor();
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
 		   gripperCounter++;
 		if(gripperCounter>2) {

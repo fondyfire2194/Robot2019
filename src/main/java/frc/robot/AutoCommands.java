@@ -55,10 +55,10 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new SetGyroOffset(180);
         Robot.autonomousCommandName[number] = "3 - Set Gyro Offset";
         number++;
-        Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 1);
+        Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Cargo Ship";
         number++;
-        Robot.autonomousCommand[number] = new RobotDriveToTarget(2,Constants.POSITION_RATE, false, 3);
+        Robot.autonomousCommand[number] = new RobotDriveToTarget(5,Constants.POSITION_RATE, false, 3);
         Robot.autonomousCommandName[number] = "5 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanelShip();

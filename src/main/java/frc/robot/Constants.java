@@ -27,13 +27,14 @@ public class Constants {
   public static double MAX_ENC_CTS_PER_100MS = MAX_ROBOT_FT_PER_SEC * FT_PER_SEC_TO_ENC_CTS_PER_100MS;
   public static double FT_PER_SEC_TO_PCT_OUT = 1 / MAX_ROBOT_FT_PER_SEC;
   public final static double WHEELBASE_WIDTH = 2.1;
-  public final static double MAX_TARGET_AREA = 6.5;
+  public final static double MAX_TARGET_AREA = 10.;
+  public final static double MAX_AREA_DISTANCE = 2.0;
   public final static double ANGLE_APPROACH_LIMIT = 5.;
-  public final static double DRIVE_SIDE_STALL_DETECT = 5.;
+  public final static double DRIVE_SIDE_STALL_DETECT = 50.;
 
   public final static double ORIENT_RATE = .35;
   public final static double POSITION_RATE = 6.;
-  public static double ALL_LOWER_HATCH_INCHES = 0;
+  public static double ALL_LOWER_HATCH_INCHES = 0.;
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
 

@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
-import frc.robot.commands.Motion.RobotOrientToVision;
 import frc.robot.commands.Motion.RobotDriveToTarget;
 
 import frc.robot.commands.Auto.*;
@@ -27,7 +26,6 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.RobotRotate;
-import frc.robot.subsystems.RotateToVision;
 
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
@@ -52,7 +50,6 @@ import frc.robot.LimelightControlMode.*;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
-  public static RotateToVision rotateToVision;
   public static Elevator elevator;
   public static GamePieceHandler gph;
   public static AirCompressor airCompressor;
@@ -87,7 +84,6 @@ public class Robot extends TimedRobot {
   public static boolean orientRunning;
   public static boolean reverseOrient;
   public static boolean doTeleopOrient;
-  public static boolean doTeleopVisionOrient;
   public static boolean doTeleopPosition;
 
   public static double targetPosition;
@@ -193,7 +189,6 @@ public class Robot extends TimedRobot {
 
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
-    rotateToVision = new RotateToVision();
     elevator = new Elevator();
 
     airCompressor = new AirCompressor();
@@ -408,14 +403,7 @@ public class Robot extends TimedRobot {
         new RobotOrient(angleTarget, orientRate, true, 5).start();
         doTeleopOrient = false;
       }
-      if (doTeleopVisionOrient) {
-
-        orientRate = SmartDashboard.getNumber("Orient Rate", .25);
-        new RobotOrientToVision(orientRate, 30).start();
-        doTeleopVisionOrient = false;
-      }
-
-      if (doFileTrajectory) {
+     if (doFileTrajectory) {
         createTrajectoryRunFile = SmartDashboard.getBoolean("CreateTrajFile", true);
         useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
         testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
@@ -639,7 +627,6 @@ public class Robot extends TimedRobot {
       robotRotate.updateStatus();
       break;
     case 9:
-      rotateToVision.updateStatus();
       break;
     case 10:
       visionData.updateStatus();

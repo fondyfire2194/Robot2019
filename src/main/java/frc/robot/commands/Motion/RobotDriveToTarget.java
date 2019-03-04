@@ -1,7 +1,6 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
 
@@ -18,19 +17,16 @@ public class RobotDriveToTarget extends Command {
 
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
-	private double startingTargetAngle;
 
 	public double myDistance;
 	public double slowDownFeet = 2;
 	public boolean decelerate;
 	private double myEndpoint;
 	private double startOfVisionPoint = 8;
-
+	private double activeMotionComp;
 	private double endOfVisionPoint = 1;
 	private boolean inVisionRange;
 	private double remainingFtToHatch;
-	private double activeMotionComp;
-	private double maxTargetArea = 20;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
@@ -56,12 +52,12 @@ public class RobotDriveToTarget extends Command {
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
 		Robot.isPositioning = true;
-		startingTargetAngle = Robot.driveTrain.getGyroYaw();
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
 		decelerate = false;
 		slowDownFeet = Pref.getPref("DriveSldnDist");
 		Robot.activeMotionComp = 0.;
+
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -86,28 +82,28 @@ public class RobotDriveToTarget extends Command {
 				currentMaxSpeed = .3;
 		}
 
+		inVisionRange = (remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint)
+				|| Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
-		inVisionRange = true;// remainingFtToHatch < startOfVisionPoint && remainingFtToHatch >
-								// endOfVisionPoint;
+		if (inVisionRange)
+			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
 		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
 		useGyroComp = !Robot.useVisionComp;
 
 		if (Robot.useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+				Robot.activeMotionComp = -Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
 			} else {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+				Robot.activeMotionComp = -Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
 			}
 
 		}
-		// if (useGyroComp) {
-		// activeMotionComp = Robot.driveTrain.getCurrentComp();
-		// }
-		SmartDashboard.putBoolean("Use Gyro Comp", useGyroComp);
-		SmartDashboard.putNumber("Use Comp", Robot.activeMotionComp);
+		if (useGyroComp) {
+			activeMotionComp = Robot.driveTrain.getCurrentComp();
+		}
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
 
 	}
@@ -115,8 +111,7 @@ public class RobotDriveToTarget extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= (myEndpoint)
-				|| Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
+		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= myEndpoint;
 	}
 
 	// Called once after isFinished returns true
@@ -128,7 +123,6 @@ public class RobotDriveToTarget extends Command {
 		Robot.isPositioning = false;
 		doneAccelerating = false;
 		decelerate = false;
-		Robot.robotRotate.setSetpoint(startingTargetAngle);
 		currentMaxSpeed = 0;
 		inVisionRange = false;
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
