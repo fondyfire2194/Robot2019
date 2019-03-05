@@ -643,7 +643,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
 
     createUniqueLogName();
-    if (AutoChoosers.debugChooser.getSelected() == 1) {
+     if (AutoChoosers.debugChooser.getSelected() == 1) {
       SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
       SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
       SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
@@ -662,7 +662,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
       SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
       SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
-    }
+     }
   }
 
   public static void cancelAllAuto() {

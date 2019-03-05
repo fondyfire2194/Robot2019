@@ -80,7 +80,7 @@ public class Pref {
     for (int i = 0; i < v.size(); i++) {
       boolean doNotDelete = false;// myArray[i].equals(".type");
 
-      if (!doNotDelete && !prefDict.containsKey(myArray[i]) && Robot.prefs.containsKey(myArray[1])) {
+      if (!doNotDelete && !prefDict.containsKey(myArray[i]) && Robot.prefs.containsKey(myArray[i])) {
         Robot.prefs.remove(myArray[i]);
       }
     }
