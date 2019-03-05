@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Trajectory;
 
 /**
@@ -33,6 +34,7 @@ public class ReverseDistanceFollower {
 		this.trajectory = traj;
 		reset();
 		lastSegmentPosition = getLastSegmentPosition();
+		SmartDashboard.putNumber("LSP", lastSegmentPosition);
 	}
 
 	/**

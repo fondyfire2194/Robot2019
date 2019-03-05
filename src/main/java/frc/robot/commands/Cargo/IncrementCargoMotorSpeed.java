@@ -5,19 +5,22 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Motion;
+package frc.robot.commands.Cargo;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.GamePieceHandler;
 
 /**
  * Add your docs here.
  */
-public class ResetEncoders extends InstantCommand {
+public class IncrementCargoMotorSpeed extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public ResetEncoders() {
+  public IncrementCargoMotorSpeed() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -26,8 +29,17 @@ public class ResetEncoders extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.driveTrain.resetEncoders();
-    
+    double temp = GamePieceHandler.cargoMotor.getMotorOutputPercent();
+    if (temp > 0) {
+      temp += .1;
+      if (temp > 1)
+        temp = 1;
+    } else {
+      temp -= .1;
+      if (temp < -1)
+        temp = -1;
+    }
+    GamePieceHandler.cargoMotor.set(ControlMode.PercentOutput, temp);
   }
 
 }

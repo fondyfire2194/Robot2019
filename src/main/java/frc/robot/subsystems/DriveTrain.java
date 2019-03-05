@@ -127,7 +127,6 @@ public class DriveTrain extends Subsystem {
   }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
-    SmartDashboard.putNumber("LDAout", throttleValue);
     leftDriveOut(throttleValue + turnValue);
     rightDriveOut(throttleValue - turnValue);
   }
@@ -150,6 +149,14 @@ public class DriveTrain extends Subsystem {
       rightTalonOne.setNeutralMode(NeutralMode.Coast);
       rightTalonTwo.setNeutralMode(NeutralMode.Coast);
     }
+  }
+
+  public double getDriverSlider() {
+    // want to change range to .25 to .5 from incoming 1 to -1
+    // subtracting it from 1 makes range 0 t0 2
+    //
+    double temp = 1 - Robot.m_oi.driverController.getRawAxis(3);
+    return .25 + temp/8;
   }
 
   public int getLeftEncoderCount() {
@@ -229,7 +236,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public boolean getRightSideStalled() {
-    return rightTalonOne.getOutputCurrent() >  Pref.getPref("DriveStall");
+    return rightTalonOne.getOutputCurrent() > Pref.getPref("DriveStall");
   }
 
   public void updateStatus() {
@@ -240,7 +247,7 @@ public class DriveTrain extends Subsystem {
     SD.putN2("RightFeet", getRightFeet());
     SD.putN1("GyroYaw", getGyroYaw());
     useVelocityLoop = SmartDashboard.getBoolean("DriveCloseLoop", false);
-
+    SmartDashboard.putNumber("Slider", getDriverSlider());
     if (AutoChoosers.debugChooser.getSelected() == 2) {
 
       SD.putN2("LeftCmd", getLeftCommand());
@@ -253,8 +260,8 @@ public class DriveTrain extends Subsystem {
       SmartDashboard.putNumber("LeftEncoder", getLeftEncoderCount());
       SmartDashboard.putNumber("RightEncoder", getRightEncoderCount());
       SmartDashboard.putNumber("VelKf", 1 / Constants.MAX_ENC_CTS_PER_100MS);
-SmartDashboard.putBoolean("LSStall", getLeftSideStalled());
-SmartDashboard.putBoolean("TSStall", getRightSideStalled());
+      SmartDashboard.putBoolean("LSStall", getLeftSideStalled());
+      SmartDashboard.putBoolean("TSStall", getRightSideStalled());
     }
 
   }

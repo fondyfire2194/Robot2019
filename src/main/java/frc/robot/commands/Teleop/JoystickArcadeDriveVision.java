@@ -67,7 +67,7 @@ public class JoystickArcadeDriveVision extends Command {
     }
 
     if (!Robot.limelightCamera.getIsTargetFound()) {
-      turnValue = Robot.m_oi.driverController.getTwist() * Pref.getPref("JSTwistKp");
+      turnValue = Robot.m_oi.driverController.getTwist() * Robot.driveTrain.getDriverSlider();
     }
 
     /**
@@ -85,9 +85,6 @@ public class JoystickArcadeDriveVision extends Command {
     inVisionRange = Robot.limelightCamera.getIsTargetFound()
         && Robot.limelightCamera.getTargetArea() < Constants.MAX_TARGET_AREA;
 
-    if (!Robot.limelightCamera.getIsTargetFound())
-      turnValue = Robot.m_oi.driverController.getTwist() * Pref.getPref("JSTwistKp");
-
     tooCloseForCamera = targetWasSeen && Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
 
     // in vision zone keep gyro target angle current to switch
@@ -97,11 +94,12 @@ public class JoystickArcadeDriveVision extends Command {
       Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
       if (Robot.limelightOnEnd) {
-        turnValue = -Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+        turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
       } else {
-        turnValue = -Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+        turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
       }
     }
+
     if (tooCloseForCamera || targetWasSeen && !Robot.limelightCamera.getIsTargetFound())
       turnValue = Robot.driveTrain.getCurrentComp();// gyro
     /**
@@ -140,11 +138,11 @@ public class JoystickArcadeDriveVision extends Command {
 
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
-    // SmartDashboard.putBoolean("TWS", targetWasSeen);
-    // SmartDashboard.putBoolean("TIVR",inVisionRange);
-    // SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
-    // SmartDashboard.putNumber("TDSA",Robot.driveTrain.driveStraightAngle);
-    // SmartDashboard.putNumber("TVAl", turnValue);
+    SmartDashboard.putBoolean("TWS", targetWasSeen);
+    SmartDashboard.putBoolean("TIVR", inVisionRange);
+    SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
+    SmartDashboard.putNumber("TDSA", Robot.driveTrain.driveStraightAngle);
+    SmartDashboard.putNumber("TVAl", turnValue);
   }
 
   // Make this return true when this Command no longer needs to run execute()

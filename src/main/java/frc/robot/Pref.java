@@ -39,11 +39,6 @@ public class Pref {
     prefDict.put("RotateKd", .005);
     prefDict.put("RotateIzone", 3.);
 
-    prefDict.put("VisionRotKp", 0.2);
-    prefDict.put("VisionRotKi", .000);
-    prefDict.put("VisionRotKd", .0);
-    prefDict.put("VisionRotIzone", 3.);
-
     prefDict.put("PathKp", 0.2);
     prefDict.put("PathKd", 0.);
     prefDict.put("PathKa", .02);
@@ -67,7 +62,7 @@ public class Pref {
     prefDict.put("DriveVelKi", .0);
     prefDict.put("DriveVelKd", .0);
 
-    prefDict.put("DriveStall",5.);
+    prefDict.put("DriveStall",25.);
 
   }
 

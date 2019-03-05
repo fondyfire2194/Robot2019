@@ -98,8 +98,7 @@ public class AutoChoosers {
 		debugChooser.addOption("GamePieceHandler", 4);
 		debugChooser.addOption("PowerPanel", 5);
 		debugChooser.addOption("RobotRotate", 6);
-		debugChooser.addOption("RotateToVision", 7);
-		debugChooser.addOption("VisionData", 8);
+		debugChooser.addOption("VisionData", 7);
 
 		SmartDashboard.putData("Debug", debugChooser);
 

@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static int maxCommands = 20;
+  public static int maxCommands = 24;
   public static Command[] autonomousCommand;
   public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;
@@ -107,7 +107,8 @@ public class Robot extends TimedRobot {
   public static Trajectory[] rightBufferTrajectory = new Trajectory[2];
   public static String[] bufferTrajectoryName = { "0", "1" };
 
-  public static int secondHatchIndex;
+  public static int secondHatchPickupIndex;
+  public static int secondHatchDeliverIndex;
   public static String bufferTrajName = "Empty";
   public static String testTrajectoryName;
   public static int testTrajectorySelection;
@@ -214,8 +215,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Orient Rate", orientRate);
     Timer.delay(.02);
     SmartDashboard.putBoolean("ReverseOrient", false);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("ReverseTrajectory", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("UseGainPrefs", true);
     Timer.delay(.02);
@@ -569,10 +568,8 @@ public class Robot extends TimedRobot {
 
         useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-        if (!SmartDashboard.getBoolean("ReverseTrajectory", false))
+      
           new PickAndRunTrajectory(towardsFieldTrajectory, faceField, invertY).start();
-        else
-          new PickAndRunTrajectory(!towardsFieldTrajectory, faceField, invertY).start();
 
         trajectoryRunning = true;
         doFileTrajectory = false;
@@ -652,7 +649,6 @@ public class Robot extends TimedRobot {
       SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
       SmartDashboard.putBoolean("BuildInProg", buildInProgress);
       SmartDashboard.putBoolean("BuildOK", buildOK);
-      SmartDashboard.putNumber("SecondHatchIndex", secondHatchIndex);
       SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
       SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
       SmartDashboard.putBoolean("OrientRng", orientRunning);

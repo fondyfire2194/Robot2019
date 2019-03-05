@@ -39,7 +39,7 @@ public class BufferToActiveTrajectory extends InstantCommand {
     Robot.logName  = Robot.activeTrajName;
     SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
 
-    SmartDashboard.putNumber("A2BL", Robot.activeLeftTrajectory.length());
+    // SmartDashboard.putNumber("A2BL", Robot.activeLeftTrajectory.length());
 
     Robot.autonomousCommandDone = true;
 

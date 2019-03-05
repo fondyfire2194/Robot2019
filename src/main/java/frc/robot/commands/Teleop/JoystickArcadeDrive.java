@@ -7,7 +7,6 @@
 
 package frc.robot.commands.Teleop;
 
-
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.Pref;
@@ -37,8 +36,9 @@ public class JoystickArcadeDrive extends Command {
     if (Math.abs(turnValue) < .15)
       turnValue = 0;
     if (!Robot.autoRunning)
-      Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Pref.getPref("JSTwistKp"));// Robot.prefs.getDouble("JSTwistKp",
-                                                                                         // .2));
+      // Robot.driveTrain.arcadeDrive(throttleValue, turnValue *
+      // Pref.getPref("JSTwistKp"));
+      Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Robot.driveTrain.getDriverSlider());
   }
 
   // Make this return true when this Command no longer needs to run execute()

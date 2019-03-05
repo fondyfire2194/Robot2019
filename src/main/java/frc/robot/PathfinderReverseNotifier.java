@@ -17,12 +17,13 @@ public class PathfinderReverseNotifier {
 	}
 
 	static Notifier _notifier = new Notifier(new PeriodicRunnable());
-	private static double lastSegmentPosition;
+	private static double lastSegmentPositionLeft;
+	private static double lastSegmentPositionRight;
 	private static boolean myfaceField;
 	private static boolean myInvertY;
 	private static int switchMode;
 	private static int testCt;
-
+	private static int logCtr;
 	public static void startNotifier(boolean faceField, boolean invertY) {
 		/**
 		 * all moves are towards the wall and away from the field. Robot can move in its
@@ -43,8 +44,12 @@ public class PathfinderReverseNotifier {
 			switchMode = 4;// rev motion Y inverted
 
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
-		lastSegmentPosition = Robot.activeLeftTrajectory.get(activeTrajectoryLength - 1).position;
+		SmartDashboard.putNumber("LATL",activeTrajectoryLength);
+		lastSegmentPositionLeft = Robot.activeLeftTrajectory.get(activeTrajectoryLength - 1).position;
+		lastSegmentPositionRight = Robot.activeRightTrajectory.get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
+
+		logCtr =0;
 		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt ;
 		_notifier.startPeriodic(periodic_time);
 	}
@@ -76,6 +81,7 @@ public class PathfinderReverseNotifier {
 	 */
 	private static void runReverseTrajectory() {
 		passCounter--;
+		logCtr++;
 		Robot.currentTrajectorySegment = activeTrajectoryLength-1- passCounter;
 		double left = 0;
 		double right = 0;
@@ -93,7 +99,7 @@ public class PathfinderReverseNotifier {
 
 		case 1:
 			/**
-			 * normal condition robot moves forward to field standard Pathfinder trajectory
+			 * normal condition reverse to wall
 			 * use
 			 */
 			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
@@ -172,10 +178,10 @@ SmartDashboard.putNumber("RN", testCt++);
 			 * "right", "ActRightVel", "turn"};
 			 * 
 			 */
-			Robot.simpleCSVLogger2194.writeData((double) passCounter,
-					lastSegmentPosition - Robot.driveTrain.revLeftDf.getSegment().position,
+			Robot.simpleCSVLogger2194.writeData((double) logCtr,
+					lastSegmentPositionLeft - Robot.driveTrain.revLeftDf.getSegment().position,
 					-Robot.driveTrain.getLeftFeet(),
-					lastSegmentPosition - Robot.driveTrain.revRightDf.getSegment().position,
+					lastSegmentPositionRight - Robot.driveTrain.revRightDf.getSegment().position,
 					-Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
 					-Robot.driveTrain.getGyroYaw(),
 					Robot.driveTrain.revLeftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, leftPct,

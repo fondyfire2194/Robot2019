@@ -5,19 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HatchPanels;
+package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-
-import frc.robot.commands.TimeDelay;
 import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.Motion.ResetEncoders;
 
-
-public class PlaceHatchPanelShip extends CommandGroup {
+public class ResetEncodersAuto extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PlaceHatchPanelShip() {
+  public ResetEncodersAuto() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -34,14 +32,7 @@ public class PlaceHatchPanelShip extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
- 
-    addSequential(new GripHatchPanel(false));
-    addSequential(new TimeDelay(.25));
-    addSequential(new PushHatchPanel(true));
-    addSequential(new TimeDelay(.1));
-    addSequential(new PushHatchPanel(false));
+    addSequential(new ResetEncoders());
     addSequential(new SetAutoCommandDone());
-}
   }
-  
+}

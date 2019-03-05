@@ -95,9 +95,9 @@ public class RobotDriveToTarget extends Command {
 
 		if (Robot.useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				Robot.activeMotionComp = -Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
 			} else {
-				Robot.activeMotionComp = -Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
 			}
 
 		}
