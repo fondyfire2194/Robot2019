@@ -124,6 +124,7 @@ public class RobotOrient extends Command {
 
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
+		Robot.driveTrain.resetEncoders();
 
 	}
 

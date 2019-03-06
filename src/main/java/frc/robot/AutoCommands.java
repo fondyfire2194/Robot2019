@@ -46,9 +46,6 @@ public class AutoCommands {
 
     public static int setOutsideStart() {
         int number = 1;
-        Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
-        Robot.autonomousCommandName[number] = "1 - Reset Encoders and Gyro";
-        number++;
         Robot.autonomousCommand[number] = new PickAndRunTrajectory(true, false, Robot.invertY);
         Robot.autonomousCommandName[number] = "2 - Trajectory To CS2 Line";
         number++;
@@ -71,10 +68,7 @@ public class AutoCommands {
 
     public static int setMiddleStart() {
         int number = 1;
-        Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
-        Robot.autonomousCommandName[number] = "1 - Reset Encoders and Gyro";
-        number++;
-        Robot.autonomousCommand[number] = new RobotDriveToTarget(11.25,Constants.POSITION_RATE, false, 3);
+       Robot.autonomousCommand[number] = new RobotDriveToTarget(11.25,Constants.POSITION_RATE, false, 3);
         Robot.autonomousCommandName[number] = "2 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
@@ -99,10 +93,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 1.5);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station";
             number++;
-            Robot.autonomousCommand[number] = new ResetEncodersAuto();
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset Encoders";
-            number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(6,Constants.POSITION_RATE, false, 3);
+             Robot.autonomousCommand[number] = new RobotDriveToTarget(6,Constants.POSITION_RATE, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station";
             number++;
             Robot.autonomousCommand[number] = new PickUpHatchPanel();
@@ -116,10 +107,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station";
             number++;
-            Robot.autonomousCommand[number] = new ResetEncodersAuto();
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset Encoders";
-            number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(6, Constants.POSITION_RATE, false, 3);
+           Robot.autonomousCommand[number] = new RobotDriveToTarget(6, Constants.POSITION_RATE, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station";
             number++;
             Robot.autonomousCommand[number] = new PickUpHatchPanel();
@@ -155,9 +143,6 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
             number++;
-            Robot.autonomousCommand[number] = new ResetEncodersAuto();
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset Encoders";
-            number++;
             Robot.autonomousCommand[number] = new RobotDriveToTarget(2,Constants.POSITION_RATE, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
             number++;
@@ -167,9 +152,6 @@ public class AutoCommands {
         case 3:
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
-            number++;
-            Robot.autonomousCommand[number] = new ResetEncodersAuto();
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset Encoders";
             number++;
             Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
@@ -181,9 +163,6 @@ public class AutoCommands {
         case 4:
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
-            number++;
-            Robot.autonomousCommand[number] = new ResetEncodersAuto();
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset Encoders";
             number++;
             Robot.autonomousCommand[number] = new RobotDriveToTarget(8.,Constants.POSITION_RATE, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";

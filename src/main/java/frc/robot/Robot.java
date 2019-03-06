@@ -298,6 +298,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     Scheduler.getInstance().run();
+    driveTrain.resetGyro();
+    driveTrain.resetEncoders();
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
@@ -326,10 +328,11 @@ public class Robot extends TimedRobot {
     if (m_oi.gamepad.getButtonStateB())
       cycleHold = false;
 
-    if (autonomousCommandDone && numberOfAutonomousCommands > runningAutoCommand) {
+    if (autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
 
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
-      SmartDashboard.putNumber("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
+      SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
+      SD.putN2("CMDTimeTotal",Timer.getFPGATimestamp() - autoStartTime);
       if (!cycleHold) {
         autonomousCommandDone = false;
         commandStartTime = Timer.getFPGATimestamp();
@@ -355,6 +358,7 @@ public class Robot extends TimedRobot {
     }
 
     if (runningAutoCommand > numberOfAutonomousCommands) {
+
       numberOfAutonomousCommands = 0;
       runningAutoCommand = 0;
       autonomousCommandDone = false;
