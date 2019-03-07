@@ -25,13 +25,13 @@ public class TrajDict {
 
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
-		gainDict.put(outsideStartNames[0], new Double[] { .7, .1, 0.07, .2 });
-		gainDict.put(secondHatchPickupNames[0], new Double[] { .7, .1, 0.07, .2 });
-		gainDict.put(secondHatchPickupNames[1], new Double[] { .7, .1, 0.07, .2 });
-		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .7, .1, 0.07, .2 });
-		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .7, .1, 0.07, .2 });
-		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .7, .1, 0.07, .2 });
-		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .7, .1, 0.07, .2 });
+		gainDict.put(outsideStartNames[0], new Double[] { .8, .1, 0.1, 1. });
+		gainDict.put(secondHatchPickupNames[0], new Double[] { .8, .1, 0.1, 1. });
+		gainDict.put(secondHatchPickupNames[1], new Double[] { .8, .1, 0.1, 1. });
+		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .8, .1, 0.1, 1. });
+		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .8, .1, 0.1, 1. });
+		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .8, .1, 0.1, 1. });
+		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .8, .1, 0.1, 1. });
 	}
 
 	public static double[] getTrajGains(String name) {

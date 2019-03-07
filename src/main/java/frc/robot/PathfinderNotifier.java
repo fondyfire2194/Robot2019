@@ -57,7 +57,7 @@ public class PathfinderNotifier {
 		thisTime = 0;
 		lastTime = 0;
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
-		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;/// 1000;
+		periodic_time = .02;// Robot.driveTrain.leftDf.getSegment().dt;/// 1000;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -98,7 +98,7 @@ public class PathfinderNotifier {
 		 *
 		 */
 		segmentCounter++;
-        Robot.currentTrajectorySegment = segmentCounter;
+		Robot.currentTrajectorySegment = segmentCounter;
 		double left = 0;
 		double right = 0;
 		double leftPct = 0;
@@ -108,7 +108,8 @@ public class PathfinderNotifier {
 		// convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
 		double headingMultiplier = 1;
-		if (Constants.usePathWeaver)
+		// if (Constants.usePathWeaver)
+		if (!Robot.useUsb)
 			headingMultiplier = -1;
 		SmartDashboard.putNumber("Heading Multi", headingMultiplier);
 		SmartDashboard.putNumber("Switch Mode", switchMode);
@@ -197,19 +198,13 @@ public class PathfinderNotifier {
 			 * 
 			 */
 
-			Robot.simpleCSVLogger2194.writeData(
-					(double) segmentCounter, 
-					Robot.driveTrain.leftDf.getSegment().position,
-					Robot.driveTrain.getLeftFeet(),
-					Robot.driveTrain.rightDf.getSegment().position,
-					Robot.driveTrain.getRightFeet(), 
-					Pathfinder.boundHalfDegrees(desired_heading),
+			Robot.simpleCSVLogger2194.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
+					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
+					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
 					Robot.driveTrain.getGyroYaw(),
-					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, 
-					left,
+					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, left,
 					Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
-					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, 
-					right,
+					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, right,
 					Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC, turn);
 		}
 

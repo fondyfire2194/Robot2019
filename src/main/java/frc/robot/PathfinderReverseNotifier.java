@@ -24,6 +24,7 @@ public class PathfinderReverseNotifier {
 	private static int switchMode;
 	private static int testCt;
 	private static int logCtr;
+
 	public static void startNotifier(boolean faceField, boolean invertY) {
 		/**
 		 * all moves are towards the wall and away from the field. Robot can move in its
@@ -44,13 +45,13 @@ public class PathfinderReverseNotifier {
 			switchMode = 4;// rev motion Y inverted
 
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
-		SmartDashboard.putNumber("LATL",activeTrajectoryLength);
+		SmartDashboard.putNumber("LATL", activeTrajectoryLength);
 		lastSegmentPositionLeft = Robot.activeLeftTrajectory.get(activeTrajectoryLength - 1).position;
 		lastSegmentPositionRight = Robot.activeRightTrajectory.get(activeTrajectoryLength - 1).position;
 		passCounter = activeTrajectoryLength - 1;
 
-		logCtr =0;
-		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt ;
+		logCtr = 0;
+		periodic_time = .02;// Robot.driveTrain.revLeftDf.getSegment().dt ;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -82,7 +83,7 @@ public class PathfinderReverseNotifier {
 	private static void runReverseTrajectory() {
 		passCounter--;
 		logCtr++;
-		Robot.currentTrajectorySegment = activeTrajectoryLength-1- passCounter;
+		Robot.currentTrajectorySegment = activeTrajectoryLength - 1 - passCounter;
 		double left = 0;
 		double right = 0;
 		double leftPct = 0;
@@ -92,15 +93,15 @@ public class PathfinderReverseNotifier {
 		// convenience because gyro action is opposite of trajectory generation
 		// double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
 		double headingMultiplier = 1;
-		if (Constants.usePathWeaver)
+		// if (Constants.usePathWeaver)
+		if (!Robot.useUsb)
 			headingMultiplier = -1;
 		SmartDashboard.putNumber("Switch RevMode", switchMode);
 		switch (switchMode) {
 
 		case 1:
 			/**
-			 * normal condition reverse to wall
-			 * use
+			 * normal condition reverse to wall use
 			 */
 			left = Robot.driveTrain.revLeftDf.calculate(-Robot.driveTrain.getLeftFeet());
 			right = Robot.driveTrain.revRightDf.calculate(-Robot.driveTrain.getRightFeet());
@@ -167,7 +168,7 @@ public class PathfinderReverseNotifier {
 		default:
 			break;
 		}
-SmartDashboard.putNumber("RN", testCt++);
+		SmartDashboard.putNumber("RN", testCt++);
 		Robot.driveTrain.leftDriveOut(leftPct);
 		Robot.driveTrain.rightDriveOut(rightPct);
 

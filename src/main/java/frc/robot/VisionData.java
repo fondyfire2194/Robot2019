@@ -20,11 +20,10 @@ public class VisionData {
     public double[] distanceFeet;
 
     public VisionData() {
-        boxWidth = new int[] { 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140,
-                145 };
-
-        distanceFeet = new double[] { 7.9, 7.04, 6.1, 5.38, 4.75, 4.4, 3.82, 3.5, 3.13, 2.75, 2.62, 2.35, 2.17, 2.01,
-                1.8, 1.7, 1.55, 1.4, 1.25, 1.15, 1.1, 1 };
+        boxWidth = new int[] { 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110,
+             115, 120, 125, 130, 140, 145 ,150,155,160,165,170};
+        distanceFeet = new double[] { 8.0,6.7 , 6.2,5.5 ,5.0 , 4.6,4.25 ,3.8 ,3.5 ,3.3 ,3.0 ,2.9 , 2.65,2.5 ,
+               2.43 , 2.25,2.1 ,2.0 ,1.95 , 1.88, 1.84, 1.8,1.75 ,1.73,1.7};
     }
 
     public double calculateDistance() {
@@ -33,7 +32,7 @@ public class VisionData {
         int distIntoRange = 0;
         double distanceRange = 0;
         double boxWidthValue = Robot.limelightCamera.getBoundingBoxWidth();
-        if (boxWidthValue >= 40 && boxWidthValue < 145) {
+        if (boxWidthValue >= 45 && boxWidthValue < 160) {
             lookUpIndex = (int) (boxWidthValue - boxWidth[0]) / 5;
             distIntoRange = ((int) boxWidthValue - boxWidth[0] - lookUpIndex * 5);
             double intoRange = (double) distIntoRange / segmentRange;

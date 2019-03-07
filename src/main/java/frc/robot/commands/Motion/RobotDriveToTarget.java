@@ -19,7 +19,7 @@ public class RobotDriveToTarget extends Command {
 	public static double currentMaxSpeed;
 
 	public double myDistance;
-	public double slowDownFeet = 2;
+	public double slowDownFeet = 2.5;
 	public boolean decelerate;
 	private double myEndpoint;
 	private double startOfVisionPoint = 8;

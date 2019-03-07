@@ -51,6 +51,8 @@ public class DriveTrain extends Subsystem {
   public double driveStraightAngle = 0;
   public static double gyroOffset = 0;
   public static boolean useVelocityLoop;
+  private int lastLeftEncoderValue;
+  private int lastRightEncoderValue;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -156,7 +158,7 @@ public class DriveTrain extends Subsystem {
     // subtracting it from 1 makes range 0 t0 2
     //
     double temp = 1 - Robot.m_oi.driverController.getRawAxis(3);
-    return .25 + temp/8;
+    return 0.1 + temp /7;
   }
 
   public int getLeftEncoderCount() {
@@ -239,7 +241,28 @@ public class DriveTrain extends Subsystem {
     return rightTalonOne.getOutputCurrent() > Pref.getPref("DriveStall");
   }
 
+  public int getLeftEncoderChange() {
+    int temp = getLeftEncoderCount() - lastLeftEncoderValue;
+    lastLeftEncoderValue = getLeftEncoderCount();
+    return temp;
+  }
+
+  public int getRightEncoderChange() {
+    int temp = getRightEncoderCount() - lastRightEncoderValue;
+    lastRightEncoderValue = getRightEncoderCount();
+    return temp;
+  }
+
+  public boolean leftEncoderNoChange() {
+    return Math.abs(getLeftEncoderChange()) < 2;
+  }
+
+  public boolean rightEncoderNoChange() {
+    return Math.abs(getRightEncoderChange()) < 2;
+  }
+
   public void updateStatus() {
+
     SmartDashboard.putNumber("GyOff", gyroOffset);
     SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());
     SmartDashboard.putNumber("Left ft per s", getLeftFeetPerSecond());

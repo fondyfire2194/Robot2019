@@ -224,7 +224,7 @@ public class Robot extends TimedRobot {
     Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("CreateTrajFile", false);
+    SmartDashboard.putBoolean("CreateTrajFile", true);
     Timer.delay(.02);
     SmartDashboard.putBoolean("DriveCloseLoop", false);
 
@@ -332,7 +332,7 @@ public class Robot extends TimedRobot {
 
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
       SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
-      SD.putN2("CMDTimeTotal",Timer.getFPGATimestamp() - autoStartTime);
+      SD.putN2("CMDTimeTotal", Timer.getFPGATimestamp() - autoStartTime);
       if (!cycleHold) {
         autonomousCommandDone = false;
         commandStartTime = Timer.getFPGATimestamp();
@@ -406,7 +406,7 @@ public class Robot extends TimedRobot {
         new RobotOrient(angleTarget, orientRate, true, 5).start();
         doTeleopOrient = false;
       }
-     if (doFileTrajectory) {
+      if (doFileTrajectory) {
         createTrajectoryRunFile = SmartDashboard.getBoolean("CreateTrajFile", true);
         useUsb = SmartDashboard.getBoolean("UseUSBTraj", false);
         testTrajectorySelection = AutoChoosers.testTrajectoryChooser.getSelected();
@@ -572,8 +572,7 @@ public class Robot extends TimedRobot {
 
         useGainPrefs = SmartDashboard.getBoolean("UseGainPrefs", true);
 
-      
-          new PickAndRunTrajectory(towardsFieldTrajectory, faceField, invertY).start();
+        new PickAndRunTrajectory(towardsFieldTrajectory, faceField, invertY).start();
 
         trajectoryRunning = true;
         doFileTrajectory = false;
@@ -647,7 +646,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("PosnRng", isPositioning);
 
     createUniqueLogName();
-     if (AutoChoosers.debugChooser.getSelected() == 1) {
+    if (AutoChoosers.debugChooser.getSelected() == 1) {
       SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
       SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
       SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
@@ -666,7 +665,7 @@ public class Robot extends TimedRobot {
       SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
       SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
       SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
-     }
+    }
   }
 
   public static void cancelAllAuto() {
@@ -792,7 +791,7 @@ public class Robot extends TimedRobot {
 
           numberOfAutonomousCommands = numberOfDeliverSecondHatchCommands;
         }
-        logName  = activeTrajName;
+        logName = activeTrajName;
         AutoCommands.updateStatus(numberOfAutonomousCommands);
 
         SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);

@@ -50,7 +50,7 @@ public class Elevator extends Subsystem {
 		elevatorMotor.enableVoltageCompensation(true);
 		elevatorSwitch = new AnalogTrigger(RobotMap.ELEVATOR_TRAVEL_SWITCH);
 		elevatorSwitch.setAveraged(true);
-		elevatorSwitch.setLimitsVoltage(1.0, 5.5);
+		elevatorSwitch.setLimitsVoltage(1.0, 5.0);
 
 		// elevatorSwitch = new DigitalInput(RobotMap.ELEVATOR_TRAVEL_SWITCH);
 		// Put methods for controlling this subsystem
