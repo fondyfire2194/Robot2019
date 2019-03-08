@@ -63,6 +63,11 @@ public class DriveTrain extends Subsystem {
     rightTalonOne = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_ONE);
     rightTalonTwo = new TalonSRX(RobotMap.DRIVETRAIN_RIGHT_TALON_TWO);
 
+    leftTalonOne.configFactoryDefault();
+    leftTalonTwo.configFactoryDefault();
+    rightTalonOne.configFactoryDefault();
+    rightTalonTwo.configFactoryDefault();
+
     rightTalonOne.setInverted(true);
     rightTalonTwo.setInverted(true);
 
@@ -74,6 +79,8 @@ public class DriveTrain extends Subsystem {
     rightTalonOne.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     rightTalonOne.setSensorPhase(false);
     setRightSideDriveBrakeOn(true);
+    configVoltageCompSaturation(true);
+    
 
     leftTalonOne.selectProfileSlot(0, 0);
     leftTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
@@ -133,6 +140,23 @@ public class DriveTrain extends Subsystem {
     rightDriveOut(throttleValue - turnValue);
   }
 
+  public void enableBothSidesCurrentLimit(boolean enable){
+    leftTalonOne.enableCurrentLimit(enable);
+    leftTalonTwo.enableCurrentLimit(enable);
+    rightTalonOne.enableCurrentLimit(enable);
+    rightTalonTwo.enableCurrentLimit(enable);
+  }
+
+  public void configVoltageCompSaturation(boolean on){ 
+    leftTalonOne.configVoltageCompSaturation(12, 0);
+    leftTalonOne.enableVoltageCompensation(on);
+    leftTalonTwo.configVoltageCompSaturation(12, 0);
+    leftTalonTwo.enableVoltageCompensation(on);
+    rightTalonOne.configVoltageCompSaturation(12, 0);
+    rightTalonOne.enableVoltageCompensation(on);
+    rightTalonTwo.configVoltageCompSaturation(12, 0);
+    rightTalonTwo.enableVoltageCompensation(on);
+   }
   public void setLeftSideDriveBrakeOn(boolean on) {
     if (on) {
       leftTalonOne.setNeutralMode(NeutralMode.Brake);
@@ -154,11 +178,12 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getDriverSlider() {
-    // want to change range to .25 to .5 from incoming 1 to -1
+    //  ex. want to change range to pref to ? from incoming 1 to -1
     // subtracting it from 1 makes range 0 t0 2
-    //
-    double temp = 1 - Robot.m_oi.driverController.getRawAxis(3);
-    return 0.1 + temp /7;
+    //divide by 2 range is 0 to 1
+    double temp = (1 - Robot.m_oi.driverController.getRawAxis(3))/2;
+    //range now 0 to 1
+    return Pref.getPref("JSTwistKp") + temp /10;
   }
 
   public int getLeftEncoderCount() {

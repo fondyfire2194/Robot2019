@@ -4,6 +4,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.SD;
 import frc.robot.AutoChoosers;
+import frc.robot.Pref;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -28,7 +29,11 @@ public class GamePieceHandler extends Subsystem {
 	public GamePieceHandler() {
 
 		cargoMotor = new TalonSRX(RobotMap.CARGO_MOTOR);
+		cargoMotor.configFactoryDefault();
 		cargoMotor.setNeutralMode(NeutralMode.Brake);
+		cargoMotor.configVoltageCompSaturation(12, 0);
+		cargoMotor.enableVoltageCompensation(true);
+
 		hatchCoverGripper = new DoubleSolenoid(1, 0);
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 
@@ -50,8 +55,8 @@ public class GamePieceHandler extends Subsystem {
 
 	}
 
-	public double getDriverSlider(){
-		double temp = (1 - Robot.m_oi.driverController.getThrottle())/2;
+	public double getDriverSlider() {
+		double temp = (1 - Robot.m_oi.driverController.getThrottle()) / 2;
 		return temp;
 	}
 
@@ -92,7 +97,7 @@ public class GamePieceHandler extends Subsystem {
 		extenderCounter = 0;
 	}
 
-	public void extenderOff(){
+	public void extenderOff() {
 		hatchCoverExtend.set(DoubleSolenoid.Value.kOff);
 	}
 
@@ -106,7 +111,7 @@ public class GamePieceHandler extends Subsystem {
 		secondExtenderCounter = 0;
 	}
 
-	public void secondExtenderOff(){
+	public void secondExtenderOff() {
 		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kOff);
 	}
 
@@ -119,21 +124,23 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void updateStatus() {
-		if(cargoMotor.getOutputCurrent() > 10.) stopCargoIntake=true;
-        if(stopCargoIntake)stopCargoMotor();
+		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit"))
+			stopCargoIntake = true;
+		if (stopCargoIntake)
+			stopCargoMotor();
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
-		   gripperCounter++;
-		if(gripperCounter>2) {
+			gripperCounter++;
+		if (gripperCounter > 2) {
 			gripHatchPanelOff();
 		}
 		if (hatchCoverExtend.get() != DoubleSolenoid.Value.kOff)
-		   extenderCounter++;
-		if(extenderCounter>2) {
+			extenderCounter++;
+		if (extenderCounter > 2) {
 			extenderOff();
 		}
 		if (hatchCoverSecondExtend.get() != DoubleSolenoid.Value.kOff)
-		   secondExtenderCounter++;
-		if(secondExtenderCounter>2) {
+			secondExtenderCounter++;
+		if (secondExtenderCounter > 2) {
 			secondExtenderOff();
 		}
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());

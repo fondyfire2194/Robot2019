@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Constants;
 import frc.robot.PathfinderReverseNotifier;
 import frc.robot.Robot;
+import frc.robot.Pref;
 
 /**
  *
@@ -40,10 +41,12 @@ public class PathfinderReverseTrajectory extends Command {
 		Robot.driveTrain.revRightDf.reset();
 
 		Robot.trajectoryRunning = true;
+	
 		String name =  Robot.trajectoryUniqueLogName + Robot.logName + ".csv";	
 		if (Robot.createTrajectoryRunFile)
 	
 			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
+			Robot.simpleCSVLogger2194.writeData(P,I,D,V,A,Pref.getPref("PathKt"),0,0,0,0,0,0,0,0);
 
 		PathfinderReverseNotifier.startNotifier(myFaceField, myInvertY);
 

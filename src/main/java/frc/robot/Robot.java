@@ -566,7 +566,7 @@ public class Robot extends TimedRobot {
 
       if ((doFileTrajectory && buildOK)) {
         if (useGainPrefs)
-          constantsFromPrefs();
+          constantsFromPrefs(invertY);
         else
           activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
 
@@ -686,11 +686,20 @@ public class Robot extends TimedRobot {
     }
   }
 
-  private void constantsFromPrefs() {
+  private void constantsFromPrefs(boolean invertY) {
+    if(!invertY){
     activeTrajectoryGains[0] = Pref.getPref("PathKp");
     activeTrajectoryGains[1] = Pref.getPref("PathKd");
     activeTrajectoryGains[2] = Pref.getPref("PathKa");
     activeTrajectoryGains[3] = Pref.getPref("PathKt");
+    }
+    else{
+      activeTrajectoryGains[0] = Pref.getPref("PathYInvKp");
+      activeTrajectoryGains[1] = Pref.getPref("PathYInvKd");
+      activeTrajectoryGains[2] = Pref.getPref("PathYInvKa");
+      activeTrajectoryGains[3] = Pref.getPref("PathYInvKt");
+   
+    }
   }
 
   private void resetCommandNames() {
@@ -742,7 +751,7 @@ public class Robot extends TimedRobot {
     if (setAutoStartPB & startSettingsDone && !autoSetupRunning) {
       resetCommandNames();
       numberOfAutonomousCommands = 0;
-      driveTrain.gyroOffset = 0;
+      DriveTrain.gyroOffset = 0;
       autoSetupRunning = true;
       autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 

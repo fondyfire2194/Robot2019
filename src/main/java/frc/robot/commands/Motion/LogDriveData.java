@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class LogDriveData extends TimedCommand {
 	private double startTime;
-	private String names = "Time,GyroYaw,LeftPct,RightPct,LeftOneAmps,LeftOneVolts,LeftTwoAmps,LeftTwoVolts,RightAAmps,RightAVolts,RightBAmps,RightBVolts,LeftFt,RightFt,LeftVel,RightVel\n";
-	private String units = "mS,Deg,PU,PU,Amps,Volts,Amps,Volts,Amps,Volts,Amps,Volts,Ft,Ft,Ftpersec,Ftpersec\n";
+	private String names = "Time,GyroYaw,LeftPct,RightPct,LeftOneAmps,LeftOneVolts,LeftTwoAmps,LeftTwoVolts,RightOneAmps,RightOneVolts,RightTwoAmps,RightTwoVolts,LeftFt,RightFt,LeftVel,RightVel\n";
+	private String units = "mS,Deg,PCT,PCT,Amps,Volts,Amps,Volts,Amps,Volts,Amps,Volts,Ft,Ft,Ftpersec,Ftpersec\n";
 	String output_dir = "/U" + "/data_capturesDS19/Drive/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Drive";
 	String name = output_dir + name1;

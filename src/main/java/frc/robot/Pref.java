@@ -44,18 +44,21 @@ public class Pref {
     prefDict.put("PathKa", .02);
     prefDict.put("PathKt", .2);
 
-    prefDict.put("PathKpRev", 0.2);
-    prefDict.put("PathKdRev", .0);
-    prefDict.put("PathKaRev", .02);
-    prefDict.put("PathKtRev", .2);
+    prefDict.put("PathYInvKp", 0.2);
+    prefDict.put("PathYInvKd", .0);
+    prefDict.put("PathYInvKa", .02);
+    prefDict.put("PathYInvKt", .2);
 
     prefDict.put("VisionKp", .002);
+    
     prefDict.put("JSTwistKp", .2);
 
     prefDict.put("ElevatorMMKf", .6);
     prefDict.put("ElevatorMMKp", .7);
     prefDict.put("ElevatorMMKi", 0.);
     prefDict.put("ElevatorMMKd", 2.0);
+
+    prefDict.put("CargoIntakeAmpsLimit",8.0;)
 
     prefDict.put("DriveVelKf", 2.07);// 1023/Constants.MAX_ENC_CTS_PER_100MS
     prefDict.put("DriveVelKp", 5.);

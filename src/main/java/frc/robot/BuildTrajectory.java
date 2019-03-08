@@ -25,9 +25,9 @@ public class BuildTrajectory {
 
 	static String rightExtension = ".right.pf1.csv";
 
-	static String leftUSBExtension = "_left.csv";
+	static String leftMPG4Extension = "_left.csv";
 
-	static String rightUSBExtension = "_right.csv";
+	static String rightMPG4Extension = "_right.csv";
 
 	public BuildTrajectory() {
 
@@ -37,26 +37,22 @@ public class BuildTrajectory {
 		Robot.buildInProgress = true;
 		Trajectory buffer = null;
 		Robot.buildOK = false;
-		String activeLeftExtension;
-		String activeRightExtension;
-		if (usb) {
-			tempPath = usbFilePath;
-			activeLeftExtension = leftUSBExtension;
-			activeRightExtension = rightUSBExtension;
-		} else {
-			tempPath = filePath;
-			activeLeftExtension = leftExtension;
-			activeRightExtension = rightExtension;
-		}
 
 		Robot.chosenFileName = "NONE";
-		Robot.chosenFileName = tempPath + name + activeLeftExtension;
-		SmartDashboard.putString("None", Robot.chosenFileName);
-		// if (Constants.usePathWeaver) {
+
+		if(!usb){
+			tempPath = filePath;
+		}
+		else{
+			tempPath = usbFilePath;
+		}
+
 		if (!usb) {
-			myLeftFile = new File(tempPath + name + activeRightExtension);
+			myLeftFile = new File(tempPath + name + rightExtension);
+			Robot.chosenFileName = tempPath + name + rightExtension;
 		} else {
-			myLeftFile = new File(tempPath + name + activeLeftExtension);
+			myLeftFile = new File(tempPath + name + leftMPG4Extension);
+			Robot.chosenFileName = tempPath + name + leftMPG4Extension;
 		}
 
 		if (myLeftFile.exists()) {
@@ -64,7 +60,6 @@ public class BuildTrajectory {
 
 			buffer = Pathfinder.readFromCSV(myLeftFile);
 
-			SmartDashboard.putString("CFN", Robot.chosenFileName);
 			Robot.buildOK = true;
 			Robot.bufferTrajName = name;
 			SmartDashboard.putNumber("BuffLgth", buffer.length());
@@ -79,33 +74,27 @@ public class BuildTrajectory {
 		Robot.buildInProgress = true;
 		Trajectory buffer = null;
 		Robot.buildOK = false;
-
-		String activeLeftExtension;
-		String activeRightExtension;
-		if (usb) {
-			tempPath = usbFilePath;
-			activeLeftExtension = leftUSBExtension;
-			activeRightExtension = rightUSBExtension;
-		} else {
+		if(!usb){
 			tempPath = filePath;
-			activeLeftExtension = leftExtension;
-			activeRightExtension = rightExtension;
 		}
+		else{
+			tempPath = usbFilePath;
+		}
+
 
 		// if (Constants.usePathWeaver) {
 		if (!usb) {
-			myRightFile = new File(tempPath + name + activeLeftExtension);
+			myRightFile = new File(tempPath + name + leftExtension);
+			Robot.chosenFileName = tempPath + name + leftExtension;
 		} else {
-			myRightFile = new File(tempPath + name + activeRightExtension);
+			myRightFile = new File(tempPath + name + rightMPG4Extension);
+			Robot.chosenFileName = tempPath + name + rightMPG4Extension;
 		}
 
 		if (myRightFile.exists()) {
 			buffer = Pathfinder.readFromCSV(myRightFile);
-
-			Robot.chosenFileName = tempPath + name + activeRightExtension;
 			Robot.buildOK = true;
 			Robot.bufferTrajName = name;
-
 		}
 		Robot.buildInProgress = false;
 		return buffer;

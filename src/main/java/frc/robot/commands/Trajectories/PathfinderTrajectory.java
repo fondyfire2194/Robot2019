@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Pref;
 
 /**
  *
@@ -57,7 +58,7 @@ public class PathfinderTrajectory extends Command {
 			
 			String name =  Robot.trajectoryUniqueLogName + Robot.logName + ".csv";
 			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
-
+			Robot.simpleCSVLogger2194.writeData(P,I,D,V,A,Pref.getPref("PathKt"),0,0,0,0,0,0,0,0);
 		}
 		scanCounter = 0;
 

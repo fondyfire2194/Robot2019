@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.Cargo.*;
 import frc.robot.Robot;
+
 public class Elevator extends Subsystem {
 	public TalonSRX elevatorMotor = null;
 	// public double holdPositionEncoderCounts;
@@ -42,6 +43,7 @@ public class Elevator extends Subsystem {
 
 	public Elevator() {
 		elevatorMotor = new TalonSRX(RobotMap.ELEVATOR_MOTOR);
+		elevatorMotor.configFactoryDefault();
 		elevatorMotor.setInverted(true);
 		elevatorMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		elevatorMotor.setSensorPhase(true);
@@ -118,9 +120,9 @@ public class Elevator extends Subsystem {
 
 	public void runElevatorMotor(double speed) {
 		// if (elevatorTooLow && speed < 0)
-		// 	speed = 0;
+		// speed = 0;
 		// if (elevatorTooHigh && speed > 0)
-		// 	speed = 0;
+		// speed = 0;
 		SmartDashboard.putNumber("speed", speed);
 		elevatorMotor.set(ControlMode.PercentOutput, speed);
 	}
@@ -132,7 +134,7 @@ public class Elevator extends Subsystem {
 
 	public void updateStatus() {
 
-    	elevatorOnSwitch = !elevatorSwitch.getInWindow();
+		elevatorOnSwitch = !elevatorSwitch.getInWindow();
 		// check for elevator unable to reach position for 250 * 20ms = 5 sec
 		if (elevatorMotor.getOutputCurrent() > 6)
 			elevatorHiCurrent++;
@@ -163,18 +165,17 @@ public class Elevator extends Subsystem {
 		SD.putN1("Elev Talon Temp", elevatorMotor.getTemperature());
 		SmartDashboard.putBoolean("Elevator Switch", elevatorOnSwitch);
 
-		
-		if( AutoChoosers.debugChooser.getSelected()==3){
-		SD.putN1("Elevator Amps", elevatorMotor.getOutputCurrent());
-		SmartDashboard.putBoolean("Elev In Pos", inPosition());
-		SmartDashboard.putNumber("Elevator Encoder", elevatorMotor.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Elevator EncCtsPer100ms", elevatorMotor.getSelectedSensorVelocity(0));
-		SD.putN1("Elevator Hold", holdPositionInches);
-		SD.putN1("Elevator Last Hold", lastHoldPositionInches);
-		SD.putN1("Elevator Pct V", elevatorMotor.getMotorOutputPercent());
-		SD.putN1("ElI", elevatorMotor.getIntegralAccumulator(0));
-		SmartDashboard.putBoolean("Switch Was Seen", switchWasSeen);
-		SmartDashboard.putNumber("ELHIAMPS", elevatorHiCurrent);
+		if (AutoChoosers.debugChooser.getSelected() == 3) {
+			SD.putN1("Elevator Amps", elevatorMotor.getOutputCurrent());
+			SmartDashboard.putBoolean("Elev In Pos", inPosition());
+			SmartDashboard.putNumber("Elevator Encoder", elevatorMotor.getSelectedSensorPosition(0));
+			SmartDashboard.putNumber("Elevator EncCtsPer100ms", elevatorMotor.getSelectedSensorVelocity(0));
+			SD.putN1("Elevator Hold", holdPositionInches);
+			SD.putN1("Elevator Last Hold", lastHoldPositionInches);
+			SD.putN1("Elevator Pct V", elevatorMotor.getMotorOutputPercent());
+			SD.putN1("ElI", elevatorMotor.getIntegralAccumulator(0));
+			SmartDashboard.putBoolean("Switch Was Seen", switchWasSeen);
+			SmartDashboard.putNumber("ELHIAMPS", elevatorHiCurrent);
 
 		}
 
