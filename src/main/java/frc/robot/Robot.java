@@ -186,7 +186,7 @@ public class Robot extends TimedRobot {
     prefs = Preferences.getInstance();
     // Pref.deleteAllPrefs();
     // Pref.deleteUnused();
-    Pref.addMissing();
+    // Pref.addMissing();
 
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
@@ -392,7 +392,7 @@ public class Robot extends TimedRobot {
       if (doTeleopPosition) {
         positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
         positionFPS = SmartDashboard.getNumber("Position FPS", 12);
-        new RobotDriveToTarget(positionTargetFt, positionFPS, false, 8).start();
+        new RobotDriveToTarget(positionTargetFt, positionFPS, 0., false, 8).start();
         doTeleopPosition = false;
       }
 
@@ -576,6 +576,7 @@ public class Robot extends TimedRobot {
 
         trajectoryRunning = true;
         doFileTrajectory = false;
+        System.out.println("Trajectory Started");
       }
       doFileTrajectory = false;
 
@@ -687,18 +688,17 @@ public class Robot extends TimedRobot {
   }
 
   private void constantsFromPrefs(boolean invertY) {
-    if(!invertY){
-    activeTrajectoryGains[0] = Pref.getPref("PathKp");
-    activeTrajectoryGains[1] = Pref.getPref("PathKd");
-    activeTrajectoryGains[2] = Pref.getPref("PathKa");
-    activeTrajectoryGains[3] = Pref.getPref("PathKt");
-    }
-    else{
+    if (!invertY) {
+      activeTrajectoryGains[0] = Pref.getPref("PathKp");
+      activeTrajectoryGains[1] = Pref.getPref("PathKd");
+      activeTrajectoryGains[2] = Pref.getPref("PathKa");
+      activeTrajectoryGains[3] = Pref.getPref("PathKt");
+    } else {
       activeTrajectoryGains[0] = Pref.getPref("PathYInvKp");
       activeTrajectoryGains[1] = Pref.getPref("PathYInvKd");
       activeTrajectoryGains[2] = Pref.getPref("PathYInvKa");
       activeTrajectoryGains[3] = Pref.getPref("PathYInvKt");
-   
+
     }
   }
 
@@ -770,22 +770,26 @@ public class Robot extends TimedRobot {
           invertY = false;
           sideAngle = 0;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
+          driveTrain.driveStraightAngle = -90.;
           break;
         case 2:
           invertY = false;
           sideAngle = 0;
+          driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 3:
           invertY = true;
           sideAngle = 180;
+          driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 4:
           invertY = true;
           sideAngle = 180;
+          driveTrain.driveStraightAngle = 90.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           break;
         }

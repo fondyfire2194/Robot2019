@@ -55,25 +55,25 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Cargo Ship";
         number++;
-        Robot.autonomousCommand[number] = new RobotDriveToTarget(5,Constants.POSITION_RATE, false, 3);
+        Robot.autonomousCommand[number] = new RobotDriveToTarget(5, Constants.POSITION_RATE, 90 + Robot.sideAngle,
+                false, 3);
         Robot.autonomousCommandName[number] = "5 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
         Robot.autonomousCommandName[number] = "6 - Place Panel";
         Robot.secondHatchPickupIndex = 0;
         Robot.secondHatchDeliverIndex = 1;
- 
+
         return number;
     }
 
     public static int setMiddleStart() {
         int number = 1;
-       Robot.autonomousCommand[number] = new RobotDriveToTarget(11.,Constants.POSITION_RATE, false, 3);
+        Robot.autonomousCommand[number] = new RobotDriveToTarget(11., Constants.POSITION_RATE, 0, false, 3);
         Robot.autonomousCommandName[number] = "2 - Drive To Cargo Ship";
         number++;
         Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
         Robot.autonomousCommandName[number] = "3 - Place Panel";
-        
         Robot.secondHatchDeliverIndex = 0;
         return number;
 
@@ -93,7 +93,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 1.5);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station";
             number++;
-             Robot.autonomousCommand[number] = new RobotDriveToTarget(7,Constants.POSITION_RATE, false, 3);
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(7, Constants.POSITION_RATE, 180, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station";
             number++;
             Robot.autonomousCommand[number] = new PickUpHatchPanel();
@@ -107,7 +107,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station";
             number++;
-           Robot.autonomousCommand[number] = new RobotDriveToTarget(6., Constants.POSITION_RATE, false, 3);
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(6., Constants.POSITION_RATE, 180, false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station";
             number++;
             Robot.autonomousCommand[number] = new PickUpHatchPanel();
@@ -143,7 +143,8 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
             number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(2,Constants.POSITION_RATE, false, 3);
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, Robot.sideAngle, false,
+                    3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
             number++;
             Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
@@ -153,7 +154,8 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
             number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, false, 3);
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, 90, false,
+                    3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
             number++;
             Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
@@ -164,7 +166,8 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
             number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(8.,Constants.POSITION_RATE, false, 3);
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(8., Constants.POSITION_RATE, Robot.sideAngle,
+                    false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
             number++;
             Robot.autonomousCommand[number] = new PlaceHatchPanelShip();

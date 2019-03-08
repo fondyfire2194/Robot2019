@@ -23,16 +23,19 @@ public class RobotDriveToTarget extends Command {
 	public boolean decelerate;
 	private double myEndpoint;
 	private double startOfVisionPoint = 8;
-	private double activeMotionComp;
 	private double endOfVisionPoint = 1;
 	private boolean inVisionRange;
 	private double remainingFtToHatch;
+	private double myTargetAngle;
+	private boolean targetWasSeen;
+	private int targetWasSeenCtr;
+	private boolean noTargetFound;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
 	// inPositionband is in feet
 
-	public RobotDriveToTarget(double distance, double speed, boolean endItNow, double timeout) {
+	public RobotDriveToTarget(double distance, double speed, double targetAngle, boolean endItNow, double timeout) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
@@ -42,6 +45,7 @@ public class RobotDriveToTarget extends Command {
 		myEndItNow = endItNow;
 		myDistance = distance;
 		myTimeout = timeout;
+		myTargetAngle = targetAngle;
 	}
 
 	// Called just before this Command runs the first time
@@ -57,7 +61,10 @@ public class RobotDriveToTarget extends Command {
 		decelerate = false;
 		slowDownFeet = Pref.getPref("DriveSldnDist");
 		Robot.activeMotionComp = 0.;
-
+		Robot.driveTrain.driveStraightAngle = myTargetAngle;
+		targetWasSeen = false;
+		targetWasSeenCtr = 0;
+		noTargetFound = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -90,6 +97,14 @@ public class RobotDriveToTarget extends Command {
 		if (inVisionRange)
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
+		if (inVisionRange & !targetWasSeen)
+			targetWasSeenCtr++;
+
+		if (targetWasSeenCtr > 10)
+			noTargetFound = true;
+		if (Robot.limelightCamera.getIsTargetFound())
+			targetWasSeen = true;
+
 		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
 		useGyroComp = !Robot.useVisionComp;
 
@@ -102,7 +117,7 @@ public class RobotDriveToTarget extends Command {
 
 		}
 		if (useGyroComp) {
-			activeMotionComp = Robot.driveTrain.getCurrentComp();
+			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
 
