@@ -100,22 +100,18 @@ public class LoadFiles implements Runnable {
             if (i == 0) {
                 Robot.activeTrajName = startName;
                 int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-                if (startPositionSelected == 1 || startPositionSelected == 2) {
+                
                     Robot.activeTrajectoryGains = TrajDict.getTrajGains(startName);
-                } else {
-                    Robot.activeTrajectoryGains = TrajDict.getInvYTrajGains(startName);
-                }
+                
+
                 SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
                 SmartDashboard.putNumber("ActTrajLngth", Robot.activeLeftTrajectory.length());
             } else {
                 Robot.bufferTrajectoryName[i - 1] = startName;
                 int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-                if (startPositionSelected == 1 || startPositionSelected == 2) {
+                
                     Robot.bufferTrajectoryGains[i - 1] = TrajDict.getTrajGains(startName);
-                } else {
-                    Robot.bufferTrajectoryGains[i - 1] = TrajDict.getInvYTrajGains(startName);
-                }
-
+        
                 SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
                 SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i - 1),
                         Robot.rightBufferTrajectory[i - 1].length());

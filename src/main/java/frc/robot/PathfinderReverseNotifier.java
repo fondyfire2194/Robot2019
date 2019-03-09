@@ -124,8 +124,8 @@ public class PathfinderReverseNotifier {
 			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.revLeftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading + Robot.driveTrain.getGyroYaw());
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
-			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
 			break;
 
 		case 3:

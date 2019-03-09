@@ -567,7 +567,7 @@ public class Robot extends TimedRobot {
 
       if ((doFileTrajectory && buildOK)) {
         if (useGainPrefs)
-          constantsFromPrefs(invertY);
+          constantsFromPrefs();
         else
           activeTrajectoryGains = TrajDict.getTrajGains(activeTrajName);
 
@@ -688,19 +688,13 @@ public class Robot extends TimedRobot {
     }
   }
 
-  private void constantsFromPrefs(boolean invertY) {
-    if (!invertY) {
+  private void constantsFromPrefs() {
+  
       activeTrajectoryGains[0] = Pref.getPref("PathKp");
       activeTrajectoryGains[1] = Pref.getPref("PathKd");
       activeTrajectoryGains[2] = Pref.getPref("PathKa");
       activeTrajectoryGains[3] = Pref.getPref("PathKt");
-    } else {
-      activeTrajectoryGains[0] = Pref.getPref("PathYInvKp");
-      activeTrajectoryGains[1] = Pref.getPref("PathYInvKd");
-      activeTrajectoryGains[2] = Pref.getPref("PathYInvKa");
-      activeTrajectoryGains[3] = Pref.getPref("PathYInvKt");
-
-    }
+  
   }
 
   private void resetCommandNames() {

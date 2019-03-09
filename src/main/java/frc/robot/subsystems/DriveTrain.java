@@ -118,7 +118,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void leftDriveOut(double speed) {
-    if (!useVelocityLoop) {
+    if (!useVelocityLoop || !Robot.trajectoryRunning) {
       leftTalonOne.set(ControlMode.PercentOutput, speed);
     } else {
       leftTalonOne.selectProfileSlot(0, 0);
@@ -127,7 +127,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void rightDriveOut(double speed) {
-    if (!useVelocityLoop) {
+    if (!useVelocityLoop || !Robot.trajectoryRunning) {
       rightTalonOne.set(ControlMode.PercentOutput, speed);
     } else {
       rightTalonOne.selectProfileSlot(0, 0);
@@ -227,6 +227,15 @@ public class DriveTrain extends Subsystem {
     return Pathfinder.boundHalfDegrees(imu.getYaw() + gyroOffset);
   }
 
+  public double getGyroRoll() {
+    return imu.getPitch();
+  }
+
+  public double getGyroPitch() {
+    return imu.getRoll();
+  }
+
+
   public boolean isRotating() {
     return imu.isRotating();
   }
@@ -235,6 +244,10 @@ public class DriveTrain extends Subsystem {
     return imu.isMoving();
   }
 
+  public double getXAccel(){
+    return imu.getWorldLinearAccelX();
+  }
+  
   public double getGyroError() {
     return imu.getYaw() - driveStraightAngle;
   }
@@ -294,8 +307,12 @@ public class DriveTrain extends Subsystem {
     SD.putN2("LeftFeet", getLeftFeet());
     SD.putN2("RightFeet", getRightFeet());
     SD.putN1("GyroYaw", getGyroYaw());
+    SD.putN1("GyroPitch", getGyroPitch());
+    SD.putN1("GyroRoll", getGyroRoll());
     useVelocityLoop = SmartDashboard.getBoolean("DriveCloseLoop", false);
     SmartDashboard.putNumber("Slider", getDriverSlider());
+    SmartDashboard.putNumber("XAccel", getXAccel());
+    SmartDashboard.putNumber("SSV", leftTalonOne.getSelectedSensorVelocity());
     if (AutoChoosers.debugChooser.getSelected() == 2) {
 
       SD.putN2("LeftCmd", getLeftCommand());

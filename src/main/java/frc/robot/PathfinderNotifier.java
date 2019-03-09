@@ -160,8 +160,8 @@ public class PathfinderNotifier {
 			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
-			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
 			break;
 
 		case 4:
@@ -178,8 +178,8 @@ public class PathfinderNotifier {
 			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(Constants.MINIMUM_START_PCT + left + turn);
-			rightPct = -(Constants.MINIMUM_START_PCT + right - turn);
+			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
 			break;
 
 		default:

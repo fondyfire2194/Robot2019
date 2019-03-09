@@ -60,8 +60,8 @@ public class Pref {
 
     prefDict.put("CargoIntakeAmpsLimit",8.0);
 
-    prefDict.put("DriveVelKf", 2.07);// 1023/Constants.MAX_ENC_CTS_PER_100MS
-    prefDict.put("DriveVelKp", 5.);
+    prefDict.put("DriveVelKf", 1.);// 1023/Constants.MAX_ENC_CTS_PER_100MS
+    prefDict.put("DriveVelKp", 1.);
     prefDict.put("DriveVelKi", .0);
     prefDict.put("DriveVelKd", .0);
 
