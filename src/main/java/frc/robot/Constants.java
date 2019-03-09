@@ -26,11 +26,12 @@ public class Constants {
   public static final double FT_PER_SEC_TO_ENC_CTS_PER_100MS = DRIVE_ENCODER_COUNTS_PER_INCH * 1.2;
   public static double MAX_ENC_CTS_PER_100MS = MAX_ROBOT_FT_PER_SEC * FT_PER_SEC_TO_ENC_CTS_PER_100MS;
   public static double FT_PER_SEC_TO_PCT_OUT = 1 / MAX_ROBOT_FT_PER_SEC;
-  public final static double WHEELBASE_WIDTH = 2.1;
+  public final static double WHEELBASE_WIDTH = 1.88;
   public final static double MAX_TARGET_AREA = 10.;
   public final static double MAX_AREA_DISTANCE = 2.0;
   public final static double ANGLE_APPROACH_LIMIT = 5.;
   public final static double DRIVE_SIDE_STALL_DETECT = 50.;
+  public final static double CAMERA_TO_FRONT_OF_BUMPER = 1.72;
 
   public final static double ORIENT_RATE = .35;
   public final static double POSITION_RATE = 7.;
@@ -39,11 +40,9 @@ public class Constants {
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
 
   public static double SHIP_CARGO_INCHES = 13;
-  public static double ROCKET_LOWER_CARGO_INCHES =  8;
-  public static double ROCKET_MID_CARGO_INCHES =  ROCKET_LOWER_CARGO_INCHES +28;
-  public static double ROCKET_TOP_CARGO_INCHES =  ROCKET_MID_CARGO_INCHES + 28;
-
-
+  public static double ROCKET_LOWER_CARGO_INCHES = 8;
+  public static double ROCKET_MID_CARGO_INCHES = ROCKET_LOWER_CARGO_INCHES + 28;
+  public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 28;
 
   public static double ELEVATOR_POSITION_RATE = 40;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;

@@ -176,6 +176,7 @@ public class Robot extends TimedRobot {
   public static boolean autoRunning;
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
+  public static boolean noCameraTargetFound;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -320,7 +321,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
-    if (m_oi.abortAuto.get()) {
+    if (m_oi.abortAuto.get() || noCameraTargetFound) {
       cancelAllAuto();
     }
     if (m_oi.gamepad.getButtonStateA())

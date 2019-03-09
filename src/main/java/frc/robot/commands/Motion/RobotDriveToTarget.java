@@ -19,7 +19,7 @@ public class RobotDriveToTarget extends Command {
 	public static double currentMaxSpeed;
 
 	public double myDistance;
-	public double slowDownFeet = 2.5;
+	public double slowDownFeet;
 	public boolean decelerate;
 	private double myEndpoint;
 	private double startOfVisionPoint = 8;
@@ -28,8 +28,8 @@ public class RobotDriveToTarget extends Command {
 	private double remainingFtToHatch;
 	private double myTargetAngle;
 	private boolean targetWasSeen;
-	private int targetWasSeenCtr;
-	private boolean noTargetFound;
+	private int targetNotSeenCtr;
+	private double visionTurnGain;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
@@ -63,8 +63,9 @@ public class RobotDriveToTarget extends Command {
 		Robot.activeMotionComp = 0.;
 		Robot.driveTrain.driveStraightAngle = myTargetAngle;
 		targetWasSeen = false;
-		targetWasSeenCtr = 0;
-		noTargetFound = false;
+		targetNotSeenCtr = 0;
+		Robot.noCameraTargetFound = false;
+		visionTurnGain = Pref.getPref("VisionKp");
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -98,10 +99,10 @@ public class RobotDriveToTarget extends Command {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
 		if (inVisionRange & !targetWasSeen)
-			targetWasSeenCtr++;
+			targetNotSeenCtr++;
 
-		if (targetWasSeenCtr > 10)
-			noTargetFound = true;
+		if (targetNotSeenCtr > 10)
+			Robot.noCameraTargetFound = true;
 		if (Robot.limelightCamera.getIsTargetFound())
 			targetWasSeen = true;
 
@@ -110,9 +111,9 @@ public class RobotDriveToTarget extends Command {
 
 		if (Robot.useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
 			} else {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
 
 		}

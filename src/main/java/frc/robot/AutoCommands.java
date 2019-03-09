@@ -143,7 +143,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
             number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, Robot.sideAngle, false,
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, 90 + Robot.sideAngle, false,
                     3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
             number++;
@@ -166,7 +166,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(90 + Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS";
             number++;
-            Robot.autonomousCommand[number] = new RobotDriveToTarget(8., Constants.POSITION_RATE, Robot.sideAngle,
+            Robot.autonomousCommand[number] = new RobotDriveToTarget(8., Constants.POSITION_RATE,90 +  Robot.sideAngle,
                     false, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
             number++;
