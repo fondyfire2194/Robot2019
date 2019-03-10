@@ -31,7 +31,7 @@ public class Constants {
   public final static double MAX_AREA_DISTANCE = 2.0;
   public final static double ANGLE_APPROACH_LIMIT = 5.;
   public final static double DRIVE_SIDE_STALL_DETECT = 50.;
-  public final static double CAMERA_TO_FRONT_OF_BUMPER = 1.72;
+  public final static double CAMERA_TO_FRONT_OF_BUMPER = 1.0;
 
   public final static double ORIENT_RATE = .35;
   public final static double POSITION_RATE = 7.;

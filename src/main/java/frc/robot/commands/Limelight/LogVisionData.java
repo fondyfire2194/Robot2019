@@ -40,7 +40,7 @@ String name = output_dir + name1;
 			Robot.simpleCSVLogger2194.writeData((Timer.getFPGATimestamp() - startTime), Robot.driveTrain.getLeftFeet(),
 					Robot.driveTrain.getRightFeet(), Robot.driveTrain.getLeftFeetPerSecond(),
 					Robot.driveTrain.getGyroYaw(), Robot.limelightCamera.getBoundingBoxHeight(),
-			  	    Robot.limelightCamera.getBoundingBoxWidth(),Robot.visionData.calculateDistance(),
+			  	    Robot.limelightCamera.getBoundingBoxWidth(),Robot.visionData.calculateCameraDistance(),
 					Robot.limelightCamera.getdegRotationToTarget(),Robot.limelightCamera.getdegVerticalToTarget(), targetFound);
 		}
 	}

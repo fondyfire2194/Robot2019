@@ -43,12 +43,7 @@ public class Pref {
     prefDict.put("PathKd", 0.);
     prefDict.put("PathKa", .02);
     prefDict.put("PathKt", .2);
-
-    prefDict.put("PathYInvKp", 0.2);
-    prefDict.put("PathYInvKd", .0);
-    prefDict.put("PathYInvKa", .02);
-    prefDict.put("PathYInvKt", .2);
-
+    
     prefDict.put("VisionKp", .002);
     
     prefDict.put("JSTwistKp", .2);

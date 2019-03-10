@@ -61,13 +61,26 @@ public class JoystickArcadeDriveVision extends Command {
      * get values from joystick turn value can also be taken from camera image or
      * gyro based on conditions
      */
-    throttleValue = -Robot.m_oi.driverController.getY();
+    throttleValue = Robot.m_oi.driverController.getY();
     if (Math.abs(throttleValue) < .15) {
       throttleValue = 0;
     }
+    double temp = 0;
+    temp = throttleValue * throttleValue;
+    if (throttleValue < 0)
+      throttleValue = temp;
+    else
+      throttleValue = -temp;
 
     if (!Robot.limelightCamera.getIsTargetFound()) {
-      turnValue = Robot.m_oi.driverController.getTwist() * Robot.driveTrain.getDriverSlider();
+      turnValue = Robot.m_oi.driverController.getTwist();
+      temp = turnValue * turnValue;
+      if (turnValue < 0)
+        turnValue = -temp;
+      else
+        turnValue = temp;
+
+      turnValue = turnValue * Robot.driveTrain.getDriverSlider();
     }
 
     /**
@@ -142,7 +155,7 @@ public class JoystickArcadeDriveVision extends Command {
     SmartDashboard.putBoolean("TIVR", inVisionRange);
     SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
     SmartDashboard.putNumber("TDSA", Robot.driveTrain.driveStraightAngle);
-    SmartDashboard.putNumber("TVAl", turnValue);
+    SmartDashboard.putNumber("TVAL", turnValue);
   }
 
   // Make this return true when this Command no longer needs to run execute()

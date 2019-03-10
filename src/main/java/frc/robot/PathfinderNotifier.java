@@ -27,7 +27,7 @@ public class PathfinderNotifier {
 	private static int activeTrajectoryLength;
 	private static double periodic_time = .02;
 	private static double desired_heading;
-	private static boolean myfaceField;
+	private static boolean myFaceField;
 	private static boolean myInvertY;
 	private static int switchMode;
 
@@ -38,15 +38,15 @@ public class PathfinderNotifier {
 		 * Y it can have its sides inverted by following opposite side trajectory
 		 * 
 		 */
-		myfaceField = faceField;
+		myFaceField = faceField;
 		myInvertY = invertY;
-		if (myfaceField && !myInvertY)
+		if (myFaceField && !myInvertY)
 			switchMode = 1;// normal
-		if (myfaceField && myInvertY)
+		if (myFaceField && myInvertY)
 			switchMode = 2;// robot move fwd invert y
-		if (!myfaceField && !myInvertY)
+		if (!myFaceField && !myInvertY)
 			switchMode = 3;// rev motion
-		if (!myfaceField && myInvertY)
+		if (!myFaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
 		minTime = 999;

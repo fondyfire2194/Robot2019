@@ -80,7 +80,6 @@ public class DriveTrain extends Subsystem {
     rightTalonOne.setSensorPhase(false);
     setRightSideDriveBrakeOn(true);
     configVoltageCompSaturation(true);
-    
 
     leftTalonOne.selectProfileSlot(0, 0);
     leftTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
@@ -118,36 +117,35 @@ public class DriveTrain extends Subsystem {
   }
 
   public void leftDriveOut(double speed) {
-    if (!useVelocityLoop || !Robot.trajectoryRunning) {
-      leftTalonOne.set(ControlMode.PercentOutput, speed);
-    } else {
+    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning) {
       leftTalonOne.selectProfileSlot(0, 0);
       leftTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
+    } else {
+      leftTalonOne.set(ControlMode.PercentOutput, speed);
     }
   }
 
   public void rightDriveOut(double speed) {
-    if (!useVelocityLoop || !Robot.trajectoryRunning) {
-      rightTalonOne.set(ControlMode.PercentOutput, speed);
-    } else {
+    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning) {
       rightTalonOne.selectProfileSlot(0, 0);
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
-    }
-  }
+    } else {
+      rightTalonOne.set(ControlMode.PercentOutput, speed);
+    }  }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
     leftDriveOut(throttleValue + turnValue);
     rightDriveOut(throttleValue - turnValue);
   }
 
-  public void enableBothSidesCurrentLimit(boolean enable){
+  public void enableBothSidesCurrentLimit(boolean enable) {
     leftTalonOne.enableCurrentLimit(enable);
     leftTalonTwo.enableCurrentLimit(enable);
     rightTalonOne.enableCurrentLimit(enable);
     rightTalonTwo.enableCurrentLimit(enable);
   }
 
-  public void configVoltageCompSaturation(boolean on){ 
+  public void configVoltageCompSaturation(boolean on) {
     leftTalonOne.configVoltageCompSaturation(12, 0);
     leftTalonOne.enableVoltageCompensation(on);
     leftTalonTwo.configVoltageCompSaturation(12, 0);
@@ -156,7 +154,8 @@ public class DriveTrain extends Subsystem {
     rightTalonOne.enableVoltageCompensation(on);
     rightTalonTwo.configVoltageCompSaturation(12, 0);
     rightTalonTwo.enableVoltageCompensation(on);
-   }
+  }
+
   public void setLeftSideDriveBrakeOn(boolean on) {
     if (on) {
       leftTalonOne.setNeutralMode(NeutralMode.Brake);
@@ -178,12 +177,12 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getDriverSlider() {
-    //  ex. want to change range to pref to ? from incoming 1 to -1
+    // ex. want to change range to pref to ? from incoming 1 to -1
     // subtracting it from 1 makes range 0 t0 2
-    //divide by 2 range is 0 to 1
-    double temp = (1 - Robot.m_oi.driverController.getRawAxis(3))/2;
-    //range now 0 to 1
-    return Pref.getPref("JSTwistKp") + temp /10;
+    // divide by 2 range is 0 to 1
+    double temp = (1 - Robot.m_oi.driverController.getRawAxis(3)) / 2;
+    // range now 0 to 1
+    return Pref.getPref("JSTwistKp") + temp / 10;
   }
 
   public int getLeftEncoderCount() {
@@ -235,7 +234,6 @@ public class DriveTrain extends Subsystem {
     return imu.getRoll();
   }
 
-
   public boolean isRotating() {
     return imu.isRotating();
   }
@@ -244,10 +242,10 @@ public class DriveTrain extends Subsystem {
     return imu.isMoving();
   }
 
-  public double getXAccel(){
+  public double getXAccel() {
     return imu.getWorldLinearAccelX();
   }
-  
+
   public double getGyroError() {
     return imu.getYaw() - driveStraightAngle;
   }

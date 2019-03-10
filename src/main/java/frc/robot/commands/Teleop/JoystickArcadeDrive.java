@@ -27,17 +27,29 @@ public class JoystickArcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double throttleValue = -Robot.m_oi.driverController.getY();
+    double throttleValue = Robot.m_oi.driverController.getY();
     double turnValue = Robot.m_oi.driverController.getTwist();
+    double temp = 0;
     SmartDashboard.putNumber("Lout", throttleValue);
 
     if (Math.abs(throttleValue) < .15)
       throttleValue = 0;
     if (Math.abs(turnValue) < .15)
       turnValue = 0;
+
+    temp = throttleValue * throttleValue;
+    if (throttleValue < 0)
+      throttleValue = temp;
+    else
+      throttleValue = -temp;
+
+    temp = turnValue * turnValue;
+    if (turnValue < 0)
+      turnValue = -temp;
+    else
+      turnValue = temp;
+
     if (!Robot.autoRunning)
-      // Robot.driveTrain.arcadeDrive(throttleValue, turnValue *
-      // Pref.getPref("JSTwistKp"));
       Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Robot.driveTrain.getDriverSlider());
   }
 

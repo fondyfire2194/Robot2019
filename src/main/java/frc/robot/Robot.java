@@ -26,7 +26,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.RobotRotate;
-
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
 import jaci.pathfinder.Trajectory;
@@ -52,6 +52,7 @@ public class Robot extends TimedRobot {
   public static RobotRotate robotRotate;
   public static Elevator elevator;
   public static GamePieceHandler gph;
+  public static Climber climber;
   public static AirCompressor airCompressor;
   public static PowerPanel pdp;
   public static SimpleCSVLogger2194 simpleCSVLogger2194;
@@ -92,7 +93,7 @@ public class Robot extends TimedRobot {
   public static double yPosition;
 
   private double angleTarget = 90;
-  private double orientRate = 0.5;
+  private double orientRate = .35;
 
   public enum motionType {
     incremental, absolute
@@ -192,7 +193,7 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
     elevator = new Elevator();
-
+    climber = new Climber();
     airCompressor = new AirCompressor();
     pdp = new PowerPanel();
     gph = new GamePieceHandler();
@@ -403,7 +404,7 @@ public class Robot extends TimedRobot {
         angleTarget = SmartDashboard.getNumber("Target Angle", 90);
         if (SmartDashboard.getBoolean("ReverseOrient", false))
           angleTarget = -angleTarget;
-        orientRate = SmartDashboard.getNumber("Orient Rate", .25);
+        orientRate = SmartDashboard.getNumber("Orient Rate", Constants.ORIENT_RATE);
         new RobotOrient(angleTarget, orientRate, true, 5).start();
         doTeleopOrient = false;
       }
@@ -617,11 +618,9 @@ public class Robot extends TimedRobot {
     case 5:
       elevator.updateStatus();
       break;
-
     case 6:
       gph.updateStatus();
       break;
-
     case 7:
       airCompressor.updateStatus();
       break;
@@ -629,6 +628,7 @@ public class Robot extends TimedRobot {
       robotRotate.updateStatus();
       break;
     case 9:
+      climber.updateStatus();
       break;
     case 10:
       visionData.updateStatus();
@@ -689,12 +689,12 @@ public class Robot extends TimedRobot {
   }
 
   private void constantsFromPrefs() {
-  
-      activeTrajectoryGains[0] = Pref.getPref("PathKp");
-      activeTrajectoryGains[1] = Pref.getPref("PathKd");
-      activeTrajectoryGains[2] = Pref.getPref("PathKa");
-      activeTrajectoryGains[3] = Pref.getPref("PathKt");
-  
+
+    activeTrajectoryGains[0] = Pref.getPref("PathKp");
+    activeTrajectoryGains[1] = Pref.getPref("PathKd");
+    activeTrajectoryGains[2] = Pref.getPref("PathKa");
+    activeTrajectoryGains[3] = Pref.getPref("PathKt");
+
   }
 
   private void resetCommandNames() {

@@ -30,6 +30,7 @@ import frc.robot.commands.HatchPanels.*;
 import frc.robot.commands.Cargo.*;
 import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 import frc.robot.commands.AirCompressor.*;
+import frc.robot.commands.Climber.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -70,6 +71,9 @@ public class OI {
     public JoystickButton stopCargoHandler;
 
     public JoystickButton driveToVision;
+
+    public JoystickButton jogClimberArm;
+    public JoystickButton jogClimberLeg;
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
@@ -196,6 +200,10 @@ public class OI {
 
         // presentAndReleaseHatchCoverRocket = gamepad_test.getStartButton();
         // presentAndReleaseHatchCoverRocket.whenPressed(new PlaceHatchPanelShip());
+
+        jogClimberArm = gamepad_test.getStartButton();
+        jogClimberArm.whileHeld(new RunClimberArmFromGamepad());
+        jogClimberArm.whileHeld(new RunClimberLegFromGamepad());
 
         driveToVision = new JoystickButton(driverController, 1);
         driveToVision.whileHeld(new JoystickArcadeDriveVision());

@@ -19,7 +19,7 @@ public class PathfinderReverseNotifier {
 	static Notifier _notifier = new Notifier(new PeriodicRunnable());
 	private static double lastSegmentPositionLeft;
 	private static double lastSegmentPositionRight;
-	private static boolean myfaceField;
+	private static boolean myFaceField;
 	private static boolean myInvertY;
 	private static int switchMode;
 	private static int testCt;
@@ -33,15 +33,15 @@ public class PathfinderReverseNotifier {
 		 * 
 		 */
 
-		myfaceField = faceField;
+		myFaceField = faceField;
 		myInvertY = invertY;
-		if (myfaceField && !myInvertY)
+		if (myFaceField && !myInvertY)
 			switchMode = 1;// reverse toward wall
-		if (myfaceField && myInvertY)
+		if (myFaceField && myInvertY)
 			switchMode = 2;// reverse toward wall invert y
-		if (!myfaceField && !myInvertY)
+		if (!myFaceField && !myInvertY)
 			switchMode = 3;// Forward toward wall
-		if (!myfaceField && myInvertY)
+		if (!myFaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();

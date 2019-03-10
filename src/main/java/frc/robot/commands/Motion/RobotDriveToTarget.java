@@ -5,8 +5,25 @@ import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
 
 /**
- * use a trajectory. Specify the trajectory segment where vision should take the
- * place of gyro
+ * This command is used from a middle start where the distance and angle is
+ * known precisely, but also following a rotate which followed a trajectory. In
+ * this latter case, distance to the target is subject to variaton of possibly
+ * as much as +/- 1/2 foot ? The distance can be up to 11 feet ? when
+ * approaching the load station from Cargo Ship 2, and 10 ft from cargo ship
+ * end. Delivery to cargo ship distances are smaller in the range of 5 ft.
+ * Angles may be off by +/- 5 degrees which is much less of a concern. Good
+ * vision distance resolution starts at around 7 feet. The position loop
+ * slowdown starts at 2.5 feet. Positioning speed is 8 ft per second; Speed 1
+ * foot away would be 8/2.5 or 3 ft per sec so it would hit at that speed with a
+ * 1 foot error. The robot can run into the physical stops of the load station /
+ * cargo ship. Other distance sensing such as ultrasound could be mounted next
+ * to the camera. This would mean no more traveling wires in the elevator loop.
+ * The hatch cover pusher cylinders could be left extended and sensed being
+ * pushed back. This is short range and needs traveling wires.
+ * 
+ * 
+ * 
+ * 
  */
 public class RobotDriveToTarget extends Command {
 	private double mySpeed;
@@ -14,10 +31,8 @@ public class RobotDriveToTarget extends Command {
 	private double myTimeout;
 	private double rampIncrement;
 	private boolean useGyroComp;
-
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
-
 	public double myDistance;
 	public double slowDownFeet;
 	public boolean decelerate;
@@ -30,6 +45,7 @@ public class RobotDriveToTarget extends Command {
 	private boolean targetWasSeen;
 	private int targetNotSeenCtr;
 	private double visionTurnGain;
+	private double distanceErrorAtStart;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
@@ -65,7 +81,14 @@ public class RobotDriveToTarget extends Command {
 		targetWasSeen = false;
 		targetNotSeenCtr = 0;
 		Robot.noCameraTargetFound = false;
+		distanceErrorAtStart = 0;
 		visionTurnGain = Pref.getPref("VisionKp");
+		if (Robot.limelightCamera.getIsTargetFound()) {
+			distanceErrorAtStart = myDistance - Robot.visionData.getRobotVisionDistance();
+			SD.putN2("DERAS", distanceErrorAtStart);
+			if (Math.abs(distanceErrorAtStart) < 1.)
+				myDistance = Robot.visionData.getRobotVisionDistance();
+		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -92,6 +115,7 @@ public class RobotDriveToTarget extends Command {
 
 		inVisionRange = (remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint)
 				|| Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
+
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
