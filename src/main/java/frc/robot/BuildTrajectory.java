@@ -17,17 +17,12 @@ public class BuildTrajectory {
 	public static File myLeftFile;
 	public static File myRightFile;
 	static String tempPath = null;
-	static String filePath = "/home/lvuser/deploy/paths/";
 
-	static String usbFilePath = "/U/DeepSpace/MPG4/output/";
+	static String filePath = "/home/lvuser/deploy/paths/";
+	static String usbFilePath = "/U/DeepSpace/PathWeaver/output/";
 
 	static String leftExtension = ".left.pf1.csv";
-
 	static String rightExtension = ".right.pf1.csv";
-
-	static String leftMPG4Extension = "_left.csv";
-
-	static String rightMPG4Extension = "_right.csv";
 
 	public BuildTrajectory() {
 
@@ -37,29 +32,25 @@ public class BuildTrajectory {
 		Robot.buildInProgress = true;
 		Trajectory buffer = null;
 		Robot.buildOK = false;
-
 		Robot.chosenFileName = "NONE";
 
-		if(!usb){
+		if (!usb) {
 			tempPath = filePath;
-		}
-		else{
+		} else {
 			tempPath = usbFilePath;
 		}
 
-		if (!usb) {
+		if (Constants.usePathWeaver) {
 			myLeftFile = new File(tempPath + name + rightExtension);
 			Robot.chosenFileName = tempPath + name + rightExtension;
 		} else {
-			myLeftFile = new File(tempPath + name + leftMPG4Extension);
-			Robot.chosenFileName = tempPath + name + leftMPG4Extension;
+			myLeftFile = new File(tempPath + name + leftExtension);
+			Robot.chosenFileName = tempPath + name + leftExtension;
 		}
 
 		if (myLeftFile.exists()) {
 			Robot.bufferTrajName = "Loading";
-
 			buffer = Pathfinder.readFromCSV(myLeftFile);
-
 			Robot.buildOK = true;
 			Robot.bufferTrajName = name;
 			SmartDashboard.putNumber("BuffLgth", buffer.length());
@@ -74,21 +65,18 @@ public class BuildTrajectory {
 		Robot.buildInProgress = true;
 		Trajectory buffer = null;
 		Robot.buildOK = false;
-		if(!usb){
+		if (!usb) {
 			tempPath = filePath;
-		}
-		else{
+		} else {
 			tempPath = usbFilePath;
 		}
 
-
-		// if (Constants.usePathWeaver) {
-		if (!usb) {
+		if (Constants.usePathWeaver) {
 			myRightFile = new File(tempPath + name + leftExtension);
 			Robot.chosenFileName = tempPath + name + leftExtension;
 		} else {
-			myRightFile = new File(tempPath + name + rightMPG4Extension);
-			Robot.chosenFileName = tempPath + name + rightMPG4Extension;
+			myRightFile = new File(tempPath + name + rightExtension);
+			Robot.chosenFileName = tempPath + name + rightExtension;
 		}
 
 		if (myRightFile.exists()) {

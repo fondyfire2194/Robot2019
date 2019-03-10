@@ -8,7 +8,6 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Pref;
 
 /**
  *
@@ -66,10 +65,10 @@ public class PathfinderTrajectory extends Command {
 		startTime = Timer.getFPGATimestamp();
 		if (Robot.createTrajectoryRunFile) {
 
-			String name = Robot.trajectoryUniqueLogName + Robot.logName + ".csv";
+			String name = Robot.trajectoryUniqueLogName + String.valueOf(switchMode) + Robot.logName + ".csv";
 			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
-			Robot.simpleCSVLogger2194.writeData(P, I, D, V, A, Pref.getPref("PathKt"), 1., switchMode, 0, 0, 0, 0, 0,
-					0);
+			Robot.simpleCSVLogger2194.writeData(P, I, D, V, A, Robot.activeTrajectoryGains[3], 1., switchMode, 0, 0, 0,
+					0, 0, 0);
 		}
 		scanCounter = 0;
 
