@@ -16,16 +16,14 @@ import frc.robot.LimelightControlMode.*;
  * slowdown starts at 2.5 feet. Positioning speed is 8 ft per second; Speed 1
  * foot away would be 8/2.5 or 3 ft per sec so it would hit at that speed with a
  * 1 foot error. The robot can run into the physical stops of the load station /
- * cargo ship. Other distance sensing such as ultrasound could be mounted next
- * to the camera. This would mean no more traveling wires in the elevator loop.
- * The hatch cover pusher cylinders could be left extended and sensed being
- * pushed back. This is short range and needs traveling wires.
+ * cargo ship. The hatch cover pusher cylinders could be left extended and
+ * sensed being pushed back. This is short range and needs traveling wires.
  * 
  * 
  * 
  * 
  */
-public class RobotDriveToTarget extends Command {
+public class RobotDriveToTargetV2 extends Command {
 	private double mySpeed;
 	private boolean myEndItNow;
 	private double myTimeout;
@@ -34,8 +32,6 @@ public class RobotDriveToTarget extends Command {
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
 	public double myDistance;
-	public double slowDownFeet;
-	public boolean decelerate;
 	private double myEndpoint;
 	private double startOfVisionPoint = 8;
 	private double endOfVisionPoint = 1;
@@ -46,12 +42,30 @@ public class RobotDriveToTarget extends Command {
 	private int targetNotSeenCtr;
 	private double visionTurnGain;
 	private double distanceErrorAtStart;
+	private double Kp;
+	private double Kd;
+	private double calcLoopSpeed;
+	private double loopTime = .02;
+	private double lastRemainingDistance;
+	private double positionChange;
+	private double positionRateOfChange;
+	private boolean visionCorrectionDone;
+	private double visionDistance;
+	private double lastVisionDistance;
+	private double visionDistanceChange;
+	private boolean visionReadingsGood;
+	private int visionReadingsGoodCtr;
+	private double toleranceSetting = .5;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
 	// inPositionband is in feet
+	/**
+	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
+	 * testing = 3 So at 2 ft speed is 6 ft per sec, at i ft it is 3
+	 */
 
-	public RobotDriveToTarget(double distance, double speed, double targetAngle, boolean endItNow, double timeout) {
+	public RobotDriveToTargetV2(double distance, double speed, double targetAngle, boolean endItNow, double timeout) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
@@ -74,20 +88,16 @@ public class RobotDriveToTarget extends Command {
 		Robot.isPositioning = true;
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
-		decelerate = false;
-		slowDownFeet = Pref.getPref("DriveSldnDist");
 		Robot.activeMotionComp = 0.;
 		Robot.driveTrain.driveStraightAngle = myTargetAngle;
 		targetWasSeen = false;
 		targetNotSeenCtr = 0;
 		Robot.noCameraTargetFound = false;
-		distanceErrorAtStart = 0;
+		distanceErrorAtStart = 99999;
 		visionTurnGain = Pref.getPref("VisionKp");
 		if (Robot.limelightCamera.getIsTargetFound()) {
 			distanceErrorAtStart = myDistance - Robot.visionData.getRobotVisionDistance();
 			SD.putN2("DERAS", distanceErrorAtStart);
-			if (Math.abs(distanceErrorAtStart) < 1.)
-				myDistance = Robot.visionData.getRobotVisionDistance();
 		}
 	}
 
@@ -104,17 +114,44 @@ public class RobotDriveToTarget extends Command {
 		}
 		remainingFtToHatch = myEndpoint - Robot.driveTrain.getLeftFeet();
 
-		if (doneAccelerating && !decelerate && remainingFtToHatch < slowDownFeet) {
-			decelerate = true;
+		positionChange = lastRemainingDistance - remainingFtToHatch;
+		lastRemainingDistance = Robot.driveTrain.getLeftFeet();
+		positionRateOfChange = positionChange / loopTime;
+
+		if (!visionCorrectionDone) {
+			visionDistance = Robot.visionData.getRobotVisionDistance();
+			visionDistanceChange = visionDistance - lastVisionDistance;
+			lastVisionDistance = visionDistance;
 		}
-		if (decelerate) {
-			currentMaxSpeed = (mySpeed * remainingFtToHatch) / slowDownFeet;
-			if (currentMaxSpeed < .3)
-				currentMaxSpeed = .3;
+		if (!visionCorrectionDone) {
+			if (Math.abs(visionDistanceChange - positionChange) < toleranceSetting) {
+				visionReadingsGoodCtr++;
+
+			} else {
+				visionReadingsGoodCtr = 0;
+			}
+		}
+
+		if (!visionCorrectionDone && visionReadingsGoodCtr >= 3) {
+			double temp = visionDistance;
+			myDistance = temp;
+			visionCorrectionDone = true;
+		}
+
+		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
+
+		if (calcLoopSpeed > mySpeed)
+			currentMaxSpeed = mySpeed;
+		else
+			currentMaxSpeed = calcLoopSpeed;
+
+		// set minimum speed
+		if (currentMaxSpeed < .3) {
+			currentMaxSpeed = .3;
 		}
 
 		inVisionRange = (remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint)
-				|| Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
+				|| Robot.limelightCamera.getBoundingBoxWidth() < 110;
 
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
@@ -126,14 +163,18 @@ public class RobotDriveToTarget extends Command {
 			targetNotSeenCtr++;
 
 		// if (targetNotSeenCtr > 10)
-		// 	Robot.noCameraTargetFound = true;
+		// Robot.noCameraTargetFound = true;
+
 		if (Robot.limelightCamera.getIsTargetFound())
 			targetWasSeen = true;
 
 		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
+
 		useGyroComp = !Robot.useVisionComp;
 
-		if (Robot.useVisionComp) {
+		if (Robot.useVisionComp)
+
+		{
 			if (Robot.limelightOnEnd) {
 				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
 			} else {
@@ -162,7 +203,6 @@ public class RobotDriveToTarget extends Command {
 		Robot.driveTrain.arcadeDrive(0, 0);
 		Robot.isPositioning = false;
 		doneAccelerating = false;
-		decelerate = false;
 		currentMaxSpeed = 0;
 		inVisionRange = false;
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOff);

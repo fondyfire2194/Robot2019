@@ -9,14 +9,16 @@ package frc.robot;
 
 import frc.robot.AutoChoosers;
 
-
 /**
- * Add your docs here.
+ * Vision validity check while in motion. Vision distance should change the
+ * san=me amount as encoder distance.
  */
 public class VisionData {
 
     public int[] boxWidth;
     public double[] distanceFeet;
+    private double goodMinWidth = 50;// 6.7 ft
+    private double goodMaxWidth = 80;// 3.8 ft
 
     public VisionData() {
         boxWidth = new int[] { 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140, 145,
@@ -43,6 +45,11 @@ public class VisionData {
 
     public double getRobotVisionDistance() {
         return calculateCameraDistance() - Constants.CAMERA_TO_FRONT_OF_BUMPER;
+    }
+
+    public boolean inGoodVisionDistanceRange() {
+        double widthSeen = Robot.limelightCamera.getBoundingBoxWidth();
+        return Robot.limelightCamera.getIsTargetFound() && (widthSeen < goodMaxWidth && widthSeen > goodMinWidth);
     }
 
     public void updateStatus() {

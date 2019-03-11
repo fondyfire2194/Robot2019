@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static int maxCommands = 24;
+  public static int maxCommands = 14;
   public static Command[] autonomousCommand;
   public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;
@@ -711,7 +711,7 @@ public class Robot extends TimedRobot {
 
       autonomousCommand[0] = new AutoWait(autoTimeDelaySeconds);
 
-      autonomousCommandName[0] = "0- Time Delay";
+      autonomousCommandName[0] = "0 - Time Delay " + String.valueOf(autoTimeDelaySeconds);
       if (!fileError && startPositionSelected != 0) {
         SmartDashboard.putNumber("Start Position", startPositionSelected);
         switch (startPositionSelected) {
@@ -725,7 +725,7 @@ public class Robot extends TimedRobot {
           invertY = false;
           sideAngle = 90;
           driveTrain.driveStraightAngle = 180.;
-          numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 3:

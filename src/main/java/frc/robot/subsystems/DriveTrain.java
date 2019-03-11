@@ -311,7 +311,8 @@ public class DriveTrain extends Subsystem {
     useVelocityLoop = SmartDashboard.getBoolean("DriveCloseLoop", false);
     SmartDashboard.putNumber("Slider", getDriverSlider());
     SmartDashboard.putNumber("XAccel", getXAccel());
-    SmartDashboard.putNumber("SSV", leftTalonOne.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("SSV", leftTalonOne.getSelectedSensorVelocity(0));
+    SmartDashboard.putNumber("SSE", leftTalonOne.getClosedLoopError(0));
     if (AutoChoosers.debugChooser.getSelected() == 2) {
 
       SD.putN2("LeftCmd", getLeftCommand());
