@@ -124,9 +124,8 @@ public class Robot extends TimedRobot {
   public static boolean trajectoryRunning;
   public static boolean buildOK;
   public static int currentTrajectorySegment;
-  public static boolean trajectoryPulse;
 
-  public static String names = "Step,LeftCmd,LeftFt,RightCmd,RightFt,AngleCmd,AngleAct, LeftSegVel,left,ActLeftVel,RightSegVel,right,ActRightVel,turn\n";
+  public static String names = "Step,LeftCmd,LeftFt,RightCmd,RightFt,AngleCmd,AngleAct, LeftSegVel,Leftpct,ActLeftVel,RightSegVel,Rightpct,ActRightVel,turn\n";
   public static String units = "NumberFT,FT,FT,FT,FT,Deg,Deg,pct,pct,pct,pct,pct,pct,pct\n";
   public static boolean createTrajectoryRunFile = true;
   public static boolean createMultipleTrajectoryRunFile;
@@ -241,7 +240,7 @@ public class Robot extends TimedRobot {
     bufferTrajectoryGains[0] = activeTrajectoryGains;
     startPositionSelected = 0;
     elevator.holdPositionInches = 0;
-
+    SmartDashboard.putNumber("TestStart", 0);
   }
 
   /**
@@ -305,12 +304,10 @@ public class Robot extends TimedRobot {
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
-    // setUpAutoStart();
-
-    //
-    if (autonomousCommand[0] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
-      autonomousCommand[0].start();
-      runningAutoCommand = 0;
+    int startCommandNumber = 0;//(int) SmartDashboard.getNumber("TestStart", 0);
+    if (autonomousCommand[startCommandNumber] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
+      autonomousCommand[startCommandNumber].start();
+      runningAutoCommand = startCommandNumber;
       autoRunning = true;
     }
   }
@@ -331,7 +328,9 @@ public class Robot extends TimedRobot {
       cycleHold = false;
 
     if (autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
-
+      if ((startPositionSelected == 1 || startPositionSelected == 4) && runningAutoCommand == 1) {
+        DriveTrain.gyroOffset = 180;
+      }
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
       SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
       SD.putN2("CMDTimeTotal", Timer.getFPGATimestamp() - autoStartTime);
@@ -344,23 +343,9 @@ public class Robot extends TimedRobot {
         runningCommandName = autonomousCommandName[runningAutoCommand];
       }
     }
-    if ((startPositionSelected == 1 || startPositionSelected == 4) && runningAutoCommand == 2 && trajectoryPulse) {
-      limelightCamera.setLEDMode(LedMode.kforceOn);
-
-    }
-    if ((startPositionSelected == 1 || startPositionSelected == 4) && secondHatchSelected == 3
-        && runningAutoCommand == 12 && trajectoryPulse) {
-      limelightCamera.setLEDMode(LedMode.kforceOn);
-    }
-
-    if ((startPositionSelected == 2 || startPositionSelected == 3) && secondHatchSelected == 3
-        && runningAutoCommand == 9 && trajectoryPulse) {
-      limelightCamera.setLEDMode(LedMode.kforceOn);
-      SmartDashboard.putNumber("SPPS1", startPositionSelected);
-    }
 
     if (runningAutoCommand > numberOfAutonomousCommands) {
-
+      DriveTrain.gyroOffset = 0;
       numberOfAutonomousCommands = 0;
       runningAutoCommand = 0;
       autonomousCommandDone = false;
@@ -513,34 +498,6 @@ public class Robot extends TimedRobot {
           invertY = true;
           useGainPrefs = true;
           break;
-        case 14:
-          testTrajectoryName = "StraightOne";
-          towardsFieldTrajectory = true;
-          faceField = true;
-          invertY = false;
-          useGainPrefs = true;
-          break;
-        case 15:
-          testTrajectoryName = "StraightOne";
-          towardsFieldTrajectory = false;
-          faceField = true;
-          invertY = false;
-          useGainPrefs = true;
-          break;
-        case 16:
-          testTrajectoryName = "CurveOne";
-          towardsFieldTrajectory = true;
-          faceField = true;
-          invertY = false;
-          useGainPrefs = true;
-          break;
-        case 17:
-          testTrajectoryName = "CurveOne";
-          towardsFieldTrajectory = false;
-          faceField = true;
-          invertY = false;
-          useGainPrefs = true;
-          break;
 
         default:
           break;
@@ -645,28 +602,22 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("AutoHold", cycleHold);
     SmartDashboard.putBoolean("LAutoRng", autoRunning);
     SmartDashboard.putString("Running Cmd Name", runningCommandName);
+    SmartDashboard.putNumber("AutoCmds", numberOfAutonomousCommands);
+    SmartDashboard.putNumber("RngNmbr", runningAutoCommand);
     SmartDashboard.putBoolean("PosnRng", isPositioning);
+    SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
+    SmartDashboard.putBoolean("OrientRng", orientRunning);
 
     createUniqueLogName();
     if (AutoChoosers.debugChooser.getSelected() == 1) {
       SmartDashboard.putNumber("TrajStep", currentTrajectorySegment);
-      SmartDashboard.putBoolean("TrajPLS", trajectoryPulse);
       SmartDashboard.putBoolean("AutoStepDone", autonomousCommandDone);
       SmartDashboard.putBoolean("BuildInProg", buildInProgress);
       SmartDashboard.putBoolean("BuildOK", buildOK);
-      SmartDashboard.putNumber("Running Cmd Nmbr", runningAutoCommand);
-      SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
-      SmartDashboard.putBoolean("OrientRng", orientRunning);
-      SmartDashboard.putString("FileChosen", chosenFileName);
       SmartDashboard.putString("FileInBuffer", bufferTrajName);
       SmartDashboard.putBoolean("LogOpen", simpleCSVLogger2194.log_open);
       SmartDashboard.putBoolean("Invert Y", invertY);
       SmartDashboard.putBoolean("Face Field", faceField);
-      SmartDashboard.putBoolean("TrajFileDo", doFileTrajectory);
-      SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
-      SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
-      SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
-      SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
     }
   }
 
@@ -694,6 +645,10 @@ public class Robot extends TimedRobot {
     activeTrajectoryGains[1] = Pref.getPref("PathKd");
     activeTrajectoryGains[2] = Pref.getPref("PathKa");
     activeTrajectoryGains[3] = Pref.getPref("PathKt");
+    SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
+    SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
+    SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
+    SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
 
   }
 
@@ -731,7 +686,6 @@ public class Robot extends TimedRobot {
       SD.putN4("ThreadTime", Timer.getFPGATimestamp() - readThreadStartTime);
       startSettingsDone = true;
       wasRunning = false;
-      System.gc();
     }
   }
 
@@ -763,28 +717,28 @@ public class Robot extends TimedRobot {
         switch (startPositionSelected) {
         case 1:
           invertY = false;
-          sideAngle = 0;
+          sideAngle = 90;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
-          driveTrain.driveStraightAngle = -90.;
+          driveTrain.driveStraightAngle = 90.;
           break;
         case 2:
           invertY = false;
-          sideAngle = 0;
-          driveTrain.driveStraightAngle = 0.;
+          sideAngle = 90;
+          driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 3:
           invertY = true;
-          sideAngle = 180;
-          driveTrain.driveStraightAngle = 0.;
+          sideAngle = -90;
+          driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 4:
           invertY = true;
-          sideAngle = 180;
-          driveTrain.driveStraightAngle = 90.;
+          sideAngle = -90;
+          driveTrain.driveStraightAngle = -90.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           break;
         }

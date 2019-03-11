@@ -8,10 +8,9 @@
 package frc.robot.commands.Trajectories;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
+
 import frc.robot.commands.Auto.SetAutoCommandDone;
 import frc.robot.commands.Motion.*;
-import frc.robot.commands.Trajectories.*;
 
 public class PickAndRunTrajectory extends CommandGroup {
   /**
@@ -35,17 +34,15 @@ public class PickAndRunTrajectory extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new ResetEncoders());
- 
-    if (towardField){
-      addParallel(new TrajectoryPLS(60,80));
+
+    if (towardField) {
+
       addSequential(new PathfinderTrajectory(faceField, invertY));
-    }
-    else{ 
-        addParallel(new TrajectoryPLS(60,80));
+    } else {
+
       addSequential((new PathfinderReverseTrajectory(faceField, invertY)));
     }
-      
-    
-      addSequential(new SetAutoCommandDone());
+
+    addSequential(new SetAutoCommandDone());
   }
 }

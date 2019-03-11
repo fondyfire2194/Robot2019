@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.LimelightControlMode.LedMode;
 import frc.robot.Constants;
 import frc.robot.Pref;
 
@@ -26,17 +27,13 @@ public class RobotOrient extends Command {
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
 	private double rampIncrement;
-	private double startTime;
-	private double rampTime;
 	private double angleError;
-	
 
 	public RobotOrient(double angle, double speed, boolean accuracy, double timeout) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.robotRotate);
 		requires(Robot.driveTrain);
-
 
 		mySpeed = speed;
 		myAngle = angle;
@@ -48,7 +45,7 @@ public class RobotOrient extends Command {
 	@Override
 	protected void initialize() {
 
-		rampIncrement = mySpeed ;
+		rampIncrement = mySpeed;
 		/*
 		 * error = command - actual. Needs adjusting if outside =+/-180
 		 * 
@@ -70,7 +67,7 @@ public class RobotOrient extends Command {
 		double Kd = Pref.getPref("RotateKd");
 		double Kf = Pref.getPref("RotateKf");
 
-        Robot.robotRotate.setPIDF(Kp,0,Kd,Kf);
+		Robot.robotRotate.setPIDF(Kp, 0, Kd, Kf);
 		Robot.robotRotate.setMaxOut(Constants.MINIMUM_START_PCT);
 		Robot.robotRotate.setSetpoint(myAngle);
 		Robot.robotRotate.enablePID();
@@ -78,9 +75,9 @@ public class RobotOrient extends Command {
 		setTimeout(myTimeout);
 		currentMaxSpeed = Constants.MINIMUM_START_PCT;
 		passCount = 0;
-		// Robot.closeDriveSpeedLoop = true;
-		startTime = Timer.getFPGATimestamp();
 		doneAccelerating = false;
+		if (Robot.autoRunning)
+			Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -93,13 +90,11 @@ public class RobotOrient extends Command {
 			if (currentMaxSpeed >= mySpeed) {
 				currentMaxSpeed = mySpeed;
 				doneAccelerating = true;
-				rampTime = Timer.getFPGATimestamp() - startTime;
-				SmartDashboard.putNumber("Ramptime", rampTime);
 			}
 		}
-		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"));
-			Robot.robotRotate.getPIDController()
-					.setI(Pref.getPref("RotateKi"));
+		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"))
+			;
+		Robot.robotRotate.getPIDController().setI(Pref.getPref("RotateKi"));
 
 		if (myAccuracy)
 			inPosition = Robot.robotRotate.inPosition();
@@ -116,7 +111,7 @@ public class RobotOrient extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-	
+
 		Robot.autonomousCommandDone = true;
 		Robot.robotRotate.setMaxOut(Constants.MINIMUM_START_PCT);
 		Robot.robotRotate.disable();

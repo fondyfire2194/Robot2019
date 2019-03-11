@@ -102,7 +102,11 @@ public class LoadFiles implements Runnable {
                 int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
                 
                     Robot.activeTrajectoryGains = TrajDict.getTrajGains(startName);
-                
+                    SmartDashboard.putNumber("AGKp", Robot.activeTrajectoryGains[0]);
+                    SmartDashboard.putNumber("AGKd", Robot.activeTrajectoryGains[1]);
+                    SmartDashboard.putNumber("AGKa", Robot.activeTrajectoryGains[2]);
+                    SmartDashboard.putNumber("AGKt", Robot.activeTrajectoryGains[3]);
+              
 
                 SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
                 SmartDashboard.putNumber("ActTrajLngth", Robot.activeLeftTrajectory.length());

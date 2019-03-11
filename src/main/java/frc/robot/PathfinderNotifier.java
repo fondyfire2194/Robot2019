@@ -16,6 +16,7 @@ public class PathfinderNotifier {
 	public static double minTime = 9999;
 	public static double maxTime = 0;
 	public static int notifierRunning;
+	private static double headingMultiplier;
 
 	public static final class PeriodicRunnable implements java.lang.Runnable {
 		public void run() {
@@ -48,7 +49,10 @@ public class PathfinderNotifier {
 			switchMode = 3;// rev motion
 		if (!myFaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
-
+		headingMultiplier = 1;
+		if (Constants.usePathWeaver)
+			headingMultiplier = -1;
+	
 		minTime = 999;
 		maxTime = 0;
 		timeAverage = 0;
@@ -107,10 +111,7 @@ public class PathfinderNotifier {
 		double turn = 0;
 		// convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
-		double headingMultiplier = 1;
-		
-		 if (Constants.usePathWeaver)
-			headingMultiplier = -1;
+
 
 		switch (switchMode) {
 
@@ -147,20 +148,23 @@ public class PathfinderNotifier {
 		case 3:
 			/**
 			 * robot moves backwards to field This requires a negated drive command and the
-			 * side positions nust be negated and exchanged. The side exchange is needed for
+			 * side positions must be negated and exchanged. The side exchange is needed for
 			 * turns as the one with the longer distance is now the opposite The target
 			 * angle doesn't change but if this is the first move after startup, then the
 			 * gyro angle will be 180 off from normal and must be compensated somehow for
 			 * any future motions
-			 * CONSTANTS NEGATED 3-10-19 PER LOG DATA
+			 * 
 			 */
 			right = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getLeftFeet());
 			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(-Constants.MINIMUM_START_PCT + left - turn);
-			rightPct = -(-Constants.MINIMUM_START_PCT + right + turn);
+		
+			
+			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
+			
 			break;
 
 		case 4:
@@ -170,15 +174,15 @@ public class PathfinderNotifier {
 			 * doesn't change but if this is the first move after startup, then the gyro
 			 * angle will be 180 off from normal and must be compensated somehow for any
 			 * future motions
-			 *  CONSTANTS NEGATED 3-10-19 PER LOG DATA
+			 *  
 			 */
 			right = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
 			desired_heading = headingMultiplier * (-Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading()));
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-			leftPct = -(-Constants.MINIMUM_START_PCT + left - turn);
-			rightPct = -(-Constants.MINIMUM_START_PCT + right + turn);
+			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
+			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
 			break;
 
 		default:
@@ -201,9 +205,9 @@ public class PathfinderNotifier {
 					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
 					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
 					Robot.driveTrain.getGyroYaw(),
-					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, left,
+					Robot.driveTrain.leftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, leftPct,
 					Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
-					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, right,
+					Robot.driveTrain.rightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, rightPct,
 					Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC, turn);
 		}
 

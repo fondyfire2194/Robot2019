@@ -9,6 +9,7 @@ public class PathfinderReverseNotifier {
 	private static int activeTrajectoryLength;
 	private static double periodic_time = .02;
 	private static double desired_heading;
+	private static double headingMultiplier;
 
 	public static final class PeriodicRunnable implements java.lang.Runnable {
 		public void run() {
@@ -44,6 +45,10 @@ public class PathfinderReverseNotifier {
 		if (!myFaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
+			headingMultiplier = 1;
+			if (Constants.usePathWeaver)
+				headingMultiplier = -1;
+	
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
 		SmartDashboard.putNumber("LATL", activeTrajectoryLength);
 		lastSegmentPositionLeft = Robot.activeLeftTrajectory.get(activeTrajectoryLength - 1).position;
@@ -92,10 +97,6 @@ public class PathfinderReverseNotifier {
 		double turn = 0;
 		// convenience because gyro action is opposite of trajectory generation
 		// double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
-		double headingMultiplier = 1;
-
-		 if (Constants.usePathWeaver)	
-			headingMultiplier = -1;
 
 		switch (switchMode) {
 
@@ -175,8 +176,8 @@ public class PathfinderReverseNotifier {
 		if (passCounter > 1) {
 			/*
 			 * names = { "Step", "Left Cmd", "Left Ft", "Right Cmd ", "Right Ft",
-			 * "Angle Cmd", "Angle", "LeftSegVel", "left", "ActLeftVel", "RightSegVel",
-			 * "right", "ActRightVel", "turn"};
+			 * "Angle Cmd", "Angle", "LeftSegVel", "leftpct", "ActLeftVel", "RightSegVel",
+			 * "rightpct", "ActRightVel", "turn"};
 			 * 
 			 */
 			Robot.simpleCSVLogger2194.writeData((double) logCtr,

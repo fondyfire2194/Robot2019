@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Constants;
 import frc.robot.PathfinderReverseNotifier;
 import frc.robot.Robot;
+import frc.robot.SD;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  *
@@ -12,6 +14,7 @@ public class PathfinderReverseTrajectory extends Command {
 	private boolean myFaceField;
 	private boolean myInvertY;
 	private double switchMode;
+	private double startTime;
 
 	public PathfinderReverseTrajectory(boolean faceField, boolean invertY) {
 		// Use requires() here to declare subsystem dependencies
@@ -50,14 +53,17 @@ public class PathfinderReverseTrajectory extends Command {
 		Robot.driveTrain.revRightDf.reset();
 
 		Robot.trajectoryRunning = true;
-
-		String name = Robot.trajectoryUniqueLogName + String.valueOf(switchMode) + Robot.logName + ".csv";
-		if (Robot.createTrajectoryRunFile)
+		startTime = Timer.getFPGATimestamp();
+		if (Robot.createTrajectoryRunFile) {
+			String dirn = "REV";
+			if (myInvertY)
+				dirn += "IY";
+			String name = Robot.trajectoryUniqueLogName + dirn + Robot.logName + ".csv";
 
 			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
-		Robot.simpleCSVLogger2194.writeData(P, I, D, V, A, Robot.activeTrajectoryGains[3], 2., switchMode, 0, 0, 0, 0,
-				0, 0);
-
+			Robot.simpleCSVLogger2194.writeData(P, I, D, V, A, Robot.activeTrajectoryGains[3], 2, switchMode, 0, 0, 0,
+					0, 0, 0);
+		}
 		PathfinderReverseNotifier.startNotifier(myFaceField, myInvertY);
 
 	}
@@ -80,6 +86,8 @@ public class PathfinderReverseTrajectory extends Command {
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
 
 		Robot.simpleCSVLogger2194.close();
+		SD.putN2("Trajectory Time", Timer.getFPGATimestamp() - startTime);
+
 	}
 
 	// Called when another command which requires one or more of the same

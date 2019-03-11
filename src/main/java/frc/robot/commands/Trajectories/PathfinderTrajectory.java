@@ -7,7 +7,7 @@ import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.SD;
 
 /**
  *
@@ -64,15 +64,17 @@ public class PathfinderTrajectory extends Command {
 		Robot.trajectoryRunning = true;
 		startTime = Timer.getFPGATimestamp();
 		if (Robot.createTrajectoryRunFile) {
+			String dirn = "FWD";
+			if (myInvertY)
+				dirn += "IY";
 
-			String name = Robot.trajectoryUniqueLogName + String.valueOf(switchMode) + Robot.logName + ".csv";
+			String name = Robot.trajectoryUniqueLogName + dirn + Robot.logName + ".csv";
 			Robot.simpleCSVLogger2194.init(name, Robot.names, Robot.units);
-			Robot.simpleCSVLogger2194.writeData(P, I, D, V, A, Robot.activeTrajectoryGains[3], 1., switchMode, 0, 0, 0,
+			Robot.simpleCSVLogger2194.writeData(P, I, D, V, A, Robot.activeTrajectoryGains[3], 1, switchMode, 0, 0, 0,
 					0, 0, 0);
 		}
 		scanCounter = 0;
 
-		SmartDashboard.putNumber("AutoCheck", Timer.getFPGATimestamp() - startTime);
 		PathfinderNotifier.startNotifier(myFaceField, myInvertY);
 	}
 
@@ -95,7 +97,7 @@ public class PathfinderTrajectory extends Command {
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
-		SmartDashboard.putNumber("Trajectory Time", Timer.getFPGATimestamp() - startTime);
+		SD.putN2("Trajectory Time", Timer.getFPGATimestamp() - startTime);
 
 		Robot.simpleCSVLogger2194.close();
 	}

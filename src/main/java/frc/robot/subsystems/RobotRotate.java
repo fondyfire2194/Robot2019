@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.SD;
-import frc.robot.Constants;
 import frc.robot.AutoChoosers;
 
 /**

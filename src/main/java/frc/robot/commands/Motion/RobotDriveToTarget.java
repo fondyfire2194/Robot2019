@@ -125,8 +125,8 @@ public class RobotDriveToTarget extends Command {
 		if (inVisionRange & !targetWasSeen)
 			targetNotSeenCtr++;
 
-		if (targetNotSeenCtr > 10)
-			Robot.noCameraTargetFound = true;
+		// if (targetNotSeenCtr > 10)
+		// 	Robot.noCameraTargetFound = true;
 		if (Robot.limelightCamera.getIsTargetFound())
 			targetWasSeen = true;
 
