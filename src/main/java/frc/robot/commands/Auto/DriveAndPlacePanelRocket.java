@@ -5,19 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HatchPanels;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.Motion.RobotDriveToTargetV2;
+import frc.robot.commands.HatchPanels.PlaceHatchPanelRocket;
 
-import frc.robot.commands.TimeDelay;
-
-
-
-public class PlaceHatchPanelRocket extends CommandGroup {
+public class DriveAndPlacePanelRocket extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PlaceHatchPanelRocket() {
+  public DriveAndPlacePanelRocket(double distance, double speed, double angle, boolean stop, double timeOut) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -34,15 +32,7 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    addSequential(new ExtendHatchPanel(true));
-    addSequential(new TimeDelay(.5));
-    addSequential(new GripHatchPanel(false));
-    addSequential(new TimeDelay(.5));
-    addSequential(new PushHatchPanel(true));
-    addSequential(new TimeDelay(.5));
-    addParallel(new PushHatchPanel(false));
-    addSequential(new ExtendHatchPanel(false));
-}
+    addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
+    addSequential(new PlaceHatchPanelRocket());
   }
-  
+}

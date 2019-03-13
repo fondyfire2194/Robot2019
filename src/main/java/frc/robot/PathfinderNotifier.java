@@ -1,20 +1,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import jaci.pathfinder.Pathfinder;
 
 public class PathfinderNotifier {
-	private static double thisTime;
-	private static double timeDifference;
-	private static double lastTime;
-	private static double timeSum;
+
 	public static double timeAverage;
 	public static boolean isRunning;
 	public static int segmentCounter = 0;
-	public static double minTime = 9999;
-	public static double maxTime = 0;
 	public static int notifierRunning;
 	private static double headingMultiplier;
 
@@ -52,16 +46,10 @@ public class PathfinderNotifier {
 		headingMultiplier = 1;
 		if (Constants.usePathWeaver)
 			headingMultiplier = -1;
-	
-		minTime = 999;
-		maxTime = 0;
-		timeAverage = 0;
+
 		segmentCounter = 0;
-		timeSum = 0;
-		thisTime = 0;
-		lastTime = 0;
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
-		periodic_time = .02;// Robot.driveTrain.leftDf.getSegment().dt;/// 1000;
+		periodic_time = .02;// Robot.driveTrain.leftDf.getSegment().dt;
 		_notifier.startPeriodic(periodic_time);
 	}
 
@@ -112,7 +100,6 @@ public class PathfinderNotifier {
 		// convenience because gyro action is opposite of trajectory generation
 		double correctedGyroYaw = -Robot.driveTrain.getGyroYaw();
 
-
 		switch (switchMode) {
 
 		case 1:
@@ -160,11 +147,10 @@ public class PathfinderNotifier {
 			desired_heading = headingMultiplier * Pathfinder.r2d(Robot.driveTrain.leftDf.getHeading());
 			angleDifference = Pathfinder.boundHalfDegrees(desired_heading - correctedGyroYaw);
 			turn = Robot.activeTrajectoryGains[3] * (-1.0 / 80.0) * angleDifference;
-		
-			
+
 			leftPct = -(Constants.MINIMUM_START_PCT + left - turn);
 			rightPct = -(Constants.MINIMUM_START_PCT + right + turn);
-			
+
 			break;
 
 		case 4:
@@ -174,7 +160,7 @@ public class PathfinderNotifier {
 			 * doesn't change but if this is the first move after startup, then the gyro
 			 * angle will be 180 off from normal and must be compensated somehow for any
 			 * future motions
-			 *  
+			 * 
 			 */
 			right = Robot.driveTrain.rightDf.calculate(-Robot.driveTrain.getRightFeet());
 			left = Robot.driveTrain.leftDf.calculate(-Robot.driveTrain.getLeftFeet());
@@ -211,19 +197,6 @@ public class PathfinderNotifier {
 					Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC, turn);
 		}
 
-		thisTime = Timer.getFPGATimestamp();
-		timeDifference = thisTime - lastTime;
-		timeSum += timeDifference;
-		lastTime = thisTime;
-		if (segmentCounter >= 10) {
-			timeAverage = timeDifference;
-			if (timeAverage < minTime)
-				minTime = timeAverage;
-			if (timeAverage > maxTime)
-				maxTime = timeAverage;
-			timeSum = 0;
-			SmartDashboard.putNumber("Time", timeAverage);
-		}
-		SmartDashboard.putNumber("NotifierRng", notifierRunning);
 	}
+
 }

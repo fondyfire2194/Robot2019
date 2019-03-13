@@ -10,21 +10,21 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.AnalogTrigger;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GamePieceHandler extends Subsystem {
 	public static TalonSRX cargoMotor;
 	public DoubleSolenoid hatchCoverGripper;
-	public DoubleSolenoid hatchCoverExtend;
-	public DoubleSolenoid hatchCoverSecondExtend;
+	public Solenoid hatchCoverExtend;
+	// public DoubleSolenoid hatchCoverExtend;
+	// public DoubleSolenoid hatchCoverSecondExtend;
 	public Solenoid hatchCoverPusher;
 	private int gripperCounter;
-	private int extenderCounter;
-	private int secondExtenderCounter;
 	private boolean stopCargoIntake;
+	public static AnalogTrigger leftPusherSwitch;
+	public static AnalogTrigger rightPusherSwitch;
 
 	public GamePieceHandler() {
 
@@ -34,14 +34,25 @@ public class GamePieceHandler extends Subsystem {
 		cargoMotor.configVoltageCompSaturation(12, 0);
 		cargoMotor.enableVoltageCompensation(true);
 
+		leftPusherSwitch = new AnalogTrigger(RobotMap.LEFT_PUSHER_SWITCH);
+		leftPusherSwitch.setAveraged(true);
+		leftPusherSwitch.setLimitsVoltage(1.0, 5.0);
+
+		rightPusherSwitch = new AnalogTrigger(RobotMap.RIGHT_PUSHER_SWITCH);
+		rightPusherSwitch.setAveraged(true);
+		rightPusherSwitch.setLimitsVoltage(1.0, 5.0);
+
 		hatchCoverGripper = new DoubleSolenoid(1, 0);
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 
-		hatchCoverExtend = new DoubleSolenoid(2, 3);
-		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
+		// hatchCoverExtend = new DoubleSolenoid(2, 3);
+		// hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
 
-		hatchCoverSecondExtend = new DoubleSolenoid(4, 5);
-		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
+		hatchCoverExtend = new Solenoid(2);
+		hatchCoverExtend.set(false);
+
+		// hatchCoverSecondExtend = new DoubleSolenoid(4, 5);
+		// hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
 
 		hatchCoverPusher = new Solenoid(6);
 		hatchCoverPusher.set(false);
@@ -88,31 +99,11 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void extendHatchPanel() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kForward);
-		extenderCounter = 0;
+		hatchCoverExtend.set(true);
 	}
 
 	public void retractHatchPanel() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
-		extenderCounter = 0;
-	}
-
-	public void extenderOff() {
-		hatchCoverExtend.set(DoubleSolenoid.Value.kOff);
-	}
-
-	public void secondExtendHatchPanel() {
-		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kForward);
-		secondExtenderCounter = 0;
-	}
-
-	public void secondRetractHatchPanel() {
-		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
-		secondExtenderCounter = 0;
-	}
-
-	public void secondExtenderOff() {
-		hatchCoverSecondExtend.set(DoubleSolenoid.Value.kOff);
+		hatchCoverExtend.set(false);
 	}
 
 	public void pushHatchPanel() {
@@ -121,6 +112,10 @@ public class GamePieceHandler extends Subsystem {
 
 	public void retractPusher() {
 		hatchCoverPusher.set(false);
+	}
+
+	public boolean getHatchDetected() {
+		return leftPusherSwitch.getInWindow() || rightPusherSwitch.getInWindow();
 	}
 
 	public void updateStatus() {
@@ -132,16 +127,6 @@ public class GamePieceHandler extends Subsystem {
 			gripperCounter++;
 		if (gripperCounter > 2) {
 			gripHatchPanelOff();
-		}
-		if (hatchCoverExtend.get() != DoubleSolenoid.Value.kOff)
-			extenderCounter++;
-		if (extenderCounter > 2) {
-			extenderOff();
-		}
-		if (hatchCoverSecondExtend.get() != DoubleSolenoid.Value.kOff)
-			secondExtenderCounter++;
-		if (secondExtenderCounter > 2) {
-			secondExtenderOff();
 		}
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
 		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());

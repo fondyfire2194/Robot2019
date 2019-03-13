@@ -270,7 +270,7 @@ public class Robot extends TimedRobot {
     Robot.gph.retractPusher();
     Robot.gph.gripHatchPanel();
     Robot.gph.retractHatchPanel();
-    Robot.gph.secondRetractHatchPanel();
+    // Robot.gph.secondRetractHatchPanel();
 
   }
 
@@ -304,7 +304,8 @@ public class Robot extends TimedRobot {
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
-    int startCommandNumber = 0;//(int) SmartDashboard.getNumber("TestStart", 0);
+    int startCommandNumber = 0;// (int) SmartDashboard.getNumber("TestStart", 0);
+    if(autoTimeDelaySeconds==0) startCommandNumber = 1;
     if (autonomousCommand[startCommandNumber] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
       autonomousCommand[startCommandNumber].start();
       runningAutoCommand = startCommandNumber;
@@ -725,7 +726,7 @@ public class Robot extends TimedRobot {
           invertY = false;
           sideAngle = 90;
           driveTrain.driveStraightAngle = 180.;
-           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
+          numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 3:

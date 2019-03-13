@@ -4,13 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
+
 /*
  *******************************************************************************************
  * Copyright (C) 2017 FRC Team 1736 Robot Casserole - www.robotcasserole.org

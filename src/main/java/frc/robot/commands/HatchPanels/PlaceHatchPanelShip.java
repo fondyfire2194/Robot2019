@@ -37,10 +37,10 @@ public class PlaceHatchPanelShip extends CommandGroup {
 
  
     addSequential(new GripHatchPanel(false));
-    addSequential(new TimeDelay(.25));
+    addSequential(new TimeDelay(.1));
     addSequential(new PushHatchPanel(true));
     addSequential(new TimeDelay(.1));
-    addSequential(new PushHatchPanel(false));
+    addParallel(new PushHatchPanel(false));
     addSequential(new SetAutoCommandDone());
 }
   }

@@ -37,7 +37,6 @@ public class PrepareToPickUpPanel extends CommandGroup {
     // arm.
     addParallel(new GripHatchPanel(false));
     addParallel(new ExtendHatchPanel(false));
-    addParallel(new SecondExtendHatchPanel(false)); 
     addParallel(new PushHatchPanel(false));
 
 

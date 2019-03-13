@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class RunClimberArmFromGamepad extends Command {
 
-	public void RunClimberArmFromGamepad() {
+	public RunClimberArmFromGamepad() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 	}
@@ -26,18 +26,18 @@ public class RunClimberArmFromGamepad extends Command {
 	@Override
 	protected void execute() {
 
-		double xValue;
+		double yValue;
 		double temp;
-		if (Math.abs(Robot.m_oi.gamepad_test.getX()) > .1)
-			xValue = Robot.m_oi.gamepad.getX();
+		if (Math.abs(Robot.m_oi.gamepad.getY()) > .1)
+			yValue = Robot.m_oi.gamepad.getY();
 		else
-			xValue = 0;
+			yValue = 0;
 
 		// square joystick and preserve sign
-		temp = xValue * xValue;
-		if (xValue < 0)
+		temp = yValue * yValue;
+		if (yValue < 0)
 			temp = -temp;
-		Robot.climber.runClimberArm(xValue);
+		Robot.climber.runClimberArm(yValue);
 
 	}
 

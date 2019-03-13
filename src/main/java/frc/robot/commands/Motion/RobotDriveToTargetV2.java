@@ -94,6 +94,8 @@ public class RobotDriveToTargetV2 extends Command {
 		targetNotSeenCtr = 0;
 		Robot.noCameraTargetFound = false;
 		distanceErrorAtStart = 99999;
+		lastRemainingDistance = 0;
+		lastVisionDistance = 0;
 		visionTurnGain = Pref.getPref("VisionKp");
 		if (Robot.limelightCamera.getIsTargetFound()) {
 			distanceErrorAtStart = myDistance - Robot.visionData.getRobotVisionDistance();
@@ -104,7 +106,6 @@ public class RobotDriveToTargetV2 extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-
 		if (!doneAccelerating) {
 			currentMaxSpeed = currentMaxSpeed + rampIncrement;
 			if (currentMaxSpeed > mySpeed) {
@@ -112,6 +113,7 @@ public class RobotDriveToTargetV2 extends Command {
 				doneAccelerating = true;
 			}
 		}
+
 		remainingFtToHatch = myEndpoint - Robot.driveTrain.getLeftFeet();
 
 		positionChange = lastRemainingDistance - remainingFtToHatch;
@@ -122,19 +124,15 @@ public class RobotDriveToTargetV2 extends Command {
 			visionDistance = Robot.visionData.getRobotVisionDistance();
 			visionDistanceChange = visionDistance - lastVisionDistance;
 			lastVisionDistance = visionDistance;
-		}
-		if (!visionCorrectionDone) {
+
 			if (Math.abs(visionDistanceChange - positionChange) < toleranceSetting) {
 				visionReadingsGoodCtr++;
-
 			} else {
 				visionReadingsGoodCtr = 0;
 			}
 		}
-
 		if (!visionCorrectionDone && visionReadingsGoodCtr >= 3) {
-			double temp = visionDistance;
-			myDistance = temp;
+			myDistance = visionDistance;
 			visionCorrectionDone = true;
 		}
 
@@ -146,8 +144,8 @@ public class RobotDriveToTargetV2 extends Command {
 			currentMaxSpeed = calcLoopSpeed;
 
 		// set minimum speed
-		if (currentMaxSpeed < .3) {
-			currentMaxSpeed = .3;
+		if (currentMaxSpeed < .2) {
+			currentMaxSpeed = .2;
 		}
 
 		inVisionRange = (remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint)
@@ -172,21 +170,17 @@ public class RobotDriveToTargetV2 extends Command {
 
 		useGyroComp = !Robot.useVisionComp;
 
-		if (Robot.useVisionComp)
-
-		{
+		if (Robot.useVisionComp) {
 			if (Robot.limelightOnEnd) {
 				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
 			} else {
 				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
-
 		}
 		if (useGyroComp) {
 			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
-
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -198,7 +192,6 @@ public class RobotDriveToTargetV2 extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-
 		// Robot.autonomousCommandDone = true;
 		Robot.driveTrain.arcadeDrive(0, 0);
 		Robot.isPositioning = false;

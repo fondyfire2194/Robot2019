@@ -45,10 +45,10 @@ public class PathfinderReverseNotifier {
 		if (!myFaceField && myInvertY)
 			switchMode = 4;// rev motion Y inverted
 
-			headingMultiplier = 1;
-			if (Constants.usePathWeaver)
-				headingMultiplier = -1;
-	
+		headingMultiplier = 1;
+		if (Constants.usePathWeaver)
+			headingMultiplier = -1;
+
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
 		SmartDashboard.putNumber("LATL", activeTrajectoryLength);
 		lastSegmentPositionLeft = Robot.activeLeftTrajectory.get(activeTrajectoryLength - 1).position;

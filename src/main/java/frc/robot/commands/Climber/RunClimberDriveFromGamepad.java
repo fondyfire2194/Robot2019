@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class RunClimberLegFromGamepad extends Command {
+public class RunClimberDriveFromGamepad extends Command {
 
-	public void RunClimberLegFromGamepad() {
+	public RunClimberDriveFromGamepad() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 	}
@@ -37,7 +37,7 @@ public class RunClimberLegFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		Robot.climber.runClimberLeg(-yValue);// y up gives a negative value
+		Robot.climber.runClimberDrive(-yValue);// y up gives a negative value
 
 	}
 

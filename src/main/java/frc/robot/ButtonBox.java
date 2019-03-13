@@ -211,19 +211,19 @@ public class ButtonBox extends Joystick {
     return new JoystickButton(this, BUTTON_R1);
   }
 
-  public JoystickButton getLeftStickClick() {
+  public JoystickButton getButtonL3() {
     return new JoystickButton(this, BUTTON_LEFT_STICK);
   }
 
-  public JoystickButton getRightStickClick() {
+  public JoystickButton getButtonR3() {
     return new JoystickButton(this, BUTTON_RIGHT_STICK);
   }
 
-  public JoystickButton getLeftTriggerClick() {
+  public JoystickButton getButtonShare() {
     return new JoystickButton(this, BUTTON_SHARE);
   }
 
-  public JoystickButton getRightTriggerClick() {
+  public JoystickButton getButtonOptions() {
     return new JoystickButton(this, BUTTON_OPTS);
   }
 }

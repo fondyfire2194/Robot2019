@@ -16,9 +16,8 @@ import frc.robot.commands.Auto.DriveAndPickUpPanel;
 import frc.robot.commands.Auto.DriveAndPlacePanelShip;
 import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
 import frc.robot.commands.Trajectories.PickAndRunTrajectory;;
-
-/**
- * Add your docs here.
+import frc.robot.commands.Auto.DriveAndPlacePanelRocket;
+/** Add your docs here.
  */
 public class AutoCommands {
 
@@ -196,7 +195,16 @@ public class AutoCommands {
             // Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
             // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place Panel";
            break;
-        }
+        
+        case 5:
+        double rocketAngle = 62;
+        secondPlaceDistance = 3;
+        Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle + rocketAngle, Constants.ORIENT_RATE, true, 2);
+        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS " + String.valueOf(Robot.sideAngle + rocketAngle);
+        number++;
+        Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
+        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Rocket and Place "+ String.valueOf(secondPlaceDistance);
+break;}
         return number;
     }
 

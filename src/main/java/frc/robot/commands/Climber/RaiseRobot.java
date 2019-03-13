@@ -5,19 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HatchPanels;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-import frc.robot.commands.TimeDelay;
-
-
-
-public class PlaceHatchPanelRocket extends CommandGroup {
+public class RaiseRobot extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PlaceHatchPanelRocket() {
+  public RaiseRobot() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -34,15 +30,7 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    addSequential(new ExtendHatchPanel(true));
-    addSequential(new TimeDelay(.5));
-    addSequential(new GripHatchPanel(false));
-    addSequential(new TimeDelay(.5));
-    addSequential(new PushHatchPanel(true));
-    addSequential(new TimeDelay(.5));
-    addParallel(new PushHatchPanel(false));
-    addSequential(new ExtendHatchPanel(false));
-}
+    addParallel(new ArmDriveToTarget(1000., 100, false, 10));
+    addParallel(new LegDriveToTarget(1000., 100, false, 10));
   }
-  
+}

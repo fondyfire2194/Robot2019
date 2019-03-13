@@ -53,6 +53,8 @@ public class Constants {
   public static double ELEVATOR_MAX_HEIGHT = 69;
   public static double ELEVATOR_IN_POSITION_BAND = 3;
 
+  public static double ELEVATOR_CARGO_LOAD = 20;
+
   public static boolean usePathWeaver = true;
 
   private Constants() {

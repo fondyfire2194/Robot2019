@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.LimelightControlMode.LedMode;
 import frc.robot.Pref;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JoystickArcadeDriveVision extends Command {
@@ -25,6 +24,8 @@ public class JoystickArcadeDriveVision extends Command {
   private boolean inVisionRange;
   private double turnValue;
   private double throttleValue;
+  private boolean visionTargetSeen;
+  private double targetBoxWidth;
 
   public JoystickArcadeDriveVision() {
     requires(Robot.driveTrain);
@@ -61,6 +62,9 @@ public class JoystickArcadeDriveVision extends Command {
      * get values from joystick turn value can also be taken from camera image or
      * gyro based on conditions
      */
+    visionTargetSeen = Robot.limelightCamera.getIsTargetFound();
+    targetBoxWidth = Robot.limelightCamera.getBoundingBoxWidth();
+
     throttleValue = Robot.m_oi.driverController.getY();
     if (Math.abs(throttleValue) < .15) {
       throttleValue = 0;
@@ -72,7 +76,7 @@ public class JoystickArcadeDriveVision extends Command {
     else
       throttleValue = -temp;
 
-    if (!Robot.limelightCamera.getIsTargetFound()) {
+    if (!visionTargetSeen) {
       turnValue = Robot.m_oi.driverController.getTwist();
       temp = turnValue * turnValue;
       if (turnValue < 0)
@@ -92,13 +96,12 @@ public class JoystickArcadeDriveVision extends Command {
      * 
      */
 
-    if (Robot.limelightCamera.getIsTargetFound())
+    if (visionTargetSeen)
       targetWasSeen = true;
 
-    inVisionRange = Robot.limelightCamera.getIsTargetFound()
-        && Robot.limelightCamera.getTargetArea() < Constants.MAX_TARGET_AREA;
+    inVisionRange = visionTargetSeen && targetBoxWidth < 110;
 
-    tooCloseForCamera = targetWasSeen && Robot.limelightCamera.getTargetArea() > Constants.MAX_TARGET_AREA;
+    tooCloseForCamera = visionTargetSeen && targetBoxWidth > 110;
 
     // in vision zone keep gyro target angle current to switch
     // over to gyro when too close for camera
@@ -113,7 +116,7 @@ public class JoystickArcadeDriveVision extends Command {
       }
     }
 
-    if (tooCloseForCamera || targetWasSeen && !Robot.limelightCamera.getIsTargetFound())
+    if (tooCloseForCamera || targetWasSeen && !visionTargetSeen)
       turnValue = Robot.driveTrain.getCurrentComp();// gyro
     /**
      * turning when robot bumpers hit target and amps rise
@@ -147,6 +150,11 @@ public class JoystickArcadeDriveVision extends Command {
     if (rightStalled) {
       rightValue = 0;
       Robot.driveTrain.setRightSideDriveBrakeOn(false);
+    }
+
+    if (tooCloseForCamera) {
+      leftValue = .2;
+      rightValue = .2;
     }
 
     Robot.driveTrain.leftDriveOut(leftValue);
