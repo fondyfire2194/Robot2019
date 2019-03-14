@@ -15,7 +15,7 @@ import frc.robot.commands.HatchPanels.*;
 import frc.robot.commands.Auto.DriveAndPickUpPanel;
 import frc.robot.commands.Auto.DriveAndPlacePanelShip;
 import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
-import frc.robot.commands.Trajectories.PickAndRunTrajectory;;
+import frc.robot.commands.Trajectories.PickAndRunTrajectory;
 import frc.robot.commands.Auto.DriveAndPlacePanelRocket;
 /** Add your docs here.
  */
@@ -99,7 +99,7 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 1.5);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station 180";
             number++;
-            Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance, Constants.POSITION_RATE, 180, false, 3);
+            Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance, Constants.POSITION_RATE, 180, Robot.gph.getLeftHatchDetected() || Robot.gph.getRightHatchDetected(), 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load and Pickup "+ String.valueOf(pickupDistance);
             // Robot.autonomousCommand[number] = new RobotDriveToTarget(7,
             // Constants.POSITION_RATE, 180, false, 3);

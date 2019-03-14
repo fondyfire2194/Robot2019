@@ -25,6 +25,7 @@ public class GamePieceHandler extends Subsystem {
 	private boolean stopCargoIntake;
 	public static AnalogTrigger leftPusherSwitch;
 	public static AnalogTrigger rightPusherSwitch;
+	public static boolean hatchGripped;
 
 	public GamePieceHandler() {
 
@@ -44,6 +45,7 @@ public class GamePieceHandler extends Subsystem {
 
 		hatchCoverGripper = new DoubleSolenoid(1, 0);
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
+		hatchGripped = true;
 
 		// hatchCoverExtend = new DoubleSolenoid(2, 3);
 		// hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
@@ -76,7 +78,10 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void pickUpCargo(double speed) {
+		if(!stopCargoIntake)
 		cargoMotor.set(ControlMode.PercentOutput, speed);
+		else
+		cargoMotor.set(ControlMode.PercentOutput, 0);
 	}
 
 	public void deliverCargo(double speed) {
@@ -87,11 +92,13 @@ public class GamePieceHandler extends Subsystem {
 	public void gripHatchPanel() {
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 		gripperCounter = 0;
+		hatchGripped = true;
 	}
 
 	public void releaseHatchPanel() {
 		hatchCoverGripper.set(DoubleSolenoid.Value.kReverse);
 		gripperCounter = 0;
+		hatchGripped = false;
 	}
 
 	private void gripHatchPanelOff() {
@@ -114,13 +121,19 @@ public class GamePieceHandler extends Subsystem {
 		hatchCoverPusher.set(false);
 	}
 
-	public boolean getHatchDetected() {
-		return leftPusherSwitch.getInWindow() || rightPusherSwitch.getInWindow();
+	public boolean getLeftHatchDetected() {
+		return leftPusherSwitch.getInWindow();
+	}
+
+	public boolean getRightHatchDetected() {
+		return rightPusherSwitch.getInWindow();
 	}
 
 	public void updateStatus() {
 		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit"))
 			stopCargoIntake = true;
+			if(stopCargoIntake)
+			stopCargoIntake = Robot.m_oi.pickUpCargo.get();
 		if (stopCargoIntake)
 			stopCargoMotor();
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)

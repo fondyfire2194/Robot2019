@@ -130,11 +130,17 @@ public class OI {
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
         driveToVision.whenReleased(new DelayOffLeds(2.));
 
- 
+        pickUpCargo = new JoystickButton(driverController, 1);
         pickUpCargo.whileHeld(new PickUpCargo(.5));
         pickUpCargo.whenReleased(new StopCargoMotor());
       
-        deliverCargo.whileHeld(new DeliverCargo(.5));
+        deliverCargo = new JoystickButton(driverController, 2);
+        deliverCargo.whileHeld(new DeliverCargo(1.));
+        deliverCargo.whenReleased(new StopCargoMotor());
+
+
+        captureHatchCover = new JoystickButton(driverController, 5);
+        captureHatchCover.whenPressed(new ToggleHatchGripper());
 
         placeHatchPanelRocket = new JoystickButton(driverController, 4);
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());

@@ -92,8 +92,7 @@ public class RobotOrient extends Command {
 				doneAccelerating = true;
 			}
 		}
-		if (passCount > 5 && Math.abs(Robot.robotRotate.getError()) < Pref.getPref("RotateIzone"))
-			;
+		if (passCount > 5 && Robot.robotRotate.closeToPosition())
 		Robot.robotRotate.getPIDController().setI(Pref.getPref("RotateKi"));
 
 		if (myAccuracy)

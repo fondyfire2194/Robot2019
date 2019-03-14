@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.Pref;
 import frc.robot.SD;
 import frc.robot.AutoChoosers;
 
@@ -92,6 +93,10 @@ public class RobotRotate extends PIDSubsystem {
 		getPIDController().setOutputRange(-speed, speed);
 	}
 
+	public double getKi()
+	{
+		return getPIDController().getI();
+	}
 	public double getKp() {
 		return getPIDController().getP();
 	}
@@ -105,7 +110,7 @@ public class RobotRotate extends PIDSubsystem {
 	}
 
 	public boolean closeToPosition() {
-		return (Math.abs(getError()) <= 8);
+		return (Math.abs(getError()) <= Pref.getPref("RotateIzone"));
 	}
 
 	public boolean isEnabled() {
@@ -121,6 +126,7 @@ public class RobotRotate extends PIDSubsystem {
 			SD.putN1("Orient Error", getError());
 			SD.putN3("RROut", getPIDController().get());
 			SD.putN("Rot Output", loopOutput);
+			SD.putN4("RotateKi", getKi());
 
 		}
 	}

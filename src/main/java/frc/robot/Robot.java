@@ -29,6 +29,7 @@ import frc.robot.subsystems.RobotRotate;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
+import frc.robot.subsystems.Ultrasound;;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
 import frc.robot.VisionData;
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
   public static Elevator elevator;
   public static GamePieceHandler gph;
   public static Climber climber;
+  public static Ultrasound ultrasound;
   public static AirCompressor airCompressor;
   public static PowerPanel pdp;
   public static SimpleCSVLogger2194 simpleCSVLogger2194;
@@ -196,6 +198,7 @@ public class Robot extends TimedRobot {
     airCompressor = new AirCompressor();
     pdp = new PowerPanel();
     gph = new GamePieceHandler();
+    ultrasound = new Ultrasound(RobotMap.ULTRASOUND, Ultrasound.ultrasoundType.inch, .009766);
     m_oi = new OI();
     simpleCSVLogger2194 = new SimpleCSVLogger2194();
     limelightCamera = new LimeLight();
@@ -584,6 +587,7 @@ public class Robot extends TimedRobot {
       break;
     case 8:
       robotRotate.updateStatus();
+      ultrasound.updateStatus();
       break;
     case 9:
       climber.updateStatus();

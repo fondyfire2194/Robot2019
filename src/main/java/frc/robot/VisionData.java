@@ -8,10 +8,12 @@
 package frc.robot;
 
 import frc.robot.AutoChoosers;
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.SD;
 
 /**
- * Vision validity check while in motion. Vision distance should change the
- * san=me amount as encoder distance.
+ * Vision validity check while in motion. Vision distance should change the same
+ * amount as encoder distance.
  */
 public class VisionData {
 
@@ -19,6 +21,8 @@ public class VisionData {
     public double[] distanceFeet;
     private double goodMinWidth = 50;// 6.7 ft
     private double goodMaxWidth = 80;// 3.8 ft
+    public double startOfVisionFt = 7.0;// ft
+    public double endOfVisionFt = 4.0;// ft
 
     public VisionData() {
         boxWidth = new int[] { 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140, 145,
@@ -35,9 +39,14 @@ public class VisionData {
         double boxWidthValue = Robot.limelightCamera.getBoundingBoxWidth();
         if (boxWidthValue >= 45 && boxWidthValue < 160) {
             lookUpIndex = (int) (boxWidthValue - boxWidth[0]) / 5;
+            SD.putN("LUI",lookUpIndex);
             distIntoRange = ((int) boxWidthValue - boxWidth[0] - lookUpIndex * 5);
+            SD.putN("LUIDIR",distIntoRange);
             double intoRange = (double) distIntoRange / segmentRange;
+            SD.putN3("LUIDIRn",distIntoRange);
             distanceRange = (distanceFeet[lookUpIndex] - distanceFeet[lookUpIndex + 1]);
+            SD.putN("LUIDIR3",distanceRange);
+            SD.putN3("LUIDIRDF",distanceFeet[lookUpIndex]);
             return (distanceFeet[lookUpIndex] - distanceRange * intoRange);
         } else
             return 0;
@@ -51,6 +60,12 @@ public class VisionData {
         double widthSeen = Robot.limelightCamera.getBoundingBoxWidth();
         return Robot.limelightCamera.getIsTargetFound() && (widthSeen < goodMaxWidth && widthSeen > goodMinWidth);
     }
+
+    public boolean tooCloseToCamera() {
+        return Robot.limelightCamera.getBoundingBoxWidth() > goodMaxWidth;
+
+    }
+
 
     public void updateStatus() {
         SD.putN1("RobotToTargetFt", getRobotVisionDistance());

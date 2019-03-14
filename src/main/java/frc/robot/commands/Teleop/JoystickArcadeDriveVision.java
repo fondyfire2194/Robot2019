@@ -26,6 +26,7 @@ public class JoystickArcadeDriveVision extends Command {
   private double throttleValue;
   private boolean visionTargetSeen;
   private double targetBoxWidth;
+  private double remainingDistanceFt;
 
   public JoystickArcadeDriveVision() {
     requires(Robot.driveTrain);
@@ -41,8 +42,9 @@ public class JoystickArcadeDriveVision extends Command {
    * 
    * 
    */
-  // Called just before this Command runs the first time
-  // If close enough to a valid target angle, use it to lock in the angle.
+  // Called just before this Command runs the first time. Capture gyro yaw.
+  // Use it to complete drive to target once a target was seen the lost de to
+  // being too close to vcamera.
   @Override
   protected void initialize() {
     leftOverCurrentCount = 0;
@@ -52,6 +54,8 @@ public class JoystickArcadeDriveVision extends Command {
     targetWasSeen = false;
     inVisionRange = false;
     Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
+    Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+    remainingDistanceFt = -1;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -85,85 +89,88 @@ public class JoystickArcadeDriveVision extends Command {
         turnValue = temp;
 
       turnValue = turnValue * Robot.driveTrain.getDriverSlider();
-    }
 
-    /**
-     * remember having seen target for switch to gyro when too close for camera to
-     * have image switch to gyro when inside a max area value. Reset if joystick Y
-     * is zero In vision range is image available but not greater area than preset
-     * constant Too close for camera is used to switch to gyro if image was
-     * previously seen
-     * 
-     */
+      remainingDistanceFt = Robot.ultrasound.getDistanceFeet();
+      SmartDashboard.putNumber("RemDist", remainingDistanceFt);
 
-    if (visionTargetSeen)
-      targetWasSeen = true;
+      /**
+       * remember having seen target for switch to gyro when too close for camera to
+       * have image switch to gyro when inside a max area value. Reset if joystick Y
+       * is zero In vision range is image available but not greater area than preset
+       * constant Too close for camera is used to switch to gyro if image was
+       * previously seen
+       * 
+       */
 
-    inVisionRange = visionTargetSeen && targetBoxWidth < 110;
+      if (visionTargetSeen)
+        targetWasSeen = true;
 
-    tooCloseForCamera = visionTargetSeen && targetBoxWidth > 110;
+      inVisionRange = Robot.visionData.inGoodVisionDistanceRange();
 
-    // in vision zone keep gyro target angle current to switch
-    // over to gyro when too close for camera
+      tooCloseForCamera = visionTargetSeen && Robot.visionData.tooCloseToCamera();
 
-    if (inVisionRange) {
-      Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+      // in vision zone keep gyro target angle current to switch
+      // over to gyro when too close for camera
 
-      if (Robot.limelightOnEnd) {
-        turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
-      } else {
-        turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+      if (inVisionRange) {
+        Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+
+        if (Robot.limelightOnEnd) {
+          turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+        } else {
+          turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+        }
       }
-    }
 
-    if (tooCloseForCamera || targetWasSeen && !visionTargetSeen)
-      turnValue = Robot.driveTrain.getCurrentComp();// gyro
-    /**
-     * turning when robot bumpers hit target and amps rise
-     */
-    if (Robot.driveTrain.getLeftSideStalled()) {
-      leftOverCurrentCount++;
-    } else {
-      leftOverCurrentCount = 0;
-    }
-    if (Robot.driveTrain.getRightSideStalled()) {
-      rightOverCurrentCount++;
-    } else {
-      rightOverCurrentCount = 0;
-    }
-    if (leftOverCurrentCount > overCurrentCountMax) {
-      leftStalled = true;
-    }
-    if (rightOverCurrentCount > overCurrentCountMax) {
-      rightStalled = true;
-    }
-    /**
-     * Output to drive motors, Turn brakes off so robot coasts in the final stageS
-     * 
-     */
-    double leftValue = throttleValue + turnValue;
-    if (leftStalled) {
-      leftValue = 0;
-      Robot.driveTrain.setLeftSideDriveBrakeOn(false);
-    }
-    double rightValue = throttleValue - turnValue;
-    if (rightStalled) {
-      rightValue = 0;
-      Robot.driveTrain.setRightSideDriveBrakeOn(false);
-    }
+      if (tooCloseForCamera || targetWasSeen && !visionTargetSeen)
+        turnValue = Robot.driveTrain.getCurrentComp();// gyro
+      /**
+       * turning when robot bumpers hit target and amps rise
+       */
+      if (Robot.driveTrain.getLeftSideStalled()) {
+        leftOverCurrentCount++;
+      } else {
+        leftOverCurrentCount = 0;
+      }
+      if (Robot.driveTrain.getRightSideStalled()) {
+        rightOverCurrentCount++;
+      } else {
+        rightOverCurrentCount = 0;
+      }
+      if (leftOverCurrentCount > overCurrentCountMax) {
+        leftStalled = true;
+      }
+      if (rightOverCurrentCount > overCurrentCountMax) {
+        rightStalled = true;
+      }
+      /**
+       * Output to drive motors, Turn brakes off so robot coasts in the final stageS
+       * 
+       */
+      double leftValue = throttleValue + turnValue;
+      if (leftStalled) {
+        leftValue = 0;
+        Robot.driveTrain.setLeftSideDriveBrakeOn(false);
+      }
+      double rightValue = throttleValue - turnValue;
+      if (rightStalled) {
+        rightValue = 0;
+        Robot.driveTrain.setRightSideDriveBrakeOn(false);
+      }
 
-    if (tooCloseForCamera) {
-      leftValue = .2;
-      rightValue = .2;
-    }
+      if (tooCloseForCamera) {
+        leftValue = .2;
+        rightValue = .2;
+      }
 
-    Robot.driveTrain.leftDriveOut(leftValue);
-    Robot.driveTrain.rightDriveOut(rightValue);
-    SmartDashboard.putBoolean("TWS", targetWasSeen);
-    SmartDashboard.putBoolean("TIVR", inVisionRange);
-    SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
-    SmartDashboard.putNumber("TDSA", Robot.driveTrain.driveStraightAngle);
-    SmartDashboard.putNumber("TVAL", turnValue);
+      Robot.driveTrain.leftDriveOut(leftValue);
+      Robot.driveTrain.rightDriveOut(rightValue);
+      SmartDashboard.putBoolean("TWS", targetWasSeen);
+      SmartDashboard.putBoolean("TIVR", inVisionRange);
+      SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
+      SmartDashboard.putNumber("TDSA", Robot.driveTrain.driveStraightAngle);
+      SmartDashboard.putNumber("TVAL", turnValue);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -33,15 +33,14 @@ public class RobotDriveToTargetV2 extends Command {
 	public static double currentMaxSpeed;
 	public double myDistance;
 	private double myEndpoint;
-	private double startOfVisionPoint = 8;
-	private double endOfVisionPoint = 1;
+	private double startOfVisionFt;
+	private double endOfVisionFt;
 	private boolean inVisionRange;
 	private double remainingFtToHatch;
 	private double myTargetAngle;
 	private boolean targetWasSeen;
 	private int targetNotSeenCtr;
 	private double visionTurnGain;
-	private double distanceErrorAtStart;
 	private double Kp;
 	private double Kd;
 	private double calcLoopSpeed;
@@ -49,20 +48,12 @@ public class RobotDriveToTargetV2 extends Command {
 	private double lastRemainingDistance;
 	private double positionChange;
 	private double positionRateOfChange;
-	private boolean visionCorrectionDone;
-	private double visionDistance;
-	private double lastVisionDistance;
-	private double visionDistanceChange;
-	private boolean visionReadingsGood;
-	private int visionReadingsGoodCtr;
-	private double toleranceSetting = .5;
+	private boolean visionTargetSeen;
+	private double robotDistance;
 
-	// side distances are in inches
-	// side speeds are in per unit where .25 = 25%
-	// inPositionband is in feet
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
-	 * testing = 3 So at 2 ft speed is 6 ft per sec, at i ft it is 3
+	 * testing = 3 So at 2 ft speed is 6 ft per sec, at 1 ft it is 3
 	 */
 
 	public RobotDriveToTargetV2(double distance, double speed, double targetAngle, boolean endItNow, double timeout) {
@@ -93,48 +84,31 @@ public class RobotDriveToTargetV2 extends Command {
 		targetWasSeen = false;
 		targetNotSeenCtr = 0;
 		Robot.noCameraTargetFound = false;
-		distanceErrorAtStart = 99999;
 		lastRemainingDistance = 0;
-		lastVisionDistance = 0;
+		// "linear" vision range in ft
+		startOfVisionFt = Robot.visionData.startOfVisionFt;
+		endOfVisionFt = Robot.visionData.endOfVisionFt;
 		visionTurnGain = Pref.getPref("VisionKp");
-		if (Robot.limelightCamera.getIsTargetFound()) {
-			distanceErrorAtStart = myDistance - Robot.visionData.getRobotVisionDistance();
-			SD.putN2("DERAS", distanceErrorAtStart);
-		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		if (!doneAccelerating) {
-			currentMaxSpeed = currentMaxSpeed + rampIncrement;
-			if (currentMaxSpeed > mySpeed) {
-				currentMaxSpeed = mySpeed;
-				doneAccelerating = true;
-			}
-		}
 
-		remainingFtToHatch = myEndpoint - Robot.driveTrain.getLeftFeet();
+		doAccel();
+		/**
+		 * capture data for this cycle
+		 * 
+		 */
+		visionTargetSeen = Robot.limelightCamera.getIsTargetFound();
+		robotDistance = Robot.driveTrain.getLeftFeet();
+		remainingFtToHatch = myEndpoint - robotDistance;
+
+		inVisionRange = (remainingFtToHatch < startOfVisionFt && remainingFtToHatch > endOfVisionFt);
 
 		positionChange = lastRemainingDistance - remainingFtToHatch;
-		lastRemainingDistance = Robot.driveTrain.getLeftFeet();
+		lastRemainingDistance = robotDistance;
 		positionRateOfChange = positionChange / loopTime;
-
-		if (!visionCorrectionDone) {
-			visionDistance = Robot.visionData.getRobotVisionDistance();
-			visionDistanceChange = visionDistance - lastVisionDistance;
-			lastVisionDistance = visionDistance;
-
-			if (Math.abs(visionDistanceChange - positionChange) < toleranceSetting) {
-				visionReadingsGoodCtr++;
-			} else {
-				visionReadingsGoodCtr = 0;
-			}
-		}
-		if (!visionCorrectionDone && visionReadingsGoodCtr >= 3) {
-			myDistance = visionDistance;
-			visionCorrectionDone = true;
-		}
 
 		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
 
@@ -148,9 +122,6 @@ public class RobotDriveToTargetV2 extends Command {
 			currentMaxSpeed = .2;
 		}
 
-		inVisionRange = (remainingFtToHatch < startOfVisionPoint && remainingFtToHatch > endOfVisionPoint)
-				|| Robot.limelightCamera.getBoundingBoxWidth() < 110;
-
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
@@ -163,10 +134,10 @@ public class RobotDriveToTargetV2 extends Command {
 		// if (targetNotSeenCtr > 10)
 		// Robot.noCameraTargetFound = true;
 
-		if (Robot.limelightCamera.getIsTargetFound())
+		if (visionTargetSeen)
 			targetWasSeen = true;
 
-		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
+		Robot.useVisionComp = inVisionRange && visionTargetSeen;
 
 		useGyroComp = !Robot.useVisionComp;
 
@@ -206,5 +177,16 @@ public class RobotDriveToTargetV2 extends Command {
 	@Override
 	protected void interrupted() {
 		end();
+	}
+
+	private void doAccel() {
+		if (!doneAccelerating) {
+			currentMaxSpeed = currentMaxSpeed + rampIncrement;
+			if (currentMaxSpeed > mySpeed) {
+				currentMaxSpeed = mySpeed;
+				doneAccelerating = true;
+			}
+		}
+
 	}
 }
