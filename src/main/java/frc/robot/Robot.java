@@ -179,6 +179,7 @@ public class Robot extends TimedRobot {
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
+  public static boolean useUltrasound;
 
   /**
    * This function is run when the robot is first started up and should be used

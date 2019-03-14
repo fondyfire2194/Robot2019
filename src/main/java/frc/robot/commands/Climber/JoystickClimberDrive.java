@@ -5,12 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Teleop;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.Pref;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class JoystickClimberDrive extends Command {
   public JoystickClimberDrive() {
@@ -28,29 +27,18 @@ public class JoystickClimberDrive extends Command {
   @Override
   protected void execute() {
     double throttleValue = Robot.m_oi.driverController.getY();
-    // double turnValue = Robot.m_oi.driverController.getTwist();
     double temp = 0;
 
 
     // if (Math.abs(throttleValue) < .15)
       throttleValue = 0;
-    // if (Math.abs(turnValue) < .15)
-    //   turnValue = 0;
-
+  
     temp = throttleValue * throttleValue;
     if (throttleValue < 0)
       throttleValue = temp;
     else
       throttleValue = -temp;
 
-    // temp = turnValue * turnValue;
-    // if (turnValue < 0)
-    //   turnValue = -temp;
-    // else
-    //   turnValue = temp;
-
-    // if (!Robot.autoRunning)
-      Robot.driveTrain.arcadeDrive(throttleValue,0);
       Robot.climber.climberDriveOut(throttleValue,false);
   }
 

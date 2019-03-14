@@ -50,6 +50,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private double positionRateOfChange;
 	private boolean visionTargetSeen;
 	private double robotDistance;
+	private boolean correctionMade;
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -89,6 +90,7 @@ public class RobotDriveToTargetV2 extends Command {
 		startOfVisionFt = Robot.visionData.startOfVisionFt;
 		endOfVisionFt = Robot.visionData.endOfVisionFt;
 		visionTurnGain = Pref.getPref("VisionKp");
+		correctionMade = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -106,6 +108,15 @@ public class RobotDriveToTargetV2 extends Command {
 
 		inVisionRange = (remainingFtToHatch < startOfVisionFt && remainingFtToHatch > endOfVisionFt);
 
+		if (Robot.useUltrasound && inVisionRange && !correctionMade) {
+
+			double distanceDifference = Robot.ultrasound.getDistanceFeet() - remainingFtToHatch;
+			if (Math.abs(distanceDifference) < 2)
+				myEndpoint = myEndpoint + distanceDifference;
+			correctionMade = true;
+		}
+
+		// differential
 		positionChange = lastRemainingDistance - remainingFtToHatch;
 		lastRemainingDistance = robotDistance;
 		positionRateOfChange = positionChange / loopTime;

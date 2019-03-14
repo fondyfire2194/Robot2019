@@ -55,6 +55,11 @@ public class Constants {
 
   public static double ELEVATOR_CARGO_LOAD = 20;
 
+  public static double CLIMBER_LEG_COUNTS_PER_INCH = 500;
+  public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 500;
+  public static double CLIMBER_DRIVE_COUNTS_PER_INCH = 500;
+  public static double CLIMBER_ARM_LENGTH_INCHES = 15.;
+
   public static boolean usePathWeaver = true;
 
   private Constants() {

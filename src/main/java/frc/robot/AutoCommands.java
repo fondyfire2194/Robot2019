@@ -17,7 +17,9 @@ import frc.robot.commands.Auto.DriveAndPlacePanelShip;
 import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
 import frc.robot.commands.Trajectories.PickAndRunTrajectory;
 import frc.robot.commands.Auto.DriveAndPlacePanelRocket;
-/** Add your docs here.
+
+/**
+ * Add your docs here.
  */
 public class AutoCommands {
 
@@ -54,10 +56,13 @@ public class AutoCommands {
         Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
         Robot.autonomousCommandName[number] = "2 - Orient to Cargo Ship " + String.valueOf(Robot.sideAngle);
         number++;
-        Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
-        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "+ String.valueOf(firstPlaceDistance);
+        Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance, Constants.POSITION_RATE,
+                Robot.sideAngle, false, 3);
+        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                + String.valueOf(firstPlaceDistance);
 
-        // Robot.autonomousCommand[number] = new RobotDriveToTarget(5, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
+        // Robot.autonomousCommand[number] = new RobotDriveToTarget(5,
+        // Constants.POSITION_RATE, Robot.sideAngle, false, 3);
         // Robot.autonomousCommandName[number] = "3 - Drive To Cargo Ship";
         // number++;
         // Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
@@ -71,10 +76,13 @@ public class AutoCommands {
     public static int setMiddleStart() {
         double firstPlaceDistance = 11.;
         int number = 1;
-        Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance, Constants.POSITION_RATE, 0, false, 3);
-        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "+ String.valueOf(firstPlaceDistance);
+        Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance, Constants.POSITION_RATE, 0,
+                false, 3);
+        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                + String.valueOf(firstPlaceDistance);
 
-        // Robot.autonomousCommand[number] = new RobotDriveToTarget(11., Constants.POSITION_RATE, 0, false, 3);
+        // Robot.autonomousCommand[number] = new RobotDriveToTarget(11.,
+        // Constants.POSITION_RATE, 0, false, 3);
         // Robot.autonomousCommandName[number] = "1 - Drive To Cargo Ship";
         // number++;
         // Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
@@ -99,8 +107,10 @@ public class AutoCommands {
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 1.5);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station 180";
             number++;
-            Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance, Constants.POSITION_RATE, 180, Robot.gph.getLeftHatchDetected() || Robot.gph.getRightHatchDetected(), 3);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load and Pickup "+ String.valueOf(pickupDistance);
+            Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance, Constants.POSITION_RATE, 180,
+                    Robot.gph.getLeftHatchDetected() || Robot.gph.getRightHatchDetected(), 3);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load and Pickup "
+                    + String.valueOf(pickupDistance);
             // Robot.autonomousCommand[number] = new RobotDriveToTarget(7,
             // Constants.POSITION_RATE, 180, false, 3);
             // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To
@@ -112,15 +122,17 @@ public class AutoCommands {
             break;
         case 2:
         case 3:
-        pickupDistance = 7.;
+            pickupDistance = 7.;
             Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, true, Robot.invertY);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move to Load Trajectory";
             number++;
             Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 3);
             Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station 180";
             number++;
-            Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance, Constants.POSITION_RATE, 180, false, 3);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station and PickUp "+ String.valueOf(pickupDistance);
+            Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance, Constants.POSITION_RATE, 180,
+                    false, 3);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load Station and PickUp "
+                    + String.valueOf(pickupDistance);
 
             // Robot.autonomousCommand[number] = new RobotDriveToTarget(6.,
             // Constants.POSITION_RATE, 180, false, 3);
@@ -151,60 +163,85 @@ public class AutoCommands {
 
         case 1:
         case 2:
-        double secondPlaceDistance = 3.;
+            double secondPlaceDistance = 3.;
             Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS " + String.valueOf(Robot.sideAngle);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
+                    + String.valueOf(Robot.sideAngle);
             number++;
-            Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "+ String.valueOf(secondPlaceDistance);
+            Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance, Constants.POSITION_RATE,
+                    Robot.sideAngle, false, 3);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                    + String.valueOf(secondPlaceDistance);
 
-            // Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, Robot.sideAngle, false,
-            //         3);
-            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
+            // Robot.autonomousCommand[number] = new RobotDriveToTarget(2,
+            // Constants.POSITION_RATE, Robot.sideAngle, false,
+            // 3);
+            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To
+            // CS";
             // number++;
             // Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
-            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place Panel";
+            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place
+            // Panel";
             break;
         case 3:
-        secondPlaceDistance = 3.;
+            secondPlaceDistance = 3.;
             Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS " + String.valueOf(Robot.sideAngle);;
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
+                    + String.valueOf(Robot.sideAngle);
+            ;
             number++;
-            Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "+ String.valueOf(secondPlaceDistance);
+            Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance, Constants.POSITION_RATE,
+                    Robot.sideAngle, false, 3);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                    + String.valueOf(secondPlaceDistance);
 
-            // Robot.autonomousCommand[number] = new RobotDriveToTarget(2, Constants.POSITION_RATE, 90, false, 3);
-            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
+            // Robot.autonomousCommand[number] = new RobotDriveToTarget(2,
+            // Constants.POSITION_RATE, 90, false, 3);
+            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To
+            // CS";
             // number++;
             // Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
-            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place Panel";
+            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place
+            // Panel";
             break;
 
         case 4:
-        secondPlaceDistance = 4;
+            secondPlaceDistance = 4;
             Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS " + String.valueOf(Robot.sideAngle);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
+                    + String.valueOf(Robot.sideAngle);
             number++;
-            Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
-            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "+ String.valueOf(secondPlaceDistance);
+            Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance, Constants.POSITION_RATE,
+                    Robot.sideAngle, false, 3);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                    + String.valueOf(secondPlaceDistance);
 
-            // Robot.autonomousCommand[number] = new RobotDriveToTarget(8., Constants.POSITION_RATE, Robot.sideAngle,
-            //         false, 3);
-            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To CS";
+            // Robot.autonomousCommand[number] = new RobotDriveToTarget(8.,
+            // Constants.POSITION_RATE, Robot.sideAngle,
+            // false, 3);
+            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Drive To
+            // CS";
             // number++;
             // Robot.autonomousCommand[number] = new PlaceHatchPanelShip();
-            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place Panel";
-           break;
-        
+            // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Place
+            // Panel";
+            break;
+
         case 5:
-        double rocketAngle = 62;
-        secondPlaceDistance = 3;
-        Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle + rocketAngle, Constants.ORIENT_RATE, true, 2);
-        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS " + String.valueOf(Robot.sideAngle + rocketAngle);
-        number++;
-        Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance, Constants.POSITION_RATE, Robot.sideAngle, false, 3);
-        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Rocket and Place "+ String.valueOf(secondPlaceDistance);
-break;}
+            double rocketAngle = -28;
+            if(Robot.invertY) rocketAngle = 28;
+            secondPlaceDistance = 3;
+            Robot.autonomousCommand[number] = new RobotOrient(rocketAngle, Constants.ORIENT_RATE,
+                    true, 2);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To Rocket "
+                    + String.valueOf(rocketAngle);
+            number++;
+            Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance, Constants.POSITION_RATE,
+                    Robot.sideAngle, false, 3);
+            Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Rocket and Place "
+                    + String.valueOf(secondPlaceDistance);
+            break;
+        }
         return number;
     }
 

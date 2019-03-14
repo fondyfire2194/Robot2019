@@ -84,6 +84,25 @@ public class Climber extends Subsystem {
     climberLeg.set(ControlMode.PercentOutput, speed);
   }
 
+  public void climberArmConfigCurrents(int peak, int time, int continuous){
+    climberArm.configPeakCurrentLimit(peak);
+    climberArm.configPeakCurrentDuration(time);
+    climberArm.configContinuousCurrentLimit(continuous);
+  }
+
+  public void climberLegConfigCurrents(int peak, int time, int continuous){
+    climberLeg.configPeakCurrentLimit(peak);
+    climberLeg.configPeakCurrentDuration(time);
+    climberLeg.configContinuousCurrentLimit(continuous);
+  }
+
+  public void climberDriveConfigCurrents(int peak, int time, int continuous){
+    climberDrive.configPeakCurrentLimit(peak);
+    climberDrive.configPeakCurrentDuration(time);
+    climberDrive.configContinuousCurrentLimit(continuous);
+  }
+
+
   public void climberLegOut(double speed, boolean useVelocityLoop) {
     if (useVelocityLoop) {
       climberLeg.selectProfileSlot(0, 0);

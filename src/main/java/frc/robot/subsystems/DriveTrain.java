@@ -23,6 +23,7 @@ import frc.robot.commands.Teleop.JoystickArcadeDrive;
 import frc.robot.ReverseDistanceFollower;
 import frc.robot.SD;
 import frc.robot.Constants;
+import frc.robot.MovingAverage;
 import frc.robot.Pref;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.followers.*;
@@ -53,6 +54,7 @@ public class DriveTrain extends Subsystem {
   public static boolean useVelocityLoop;
   private int lastLeftEncoderValue;
   private int lastRightEncoderValue;
+  private MovingAverage movingAverage;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -104,7 +106,7 @@ public class DriveTrain extends Subsystem {
     } catch (Exception ex) {
       DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
-
+    movingAverage = new MovingAverage(10);
   }
 
   @Override
@@ -131,7 +133,8 @@ public class DriveTrain extends Subsystem {
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
       rightTalonOne.set(ControlMode.PercentOutput, speed);
-    }  }
+    }
+  }
 
   public void arcadeDrive(double throttleValue, double turnValue) {
     leftDriveOut(throttleValue + turnValue);
@@ -234,6 +237,11 @@ public class DriveTrain extends Subsystem {
     return imu.getRoll();
   }
 
+  public double getFilteredGyroPitch() {
+    movingAverage.add(getGyroPitch());
+    return movingAverage.getAverage();
+  }
+
   public boolean isRotating() {
     return imu.isRotating();
   }
@@ -330,4 +338,5 @@ public class DriveTrain extends Subsystem {
     }
 
   }
+
 }

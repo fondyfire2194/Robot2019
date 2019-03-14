@@ -19,7 +19,7 @@ public class TrajDict {
 
 	public static String[] secondHatchPickupNames = { "CS2ToTurn", "CLEToLoad" };
 
-	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2", "LoadToCS3", "LoadToFarCenter" };
+	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2", "LoadToCS3", "LoadToFarCenter","LoadToRocket" };
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 
@@ -32,6 +32,8 @@ public class TrajDict {
 		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .3, 0., 0., .4 });
 		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .3, 0., 0., .4 });
 		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .4, 0., 0., .8 });
+		gainDict.put(secondHatchDeliveryNames[4], new Double[] { .4, 0., 0., .8 });
+
 	}
 
 	public static double[] getTrajGains(String name) {
