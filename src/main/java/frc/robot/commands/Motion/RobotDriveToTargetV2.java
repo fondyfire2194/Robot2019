@@ -174,8 +174,13 @@ public class RobotDriveToTargetV2 extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		// Robot.autonomousCommandDone = true;
+
 		Robot.driveTrain.arcadeDrive(0, 0);
+		if (myEndItNow) {
+			Robot.driveTrain.setLeftSideDriveBrakeOn(true);
+			Robot.driveTrain.setRightSideDriveBrakeOn(true);
+		}
+
 		Robot.isPositioning = false;
 		doneAccelerating = false;
 		currentMaxSpeed = 0;

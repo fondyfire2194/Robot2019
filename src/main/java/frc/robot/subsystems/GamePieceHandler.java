@@ -5,26 +5,28 @@ import frc.robot.RobotMap;
 import frc.robot.SD;
 import frc.robot.AutoChoosers;
 import frc.robot.Pref;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.AnalogTrigger;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Counter;
 
 public class GamePieceHandler extends Subsystem {
 	public static TalonSRX cargoMotor;
 	public DoubleSolenoid hatchCoverGripper;
 	public Solenoid hatchCoverExtend;
-	// public DoubleSolenoid hatchCoverExtend;
-	// public DoubleSolenoid hatchCoverSecondExtend;
 	public Solenoid hatchCoverPusher;
 	private int gripperCounter;
 	private boolean stopCargoIntake;
-	public static AnalogTrigger leftPusherSwitch;
-	public static AnalogTrigger rightPusherSwitch;
+	private DigitalInput leftPusherSensor;
+	private DigitalInput rightPusherSensor;
+
 	public static boolean hatchGripped;
 
 	public GamePieceHandler() {
@@ -35,29 +37,21 @@ public class GamePieceHandler extends Subsystem {
 		cargoMotor.configVoltageCompSaturation(12, 0);
 		cargoMotor.enableVoltageCompensation(true);
 
-		leftPusherSwitch = new AnalogTrigger(RobotMap.LEFT_PUSHER_SWITCH);
-		leftPusherSwitch.setAveraged(true);
-		leftPusherSwitch.setLimitsVoltage(1.0, 5.0);
+		leftPusherSensor = new DigitalInput(0);
 
-		rightPusherSwitch = new AnalogTrigger(RobotMap.RIGHT_PUSHER_SWITCH);
-		rightPusherSwitch.setAveraged(true);
-		rightPusherSwitch.setLimitsVoltage(1.0, 5.0);
+		rightPusherSensor = new DigitalInput(1);
+
+		hatchCoverExtend = new Solenoid(2);
+		hatchCoverExtend.set(false);
 
 		hatchCoverGripper = new DoubleSolenoid(1, 0);
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 		hatchGripped = true;
 
-		// hatchCoverExtend = new DoubleSolenoid(2, 3);
-		// hatchCoverExtend.set(DoubleSolenoid.Value.kReverse);
-
-		hatchCoverExtend = new Solenoid(2);
-		hatchCoverExtend.set(false);
-
-		// hatchCoverSecondExtend = new DoubleSolenoid(4, 5);
-		// hatchCoverSecondExtend.set(DoubleSolenoid.Value.kReverse);
-
 		hatchCoverPusher = new Solenoid(6);
 		hatchCoverPusher.set(false);
+
+
 
 	}
 
@@ -78,10 +72,10 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void pickUpCargo(double speed) {
-		if(!stopCargoIntake)
-		cargoMotor.set(ControlMode.PercentOutput, speed);
+		if (!stopCargoIntake)
+			cargoMotor.set(ControlMode.PercentOutput, speed);
 		else
-		cargoMotor.set(ControlMode.PercentOutput, 0);
+			cargoMotor.set(ControlMode.PercentOutput, 0);
 	}
 
 	public void deliverCargo(double speed) {
@@ -102,7 +96,9 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	private void gripHatchPanelOff() {
+
 		hatchCoverGripper.set(DoubleSolenoid.Value.kOff);
+
 	}
 
 	public void extendHatchPanel() {
@@ -119,31 +115,39 @@ public class GamePieceHandler extends Subsystem {
 
 	public void retractPusher() {
 		hatchCoverPusher.set(false);
+		
 	}
 
 	public boolean getLeftHatchDetected() {
-		return leftPusherSwitch.getInWindow();
+      return !leftPusherSensor.get();
 	}
 
 	public boolean getRightHatchDetected() {
-		return rightPusherSwitch.getInWindow();
+      return !rightPusherSensor.get();
 	}
+
+	
 
 	public void updateStatus() {
 		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit"))
 			stopCargoIntake = true;
-			if(stopCargoIntake)
+		if (stopCargoIntake)
 			stopCargoIntake = Robot.m_oi.pickUpCargo.get();
 		if (stopCargoIntake)
 			stopCargoMotor();
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
 			gripperCounter++;
-		if (gripperCounter > 2) {
+		if (gripperCounter > 2) {	
 			gripHatchPanelOff();
 		}
+
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
 		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
 		SD.putN2("Sldr", getDriverSlider());
+		SmartDashboard.putBoolean("LeftDetected",getLeftHatchDetected());
+
+		SmartDashboard.putBoolean("RightDetected",getRightHatchDetected());
+
 		if (AutoChoosers.debugChooser.getSelected() == 4) {
 			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());
 

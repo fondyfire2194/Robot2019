@@ -274,7 +274,7 @@ public class Robot extends TimedRobot {
     Robot.gph.retractPusher();
     Robot.gph.gripHatchPanel();
     Robot.gph.retractHatchPanel();
-    // Robot.gph.secondRetractHatchPanel();
+    
 
   }
 
@@ -369,7 +369,7 @@ public class Robot extends TimedRobot {
     PathfinderReverseNotifier.stopNotfier();
     PathfinderNotifier.stopNotfier();
     cancelAllAuto();
-
+    
   }
 
   /**

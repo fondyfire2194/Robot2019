@@ -31,8 +31,8 @@ public class RobotMap {
   public static final int ELEVATOR_MOTOR = 12;
 
   public static final int ELEVATOR_TRAVEL_SWITCH = 0;
-  public static final int LEFT_PUSHER_SWITCH = 1;
-  public static final int RIGHT_PUSHER_SWITCH = 2;
+  public static final int LEFT_PUSHER_SWITCH = 0;
+  public static final int RIGHT_PUSHER_SWITCH = 1;
   public static final int ULTRASOUND = 3;
 
   // For example to map the left and right motors, you could define the
