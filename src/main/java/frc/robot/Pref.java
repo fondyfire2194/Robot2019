@@ -32,6 +32,7 @@ public class Pref {
   static {
     prefDict.put("DriveStraightKp", .03);
     prefDict.put("DrivePositionKp", .03);
+    prefDict.put("DrivePositionKd", .03); 
     prefDict.put("DriveSldnDist", 2.3);
 
     prefDict.put("RotateKp", 0.005);
@@ -45,8 +46,9 @@ public class Pref {
     prefDict.put("PathKt", .2);
     
     prefDict.put("VisionKp", .002);
-    
-    prefDict.put("JSTwistKp", .2);
+   
+    prefDict.put("JSTwistMinKp", .2);
+    prefDict.put("JSTwistMaxKp", .4);
 
     prefDict.put("ElevatorMMKf", .6);
     prefDict.put("ElevatorMMKp", .7);

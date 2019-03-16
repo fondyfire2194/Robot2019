@@ -51,8 +51,6 @@ public class GamePieceHandler extends Subsystem {
 		hatchCoverPusher = new Solenoid(6);
 		hatchCoverPusher.set(false);
 
-
-
 	}
 
 	// Put methods for controlling this subsystem
@@ -60,11 +58,6 @@ public class GamePieceHandler extends Subsystem {
 
 	public void initDefaultCommand() {
 
-	}
-
-	public double getDriverSlider() {
-		double temp = (1 - Robot.m_oi.driverController.getThrottle()) / 2;
-		return temp;
 	}
 
 	public void stopCargoMotor() {
@@ -115,18 +108,24 @@ public class GamePieceHandler extends Subsystem {
 
 	public void retractPusher() {
 		hatchCoverPusher.set(false);
-		
+
 	}
 
 	public boolean getLeftHatchDetected() {
-      return !leftPusherSensor.get();
+		return !leftPusherSensor.get();
 	}
 
 	public boolean getRightHatchDetected() {
-      return !rightPusherSensor.get();
+		return !rightPusherSensor.get();
 	}
 
-	
+	public boolean eitherHatchDetected() {
+		return !leftPusherSensor.get() || !rightPusherSensor.get();
+	}
+
+	public boolean bothHatchesDetected() {
+		return !leftPusherSensor.get() && !rightPusherSensor.get();
+	}
 
 	public void updateStatus() {
 		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit"))
@@ -137,16 +136,15 @@ public class GamePieceHandler extends Subsystem {
 			stopCargoMotor();
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
 			gripperCounter++;
-		if (gripperCounter > 2) {	
+		if (gripperCounter > 2) {
 			gripHatchPanelOff();
 		}
 
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
 		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
-		SD.putN2("Sldr", getDriverSlider());
-		SmartDashboard.putBoolean("LeftDetected",getLeftHatchDetected());
+		SmartDashboard.putBoolean("LeftDetected", getLeftHatchDetected());
 
-		SmartDashboard.putBoolean("RightDetected",getRightHatchDetected());
+		SmartDashboard.putBoolean("RightDetected", getRightHatchDetected());
 
 		if (AutoChoosers.debugChooser.getSelected() == 4) {
 			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());

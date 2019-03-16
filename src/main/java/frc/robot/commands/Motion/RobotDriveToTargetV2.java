@@ -3,6 +3,7 @@ package frc.robot.commands.Motion;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
+import frc.robot.Constants;
 
 /**
  * This command is used from a middle start where the distance and angle is
@@ -33,8 +34,6 @@ public class RobotDriveToTargetV2 extends Command {
 	public static double currentMaxSpeed;
 	public double myDistance;
 	private double myEndpoint;
-	private double startOfVisionFt;
-	private double endOfVisionFt;
 	private boolean inVisionRange;
 	private double remainingFtToHatch;
 	private double myTargetAngle;
@@ -87,9 +86,9 @@ public class RobotDriveToTargetV2 extends Command {
 		Robot.noCameraTargetFound = false;
 		lastRemainingDistance = 0;
 		// "linear" vision range in ft
-		startOfVisionFt = Robot.visionData.startOfVisionFt;
-		endOfVisionFt = Robot.visionData.endOfVisionFt;
 		visionTurnGain = Pref.getPref("VisionKp");
+		Kp = Pref.getPref("DrivePositionKp");
+		Kd = Pref.getPref("DrivePositionKd");
 		correctionMade = false;
 	}
 
@@ -97,7 +96,6 @@ public class RobotDriveToTargetV2 extends Command {
 	@Override
 	protected void execute() {
 
-		doAccel();
 		/**
 		 * capture data for this cycle
 		 * 
@@ -106,62 +104,24 @@ public class RobotDriveToTargetV2 extends Command {
 		robotDistance = Robot.driveTrain.getLeftFeet();
 		remainingFtToHatch = myEndpoint - robotDistance;
 
-		inVisionRange = (remainingFtToHatch < startOfVisionFt && remainingFtToHatch > endOfVisionFt);
+		// check if camera can be used
 
-		if (Robot.useUltrasound && inVisionRange && !correctionMade) {
+		inVisionRange = (remainingFtToHatch < Constants.VISION_START_FEET
+				&& remainingFtToHatch > Constants.VISION_END_FEET);
 
-			double distanceDifference = Robot.ultrasound.getDistanceFeet() - remainingFtToHatch;
-			if (Math.abs(distanceDifference) < 2)
-				myEndpoint = myEndpoint + distanceDifference;
-			correctionMade = true;
+		if (!doneAccelerating) {
+			doAccel();
 		}
-
-		// differential
-		positionChange = lastRemainingDistance - remainingFtToHatch;
-		lastRemainingDistance = robotDistance;
-		positionRateOfChange = positionChange / loopTime;
-
-		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
-
-		if (calcLoopSpeed > mySpeed)
-			currentMaxSpeed = mySpeed;
-		else
-			currentMaxSpeed = calcLoopSpeed;
-
-		// set minimum speed
-		if (currentMaxSpeed < .2) {
-			currentMaxSpeed = .2;
-		}
-
-		// in vision zone keep gyro target angle current in case need to switch
-		// over to gyro
-
-		if (inVisionRange)
-			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
-
+		// if no target seen abort aute
 		if (inVisionRange & !targetWasSeen)
-			targetNotSeenCtr++;
+			doTargetSeenCheck();
+		// vision and gyro comps
+		doComps();
+		// one time correcton of final distance from ultrasound
+		doCorrection();
+		// control speed of motion using kp and kd
+		doSpeed();
 
-		// if (targetNotSeenCtr > 10)
-		// Robot.noCameraTargetFound = true;
-
-		if (visionTargetSeen)
-			targetWasSeen = true;
-
-		Robot.useVisionComp = inVisionRange && visionTargetSeen;
-
-		useGyroComp = !Robot.useVisionComp;
-
-		if (Robot.useVisionComp) {
-			if (Robot.limelightOnEnd) {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
-			} else {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
-			}
-		}
-		if (useGyroComp) {
-			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
-		}
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
 	}
 
@@ -196,13 +156,74 @@ public class RobotDriveToTargetV2 extends Command {
 	}
 
 	private void doAccel() {
-		if (!doneAccelerating) {
-			currentMaxSpeed = currentMaxSpeed + rampIncrement;
-			if (currentMaxSpeed > mySpeed) {
-				currentMaxSpeed = mySpeed;
-				doneAccelerating = true;
+		currentMaxSpeed = currentMaxSpeed + rampIncrement;
+		if (currentMaxSpeed > mySpeed) {
+			currentMaxSpeed = mySpeed;
+			doneAccelerating = true;
+		}
+	}
+
+	private void doSpeed() {
+		// differential
+		positionChange = lastRemainingDistance - remainingFtToHatch;
+		lastRemainingDistance = robotDistance;
+		positionRateOfChange = positionChange / loopTime;
+
+		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
+
+		if (calcLoopSpeed > mySpeed)
+			currentMaxSpeed = mySpeed;
+		else
+			currentMaxSpeed = calcLoopSpeed;
+
+		// set minimum speed
+		if (currentMaxSpeed < .2) {
+			currentMaxSpeed = .2;
+		}
+	}
+
+	private void doTargetSeenCheck() {
+		targetNotSeenCtr++;
+		if (targetNotSeenCtr > 10)
+			Robot.noCameraTargetFound = true;
+	}
+
+	private void doComps() {
+		// in vision zone keep gyro target angle current in case need to switch
+		// over to gyro
+
+		if (inVisionRange)
+			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+
+		if (visionTargetSeen)
+			targetWasSeen = true;
+
+		Robot.useVisionComp = inVisionRange && visionTargetSeen;
+
+		useGyroComp = !Robot.useVisionComp;
+
+		if (Robot.useVisionComp) {
+			if (Robot.limelightOnEnd) {
+				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
+			} else {
+				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
+		}
+		if (useGyroComp) {
+			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 
 	}
+
+	private void doCorrection() {
+		if (Robot.useUltrasound && inVisionRange && !correctionMade) {
+
+			double distanceDifference = Robot.ultrasound.getDistanceFeet() - remainingFtToHatch;
+			if (Math.abs(distanceDifference) < Constants.USND_CORRECT_BAND)
+				myEndpoint = myEndpoint + distanceDifference;
+			correctionMade = true;
+		}
+
+	}
+
 }

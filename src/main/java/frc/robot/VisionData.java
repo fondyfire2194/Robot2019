@@ -8,7 +8,7 @@
 package frc.robot;
 
 import frc.robot.AutoChoosers;
-import edu.wpi.first.wpilibj.Timer;
+
 import frc.robot.SD;
 
 /**
@@ -21,9 +21,7 @@ public class VisionData {
     public double[] distanceFeet;
     private double goodMinWidth = 50;// 6.7 ft
     private double goodMaxWidth = 80;// 3.8 ft
-    public double startOfVisionFt = 7.0;// ft
-    public double endOfVisionFt = 4.0;// ft
-
+ 
     public VisionData() {
         boxWidth = new int[] { 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140, 145,
                 150, 155, 160, 165, 170 };

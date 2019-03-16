@@ -98,7 +98,7 @@ public class AutoCommands {
                         number++;
                         Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance,
                                         Constants.POSITION_RATE, 180,
-                                        Robot.gph.getLeftHatchDetected() || Robot.gph.getRightHatchDetected(), 3);
+                                        Robot.gph.eitherHatchDetected(), 3);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load and Pickup "
                                         + String.valueOf(pickupDistance);
                         break;

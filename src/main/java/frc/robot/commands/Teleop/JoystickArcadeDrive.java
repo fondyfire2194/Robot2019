@@ -30,7 +30,6 @@ public class JoystickArcadeDrive extends Command {
     double throttleValue = Robot.m_oi.driverController.getY();
     double turnValue = Robot.m_oi.driverController.getTwist();
     double temp = 0;
-    SmartDashboard.putNumber("Lout", throttleValue);
 
     if (Math.abs(throttleValue) < .15)
       throttleValue = 0;

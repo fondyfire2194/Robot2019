@@ -180,12 +180,12 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getDriverSlider() {
-    // ex. want to change range to pref to ? from incoming 1 to -1
+    // want to change range from min pref to max pref from incoming 1 to -1
     // subtracting it from 1 makes range 0 t0 2
     // divide by 2 range is 0 to 1
     double temp = (1 - Robot.m_oi.driverController.getRawAxis(3)) / 2;
-    // range now 0 to 1
-    return Pref.getPref("JSTwistKp") + temp / 10;
+    double range = Math.abs(Pref.getPref("JSTwistMaxKp") - Pref.getPref("JSTwistMinKp"));
+    return Pref.getPref("JSTwistMinKp") + range * temp;
   }
 
   public int getLeftEncoderCount() {

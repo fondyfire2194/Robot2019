@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
-import frc.robot.commands.Motion.RobotDriveToTarget;
+import frc.robot.commands.Motion.RobotDriveToTargetV2;
 
 import frc.robot.commands.Auto.*;
 import frc.robot.commands.Trajectories.PickAndRunTrajectory;
@@ -384,7 +384,7 @@ public class Robot extends TimedRobot {
       if (doTeleopPosition) {
         positionTargetFt = SmartDashboard.getNumber("Target Feet", 5);
         positionFPS = SmartDashboard.getNumber("Position FPS", 12);
-        new RobotDriveToTarget(positionTargetFt, positionFPS, 0., false, 8).start();
+        new RobotDriveToTargetV2(positionTargetFt, positionFPS, 0., false, 8).start();
         doTeleopPosition = false;
       }
 

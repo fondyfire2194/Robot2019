@@ -60,6 +60,11 @@ public class Constants {
   public static double CLIMBER_DRIVE_COUNTS_PER_INCH = 500;
   public static double CLIMBER_ARM_LENGTH_INCHES = 15.;
 
+  public static double VISION_START_FEET = 7.0;
+  public static double VISION_END_FEET = 4.0;
+
+  public static double USND_CORRECT_BAND = 2.0;
+
   public static boolean usePathWeaver = true;
 
   private Constants() {
