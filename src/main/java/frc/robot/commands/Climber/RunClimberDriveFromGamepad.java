@@ -2,7 +2,7 @@ package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
 
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ClimberDrive;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -37,7 +37,7 @@ public class RunClimberDriveFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		Robot.climber.runClimberDrive(-yValue);// y up gives a negative value
+		Robot.climberDrive.runClimberDrive(-yValue);// y up gives a negative value
 
 	}
 
@@ -50,7 +50,7 @@ public class RunClimberDriveFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climber.runClimberLeg(0);
+		Robot.climberLeg.runClimberLeg(0);
 
 
 	}

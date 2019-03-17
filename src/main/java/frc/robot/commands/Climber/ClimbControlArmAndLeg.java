@@ -18,10 +18,13 @@
  * 
  * 
  */
+
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.ClimberArm;
+import frc.robot.subsystems.ClimberLeg;
 
 public class ClimbControlArmAndLeg extends Command {
   private double mySpeed;
@@ -73,9 +76,9 @@ public class ClimbControlArmAndLeg extends Command {
 
     armSpeed = (legSpeed * armLiftRatio) - armKp * pitchError;//in/sec * deg/in = deg/sec
 
-    Robot.climber.climberArmOut(armSpeed, true);
+    Robot.climberArm.climberArmOut(armSpeed, true);
 
-    Robot.climber.climberLegOut(legSpeed, true);
+    Robot.climberLeg.climberLegOut(legSpeed, true);
   }
 
   // Make this return true when this Command no longer needs to run execute()

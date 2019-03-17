@@ -26,7 +26,9 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.PowerPanel;
 import frc.robot.subsystems.RobotRotate;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ClimberArm;
+import frc.robot.subsystems.ClimberLeg;
+import frc.robot.subsystems.ClimberDrive;
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
 import frc.robot.subsystems.Ultrasound;;
@@ -53,7 +55,9 @@ public class Robot extends TimedRobot {
   public static RobotRotate robotRotate;
   public static Elevator elevator;
   public static GamePieceHandler gph;
-  public static Climber climber;
+  public static ClimberArm climberArm;
+  public static ClimberLeg climberLeg;
+  public static ClimberDrive climberDrive;
   public static Ultrasound ultrasound;
   public static AirCompressor airCompressor;
   public static PowerPanel pdp;
@@ -195,7 +199,10 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     robotRotate = new RobotRotate();
     elevator = new Elevator();
-    climber = new Climber();
+    climberArm = new ClimberArm();
+    climberLeg = new ClimberLeg();
+    climberDrive = new ClimberDrive();
+    
     airCompressor = new AirCompressor();
     pdp = new PowerPanel();
     gph = new GamePieceHandler();
@@ -591,7 +598,9 @@ public class Robot extends TimedRobot {
       ultrasound.updateStatus();
       break;
     case 9:
-      climber.updateStatus();
+      climberArm.updateStatus();
+      climberLeg.updateStatus();
+      climberDrive.updateStatus();
       break;
     case 10:
       visionData.updateStatus();

@@ -2,7 +2,7 @@ package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
 
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ClimberArm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -14,6 +14,7 @@ public class RunClimberArmFromGamepad extends Command {
 	public RunClimberArmFromGamepad() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		requires (Robot.climberArm);
 	}
 
 	// Called just before this Command runs the first time
@@ -37,7 +38,7 @@ public class RunClimberArmFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		Robot.climber.runClimberArm(yValue);
+		Robot.climberArm.runClimberArm(yValue/2);
 
 	}
 
@@ -50,7 +51,7 @@ public class RunClimberArmFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climber.runClimberArm(0);
+		Robot.climberArm.runClimberArm(0);
 
 
 	}

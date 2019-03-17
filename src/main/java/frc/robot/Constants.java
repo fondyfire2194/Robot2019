@@ -58,7 +58,11 @@ public class Constants {
   public static double CLIMBER_LEG_COUNTS_PER_INCH = 500;
   public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 500;
   public static double CLIMBER_DRIVE_COUNTS_PER_INCH = 500;
-  public static double CLIMBER_ARM_LENGTH_INCHES = 15.;
+  public static double CLIMBER_ARM_LENGTH_INCHES = 18.;
+  public static double MAX_ARM_ENC_CTS_PER_100MS = 100;
+
+
+  public static double CLIMBER_ARM_RATE = 10;
 
   public static double VISION_START_FEET = 7.0;
   public static double VISION_END_FEET = 4.0;

@@ -8,58 +8,59 @@
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.subsystems.ClimberArm;
 import frc.robot.Robot;
-import frc.robot.subsystems.ClimberDrive;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+public class ClimberArmPosition extends Command {
+
+private double myDegrees;
+private double myRate;
 
 
-public class JoystickClimberDrive extends Command {
-
-  public JoystickClimberDrive() {
-    requires(Robot.driveTrain);
+  public ClimberArmPosition(double degrees, double rate) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    myDegrees = degrees;
+    myRate = rate;
+    requires (Robot.climberArm);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+        /* Config the peak and nominal outputs, 12V means full */
+        myRate = .2;
+		Robot.climberArm.climberArm.configNominalOutputForward(0, 0);
+		Robot.climberArm.climberArm.configNominalOutputReverse(0, 0);
+		Robot.climberArm.climberArm.configPeakOutputForward(myRate, 0);
+		Robot.climberArm.climberArm.configPeakOutputReverse(-myRate, 0);
+
+		
+
+
+    Robot.climberArm.climberArm.set(ControlMode.Position,myDegrees);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double throttleValue = Robot.m_oi.driverController.getY();
-    double temp = 0;
-
-
-    // if (Math.abs(throttleValue) < .15)
-      throttleValue = 0;
-  
-    temp = throttleValue * throttleValue;
-    if (throttleValue < 0)
-      throttleValue = temp;
-    else
-      throttleValue = -temp;
-
-      Robot.climberDrive.climberDriveOut(throttleValue);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return Robot.climberArm.armInPosition();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.driveTrain.arcadeDrive(0, 0);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

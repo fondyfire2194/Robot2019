@@ -30,7 +30,7 @@ public class RaiseRobot extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addParallel(new ArmDriveToTarget(1000., 100, false, 10));
-    addParallel(new LegDriveToTarget(1000., 100, false, 10));
+    // addParallel(new (1000., 100, false, 10));
+    // addParallel(new LegDriveToTarget(1000., 100, false, 10));
   }
 }
