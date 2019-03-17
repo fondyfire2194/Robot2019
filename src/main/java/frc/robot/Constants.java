@@ -57,14 +57,13 @@ public class Constants {
 
   public static double CLIMBER_LEG_COUNTS_PER_INCH = 500;
 
-
-  public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 13.28 ;//
+  public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 53.;//
   public static double CLIMBER_ARM_LENGTH_INCHES = 18.;
-  public static double MAX_ARM_ENC_CTS_PER_100MS = 100;
-
+  public static double MAX_ARM_DEG_PER_SEC = 20;
+  public static double MAX_ARM_ENC_CTS_PER_100MS = MAX_ARM_DEG_PER_SEC / 10 * CLIMBER_ARM_COUNTS_PER_DEGREE;
+  public static double ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS = 1;
 
   public static double CLIMBER_DRIVE_COUNTS_PER_INCH = 500;
-
 
   public static double CLIMBER_ARM_RATE = 10;
 

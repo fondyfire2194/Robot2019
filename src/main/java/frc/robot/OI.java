@@ -159,7 +159,7 @@ public class OI {
         jogElevator.whileHeld(new RunElevatorFromGamepad());
 
         jogClimberArm = gamepad.getButtonX();
-        jogClimberArm.whileHeld(new RunClimberArmFromGamepad());
+        jogClimberArm.whileHeld(new RunClimberArmFromGamepad(false));
 
         jogClimberLeg = gamepad.getButtonB();
         jogClimberLeg.whileHeld(new RunClimberLegFromGamepad());
@@ -196,13 +196,13 @@ public class OI {
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
      
         prepareLevelTwo = buttonBox.getButtonR3();
-        prepareLevelTwo.whenPressed(new ClimberArmPosition(60,.5);
+        prepareLevelTwo.whenPressed(new ClimberArmMotionMagic());
         
         prepareLevelThree = buttonBox.getButtonL3();
-        prepareLevelThree.whenPressed(new ClimberArmPosition(45,.5);
+        prepareLevelThree.whenPressed(new ClimberArmMotionMagic());
 
        startClimb = buttonBox.getButtonOptions();
-       startClimb.whenPressed(new ClimberArmPosition(0,0));
+       startClimb.whenPressed(new ClimberArmMotionMagic());
        
 
 

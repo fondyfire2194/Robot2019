@@ -10,17 +10,21 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class RunClimberArmFromGamepad extends Command {
+	private boolean myVel;
 
-	public RunClimberArmFromGamepad() {
+	public RunClimberArmFromGamepad(boolean vel) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		requires (Robot.climberArm);
+		requires(Robot.climberArm);
+		myVel = vel;
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-
+		if (myVel) {
+			Robot.climberArm.climberArm.selectProfileSlot(1, 0);
+		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -38,7 +42,7 @@ public class RunClimberArmFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		Robot.climberArm.runClimberArm(yValue/2);
+		Robot.climberArm.climberArmOut(yValue, myVel);
 
 	}
 
@@ -51,8 +55,7 @@ public class RunClimberArmFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climberArm.runClimberArm(0);
-
+		Robot.climberArm.climberArmOut(0, myVel);
 
 	}
 

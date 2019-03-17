@@ -64,6 +64,12 @@ public class Pref {
 
     prefDict.put("DriveStall",25.);
 
+    prefDict.put("ArmMMKf", .6);
+    prefDict.put("ArmMMKp", .7);
+    prefDict.put("ArmMMKi", 0.);
+    prefDict.put("ArmMMKd", 2.0);
+
+
   }
 
   public static void ensureRioPrefs() {
