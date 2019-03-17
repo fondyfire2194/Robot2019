@@ -44,11 +44,9 @@ public class ClimberArm extends Subsystem {
     climberArm.enableVoltageCompensation(true);
     climberArm.set(ControlMode.PercentOutput, 0);
 
-    		/* Config Position Closed Loop gains in slot0, typically kF stays zero. */
-		climberArm.config_kF(0, 0, 0);
-		climberArm.config_kP(0, 0, 0);
-		climberArm.config_kI(0, 0, 0);
-		climberArm.config_kD(0, 0, 0); 
+    climberArm.setSelectedSensorPosition(0, 0, 0);
+
+
   }
 
   @Override
@@ -70,7 +68,6 @@ public class ClimberArm extends Subsystem {
 
   public void resetArmPosition() {
     climberArm.setSelectedSensorPosition(0, 0, 0);
-    armHoldPositionDegrees = getArmDegrees();
   }
 
   public boolean armInPosition(){
@@ -97,10 +94,9 @@ public class ClimberArm extends Subsystem {
     }
   }
 
-
-
   public void updateStatus() {
-    SD.putN("CliberArmPosition", (double) getArmEncoderPosition());
+    SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
+    SD.putN1("ClimberArmDegrees",  getArmDegrees();
     SD.putN2("ClimberArmAmps", climberArm.getOutputCurrent());
   }
 }

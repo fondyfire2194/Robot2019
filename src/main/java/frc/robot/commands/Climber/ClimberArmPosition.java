@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.ClimberArm;
 import frc.robot.Robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import frc.robot.Constants;
 
 public class ClimberArmPosition extends Command {
 
@@ -31,15 +32,23 @@ private double myRate;
   protected void initialize() {
         /* Config the peak and nominal outputs, 12V means full */
         myRate = .2;
+
+    /* Config Position Closed Loop gains in slot0, typically kF stays zero. */
+
+    climberArm.selectProfileSlot(0,0);
+
+		climberArm.config_kF(0, 0, 0);
+		climberArm.config_kP(0, .1, 0);
+		climberArm.config_kI(0, 0, 0);
+    climberArm.config_kD(0, 0, 0); 
+    
 		Robot.climberArm.climberArm.configNominalOutputForward(0, 0);
 		Robot.climberArm.climberArm.configNominalOutputReverse(0, 0);
 		Robot.climberArm.climberArm.configPeakOutputForward(myRate, 0);
-		Robot.climberArm.climberArm.configPeakOutputReverse(-myRate, 0);
+    Robot.climberArm.climberArm.configPeakOutputReverse(-myRate, 0);
+    
 
-		
-
-
-    Robot.climberArm.climberArm.set(ControlMode.Position,myDegrees);
+    Robot.climberArm.climberArm.set(ControlMode.Position,myDegrees * Constants.CLIMBER_ARM_COUNTS_PER_DEGREE);
   }
 
   // Called repeatedly when this Command is scheduled to run

@@ -196,10 +196,10 @@ public class OI {
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
      
         prepareLevelTwo = buttonBox.getButtonR3();
-        // prepareLevelTwo.whenPressed(new ArmDriveToTarget(.5,.5,false,5));
+        prepareLevelTwo.whenPressed(new ClimberArmPosition(60,.5);
         
         prepareLevelThree = buttonBox.getButtonL3();
-        // prepareLevelThree.whenPressed(new ArmDriveToTarget(.5,.5,false,5));
+        prepareLevelThree.whenPressed(new ClimberArmPosition(45,.5);
 
        startClimb = buttonBox.getButtonOptions();
        startClimb.whenPressed(new ClimberArmPosition(0,0));
