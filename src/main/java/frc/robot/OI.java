@@ -161,11 +161,11 @@ public class OI {
         jogClimberArm = gamepad.getButtonX();
         jogClimberArm.whileHeld(new RunClimberArmFromGamepad(false));
 
-        jogClimberLeg = gamepad.getButtonB();
-        jogClimberLeg.whileHeld(new RunClimberLegFromGamepad());
+        // jogClimberLeg = gamepad.getButtonB();
+        // jogClimberLeg.whileHeld(new RunClimberLegFromGamepad());
 
-        jogClimberDrive = gamepad.getButtonA();
-        jogClimberDrive.whileHeld(new RunClimberDriveFromGamepad());
+        // jogClimberDrive = gamepad.getButtonA();
+        // jogClimberDrive.whileHeld(new RunClimberDriveFromGamepad());
 
         /**
          * 
@@ -195,14 +195,14 @@ public class OI {
         elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
      
-        prepareLevelTwo = buttonBox.getButtonR3();
-        prepareLevelTwo.whenPressed(new ClimberArmMotionMagic());
+        prepareLevelTwo = buttonBox.getBackButton();
+        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(10));
         
-        prepareLevelThree = buttonBox.getButtonL3();
-        prepareLevelThree.whenPressed(new ClimberArmMotionMagic());
+        prepareLevelThree = buttonBox.getStartButton();
+        prepareLevelThree.whenPressed(new SetClimberTargetAngle(20));
 
        startClimb = buttonBox.getButtonOptions();
-       startClimb.whenPressed(new ClimberArmMotionMagic());
+       startClimb.whenPressed(new SetClimberTargetAngle(30));
        
 
 

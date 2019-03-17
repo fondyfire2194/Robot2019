@@ -17,7 +17,7 @@ public class ClimberArmMotionMagic extends Command {
 	public ClimberArmMotionMagic() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		// requires(Robot.climberArm);
+		requires(Robot.climberArm);
 
 	}
 

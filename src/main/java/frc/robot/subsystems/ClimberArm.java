@@ -53,8 +53,8 @@ public class ClimberArm extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new RunClimberArmFromGamepad(false));
-    // setDefaultCommand(new ClimberArmPosition());
+    // setDefaultCommand(new RunClimberArmFromGamepad(false));
+    setDefaultCommand(new ClimberArmMotionMagic());
   }
 
   public void configVelMode() {
@@ -115,21 +115,25 @@ public class ClimberArm extends Subsystem {
       climberArm.set(ControlMode.Velocity, speed * Constants.MAX_ARM_ENC_CTS_PER_100MS);
     } else {
       climberArm.set(ControlMode.PercentOutput, speed);
+      SD.putN1("ClimberArmCMD",speed);
     }
   }
 
-  public void armMagicMotion(double distance, double speedIPS) {
+  public void armMagicMotion(double distance, double speedDPS) {
     /**
      * arm motor 775 Pro with 343:1 gear reduction and a 4096 count encoder
      *  53 counts per degree
      * 
-     * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rper 100ms
+     * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rper 100ms 
+     * 
+     * 
      *
-     * = 320 counts / 100 ms measured encoder rate at 100% was
+     * = 320 counts / 100 ms measured encoder rate at 100% was 250
      *
-     * Use measured rate not theoretical so 100% Kf would be 1023/320 = 3 For error
-     * of 1 degree, to add another 2% of motor output. p-gain .02 x 1023 / (341) =
-     * .06
+     * Use measured rate not theoretical so 100% Kf would be 1023/250 = 4 
+     * 
+     * For error of 1 degree, to add another 2% of motor output. p-gain .02 x 1023 / (52) =
+     * .4
      * 
      * start P-gain = .06
      * 
@@ -143,7 +147,7 @@ public class ClimberArm extends Subsystem {
      * enc cts per 100ms per second so to accelerate in 1/2 second, use velocity x 2
      */
 
-    int cruiseVelocity = (int) (speedIPS * Constants.ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS);
+    int cruiseVelocity = (int) (speedDPS * Constants.ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS);
 
     int acceleration = cruiseVelocity * 2;
 
@@ -156,5 +160,7 @@ public class ClimberArm extends Subsystem {
     SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
     SD.putN1("ClimberArmDegrees", getArmDegrees());
     SD.putN2("ClimberArmAmps", climberArm.getOutputCurrent());
+    SD.putN1("ClimberArmENCPer100MS",climberArm.getSelectedSensorVelocity(0));
+    SD.putN1("ClimberArmTarget", armTargetDegrees);
   }
 }

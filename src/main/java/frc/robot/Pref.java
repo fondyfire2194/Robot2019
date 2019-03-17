@@ -40,10 +40,10 @@ public class Pref {
     prefDict.put("RotateKd", .005);
     prefDict.put("RotateIzone", 3.);
 
-    prefDict.put("PathKp", 0.2);
+    prefDict.put("PathKp", 0.3);
     prefDict.put("PathKd", 0.);
-    prefDict.put("PathKa", .02);
-    prefDict.put("PathKt", .2);
+    prefDict.put("PathKa", .0);
+    prefDict.put("PathKt", .4);
     
     prefDict.put("VisionKp", .002);
    
@@ -64,9 +64,9 @@ public class Pref {
 
     prefDict.put("DriveStall",25.);
 
-    prefDict.put("ArmMMKf", .6);
-    prefDict.put("ArmMMKp", .7);
-    prefDict.put("ArmMMKi", 0.);
+    prefDict.put("ArmMMKf", 2.);
+    prefDict.put("ArmMMKp", .4);
+    prefDict.put("ArmMMKi", 0.0);
     prefDict.put("ArmMMKd", 2.0);
 
 

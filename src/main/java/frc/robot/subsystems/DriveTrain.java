@@ -55,6 +55,8 @@ public class DriveTrain extends Subsystem {
   private int lastLeftEncoderValue;
   private int lastRightEncoderValue;
   private MovingAverage movingAverage;
+  public double leftCmd;
+  public double rightCmd;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -119,6 +121,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void leftDriveOut(double speed) {
+    leftCmd = speed;
     if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning) {
       leftTalonOne.selectProfileSlot(0, 0);
       leftTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
@@ -128,6 +131,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void rightDriveOut(double speed) {
+    rightCmd = speed;
     if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning) {
       rightTalonOne.selectProfileSlot(0, 0);
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);

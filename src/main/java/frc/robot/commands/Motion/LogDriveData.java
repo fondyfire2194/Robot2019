@@ -5,13 +5,14 @@ import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * 
  */
 public class LogDriveData extends TimedCommand {
 	private double startTime;
-	private String names = "LeftOneAmps,LeftTwoAmps,RightOneAmps,RightTwoAmps";
-	private String units = "Amps,Amps,Amps,Amps";
+	private String names = "LeftCmd,LeftFPS,RightCmd,RightFPS,LeftOneAmps,LeftTwoAmps,RightOneAmps,RightTwoAmps";
+	private String units = "PU,FPS,PU,FPS,Amps,Amps,Amps,Amps";
 	String output_dir = "/U" + "/data_capturesDS19/Drive/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Drive";
 	String name = output_dir + name1;
@@ -28,7 +29,7 @@ public class LogDriveData extends TimedCommand {
 		// double temp = (int) Timer.getFPGATimestamp();
 		// name += String.valueOf(temp) + ".csv";
 		name = Robot.driveUniqueLogName;
-		SmartDashboard.putString("CSVDRName",name);
+		SmartDashboard.putString("CSVDRName", name);
 
 		// log_name = output_dir + "log_" + name + ".csv"
 		if (Robot.createDriveRunFile)
@@ -39,12 +40,11 @@ public class LogDriveData extends TimedCommand {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (Robot.createDriveRunFile) {
-			Robot.simpleCSVLogger2194.writeData(
-			Robot.driveTrain.leftTalonOne.getOutputCurrent(),
-			Robot.driveTrain.leftTalonTwo.getOutputCurrent(),		
-			Robot.driveTrain.rightTalonOne.getOutputCurrent(),
-			Robot.driveTrain.rightTalonTwo.getOutputCurrent()
-			);
+			Robot.simpleCSVLogger2194.writeData(Robot.driveTrain.getLeftCommand(),
+					Robot.driveTrain.getLeftFeetPerSecond(), Robot.driveTrain.getRightCommand(),
+					Robot.driveTrain.getRightFeetPerSecond(), Robot.driveTrain.leftTalonOne.getOutputCurrent(),
+					Robot.driveTrain.leftTalonTwo.getOutputCurrent(), Robot.driveTrain.rightTalonOne.getOutputCurrent(),
+					Robot.driveTrain.rightTalonTwo.getOutputCurrent());
 		}
 	}
 
@@ -57,7 +57,7 @@ public class LogDriveData extends TimedCommand {
 	protected void end() {
 		if (Robot.createDriveRunFile) {
 			Robot.simpleCSVLogger2194.close();
-			
+
 		}
 	}
 
