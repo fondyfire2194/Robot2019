@@ -14,19 +14,11 @@ import frc.robot.Pref;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class JoystickArcadeDriveVision extends Command {
-  private int leftOverCurrentCount;
-  private int rightOverCurrentCount;
-  private int overCurrentCountMax = 10;
-  private boolean leftStalled;
-  private boolean rightStalled;
   private boolean targetWasSeen;
-  private boolean tooCloseForCamera;
-  private boolean inVisionRange;
   private double turnValue;
   private double throttleValue;
   private boolean visionTargetSeen;
-  private double targetBoxWidth;
-  private double remainingDistanceFt;
+  private int targetSeenCtr;
 
   public JoystickArcadeDriveVision() {
     requires(Robot.driveTrain);
@@ -47,15 +39,11 @@ public class JoystickArcadeDriveVision extends Command {
   // being too close to vcamera.
   @Override
   protected void initialize() {
-    leftOverCurrentCount = 0;
-    rightOverCurrentCount = 0;
-    leftStalled = false;
-    rightStalled = false;
     targetWasSeen = false;
-    inVisionRange = false;
+    targetSeenCtr = 0;
     Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
     Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
-    remainingDistanceFt = -1;
+    Robot.visionCompJoystick = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -67,7 +55,6 @@ public class JoystickArcadeDriveVision extends Command {
      * gyro based on conditions
      */
     visionTargetSeen = Robot.limelightCamera.getIsTargetFound();
-    targetBoxWidth = Robot.limelightCamera.getBoundingBoxWidth();
 
     throttleValue = Robot.m_oi.driverController.getY();
     if (Math.abs(throttleValue) < .15) {
@@ -80,7 +67,7 @@ public class JoystickArcadeDriveVision extends Command {
     else
       throttleValue = -temp;
 
-    if (targetWasSeen) {
+    if (!targetWasSeen) {
       turnValue = Robot.m_oi.driverController.getTwist();
       temp = turnValue * turnValue;
       if (turnValue < 0)
@@ -91,49 +78,42 @@ public class JoystickArcadeDriveVision extends Command {
       turnValue = turnValue * Robot.driveTrain.getDriverSlider();
     }
 
-      /**
-       * remember having seen target for switch to gyro when too close for camera to
-       * have image switch to gyro when inside a max area value. Reset if joystick Y
-       * is zero In vision range is image available but not greater area than preset
-       * constant Too close for camera is used to switch to gyro if image was
-       * previously seen
-       * 
-       */
+    /**
+     * remember having seen target for switch to gyro when too close for camera to
+     * have image 
+     * 
+     */
 
-      if (visionTargetSeen)
-        targetWasSeen = true;
+    if (visionTargetSeen)
+      targetSeenCtr++;
+    else
+      targetSeenCtr = 0;
+    if (targetSeenCtr >= 10)
+      targetWasSeen = true;
 
-      inVisionRange =visionTargetSeen;//Robot.visionData.inGoodVisionDistanceRange();
+    // in vision zone keep gyro target angle current to switch
+    // over to gyro when too close for camera
 
-      // tooCloseForCamera = visionTargetSeen && Robot.visionData.tooCloseToCamera();
+    if (visionTargetSeen) {
+      Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
-      // in vision zone keep gyro target angle current to switch
-      // over to gyro when too close for camera
-
-      if (inVisionRange) {
-        Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
-
-        if (Robot.limelightOnEnd) {
-          turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
-        } else {
-          turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
-        }
+      if (Robot.limelightOnEnd) {
+        turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+      } else {
+        turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
       }
+    }
 
-      if (targetWasSeen && !visionTargetSeen)
-        turnValue = Robot.driveTrain.getCurrentComp();// gyro
+    if (targetWasSeen && !visionTargetSeen)
+      turnValue = Robot.driveTrain.getCurrentComp();// gyro
 
-       double leftValue = throttleValue + turnValue;
-       double rightValue = throttleValue - turnValue;
+    double leftValue = throttleValue + turnValue;
+    double rightValue = throttleValue - turnValue;
 
-      Robot.driveTrain.leftDriveOut(leftValue);
-      Robot.driveTrain.rightDriveOut(rightValue);
-      SmartDashboard.putBoolean("TWS", targetWasSeen);
-      SmartDashboard.putBoolean("TIVR", inVisionRange);
-      SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
-      SmartDashboard.putNumber("TDSA", Robot.driveTrain.driveStraightAngle);
-      SmartDashboard.putNumber("TVAL", turnValue);
-    
+    Robot.driveTrain.leftDriveOut(leftValue);
+    Robot.driveTrain.rightDriveOut(rightValue);
+    SmartDashboard.putBoolean("TWS", targetWasSeen);
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -149,7 +129,7 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.setLeftSideDriveBrakeOn(true);
     Robot.driveTrain.setRightSideDriveBrakeOn(true);
     targetWasSeen = false;
-    tooCloseForCamera = false;
+    Robot.visionCompJoystick = false;
   }
 
   // Called when another command which requires one or more of the same

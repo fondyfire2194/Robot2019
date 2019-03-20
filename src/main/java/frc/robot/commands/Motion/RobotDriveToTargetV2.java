@@ -76,7 +76,7 @@ public class RobotDriveToTargetV2 extends Command {
 		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
-		Robot.isPositioning = true;
+		Robot.positionRunning = true;
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
 		Robot.activeMotionComp = 0.;
@@ -141,7 +141,7 @@ public class RobotDriveToTargetV2 extends Command {
 			Robot.driveTrain.setRightSideDriveBrakeOn(true);
 		}
 
-		Robot.isPositioning = false;
+		Robot.positionRunning = false;
 		doneAccelerating = false;
 		currentMaxSpeed = 0;
 		inVisionRange = false;

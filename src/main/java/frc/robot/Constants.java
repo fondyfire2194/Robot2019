@@ -25,7 +25,7 @@ public class Constants {
   public static final double DRIVE_RIGHT_ENCODER_CTS_PER_FT = DRIVE_RIGHT_ENCODER_COUNTS_PER_INCH * 12;
   public static final double MINIMUM_START_PCT = 0.2;
   public static final double IN_POSITION_BAND_FT = .5;
-  public static final double MAX_ROBOT_FT_PER_SEC = 12.;
+  public static final double MAX_ROBOT_FT_PER_SEC = 10.;
   public static final double FT_PER_SEC_TO_ENC_CTS_PER_100MS = DRIVE_ENCODER_COUNTS_PER_INCH * 1.2;
   public static double MAX_ENC_CTS_PER_100MS = MAX_ROBOT_FT_PER_SEC * FT_PER_SEC_TO_ENC_CTS_PER_100MS;
   public static double FT_PER_SEC_TO_PCT_OUT = 1 / MAX_ROBOT_FT_PER_SEC;

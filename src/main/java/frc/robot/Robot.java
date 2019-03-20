@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
   public static double positionTargetFt;
   public static double positionFPS;
   public static boolean incrPosn;
-  public static boolean isPositioning;
+  public static boolean positionRunning;
   public static boolean stopPositioning;
   public static boolean orientRunning;
   public static boolean reverseOrient;
@@ -184,6 +184,9 @@ public class Robot extends TimedRobot {
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
   public static boolean useUltrasound;
+ public static boolean visionCompJoystick;
+   
+
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -619,7 +622,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Running Cmd Name", runningCommandName);
     SmartDashboard.putNumber("AutoCmds", numberOfAutonomousCommands);
     SmartDashboard.putNumber("RngNmbr", runningAutoCommand);
-    SmartDashboard.putBoolean("PosnRng", isPositioning);
+    SmartDashboard.putBoolean("PosnRng", positionRunning);
     SmartDashboard.putBoolean("TrajRng", trajectoryRunning);
     SmartDashboard.putBoolean("OrientRng", orientRunning);
 

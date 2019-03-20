@@ -79,6 +79,9 @@ public class OI {
 
     public JoystickButton toggleExtension;
 
+    public JoystickButton incrementArmAngle;
+    public JoystickButton decrementArmAngle;
+
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
     public ButtonBox buttonBox = new ButtonBox(RobotMap.BUTTON_BOX);
@@ -187,7 +190,13 @@ public class OI {
         stopCargoHandler = gamepad.getBackButton();
         stopCargoHandler.whenPressed(new StopCargoMotor());
 
- 
+        incrementArmAngle = gamepad.getLeftShoulder();
+        incrementArmAngle.whenPressed(new IncrementArmAngle(2));
+
+        decrementArmAngle = gamepad.getLeftTriggerClick();
+        decrementArmAngle.whenPressed(new IncrementArmAngle(-2));
+
+
         /**
          * 
          * 

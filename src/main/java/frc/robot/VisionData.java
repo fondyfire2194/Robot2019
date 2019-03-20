@@ -21,7 +21,7 @@ public class VisionData {
     public double[] distanceFeet;
     private double goodMinWidth = 50;// 6.7 ft
     private double goodMaxWidth = 80;// 3.8 ft
- 
+
     public VisionData() {
         boxWidth = new int[] { 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140, 145,
                 150, 155, 160, 165, 170 };
@@ -37,14 +37,14 @@ public class VisionData {
         double boxWidthValue = Robot.limelightCamera.getBoundingBoxWidth();
         if (boxWidthValue >= 45 && boxWidthValue < 160) {
             lookUpIndex = (int) (boxWidthValue - boxWidth[0]) / 5;
-            SD.putN("LUI",lookUpIndex);
+            SD.putN("LUI", lookUpIndex);
             distIntoRange = ((int) boxWidthValue - boxWidth[0] - lookUpIndex * 5);
-            SD.putN("LUIDIR",distIntoRange);
+            SD.putN("LUIDIR", distIntoRange);
             double intoRange = (double) distIntoRange / segmentRange;
-            SD.putN3("LUIDIRn",distIntoRange);
+            SD.putN3("LUIDIRn", distIntoRange);
             distanceRange = (distanceFeet[lookUpIndex] - distanceFeet[lookUpIndex + 1]);
-            SD.putN("LUIDIR3",distanceRange);
-            SD.putN3("LUIDIRDF",distanceFeet[lookUpIndex]);
+            SD.putN("LUIDIR3", distanceRange);
+            SD.putN3("LUIDIRDF", distanceFeet[lookUpIndex]);
             return (distanceFeet[lookUpIndex] - distanceRange * intoRange);
         } else
             return 0;
@@ -64,6 +64,31 @@ public class VisionData {
 
     }
 
+    public double getVisionKpAtDistance() {
+        // minVisionKp = Robot.prefs.getDouble("minVisionKp", .001);
+        // maxVisionKp = Robot.prefs.getDouble("maxVisionKp", .005);
+        // prorate vision kp based on distance from target
+        // the further away, the lower the kp should be since pixels
+        // have a smaller inch value farther away than they do close up
+        double minVisionKp = .008;
+        double maxVisionKp = .02;
+        double maxVisionKpFeet = 7;
+        double minVisionKpFeet = 2;
+        double visionKp = 0;
+        double visionKpPerFoot = (maxVisionKp - minVisionKp) / (maxVisionKpFeet - minVisionKpFeet);
+        if (Robot.visionCompJoystick)
+            visionKp = maxVisionKp - ((getRobotVisionDistance() - minVisionKpFeet) * visionKpPerFoot);
+        else
+            visionKp = maxVisionKp - ((Robot.driveTrain.remainingDistance - minVisionKpFeet) * visionKpPerFoot);
+
+        if (visionKp < minVisionKp) {
+            visionKp = minVisionKp;
+        }
+        if (visionKp > maxVisionKp) {
+            visionKp = maxVisionKp;
+        }
+        return visionKp;
+    }
 
     public void updateStatus() {
         SD.putN1("RobotToTargetFt", getRobotVisionDistance());

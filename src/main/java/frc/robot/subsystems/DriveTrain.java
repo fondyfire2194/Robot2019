@@ -57,6 +57,7 @@ public class DriveTrain extends Subsystem {
   private MovingAverage movingAverage;
   public double leftCmd;
   public double rightCmd;
+  public double remainingDistance;
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -122,7 +123,7 @@ public class DriveTrain extends Subsystem {
 
   public void leftDriveOut(double speed) {
     leftCmd = speed;
-    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning) {
+    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
       leftTalonOne.selectProfileSlot(0, 0);
       leftTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
@@ -132,7 +133,7 @@ public class DriveTrain extends Subsystem {
 
   public void rightDriveOut(double speed) {
     rightCmd = speed;
-    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning) {
+    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
       rightTalonOne.selectProfileSlot(0, 0);
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
@@ -259,7 +260,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroError() {
-    return   driveStraightAngle - imu.getYaw();
+    return driveStraightAngle - imu.getYaw();
   }
 
   public void resetGyro() {
@@ -275,10 +276,9 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getCurrentComp() {
-    
-      return (getGyroError() * Pref.getPref("DriveStraightKp"));
-    
-      
+
+    return (getGyroError() * Pref.getPref("DriveStraightKp"));
+
   }
 
   public boolean getLeftSideStalled() {

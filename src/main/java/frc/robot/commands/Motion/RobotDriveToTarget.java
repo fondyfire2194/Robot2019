@@ -71,7 +71,7 @@ public class RobotDriveToTarget extends Command {
 		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
-		Robot.isPositioning = true;
+		Robot.positionRunning = true;
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
 		decelerate = false;
@@ -145,7 +145,7 @@ public class RobotDriveToTarget extends Command {
 			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
-
+Robot.driveTrain.remainingDistance = remainingFtToHatch;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -160,7 +160,7 @@ public class RobotDriveToTarget extends Command {
 
 		// Robot.autonomousCommandDone = true;
 		Robot.driveTrain.arcadeDrive(0, 0);
-		Robot.isPositioning = false;
+		Robot.positionRunning = false;
 		doneAccelerating = false;
 		decelerate = false;
 		currentMaxSpeed = 0;
