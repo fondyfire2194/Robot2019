@@ -19,6 +19,8 @@ public class JoystickArcadeDriveVision extends Command {
   private double throttleValue;
   private boolean visionTargetSeen;
   private int targetSeenCtr;
+  private double visionTargetError;
+  
 
   public JoystickArcadeDriveVision() {
     requires(Robot.driveTrain);
@@ -44,6 +46,7 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
     Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
     Robot.visionCompJoystick = true;
+    visionTargetError = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -80,7 +83,7 @@ public class JoystickArcadeDriveVision extends Command {
 
     /**
      * remember having seen target for switch to gyro when too close for camera to
-     * have image 
+     * have image
      * 
      */
 
@@ -92,19 +95,20 @@ public class JoystickArcadeDriveVision extends Command {
       targetWasSeen = true;
 
     // in vision zone keep gyro target angle current to switch
-    // over to gyro when too close for camera
+    // over to gyro when too close for camera or once the vision error is near 0
 
     if (visionTargetSeen) {
       Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
       if (Robot.limelightOnEnd) {
-        turnValue = Robot.limelightCamera.getdegVerticalToTarget() * Pref.getPref("VisionKp");
+        visionTargetError = Robot.limelightCamera.getdegVerticalToTarget();
       } else {
-        turnValue = Robot.limelightCamera.getdegRotationToTarget() * Pref.getPref("VisionKp");
+        visionTargetError = Robot.limelightCamera.getdegRotationToTarget();
       }
+      turnValue = visionTargetError * Pref.getPref("VisionKp");
     }
 
-    if (targetWasSeen && !visionTargetSeen)
+    if ((targetWasSeen && !visionTargetSeen))
       turnValue = Robot.driveTrain.getCurrentComp();// gyro
 
     double leftValue = throttleValue + turnValue;
@@ -112,7 +116,6 @@ public class JoystickArcadeDriveVision extends Command {
 
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
-    SmartDashboard.putBoolean("TWS", targetWasSeen);
 
   }
 

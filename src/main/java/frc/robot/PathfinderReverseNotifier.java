@@ -186,9 +186,9 @@ public class PathfinderReverseNotifier {
 					lastSegmentPositionRight - Robot.driveTrain.revRightDf.getSegment().position,
 					-Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
 					-Robot.driveTrain.getGyroYaw(),
-					Robot.driveTrain.revLeftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, leftPct,
+					Robot.driveTrain.revLeftDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, left,
 					Robot.driveTrain.getLeftFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC,
-					Robot.driveTrain.revRightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, rightPct,
+					Robot.driveTrain.revRightDf.getSegment().velocity / Constants.MAX_ROBOT_FT_PER_SEC, right,
 					Robot.driveTrain.getRightFeetPerSecond() / Constants.MAX_ROBOT_FT_PER_SEC, turn);
 		}
 	}

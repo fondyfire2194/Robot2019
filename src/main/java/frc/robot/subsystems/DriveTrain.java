@@ -87,10 +87,10 @@ public class DriveTrain extends Subsystem {
     configVoltageCompSaturation(true);
 
     leftTalonOne.selectProfileSlot(0, 0);
-    leftTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
-    leftTalonOne.config_kP(0, Pref.getPref("DriveVelKp"), 0);
-    leftTalonOne.config_kI(0, Pref.getPref("DriveVelKi"), 0);
-    leftTalonOne.config_kD(0, Pref.getPref("DriveVelKd"), 0);
+    leftTalonOne.config_kF(0, 1.3, 0);
+    leftTalonOne.config_kP(0, 1, 0);
+    leftTalonOne.config_kI(0, 0, 0);
+    leftTalonOne.config_kD(0, 0, 0);
 
     rightTalonOne.selectProfileSlot(0, 0);
     rightTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);

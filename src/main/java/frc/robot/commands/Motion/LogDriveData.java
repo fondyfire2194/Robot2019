@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class LogDriveData extends TimedCommand {
 	private double startTime;
-	private String names = "LeftCmd,LeftFPS,RightCmd,RightFPS,LeftOneAmps,LeftTwoAmps,RightOneAmps,RightTwoAmps";
-	private String units = "PU,FPS,PU,FPS,Amps,Amps,Amps,Amps";
+	private String names = "LeftCmd,LeftFPS,RightCmd,RightFPS,LeftOneAmps,LeftTwoAmps,RightOneAmps,RightTwoAmps,lcp,rcp";
+	private String units = "PU,FPS,PU,FPS,Amps,Amps,Amps,Amps,cp100,cp100";
 	String output_dir = "/U" + "/data_capturesDS19/Drive/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Drive";
 	String name = output_dir + name1;
@@ -44,7 +44,9 @@ public class LogDriveData extends TimedCommand {
 					Robot.driveTrain.getLeftFeetPerSecond(), Robot.driveTrain.getRightCommand(),
 					Robot.driveTrain.getRightFeetPerSecond(), Robot.driveTrain.leftTalonOne.getOutputCurrent(),
 					Robot.driveTrain.leftTalonTwo.getOutputCurrent(), Robot.driveTrain.rightTalonOne.getOutputCurrent(),
-					Robot.driveTrain.rightTalonTwo.getOutputCurrent());
+					Robot.driveTrain.rightTalonTwo.getOutputCurrent(),
+					Robot.driveTrain.leftTalonOne.getSelectedSensorVelocity(0),
+					Robot.driveTrain.rightTalonOne.getSelectedSensorVelocity(0));
 		}
 	}
 

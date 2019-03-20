@@ -163,7 +163,7 @@ public class OI {
         raiseLeg.whenPressed(new SetClimberLegTargetInches(0));
 
         moveArmToZero = new JoystickButton(driverController,10);
-        moveArmToZero.whenPressed(new SetClimberTargetAngle(0));
+        moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1));
 
 
 

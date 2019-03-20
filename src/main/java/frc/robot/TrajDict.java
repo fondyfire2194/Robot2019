@@ -27,11 +27,11 @@ public class TrajDict {
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
 		gainDict.put(outsideStartNames[0], new Double[] { .3, 0., 0., .4 });
-		gainDict.put(secondHatchPickupNames[0], new Double[] { .3, .1, 0.1, .8 });
+		gainDict.put(secondHatchPickupNames[0], new Double[] { .5, 0., 0.01, 1.0 });
 		gainDict.put(secondHatchPickupNames[1], new Double[] { .3, 0., 0., .8 });
-		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .3, 0., 0., .4 });
-		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .3, 0., 0., .4 });
-		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .3, 0., 0., .4 });
+		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .4, 0., 0., .4 });
+		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .4, 0., 0., .4 });
+		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .4, 0., 0., .4 });
 		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .4, 0., 0., .8 });
 		gainDict.put(secondHatchDeliveryNames[4], new Double[] { .4, 0., 0., .8 });
 
