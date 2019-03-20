@@ -201,11 +201,11 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getLeftFeet() {
-    return ((double) getLeftEncoderCount()) / Constants.DRIVE_ENCODER_CTS_PER_FT;
+    return ((double) getLeftEncoderCount()) / Constants.DRIVE_LEFT_ENCODER_CTS_PER_FT;
   }
 
   public double getRightFeet() {
-    return ((double) getRightEncoderCount()) / Constants.DRIVE_ENCODER_CTS_PER_FT;
+    return ((double) getRightEncoderCount()) / Constants.DRIVE_RIGHT_ENCODER_CTS_PER_FT;
   }
 
   public double getLeftFeetPerSecond() {
@@ -259,7 +259,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroError() {
-    return imu.getYaw() - driveStraightAngle;
+    return   driveStraightAngle - imu.getYaw();
   }
 
   public void resetGyro() {
@@ -275,10 +275,10 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getCurrentComp() {
-    if (useGyroComp)
-      return -(getGyroError() * Pref.getPref("DriveStraightKp"));
-    else
-      return 0;
+    
+      return (getGyroError() * Pref.getPref("DriveStraightKp"));
+    
+      
   }
 
   public boolean getLeftSideStalled() {
@@ -313,6 +313,7 @@ public class DriveTrain extends Subsystem {
 
     SmartDashboard.putNumber("GyOff", gyroOffset);
     SmartDashboard.putNumber("DrvStrtAng", driveStraightAngle);
+    SmartDashboard.putNumber("GyroError", getCurrentComp());
     SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());
     SmartDashboard.putNumber("Left ft per s", getLeftFeetPerSecond());
     SD.putN2("LeftFeet", getLeftFeet());

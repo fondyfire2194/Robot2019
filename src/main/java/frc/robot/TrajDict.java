@@ -19,7 +19,8 @@ public class TrajDict {
 
 	public static String[] secondHatchPickupNames = { "CS2ToTurn", "CLEToLoad" };
 
-	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2", "LoadToCS3", "LoadToFarCenter","LoadToRocket" };
+	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2", "LoadToCS3", "LoadToFarCenter",
+			"LoadToRocket" };
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 

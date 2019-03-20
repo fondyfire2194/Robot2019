@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Cargo;
+package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
@@ -13,23 +13,25 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class PickUpCargo extends InstantCommand {
+public class ToggleExtendHatchPanel extends InstantCommand {
   /**
    * Add your docs here.
    */
-  double mySpeed;
-  public PickUpCargo(double speed) {
+
+  public ToggleExtendHatchPanel() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    mySpeed = speed;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.pickUpCargo(-mySpeed);
-    Robot.gph.extendHatchPanel();
+    if (Robot.gph.hatchCoverExtend.get())
+      Robot.gph.retractHatchPanel();
+    else
+      Robot.gph.extendHatchPanel();
+
   }
 
 }

@@ -45,7 +45,7 @@ public class Pref {
     prefDict.put("PathKa", .0);
     prefDict.put("PathKt", .4);
     
-    prefDict.put("VisionKp", .002);
+    prefDict.put("VisionKp", .008);
    
     prefDict.put("JSTwistMinKp", .2);
     prefDict.put("JSTwistMaxKp", .4);
@@ -57,7 +57,7 @@ public class Pref {
 
     prefDict.put("CargoIntakeAmpsLimit",8.0);
 
-    prefDict.put("DriveVelKf", 1.);// 1023/Constants.MAX_ENC_CTS_PER_100MS
+    prefDict.put("DriveVelKf", 1.55);// 1023/Constants.MAX_ENC_CTS_PER_100MS 10 * 55 * 1.2
     prefDict.put("DriveVelKp", 1.);
     prefDict.put("DriveVelKi", .0);
     prefDict.put("DriveVelKd", .0);

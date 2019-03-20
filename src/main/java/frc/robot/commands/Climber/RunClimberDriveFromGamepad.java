@@ -2,7 +2,6 @@ package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
 
-import frc.robot.subsystems.ClimberDrive;
 
 import edu.wpi.first.wpilibj.command.Command;
 

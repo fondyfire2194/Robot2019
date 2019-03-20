@@ -18,11 +18,14 @@ public class Constants {
    * 
    */
   // Constants for drive
-  public static double DRIVE_ENCODER_COUNTS_PER_INCH = 55;
-  public static final double DRIVE_ENCODER_CTS_PER_FT = DRIVE_ENCODER_COUNTS_PER_INCH * 12;
+  public static double DRIVE_LEFT_ENCODER_COUNTS_PER_INCH = 55;
+  public static double DRIVE_RIGHT_ENCODER_COUNTS_PER_INCH = 55;
+  public static double DRIVE_ENCODER_COUNTS_PER_INCH = (DRIVE_LEFT_ENCODER_COUNTS_PER_INCH + DRIVE_RIGHT_ENCODER_COUNTS_PER_INCH)/2;
+  public static final double DRIVE_LEFT_ENCODER_CTS_PER_FT = DRIVE_LEFT_ENCODER_COUNTS_PER_INCH * 12;
+  public static final double DRIVE_RIGHT_ENCODER_CTS_PER_FT = DRIVE_RIGHT_ENCODER_COUNTS_PER_INCH * 12;
   public static final double MINIMUM_START_PCT = 0.2;
   public static final double IN_POSITION_BAND_FT = .5;
-  public static final double MAX_ROBOT_FT_PER_SEC = 10.;
+  public static final double MAX_ROBOT_FT_PER_SEC = 12.;
   public static final double FT_PER_SEC_TO_ENC_CTS_PER_100MS = DRIVE_ENCODER_COUNTS_PER_INCH * 1.2;
   public static double MAX_ENC_CTS_PER_100MS = MAX_ROBOT_FT_PER_SEC * FT_PER_SEC_TO_ENC_CTS_PER_100MS;
   public static double FT_PER_SEC_TO_PCT_OUT = 1 / MAX_ROBOT_FT_PER_SEC;
@@ -39,8 +42,8 @@ public class Constants {
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
 
-  public static double SHIP_CARGO_INCHES = 13;
-  public static double ROCKET_LOWER_CARGO_INCHES = 8;
+  public static double SHIP_CARGO_INCHES = 36;
+  public static double ROCKET_LOWER_CARGO_INCHES = 24;
   public static double ROCKET_MID_CARGO_INCHES = ROCKET_LOWER_CARGO_INCHES + 28;
   public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 28;
 
@@ -56,16 +59,19 @@ public class Constants {
   public static double ELEVATOR_CARGO_LOAD = 20;
 
   public static double CLIMBER_LEG_COUNTS_PER_INCH = 500;
+  public static double MAX_LEG_INCHES_PER_SEC = 20;
+  public static double MAX_LEG_ENC_CTS_PER_100MS = MAX_LEG_INCHES_PER_SEC / 10 * CLIMBER_LEG_COUNTS_PER_INCH;
+  public static double LEG_INCHES_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_LEG_COUNTS_PER_INCH / 10;
 
   public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 53.;//
   public static double CLIMBER_ARM_LENGTH_INCHES = 18.;
   public static double MAX_ARM_DEG_PER_SEC = 20;
   public static double MAX_ARM_ENC_CTS_PER_100MS = MAX_ARM_DEG_PER_SEC / 10 * CLIMBER_ARM_COUNTS_PER_DEGREE;
   public static double ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_ARM_COUNTS_PER_DEGREE / 10;
-
-  public static double CLIMBER_DRIVE_COUNTS_PER_INCH = 500;
+  public static double ARM_INCHES_LIFT_PER_DEGREE = .3;
 
   public static double CLIMBER_ARM_RATE = 20;
+  public static double CLIMBER_LEG_RATE = 20;
 
   public static double VISION_START_FEET = 7.0;
   public static double VISION_END_FEET = 4.0;

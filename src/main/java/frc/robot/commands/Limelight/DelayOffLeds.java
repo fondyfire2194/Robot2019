@@ -37,7 +37,7 @@ public class DelayOffLeds extends TimedCommand {
   // Called once after timeout
   @Override
   protected void end() {
-    if (!Robot.m_oi.driverController.getTrigger())
+    if (!Robot.m_oi.driveToVision.get())
       Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
   }
 

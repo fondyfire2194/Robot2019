@@ -42,7 +42,9 @@ public class RunClimberArmFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		Robot.climberArm.climberArmOut(yValue, myVel);
+
+
+		Robot.climberArm.climberArmOut(yValue);
 
 	}
 
@@ -55,7 +57,7 @@ public class RunClimberArmFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climberArm.climberArmOut(0, myVel);
+		Robot.climberArm.climberArmOut(0);
 
 	}
 

@@ -80,7 +80,7 @@ public class JoystickArcadeDriveVision extends Command {
     else
       throttleValue = -temp;
 
-    if (!visionTargetSeen) {
+    if (targetWasSeen) {
       turnValue = Robot.m_oi.driverController.getTwist();
       temp = turnValue * turnValue;
       if (turnValue < 0)
@@ -89,9 +89,7 @@ public class JoystickArcadeDriveVision extends Command {
         turnValue = temp;
 
       turnValue = turnValue * Robot.driveTrain.getDriverSlider();
-
-      remainingDistanceFt = Robot.ultrasound.getDistanceFeet();
-      SmartDashboard.putNumber("RemDist", remainingDistanceFt);
+    }
 
       /**
        * remember having seen target for switch to gyro when too close for camera to
@@ -105,9 +103,9 @@ public class JoystickArcadeDriveVision extends Command {
       if (visionTargetSeen)
         targetWasSeen = true;
 
-      inVisionRange = Robot.visionData.inGoodVisionDistanceRange();
+      inVisionRange =visionTargetSeen;//Robot.visionData.inGoodVisionDistanceRange();
 
-      tooCloseForCamera = visionTargetSeen && Robot.visionData.tooCloseToCamera();
+      // tooCloseForCamera = visionTargetSeen && Robot.visionData.tooCloseToCamera();
 
       // in vision zone keep gyro target angle current to switch
       // over to gyro when too close for camera
@@ -122,46 +120,11 @@ public class JoystickArcadeDriveVision extends Command {
         }
       }
 
-      if (tooCloseForCamera || targetWasSeen && !visionTargetSeen)
+      if (targetWasSeen && !visionTargetSeen)
         turnValue = Robot.driveTrain.getCurrentComp();// gyro
-      /**
-       * turning when robot bumpers hit target and amps rise
-       */
-      if (Robot.driveTrain.getLeftSideStalled()) {
-        leftOverCurrentCount++;
-      } else {
-        leftOverCurrentCount = 0;
-      }
-      if (Robot.driveTrain.getRightSideStalled()) {
-        rightOverCurrentCount++;
-      } else {
-        rightOverCurrentCount = 0;
-      }
-      if (leftOverCurrentCount > overCurrentCountMax) {
-        leftStalled = true;
-      }
-      if (rightOverCurrentCount > overCurrentCountMax) {
-        rightStalled = true;
-      }
-      /**
-       * Output to drive motors, Turn brakes off so robot coasts in the final stageS
-       * 
-       */
-      double leftValue = throttleValue + turnValue;
-      if (leftStalled) {
-        leftValue = 0;
-        Robot.driveTrain.setLeftSideDriveBrakeOn(false);
-      }
-      double rightValue = throttleValue - turnValue;
-      if (rightStalled) {
-        rightValue = 0;
-        Robot.driveTrain.setRightSideDriveBrakeOn(false);
-      }
 
-      if (tooCloseForCamera) {
-        leftValue = .2;
-        rightValue = .2;
-      }
+       double leftValue = throttleValue + turnValue;
+       double rightValue = throttleValue - turnValue;
 
       Robot.driveTrain.leftDriveOut(leftValue);
       Robot.driveTrain.rightDriveOut(rightValue);
@@ -170,7 +133,7 @@ public class JoystickArcadeDriveVision extends Command {
       SmartDashboard.putBoolean("TTCFC", tooCloseForCamera);
       SmartDashboard.putNumber("TDSA", Robot.driveTrain.driveStraightAngle);
       SmartDashboard.putNumber("TVAL", turnValue);
-    }
+    
   }
 
   // Make this return true when this Command no longer needs to run execute()

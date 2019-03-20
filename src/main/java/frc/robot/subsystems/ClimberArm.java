@@ -46,6 +46,7 @@ public class ClimberArm extends Subsystem {
     climberArm.set(ControlMode.PercentOutput, 0);
 
     climberArm.setSelectedSensorPosition(0, 0, 0);
+    configVelMode();
 
   }
 
@@ -58,8 +59,8 @@ public class ClimberArm extends Subsystem {
   }
 
   public void configVelMode() {
-    climberArm.config_kF(1, 0, 0);
-    climberArm.config_kP(1, .1, 0);
+    climberArm.config_kF(1, 2., 0);
+    climberArm.config_kP(1, .4, 0);
     climberArm.config_kI(1, 0, 0);
     climberArm.config_kD(1, 0, 0);
 
@@ -67,17 +68,6 @@ public class ClimberArm extends Subsystem {
     climberArm.configNominalOutputReverse(0, 0);
     climberArm.configPeakOutputForward(1, 0);
     climberArm.configPeakOutputReverse(-1, 0);
-
-  }
-
-  public void configPositionMode() {
-    climberArm.config_kF(0, 0, 0);
-    climberArm.config_kP(0, .1, 0);
-    climberArm.config_kI(0, 0, 0);
-    climberArm.config_kD(0, 0, 0);
-
-    climberArm.configNominalOutputForward(0, 0);
-    climberArm.configNominalOutputReverse(0, 0);
 
   }
 
@@ -109,31 +99,31 @@ public class ClimberArm extends Subsystem {
 
   }
 
-  public void climberArmOut(double speed, boolean useVelocityLoop) {
-    if (useVelocityLoop) {
-      climberArm.selectProfileSlot(1, 0);
-      climberArm.set(ControlMode.Velocity, speed * Constants.MAX_ARM_ENC_CTS_PER_100MS);
-    } else {
+  public void climberArmOut(double speed) {
+    boolean temp = getArmDegrees() <= 0 && speed > 0;
+    boolean temp1 = getArmDegrees() >= 100 && speed < 0;
+    if (temp || temp1 || (getArmDegrees() > 0 && getArmDegrees() < 100)) {
       climberArm.set(ControlMode.PercentOutput, speed);
-      SD.putN1("ClimberArmCMD",speed);
-    }
+      SD.putN1("ClimberArmCMD", speed);
+    } else
+      climberArm.set(ControlMode.PercentOutput, 0);
   }
 
   public void armMagicMotion(double distance, double speedDPS) {
     /**
-     * arm motor 775 Pro with 343:1 gear reduction and a 4096 count encoder
-     *  53 counts per degree
+     * arm motor 775 Pro with 343:1 gear reduction and a 4096 count encoder 53
+     * counts per degree
      * 
-     * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rper 100ms 
+     * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rper 100ms
      * 
      * 
      *
      * = 320 counts / 100 ms measured encoder rate at 100% was 250
      *
-     * Use measured rate not theoretical so 100% Kf would be 1023/250 = 4 
+     * Use measured rate not theoretical so 100% Kf would be 1023/250 = 4
      * 
-     * For error of 1 degree, to add another 2% of motor output. p-gain .02 x 1023 / (52) =
-     * .4
+     * For error of 1 degree, to add another 2% of motor output. p-gain .02 x 1023 /
+     * (52) = .4
      * 
      * start P-gain = .06
      * 
@@ -160,7 +150,7 @@ public class ClimberArm extends Subsystem {
     SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
     SD.putN1("ClimberArmDegrees", getArmDegrees());
     SD.putN2("ClimberArmAmps", climberArm.getOutputCurrent());
-    SD.putN1("ClimberArmENCPer100MS",climberArm.getSelectedSensorVelocity(0));
+    SD.putN1("ClimberArmENCPer100MS", climberArm.getSelectedSensorVelocity(0));
     SD.putN1("ClimberArmTarget", armTargetDegrees);
   }
 }

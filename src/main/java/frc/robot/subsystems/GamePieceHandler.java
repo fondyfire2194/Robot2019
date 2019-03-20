@@ -5,6 +5,7 @@ import frc.robot.RobotMap;
 import frc.robot.SD;
 import frc.robot.AutoChoosers;
 import frc.robot.Pref;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -89,9 +90,7 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	private void gripHatchPanelOff() {
-
 		hatchCoverGripper.set(DoubleSolenoid.Value.kOff);
-
 	}
 
 	public void extendHatchPanel() {
@@ -128,8 +127,10 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void updateStatus() {
-		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit"))
+		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit")){
 			stopCargoIntake = true;
+            Robot.elevator.holdPositionInches =Constants.ROCKET_LOWER_CARGO_INCHES;
+		}
 		if (stopCargoIntake)
 			stopCargoIntake = Robot.m_oi.pickUpCargo.get();
 		if (stopCargoIntake)

@@ -5,31 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Cargo;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-
 /**
  * Add your docs here.
  */
-public class PickUpCargo extends InstantCommand {
+public class ResetLegPosition extends InstantCommand {
   /**
    * Add your docs here.
    */
-  double mySpeed;
-  public PickUpCargo(double speed) {
+  public ResetLegPosition() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    mySpeed = speed;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.gph.pickUpCargo(-mySpeed);
-    Robot.gph.extendHatchPanel();
+    Robot.climberLeg.resetLegPosition();
+    Robot.climberLeg.legTargetInches = 0;
   }
 
 }

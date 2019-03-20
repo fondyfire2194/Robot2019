@@ -23,8 +23,7 @@ package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.ClimberArm;
-import frc.robot.subsystems.ClimberLeg;
+
 
 public class ClimbControlArmAndLeg extends Command {
   private double mySpeed;
@@ -32,10 +31,10 @@ public class ClimbControlArmAndLeg extends Command {
   private double legSpeed;
   private double armSpeed;
 
-  public ClimbControlArmAndLeg(double legSpeed, double pitchAngle) {
+  public ClimbControlArmAndLeg(double armSpeed, double pitchAngle) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    mySpeed = legSpeed;//in/sec
+    mySpeed = armSpeed;//in/sec
     myPitchAngle = pitchAngle;
   }
 
@@ -60,7 +59,7 @@ public class ClimbControlArmAndLeg extends Command {
 
 
     double armLiftRatio = 2; //starting lift point deg/in
-    double armKp = .3;
+    double legKp = .3;
     double armStartLiftAngle = 22;
     double armFinishLiftAngle = 54;
     legSpeed = mySpeed;
@@ -74,9 +73,9 @@ public class ClimbControlArmAndLeg extends Command {
      * */
 
 
-    armSpeed = (legSpeed * armLiftRatio) - armKp * pitchError;//in/sec * deg/in = deg/sec
+    legSpeed = (armSpeed * armLiftRatio) - legKp * pitchError;//in/sec * deg/in = deg/sec
 
-    Robot.climberArm.climberArmOut(armSpeed, true);
+    Robot.climberArm.climberArmOut(armSpeed);
 
     Robot.climberLeg.climberLegOut(legSpeed, true);
   }

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class ClimberArmMotionMagic extends Command {
-	
 
 	public ClimberArmMotionMagic() {
 		// Use requires() here to declare subsystem dependencies
@@ -47,11 +46,16 @@ public class ClimberArmMotionMagic extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
+		if (Robot.climberArm.armTargetDegrees > 0 && Robot.climberArm.armTargetDegrees < 100) {
+			if (Robot.climberArm.armTargetDegrees != Robot.climberArm.lastHoldDegrees) {
+				Robot.climberArm.armMagicMotion(Robot.climberArm.armTargetDegrees, Constants.CLIMBER_ARM_RATE);
+				Robot.climberArm.lastHoldDegrees = Robot.climberArm.armTargetDegrees;
 
-		if (Robot.climberArm.armTargetDegrees != Robot.climberArm.lastHoldDegrees) {
-			Robot.climberArm.armMagicMotion(Robot.climberArm.armTargetDegrees, Constants.CLIMBER_ARM_RATE);
-			Robot.climberArm.lastHoldDegrees = Robot.climberArm.armTargetDegrees;
-;
+			}
+		} else {
+			Robot.climberArm.armTargetDegrees = Robot.climberArm.getArmDegrees();
+			Robot.climberArm.lastHoldDegrees = Robot.climberArm.armTargetDegrees + .01;
+
 		}
 	}
 

@@ -51,13 +51,11 @@ public class OI {
 
     public JoystickButton jogElevator;
 
-    public JoystickButton captureHatchCover;
-    public JoystickButton releaseHatchCover;
+    public JoystickButton toggleHatchCoverGripper;
     public JoystickButton extendHatchCover;
     public JoystickButton retractHatchCover;
     public JoystickButton placeHatchPanelShip;
     public JoystickButton placeHatchPanelRocket;
-
 
     public JoystickButton pushHatchCover;
     public JoystickButton retractPusher;
@@ -65,7 +63,7 @@ public class OI {
     public JoystickButton deliverCargo;
     public JoystickButton abortAuto;
 
-   public JoystickButton stopCargoHandler;
+    public JoystickButton stopCargoHandler;
 
     public JoystickButton driveToVision;
 
@@ -74,12 +72,17 @@ public class OI {
     public JoystickButton jogClimberDrive;
     public JoystickButton prepareLevelThree;
     public JoystickButton prepareLevelTwo;
-    public JoystickButton startClimb;
+    public JoystickButton moveArmToZero;
+    public JoystickButton moveLegToZero;
+    public JoystickButton lowerLeg;
+    public JoystickButton raiseLeg;
+
+    public JoystickButton toggleExtension;
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
     public ButtonBox buttonBox = new ButtonBox(RobotMap.BUTTON_BOX);
-    public Gamepad gamepad_test = new Gamepad(RobotMap.OI_TEST_CONTROLLER);
+    // public Gamepad gamepad_test = new Gamepad(RobotMap.OI_TEST_CONTROLLER);
 
     public OI() {
         Timer.delay(.02);
@@ -119,54 +122,72 @@ public class OI {
 
         SmartDashboard.putData("StopCompressor", new StopCompressor());
 
+        SmartDashboard.putData("ResetArmPosition", new ResetArmPosition());
+
+        SmartDashboard.putData("ResetLegPosition", new ResetLegPosition());
+
         /**
          * 
          * Driver joystick
          */
 
-        abortAuto = new JoystickButton(driverController, 7);
-
-        driveToVision = new JoystickButton(driverController, 3);
-        driveToVision.whileHeld(new JoystickArcadeDriveVision());
-        driveToVision.whenReleased(new DelayOffLeds(2.));
-
         pickUpCargo = new JoystickButton(driverController, 1);
         pickUpCargo.whileHeld(new PickUpCargo(.5));
         pickUpCargo.whenReleased(new StopCargoMotor());
-      
+        pickUpCargo.whenReleased(new ExtendHatchPanel(false));
+
         deliverCargo = new JoystickButton(driverController, 2);
         deliverCargo.whileHeld(new DeliverCargo(1.));
         deliverCargo.whenReleased(new StopCargoMotor());
+        deliverCargo.whenReleased(new ExtendHatchPanel(false));
 
-
-        captureHatchCover = new JoystickButton(driverController, 5);
-        captureHatchCover.whenPressed(new ToggleHatchGripper());
+        driveToVision = new JoystickButton(driverController, 3);
+        driveToVision.whileHeld(new JoystickArcadeDriveVision());
+        driveToVision.whenReleased(new DelayOffLeds(10.));
 
         placeHatchPanelRocket = new JoystickButton(driverController, 4);
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());
 
+        toggleHatchCoverGripper = new JoystickButton(driverController, 5);
+        toggleHatchCoverGripper.whenPressed(new ToggleHatchGripper());
+
         placeHatchPanelShip = new JoystickButton(driverController, 6);
         placeHatchPanelShip.whenPressed(new PlaceHatchPanelShip());
+
+        abortAuto = new JoystickButton(driverController, 7);
+
+        raiseLeg = new JoystickButton(driverController, 9);
+        raiseLeg.whenPressed(new SetClimberLegTargetInches(0));
+
+        moveArmToZero = new JoystickButton(driverController,10);
+        moveArmToZero.whenPressed(new SetClimberTargetAngle(0));
+
+
+
+        lowerLeg = new JoystickButton(driverController, 11);
+        lowerLeg.whenPressed(new SetClimberLegTargetInches(4));
 
         /**
          * Co driver controller
          * 
          */
-        stopCargoHandler = gamepad_test.getBackButton();
-        stopCargoHandler.whenPressed(new StopCargoMotor());
- 
-        jogElevator = gamepad.getButtonY();
-        jogElevator.whileHeld(new RunElevatorFromGamepad());
+
+        jogClimberDrive = gamepad.getButtonA();
+        jogClimberDrive.whileHeld(new RunClimberDriveFromGamepad());
+
+        jogClimberLeg = gamepad.getButtonB();
+        jogClimberLeg.whileHeld(new RunClimberLegFromGamepad());
 
         jogClimberArm = gamepad.getButtonX();
         jogClimberArm.whileHeld(new RunClimberArmFromGamepad(false));
 
-        // jogClimberLeg = gamepad.getButtonB();
-        // jogClimberLeg.whileHeld(new RunClimberLegFromGamepad());
+        jogElevator = gamepad.getButtonY();
+        jogElevator.whileHeld(new RunElevatorFromGamepad());
 
-        // jogClimberDrive = gamepad.getButtonA();
-        // jogClimberDrive.whileHeld(new RunClimberDriveFromGamepad());
+        stopCargoHandler = gamepad.getBackButton();
+        stopCargoHandler.whenPressed(new StopCargoMotor());
 
+ 
         /**
          * 
          * 
@@ -183,7 +204,7 @@ public class OI {
         elevatorToMidRocketCargo = buttonBox.getButtonX();
         elevatorToTopRocketCargo = buttonBox.getButtonL1();
         elevatorToCargoLoadStation = buttonBox.getButtonOptions();
-        
+
         elevatorToRocketLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
 
         elevatorToAllLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
@@ -194,17 +215,15 @@ public class OI {
         elevatorToLowerRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_LOWER_CARGO_INCHES));
         elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
-     
+
         prepareLevelTwo = buttonBox.getBackButton();
-        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(10));
-        
+        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(35));
+
         prepareLevelThree = buttonBox.getStartButton();
-        prepareLevelThree.whenPressed(new SetClimberTargetAngle(20));
+        prepareLevelThree.whenPressed(new SetClimberTargetAngle(75));
 
-       startClimb = buttonBox.getButtonOptions();
-       startClimb.whenPressed(new SetClimberTargetAngle(30));
-       
-
+         toggleExtension = buttonBox.getButtonOptions();
+        toggleExtension.whenPressed(new ToggleExtendHatchPanel());
 
     }
 }
