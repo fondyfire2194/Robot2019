@@ -15,12 +15,11 @@ import java.util.HashMap;
 
 public class TrajDict {
 
-	public static String[] outsideStartNames = { "LL1ToCS2" };
+	public static String[] outsideStartNames = { "LL1ToCS1" };
 
-	public static String[] secondHatchPickupNames = { "CS2ToTurn", "CLEToLoad" };
+	public static String[] secondHatchPickupNames = { "CS1ToLoad", "CLEToLoad" };
 
-	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2", "LoadToCS3", "LoadToFarCenter",
-			"LoadToRocket" };
+	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2" };
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 
@@ -31,10 +30,7 @@ public class TrajDict {
 		gainDict.put(secondHatchPickupNames[1], new Double[] { .3, 0., 0., .8 });
 		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .4, 0., 0., .4 });
 		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .4, 0., 0., .4 });
-		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .4, 0., 0., .4 });
-		gainDict.put(secondHatchDeliveryNames[3], new Double[] { .4, 0., 0., .8 });
-		gainDict.put(secondHatchDeliveryNames[4], new Double[] { .4, 0., 0., .8 });
-
+	
 	}
 
 	public static double[] getTrajGains(String name) {

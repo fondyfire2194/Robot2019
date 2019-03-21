@@ -40,27 +40,16 @@ public class AutoChoosers {
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[0], 7);
 		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[1], 8);
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[1], 9);
-		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[2], 10);
-		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[2], 11);
-		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[3], 12);
-		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[3], 13);
 
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
-		trajectoryDirectionChooser = new SendableChooser<Integer>();
-		trajectoryDirectionChooser.setDefaultOption("FaceFieldMoveField", 1);
-		trajectoryDirectionChooser.addOption("FaceWallMoveField", 2);
-		trajectoryDirectionChooser.addOption("FaceFieldMoveWall", 3);
-		trajectoryDirectionChooser.addOption("FaceWallMoveWall", 4);
-		// SmartDashboard.putData("Trajectory Direction Chooser",
-		// trajectoryDirectionChooser);
 
 		startPositionChooser = new SendableChooser<Integer>();
 		startPositionChooser.setDefaultOption("DriverControl", 0);
-		startPositionChooser.addOption("Left to LCS2", 1);
+		startPositionChooser.addOption("Left to LCS1", 1);
 		startPositionChooser.addOption("LCenter", 2);
 		startPositionChooser.addOption("RCenter", 3);
-		startPositionChooser.addOption("Right to RCS2", 4);
+		startPositionChooser.addOption("Right to RCS1", 4);
 
 		SmartDashboard.putData("Start Position Chooser", startPositionChooser);
 
@@ -69,9 +58,6 @@ public class AutoChoosers {
 		secondHatchChooser.setDefaultOption("No Second Hatch", 0);
 		secondHatchChooser.addOption("Cargo Ship 1", 1);
 		secondHatchChooser.addOption("Cargo Ship 2", 2);
-		secondHatchChooser.addOption("Cargo Ship 3", 3);
-		secondHatchChooser.addOption("End Cargo Ship Far", 4);
-		secondHatchChooser.addOption("Rocket", 5);
 
 		SmartDashboard.putData("Second Hatch", secondHatchChooser);
 

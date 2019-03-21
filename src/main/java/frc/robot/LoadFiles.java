@@ -53,7 +53,6 @@ public class LoadFiles implements Runnable {
             int startPositionSelectedIndex = 0;
             if (startPositionSelected == 2 || startPositionSelected == 3)
                 startPositionSelectedIndex = 1;
-
             error = loadLeftFile(TrajDict.secondHatchPickupNames[startPositionSelectedIndex], i);
             if (!error)
                 error = loadRightFile(TrajDict.secondHatchPickupNames[startPositionSelectedIndex], i);
@@ -78,6 +77,7 @@ public class LoadFiles implements Runnable {
         } else {
             Robot.leftBufferTrajectory[i - 1] = BuildTrajectory.buildLeftFileName(Robot.useUsb, startName);
         }
+
         if (Robot.buildOK && i != 0) {
             Robot.bufferTrajectoryName[i - 1] = startName;
             SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
@@ -100,28 +100,27 @@ public class LoadFiles implements Runnable {
             if (i == 0) {
                 Robot.activeTrajName = startName;
                 int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-                
-                    Robot.activeTrajectoryGains = TrajDict.getTrajGains(startName);
-                    SmartDashboard.putNumber("AGKp", Robot.activeTrajectoryGains[0]);
-                    SmartDashboard.putNumber("AGKd", Robot.activeTrajectoryGains[1]);
-                    SmartDashboard.putNumber("AGKa", Robot.activeTrajectoryGains[2]);
-                    SmartDashboard.putNumber("AGKt", Robot.activeTrajectoryGains[3]);
-              
+
+                Robot.activeTrajectoryGains = TrajDict.getTrajGains(startName);
+                SmartDashboard.putNumber("AGKp", Robot.activeTrajectoryGains[0]);
+                SmartDashboard.putNumber("AGKd", Robot.activeTrajectoryGains[1]);
+                SmartDashboard.putNumber("AGKa", Robot.activeTrajectoryGains[2]);
+                SmartDashboard.putNumber("AGKt", Robot.activeTrajectoryGains[3]);
 
                 SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
                 SmartDashboard.putNumber("ActTrajLngth", Robot.activeLeftTrajectory.length());
             } else {
                 Robot.bufferTrajectoryName[i - 1] = startName;
                 int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
-                
-                    Robot.bufferTrajectoryGains[i - 1] = TrajDict.getTrajGains(startName);
-        
+
+                Robot.bufferTrajectoryGains[i - 1] = TrajDict.getTrajGains(startName);
+
                 SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
                 SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i - 1),
                         Robot.rightBufferTrajectory[i - 1].length());
             }
         }
-        return!Robot.buildOK;
-}
+        return !Robot.buildOK;
+    }
 
 }

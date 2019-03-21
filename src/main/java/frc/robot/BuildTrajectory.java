@@ -18,7 +18,7 @@ public class BuildTrajectory {
 	public static File myRightFile;
 	static String tempPath = null;
 
-	static String filePath = "/home/lvuser/deploy/paths/";
+	static String filePath = "/home/lvuser/deploy/Paths/output/";
 	static String usbFilePath = "/U/DeepSpace/PathWeaver/output/";
 
 	static String leftExtension = ".left.pf1.csv";

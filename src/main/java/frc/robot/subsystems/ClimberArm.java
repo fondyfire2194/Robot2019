@@ -100,13 +100,7 @@ public class ClimberArm extends Subsystem {
   }
 
   public void climberArmOut(double speed) {
-    boolean temp = getArmDegrees() <= 0 && speed > 0;
-    boolean temp1 = getArmDegrees() >= 100 && speed < 0;
-    if (temp || temp1 || (getArmDegrees() > 0 && getArmDegrees() < 100)) {
-      climberArm.set(ControlMode.PercentOutput, speed);
-      SD.putN1("ClimberArmCMD", speed);
-    } else
-      climberArm.set(ControlMode.PercentOutput, 0);
+    climberArm.set(ControlMode.PercentOutput, speed);
   }
 
   public void armMagicMotion(double distance, double speedDPS) {
