@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.SD;
 import frc.robot.Constants;
+import frc.robot.commands.Climber.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -51,6 +52,8 @@ public class ClimberLeg extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new RunClimberLegFromGamepad(false));
+    // setDefaultCommand(new ClimberLegMotionMagic());
   }
 
 
@@ -76,20 +79,23 @@ public class ClimberLeg extends Subsystem {
     climberLeg.configPeakCurrentDuration(time);
     climberLeg.configContinuousCurrentLimit(continuous);
   }
+  public double getLegCurrent() {
+    return climberLeg.getOutputCurrent();
+  }
 
 
   public void climberLegOut(double speed, boolean useVelocityLoop) {
     if (useVelocityLoop) {
       climberLeg.selectProfileSlot(0, 0);
-      climberLeg.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
+      climberLeg.set(ControlMode.Velocity, speed * Constants.MAX_LEG_ENC_CTS_PER_100MS);
     } else {
       climberLeg.set(ControlMode.PercentOutput, speed);
     }
   }
 
-  public void legMagicMotion(double distance, double speedDPS) {
+  public void legMagicMotion(double distance, double speed) {
     /**
-     * arm motor 775 Pro with 343:1 gear reduction and a 4096 count encoder
+     * leg motor 775 Pro with 343:1 gear reduction and a 4096 count encoder
      *  53 counts per degree
      * 
      * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rper 100ms 
@@ -115,7 +121,7 @@ public class ClimberLeg extends Subsystem {
      * enc cts per 100ms per second so to accelerate in 1/2 second, use velocity x 2
      */
 
-    int cruiseVelocity = (int) (speedDPS * Constants.ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS);
+    int cruiseVelocity = (int) (speed * Constants.LEG_INCHES_PER_SEC_TO_ENC_CTS_PER_100MS);
 
     int acceleration = cruiseVelocity * 2;
 
@@ -133,7 +139,7 @@ public class ClimberLeg extends Subsystem {
     SD.putN1("ClimberLegInches",getLegInches());
     SD.putN1("ClimberLegENCPer100MS",climberLeg.getSelectedSensorVelocity(0));
     SD.putN1("ClimberLegTarget", legTargetInches);
-    SD.putN2("ClimberLegAmps", climberLeg.getOutputCurrent());
+    SD.putN2("ClimberLegAmps", getLegCurrent());
 
   }
 }

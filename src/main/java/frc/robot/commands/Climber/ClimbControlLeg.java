@@ -23,18 +23,19 @@ package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.Constants;
+import frc.robot.Pref;
 
-
-public class ClimbControlArmAndLeg extends Command {
+public class ClimbControlLeg extends Command {
   private double mySpeed;
   private double myPitchAngle;
-  private double legSpeed;
-  private double armSpeed;
 
-  public ClimbControlArmAndLeg(double armSpeed, double pitchAngle) {
+  public ClimbControlLeg(double armSpeed, double pitchAngle) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    mySpeed = armSpeed;//in/sec
+    requires(Robot.climberArm);
+
+    mySpeed = armSpeed;
     myPitchAngle = pitchAngle;
   }
 
@@ -47,37 +48,19 @@ public class ClimbControlArmAndLeg extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    /**
+     * Pitch angle rises as front of robot rises If angle is too high, slow down arm
+     * and speed up leg Error = Command - angle will give a negative result if the
+     * front is too high So subtract from leg to speed it up
+     * 
+     * 
+     */
 
     double pitchError = myPitchAngle - Robot.driveTrain.getFilteredGyroPitch();
-/**
- * arm lift producd in inches decreases as arm moves down so arm needs to speed up as the lift proceeds. 
- * So another multiplier is needed ?which is a function of arm angle ?
- * 
- * 
- * 
- */
 
+    Robot.climberLeg.climberLegOut(mySpeed * Constants.CLIMBER_LEG_RATE - pitchError * Pref.getPref("ClimbAngleKp"),
+        true);
 
-    double armLiftRatio = 2; //starting lift point deg/in
-    double legKp = .3;
-    double armStartLiftAngle = 22;
-    double armFinishLiftAngle = 54;
-    legSpeed = mySpeed;
-
-    /** 
-     * pitchError will be + if below target and - if above
-     * 
-     * so + meand speed up arm. Leg will run constant speed unless error gets too negative.
-     * 
-     * 
-     * */
-
-
-    legSpeed = (armSpeed * armLiftRatio) - legKp * pitchError;//in/sec * deg/in = deg/sec
-
-    Robot.climberArm.climberArmOut(armSpeed);
-
-    Robot.climberLeg.climberLegOut(legSpeed, true);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -89,6 +72,8 @@ public class ClimbControlArmAndLeg extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.climberLeg.legTargetInches = Robot.climberLeg.getLegInches();
+    Robot.climberLeg.lastHoldInches = Robot.climberLeg.getLegInches() + .01;
   }
 
   // Called when another command which requires one or more of the same

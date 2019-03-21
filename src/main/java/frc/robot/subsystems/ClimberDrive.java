@@ -51,6 +51,9 @@ public class ClimberDrive extends Subsystem {
     climberDrive.configContinuousCurrentLimit(continuous);
   }
 
+  public double getDriveCurrent() {
+    return climberDrive.getOutputCurrent();
+  }
 
   public void runClimberDrive(double speed) {
     climberDrive.set(ControlMode.PercentOutput, speed);
@@ -62,6 +65,6 @@ public class ClimberDrive extends Subsystem {
 
   public void updateStatus() {
 
-    SD.putN2("ClimberDriveAmps", climberDrive.getOutputCurrent());
+    SD.putN2("ClimberDriveAmps", getDriveCurrent());
   }
 }

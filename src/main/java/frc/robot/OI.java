@@ -31,6 +31,7 @@ import frc.robot.commands.Cargo.*;
 import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 import frc.robot.commands.AirCompressor.*;
 import frc.robot.commands.Climber.*;
+import frc.robot.Constants;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -81,6 +82,8 @@ public class OI {
 
     public JoystickButton incrementArmAngle;
     public JoystickButton decrementArmAngle;
+
+    public JoystickButton doClimb;
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
@@ -165,10 +168,12 @@ public class OI {
         moveArmToZero = new JoystickButton(driverController,10);
         moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1));
 
-
-
         lowerLeg = new JoystickButton(driverController, 11);
-        lowerLeg.whenPressed(new SetClimberLegTargetInches(4));
+        lowerLeg.whenPressed(new SetClimberLegTargetInches(Constants.CLIMBER_LEG_START_POSITION));
+
+        doClimb = new JoystickButton(driverController, 12);
+        doClimb.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_RATE,Constants.CLIMB_TARGET_ANGLE));
+        doClimb.whileHeld(new ClimbControlLeg(Constants.CLIMBER_ARM_RATE,Constants.CLIMB_TARGET_ANGLE));
 
         /**
          * Co driver controller
@@ -179,7 +184,7 @@ public class OI {
         jogClimberDrive.whileHeld(new RunClimberDriveFromGamepad());
 
         jogClimberLeg = gamepad.getButtonB();
-        jogClimberLeg.whileHeld(new RunClimberLegFromGamepad());
+        jogClimberLeg.whileHeld(new RunClimberLegFromGamepad(false));
 
         jogClimberArm = gamepad.getButtonX();
         jogClimberArm.whileHeld(new RunClimberArmFromGamepad(false));
@@ -226,10 +231,10 @@ public class OI {
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
         prepareLevelTwo = buttonBox.getBackButton();
-        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(35));
+        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE));
 
         prepareLevelThree = buttonBox.getStartButton();
-        prepareLevelThree.whenPressed(new SetClimberTargetAngle(75));
+        prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE));
 
          toggleExtension = buttonBox.getButtonOptions();
         toggleExtension.whenPressed(new ToggleExtendHatchPanel());

@@ -2,7 +2,7 @@ package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
 
-import frc.robot.subsystems.ClimberArm;
+
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -44,7 +44,7 @@ public class RunClimberArmFromGamepad extends Command {
 			temp = -temp;
 
 
-		Robot.climberArm.climberArmOut(yValue);
+		Robot.climberArm.climberArmOut(yValue,false);
 
 	}
 
@@ -57,7 +57,7 @@ public class RunClimberArmFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climberArm.climberArmOut(0);
+		Robot.climberArm.climberArmOut(0,false);
 
 	}
 

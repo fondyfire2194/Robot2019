@@ -2,7 +2,7 @@ package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
 
-import frc.robot.subsystems.ClimberLeg;
+
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -10,16 +10,21 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class RunClimberLegFromGamepad extends Command {
+	private boolean myVel;
 
-	public void RunClimberLegFromGamepad() {
+	public RunClimberLegFromGamepad(boolean vel) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		requires(Robot.climberLeg);
+		myVel = vel;
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-
+		if (myVel) {
+			Robot.climberLeg.climberLeg.selectProfileSlot(1, 0);
+		}
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -37,7 +42,9 @@ public class RunClimberLegFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		Robot.climberLeg.runClimberLeg(-yValue);// y up gives a negative value
+
+
+		Robot.climberLeg.climberLegOut(yValue,false);
 
 	}
 
@@ -50,8 +57,7 @@ public class RunClimberLegFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climberLeg.runClimberLeg(0);
-
+		Robot.climberLeg.climberLegOut(0,false);
 
 	}
 

@@ -12,6 +12,7 @@ import frc.robot.RobotMap;
 import frc.robot.SD;
 import frc.robot.Constants;
 import frc.robot.commands.Climber.*;
+import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -99,8 +100,23 @@ public class ClimberArm extends Subsystem {
 
   }
 
-  public void climberArmOut(double speed) {
-    climberArm.set(ControlMode.PercentOutput, speed);
+  public double getArmCurrent() {
+    return climberArm.getOutputCurrent();
+  }
+
+  public double getDriverSliderClimb() {
+    // want to convert range to 0 to 1
+    return (1 - Robot.m_oi.driverController.getRawAxis(3)) / 2;
+  }
+
+  public void climberArmOut(double speed, boolean useVelocityLoop) {
+    if (useVelocityLoop) {
+      climberArm.selectProfileSlot(0, 0);
+      climberArm.set(ControlMode.Velocity, speed * Constants.MAX_ARM_ENC_CTS_PER_100MS);
+    } else {
+      climberArm.set(ControlMode.PercentOutput, speed);
+
+    }
   }
 
   public void armMagicMotion(double distance, double speedDPS) {
@@ -143,7 +159,7 @@ public class ClimberArm extends Subsystem {
   public void updateStatus() {
     SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
     SD.putN1("ClimberArmDegrees", getArmDegrees());
-    SD.putN2("ClimberArmAmps", climberArm.getOutputCurrent());
+    SD.putN2("ClimberArmAmps", getArmCurrent());
     SD.putN1("ClimberArmENCPer100MS", climberArm.getSelectedSensorVelocity(0));
     SD.putN1("ClimberArmTarget", armTargetDegrees);
   }
