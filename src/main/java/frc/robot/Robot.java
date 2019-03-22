@@ -31,7 +31,7 @@ import frc.robot.subsystems.ClimberLeg;
 import frc.robot.subsystems.ClimberDrive;
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
-import frc.robot.subsystems.Ultrasound;;
+import frc.robot.subsystems.Ultrasound;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
 import frc.robot.VisionData;
@@ -177,17 +177,13 @@ public class Robot extends TimedRobot {
   public static String driveUniqueLogName;
   public static String trajectoryLogName = "/U" + "/data_capturesDS19/Trajectory/T";
   public static String trajectoryUniqueLogName;
-  public static boolean useVisionComp;
-  public static double activeMotionComp;
   public static boolean autoRunning;
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
   public static boolean useUltrasound;
- public static boolean visionCompJoystick;
-   
-
-
+  public static boolean visionCompJoystick;
+private double scl;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -205,9 +201,9 @@ public class Robot extends TimedRobot {
     climberArm = new ClimberArm();
     climberLeg = new ClimberLeg();
     climberDrive = new ClimberDrive();
-    
+
     airCompressor = new AirCompressor();
-    pdp = new PowerPanel();
+    // pdp = new PowerPanel();
     gph = new GamePieceHandler();
     ultrasound = new Ultrasound(RobotMap.ULTRASOUND, Ultrasound.ultrasoundType.inch, .009766);
     m_oi = new OI();
@@ -248,7 +244,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putData(robotRotate);
     // SmartDashboard.putData(gph);
     // SmartDashboard.putData(airCompressor);
-    SmartDashboard.putData(pdp);
+    // SmartDashboard.putData(pdp);
     SmartDashboard.putData(Scheduler.getInstance());
 
     bufferTrajectoryGains[0] = activeTrajectoryGains;
@@ -284,13 +280,12 @@ public class Robot extends TimedRobot {
     Robot.gph.retractPusher();
     Robot.gph.gripHatchPanel();
     Robot.gph.retractHatchPanel();
-    
 
   }
 
   @Override
   public void disabledPeriodic() {
-
+    Scheduler.getInstance().run();
     readTrajFiles();
 
     // if (m_oi.gamepad.getButtonStateA()) {
@@ -312,6 +307,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    useGainPrefs = false;
     Scheduler.getInstance().run();
     driveTrain.resetGyro();
     driveTrain.resetEncoders();
@@ -319,7 +315,8 @@ public class Robot extends TimedRobot {
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
     int startCommandNumber = 0;// (int) SmartDashboard.getNumber("TestStart", 0);
-    if(autoTimeDelaySeconds==0) startCommandNumber = 1;
+    if (autoTimeDelaySeconds == 0)
+      startCommandNumber = 1;
     if (autonomousCommand[startCommandNumber] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
       autonomousCommand[startCommandNumber].start();
       runningAutoCommand = startCommandNumber;
@@ -379,7 +376,7 @@ public class Robot extends TimedRobot {
     PathfinderReverseNotifier.stopNotfier();
     PathfinderNotifier.stopNotfier();
     cancelAllAuto();
-    
+
   }
 
   /**
@@ -550,7 +547,6 @@ public class Robot extends TimedRobot {
 
         trajectoryRunning = true;
         doFileTrajectory = false;
-        System.out.println("Trajectory Started");
       }
       doFileTrajectory = false;
 
@@ -566,6 +562,8 @@ public class Robot extends TimedRobot {
   }
 
   public void updateStatus() {
+SmartDashboard.putNumber("SCT",Timer.getFPGATimestamp() - scl);
+scl = Timer.getFPGATimestamp();
     scanCounter++;
 
     switch (scanCounter) {

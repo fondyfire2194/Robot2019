@@ -56,7 +56,7 @@ public class PathfinderReverseNotifier {
 		passCounter = activeTrajectoryLength - 1;
 
 		logCtr = 0;
-		periodic_time = .02;// Robot.driveTrain.revLeftDf.getSegment().dt ;
+		periodic_time = Robot.driveTrain.revLeftDf.getSegment().dt ;
 		_notifier.startPeriodic(periodic_time);
 	}
 

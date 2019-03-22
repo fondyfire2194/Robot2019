@@ -47,7 +47,30 @@ public class ClimberArm extends Subsystem {
     climberArm.set(ControlMode.PercentOutput, 0);
 
     climberArm.setSelectedSensorPosition(0, 0, 0);
-    configVelMode();
+    //velocity
+    climberArm.config_kF(1, 2., 0);
+    climberArm.config_kP(1, 5, 0);
+    climberArm.config_kI(1, 0, 0);
+    climberArm.config_kD(1, 0, 0);
+//motion magic
+    climberArm.config_kF(0,2, 0);
+		climberArm.config_kP(0, 5, 0);
+		climberArm.config_kI(0, 0, 0);
+	  climberArm.config_kD(0, 0, 0);
+
+
+    climberArm.configNominalOutputForward(0, 0);
+    climberArm.configNominalOutputReverse(0, 0);
+    climberArm.configPeakOutputForward(1, 0);
+    climberArm.configPeakOutputReverse(-1, 0);
+
+    climberArm.configOpenloopRamp(0, 0);
+		climberArm.configClosedloopRamp(0, 0);
+		climberArm.configPeakOutputForward(1, 0);
+		climberArm.configPeakOutputReverse(-1, 0);
+		climberArm.configNominalOutputForward(0, 0);
+    climberArm.configNominalOutputReverse(0, 0);
+
 
   }
 
@@ -59,19 +82,8 @@ public class ClimberArm extends Subsystem {
     setDefaultCommand(new ClimberArmMotionMagic());
   }
 
-  public void configVelMode() {
-    climberArm.config_kF(1, 2., 0);
-    climberArm.config_kP(1, .4, 0);
-    climberArm.config_kI(1, 0, 0);
-    climberArm.config_kD(1, 0, 0);
 
-    climberArm.configNominalOutputForward(0, 0);
-    climberArm.configNominalOutputReverse(0, 0);
-    climberArm.configPeakOutputForward(1, 0);
-    climberArm.configPeakOutputReverse(-1, 0);
-
-  }
-
+ 
   public int getArmEncoderPosition() {
     return climberArm.getSelectedSensorPosition(0);
   }
@@ -95,7 +107,7 @@ public class ClimberArm extends Subsystem {
     climberArm.configContinuousCurrentLimit(continuous);
   }
 
-  public double getArmSpeed() {
+  public double getArmSpeedDegPerSec() {
     return climberArm.getSelectedSensorVelocity(0) * 10 / Constants.CLIMBER_ARM_COUNTS_PER_DEGREE;
 
   }
@@ -110,8 +122,9 @@ public class ClimberArm extends Subsystem {
   }
 
   public void climberArmOut(double speed, boolean useVelocityLoop) {
+    SD.putN3("CAS",speed);
     if (useVelocityLoop) {
-      climberArm.selectProfileSlot(0, 0);
+      climberArm.selectProfileSlot(1, 0);
       climberArm.set(ControlMode.Velocity, speed * Constants.MAX_ARM_ENC_CTS_PER_100MS);
     } else {
       climberArm.set(ControlMode.PercentOutput, speed);
@@ -159,8 +172,10 @@ public class ClimberArm extends Subsystem {
   public void updateStatus() {
     SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
     SD.putN1("ClimberArmDegrees", getArmDegrees());
+    SD.putN1("ClimberArmDegreesPerSec", getArmSpeedDegPerSec());
     SD.putN2("ClimberArmAmps", getArmCurrent());
     SD.putN1("ClimberArmENCPer100MS", climberArm.getSelectedSensorVelocity(0));
     SD.putN1("ClimberArmTarget", armTargetDegrees);
+    SD.putN1("CDS", getDriverSliderClimb());
   }
 }

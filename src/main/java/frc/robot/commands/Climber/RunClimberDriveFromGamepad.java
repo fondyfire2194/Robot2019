@@ -36,6 +36,7 @@ public class RunClimberDriveFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
+			yValue = temp;
 		Robot.climberDrive.runClimberDrive(-yValue);// y up gives a negative value
 
 	}

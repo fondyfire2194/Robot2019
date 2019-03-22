@@ -29,6 +29,7 @@ import frc.robot.Pref;
 public class ClimbControlArm extends Command {
   private double myArmSpeed;
   private double myPitchAngle;
+  private double lastPitchAngle;
 
   public ClimbControlArm(double armSpeed, double pitchAngle) {
     // Use requires() here to declare subsystem dependencies
@@ -42,8 +43,6 @@ public class ClimbControlArm extends Command {
   @Override
   protected void initialize() {
 
-    Robot.climberArm.climberArmOut(myArmSpeed, true);
-
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -56,10 +55,23 @@ public class ClimbControlArm extends Command {
      * 
      * 
      */
-
-    double pitchError = myPitchAngle - Robot.driveTrain.getFilteredGyroPitch();
-    Robot.climberArm.climberArmOut(myArmSpeed - pitchError * Pref.getPref("ClimbAngleKp"), true);
-
+    double maxError = 5;
+    double loopTime = .02;
+    double currentPitchAngle = Robot.driveTrain.getFilteredGyroPitch();
+    double pitchError = myPitchAngle - currentPitchAngle;
+    double pitchChange = lastPitchAngle - currentPitchAngle;
+    lastPitchAngle = currentPitchAngle;
+    double currentSpeed = (myArmSpeed * Constants.CLIMBER_ARM_LEG_RATIO) / Constants.MAX_LEG_INCHES_PER_SEC;
+    double pitchRateOfChange = pitchChange / loopTime;
+    /**
+     * If arm gets ahead, the pitch error will be positive, so arm must slow down
+     * IF arm gets too far ahead it must be shut down
+     * 
+     */
+    Robot.climberArm.climberArmOut(
+        currentSpeed - pitchError * Robot.climberArm.getDriverSliderClimb() + pitchRateOfChange * .001, true);
+    if (pitchError > maxError)
+      Robot.climberArm.climberArmOut(0, true);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -72,7 +84,6 @@ public class ClimbControlArm extends Command {
   @Override
   protected void end() {
     Robot.climberArm.armTargetDegrees = Robot.climberArm.getArmDegrees();
-    Robot.climberArm.lastHoldDegrees = Robot.climberArm.getArmDegrees() + .01;
   }
 
   // Called when another command which requires one or more of the same

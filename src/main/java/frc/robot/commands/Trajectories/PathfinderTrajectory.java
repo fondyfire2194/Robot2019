@@ -98,8 +98,8 @@ public class PathfinderTrajectory extends Command {
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
 		SD.putN2("Trajectory Time", Timer.getFPGATimestamp() - startTime);
-
-		Robot.simpleCSVLogger2194.close();
+		if (Robot.createTrajectoryRunFile) 
+		   Robot.simpleCSVLogger2194.close();
 	}
 
 	// Called when another command which requires one or more of the same

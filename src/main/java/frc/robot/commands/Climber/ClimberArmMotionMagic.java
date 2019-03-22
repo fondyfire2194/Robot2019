@@ -26,18 +26,8 @@ public class ClimberArmMotionMagic extends Command {
 		Robot.climberArm.climberArm.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
 		Robot.climberArm.climberArm.selectProfileSlot(0, 0);
 
-		Robot.climberArm.climberArm.configOpenloopRamp(0, 0);
-		Robot.climberArm.climberArm.configClosedloopRamp(0, 0);
-		Robot.climberArm.climberArm.configPeakOutputForward(1, 0);
-		Robot.climberArm.climberArm.configPeakOutputReverse(-1, 0);
-		Robot.climberArm.climberArm.configNominalOutputForward(0, 0);
-		Robot.climberArm.climberArm.configNominalOutputReverse(0, 0);
 		Robot.climberArm.climberArm.selectProfileSlot(0, 0);
 
-		Robot.climberArm.climberArm.config_kF(0, Pref.getPref("ArmMMKf"), 0);
-		Robot.climberArm.climberArm.config_kP(0, Pref.getPref("ArmMMKp"), 0);
-		Robot.climberArm.climberArm.config_kI(0, Pref.getPref("ArmMMKi"), 0);
-		Robot.climberArm.climberArm.config_kD(0, Pref.getPref("ArmMMKd"), 0);
 
 		Robot.climberArm.armTargetDegrees = Robot.climberArm.getArmDegrees();
 		Robot.climberArm.lastHoldDegrees = Robot.climberArm.armTargetDegrees + .01;

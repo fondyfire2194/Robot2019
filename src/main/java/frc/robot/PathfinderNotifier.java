@@ -1,8 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Notifier;
-
+import edu.wpi.first.wpilibj.Timer;
 import jaci.pathfinder.Pathfinder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PathfinderNotifier {
 
@@ -49,8 +50,10 @@ public class PathfinderNotifier {
 
 		segmentCounter = 0;
 		activeTrajectoryLength = Robot.activeLeftTrajectory.length();
-		periodic_time = .02;// Robot.driveTrain.leftDf.getSegment().dt;
+		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;
+		
 		_notifier.startPeriodic(periodic_time);
+		SmartDashboard.putNumber("PT",periodic_time);
 	}
 
 	public static void stopNotfier() {
@@ -187,7 +190,7 @@ public class PathfinderNotifier {
 			 * 
 			 */
 
-			Robot.simpleCSVLogger2194.writeData((double) segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
+			Robot.simpleCSVLogger2194.writeData((double)segmentCounter, Robot.driveTrain.leftDf.getSegment().position,
 					Robot.driveTrain.getLeftFeet(), Robot.driveTrain.rightDf.getSegment().position,
 					Robot.driveTrain.getRightFeet(), Pathfinder.boundHalfDegrees(desired_heading),
 					Robot.driveTrain.getGyroYaw(),

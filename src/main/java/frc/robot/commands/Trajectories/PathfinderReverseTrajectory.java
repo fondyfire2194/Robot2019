@@ -84,7 +84,7 @@ public class PathfinderReverseTrajectory extends Command {
 		Robot.driveTrain.leftDriveOut(0);
 		Robot.driveTrain.rightDriveOut(0);
 		// Robot.driveTrain.configOpenLoopAcceleration(.5);
-
+		if (Robot.createTrajectoryRunFile) 
 		Robot.simpleCSVLogger2194.close();
 		SD.putN2("Trajectory Time", Timer.getFPGATimestamp() - startTime);
 

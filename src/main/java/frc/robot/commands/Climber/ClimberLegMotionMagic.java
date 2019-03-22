@@ -29,18 +29,7 @@ public class ClimberLegMotionMagic extends Command {
 		Robot.climberLeg.climberLeg.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
 		Robot.climberLeg.climberLeg.selectProfileSlot(0, 0);
 
-		Robot.climberLeg.climberLeg.configOpenloopRamp(0, 0);
-		Robot.climberLeg.climberLeg.configClosedloopRamp(0, 0);
-		Robot.climberLeg.climberLeg.configPeakOutputForward(1, 0);
-		Robot.climberLeg.climberLeg.configPeakOutputReverse(-1, 0);
-		Robot.climberLeg.climberLeg.configNominalOutputForward(0, 0);
-		Robot.climberLeg.climberLeg.configNominalOutputReverse(0, 0);
 		Robot.climberLeg.climberLeg.selectProfileSlot(0, 0);
-
-		Robot.climberLeg.climberLeg.config_kF(0, Pref.getPref("LegMMKf"), 0);
-		Robot.climberLeg.climberLeg.config_kP(0, Pref.getPref("LegMMKp"), 0);
-		Robot.climberLeg.climberLeg.config_kI(0, Pref.getPref("LegMMKi"), 0);
-		Robot.climberLeg.climberLeg.config_kD(0, Pref.getPref("LegMMKd"), 0);
 
     Robot.climberLeg.legTargetInches = Robot.climberLeg.getLegInches();
 		Robot.climberLeg.lastHoldInches = Robot.climberLeg.legTargetInches + .01;

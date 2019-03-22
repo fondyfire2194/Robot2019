@@ -10,7 +10,7 @@ import frc.robot.Constants;
  * known precisely, but also following a rotate which followed a trajectory. In
  * this latter case, distance to the target is subject to variaton of possibly
  * as much as +/- 1/2 foot ? The distance can be up to 11 feet ? when
- * approaching the load station from Cargo Ship 2, and 10 ft from cargo ship
+ * approaching the load station from Cargo Ship side, and 10 ft from cargo ship
  * end. Delivery to cargo ship distances are smaller in the range of 5 ft.
  * Angles may be off by +/- 5 degrees which is much less of a concern. Good
  * vision distance resolution starts at around 7 feet. The position loop
@@ -50,6 +50,8 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean visionTargetSeen;
 	private double robotDistance;
 	private boolean correctionMade;
+	private boolean useVisionComp;
+	private double activeMotionComp;
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -79,7 +81,7 @@ public class RobotDriveToTargetV2 extends Command {
 		Robot.positionRunning = true;
 		currentMaxSpeed = 0;
 		doneAccelerating = false;
-		Robot.activeMotionComp = 0.;
+		activeMotionComp = 0.;
 		Robot.driveTrain.driveStraightAngle = myTargetAngle;
 		targetWasSeen = false;
 		targetNotSeenCtr = 0;
@@ -112,7 +114,7 @@ public class RobotDriveToTargetV2 extends Command {
 		if (!doneAccelerating) {
 			doAccel();
 		}
-		// if no target seen abort aute
+		// if no target seen abort auto
 		if (inVisionRange & !targetWasSeen)
 			doTargetSeenCheck();
 		// vision and gyro comps
@@ -122,7 +124,7 @@ public class RobotDriveToTargetV2 extends Command {
 		// control speed of motion using kp and kd
 		doSpeed();
 
-		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
+		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -192,32 +194,29 @@ public class RobotDriveToTargetV2 extends Command {
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
-		if (inVisionRange)
+		if (inVisionRange && visionTargetSeen) {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
-
-		if (visionTargetSeen)
+			useVisionComp = true;
 			targetWasSeen = true;
+		}
 
-		Robot.useVisionComp = inVisionRange && visionTargetSeen;
+		useGyroComp = !useVisionComp;
 
-		useGyroComp = !Robot.useVisionComp;
-
-		if (Robot.useVisionComp) {
+		if (useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
+				activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
 			} else {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
+				activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
 		}
 		if (useGyroComp) {
-			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
+			activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 
 	}
 
 	private void doCorrection() {
 		if (Robot.useUltrasound && inVisionRange && !correctionMade) {
-
 			double distanceDifference = Robot.ultrasound.getDistanceFeet() - remainingFtToHatch;
 			if (Math.abs(distanceDifference) < Constants.USND_CORRECT_BAND)
 				myEndpoint = myEndpoint + distanceDifference;

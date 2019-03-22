@@ -149,7 +149,7 @@ public class OI {
 
         driveToVision = new JoystickButton(driverController, 3);
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
-        driveToVision.whenReleased(new DelayOffLeds(10.));
+        driveToVision.whenReleased(new DelayOffLeds(5.));
 
         placeHatchPanelRocket = new JoystickButton(driverController, 4);
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());
@@ -184,10 +184,10 @@ public class OI {
         jogClimberDrive.whileHeld(new RunClimberDriveFromGamepad());
 
         jogClimberLeg = gamepad.getButtonB();
-        jogClimberLeg.whileHeld(new RunClimberLegFromGamepad(false));
+        jogClimberLeg.whileHeld(new RunClimberLegFromGamepad(true));
 
         jogClimberArm = gamepad.getButtonX();
-        jogClimberArm.whileHeld(new RunClimberArmFromGamepad(false));
+        jogClimberArm.whileHeld(new RunClimberArmFromGamepad(true));
 
         jogElevator = gamepad.getButtonY();
         jogElevator.whileHeld(new RunElevatorFromGamepad());
@@ -200,6 +200,11 @@ public class OI {
 
         decrementArmAngle = gamepad.getLeftTriggerClick();
         decrementArmAngle.whenPressed(new IncrementArmAngle(-2));
+
+        moveLegToZero = gamepad.getBackButton();
+        moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
+
+
 
 
         /**

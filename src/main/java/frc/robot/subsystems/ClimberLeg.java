@@ -36,7 +36,7 @@ public class ClimberLeg extends Subsystem {
 
     climberLeg = new TalonSRX(RobotMap.CLIMBER_LEG);
     climberLeg.configFactoryDefault();
-    climberLeg.setInverted(false);
+    climberLeg.setInverted(true);
 
 
     climberLeg.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -44,7 +44,24 @@ public class ClimberLeg extends Subsystem {
     climberLeg.setNeutralMode(NeutralMode.Brake);
     climberLeg.configVoltageCompSaturation(12, 0);
     climberLeg.enableVoltageCompensation(true);
+    resetLegPosition();
 
+    climberLeg.configOpenloopRamp(0, 0);
+		climberLeg.configClosedloopRamp(0, 0);
+		climberLeg.configPeakOutputForward(1, 0);
+		climberLeg.configPeakOutputReverse(-1, 0);
+		climberLeg.configNominalOutputForward(0, 0);
+    climberLeg.configNominalOutputReverse(0, 0);
+    //motion magic
+    climberLeg.config_kF(0, 1.4, 0);
+		climberLeg.config_kP(0, 4, 0);
+		climberLeg.config_kI(0, 0, 0);
+    climberLeg.config_kD(0, 0, 0);
+    //velocity
+    climberLeg.config_kF(1, 1.4, 0);
+		climberLeg.config_kP(1, 1, 0);
+		climberLeg.config_kI(1, 0, 0);
+		climberLeg.config_kD(1, 0, 0);
 
   }
 
@@ -52,8 +69,8 @@ public class ClimberLeg extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-        setDefaultCommand(new RunClimberLegFromGamepad(false));
-    // setDefaultCommand(new ClimberLegMotionMagic());
+        // setDefaultCommand(new RunClimberLegFromGamepad(false));
+     setDefaultCommand(new ClimberLegMotionMagic());
   }
 
 
@@ -82,11 +99,15 @@ public class ClimberLeg extends Subsystem {
   public double getLegCurrent() {
     return climberLeg.getOutputCurrent();
   }
+public double getLegInPerSec(){
 
+  return (climberLeg.getSelectedSensorVelocity(0) *10)/Constants.CLIMBER_LEG_COUNTS_PER_INCH;
+}
 
   public void climberLegOut(double speed, boolean useVelocityLoop) {
+    SD.putN3("LegSpeed",speed);
     if (useVelocityLoop) {
-      climberLeg.selectProfileSlot(0, 0);
+      climberLeg.selectProfileSlot(1, 0);
       climberLeg.set(ControlMode.Velocity, speed * Constants.MAX_LEG_ENC_CTS_PER_100MS);
     } else {
       climberLeg.set(ControlMode.PercentOutput, speed);
@@ -138,6 +159,7 @@ public class ClimberLeg extends Subsystem {
     SD.putN("ClimberLegPosition", (double) getLegEncoderPosition());
     SD.putN1("ClimberLegInches",getLegInches());
     SD.putN1("ClimberLegENCPer100MS",climberLeg.getSelectedSensorVelocity(0));
+    SD.putN1("ClimberLegInchesPerSec",getLegInPerSec());
     SD.putN1("ClimberLegTarget", legTargetInches);
     SD.putN2("ClimberLegAmps", getLegCurrent());
 

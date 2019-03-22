@@ -46,7 +46,7 @@ public class Constants {
   public static double ROCKET_LOWER_CARGO_INCHES = 24;
   public static double ROCKET_MID_CARGO_INCHES = ROCKET_LOWER_CARGO_INCHES + 28;
   public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 28;
-
+// ********************************************************************
   public static double ELEVATOR_POSITION_RATE = 40;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
   // (in/sec) * enc Counts/in = enc counts / sec then divide by 10 for 100ms
@@ -57,28 +57,31 @@ public class Constants {
   public static double ELEVATOR_IN_POSITION_BAND = 3;
 
   public static double ELEVATOR_CARGO_LOAD = 20;
-
-  public static double CLIMBER_LEG_COUNTS_PER_INCH = 500;
-  public static double MAX_LEG_INCHES_PER_SEC = 20;
-  public static double MAX_LEG_ENC_CTS_PER_100MS = MAX_LEG_INCHES_PER_SEC / 10 * CLIMBER_LEG_COUNTS_PER_INCH;
+//**************************************************************** */
+  public static double CLIMBER_LEG_COUNTS_PER_INCH = 700;
+  public static double MAX_LEG_INCHES_PER_SEC = 8;
+  public static double MAX_LEG_ENC_CTS_PER_100MS = MAX_LEG_INCHES_PER_SEC / 10 * CLIMBER_LEG_COUNTS_PER_INCH;//600
   public static double LEG_INCHES_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_LEG_COUNTS_PER_INCH / 10;
-
+  public static double CLIMBER_LEG_RATE = 4;//IPS
+//****************************************************************** */
   public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 53.;//
   public static double CLIMBER_ARM_LENGTH_INCHES = 18.;
-  public static double MAX_ARM_DEG_PER_SEC = 20;
+  public static double MAX_ARM_DEG_PER_SEC = 12;
   public static double MAX_ARM_ENC_CTS_PER_100MS = MAX_ARM_DEG_PER_SEC / 10 * CLIMBER_ARM_COUNTS_PER_DEGREE;
   public static double ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_ARM_COUNTS_PER_DEGREE / 10;
   public static double LEVEL_2_START_ANGLE = 35;
   public static double LEVEL_3_START_ANGLE = 75;
-  public static double CLIMBER_ARM_RATE = 20;
-  public static double CLIMBER_ARM_LEG_RATIO = .322;
-  public static double CLIMBER_LEG_RATE = CLIMBER_ARM_RATE * CLIMBER_ARM_LEG_RATIO;
+  public static double CLIMBER_ARM_RATE = 5;
 
-  public static double CLIMBER_LEG_START_POSITION = 6;
+  public static double CLIMBER_ARM_LEG_RATIO = .322;
+
+  public static double CLIMB_LEG_RATE = CLIMBER_ARM_RATE * CLIMBER_ARM_LEG_RATIO;
+ 
+   public static double CLIMBER_LEG_START_POSITION = 1.5;
 
   public static double CLIMB_TARGET_ANGLE = 5;
 
-  public static double VISION_START_FEET = 7.0;
+  public static double VISION_START_FEET = 10.0;
   public static double VISION_END_FEET = 4.0;
 
   public static double USND_CORRECT_BAND = 2.0;

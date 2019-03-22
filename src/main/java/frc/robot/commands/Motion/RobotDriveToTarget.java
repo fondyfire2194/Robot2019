@@ -46,6 +46,8 @@ public class RobotDriveToTarget extends Command {
 	private int targetNotSeenCtr;
 	private double visionTurnGain;
 	private double distanceErrorAtStart;
+	private boolean useVisionComp;
+	private double activeMotionComp;
 
 	// side distances are in inches
 	// side speeds are in per unit where .25 = 25%
@@ -76,7 +78,7 @@ public class RobotDriveToTarget extends Command {
 		doneAccelerating = false;
 		decelerate = false;
 		slowDownFeet = Pref.getPref("DriveSldnDist");
-		Robot.activeMotionComp = 0.;
+		activeMotionComp = 0.;
 		Robot.driveTrain.driveStraightAngle = myTargetAngle;
 		targetWasSeen = false;
 		targetNotSeenCtr = 0;
@@ -126,26 +128,26 @@ public class RobotDriveToTarget extends Command {
 			targetNotSeenCtr++;
 
 		// if (targetNotSeenCtr > 10)
-		// 	Robot.noCameraTargetFound = true;
+		// Robot.noCameraTargetFound = true;
 		if (Robot.limelightCamera.getIsTargetFound())
 			targetWasSeen = true;
 
-		Robot.useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
-		useGyroComp = !Robot.useVisionComp;
+		useVisionComp = inVisionRange && Robot.limelightCamera.getIsTargetFound();
+		useGyroComp = !useVisionComp;
 
-		if (Robot.useVisionComp) {
+		if (useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
+				activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
 			} else {
-				Robot.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
+				activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
 
 		}
 		if (useGyroComp) {
-			Robot.activeMotionComp = Robot.driveTrain.getCurrentComp();
+			activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
-		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.activeMotionComp);
-Robot.driveTrain.remainingDistance = remainingFtToHatch;
+		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
+		Robot.driveTrain.remainingDistance = remainingFtToHatch;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

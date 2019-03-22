@@ -24,16 +24,16 @@ package frc.robot.commands.Climber;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants;
-import frc.robot.Pref;
 
 public class ClimbControlLeg extends Command {
   private double mySpeed;
   private double myPitchAngle;
+  private double lastPitchAngle;
 
   public ClimbControlLeg(double armSpeed, double pitchAngle) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.climberArm);
+    requires(Robot.climberLeg);
 
     mySpeed = armSpeed;
     myPitchAngle = pitchAngle;
@@ -45,7 +45,7 @@ public class ClimbControlLeg extends Command {
 
   }
 
-  // Called repeatedly when this Command is scheduled to run
+  // Called repeatedly when this Command is s -cheduled to run
   @Override
   protected void execute() {
     /**
@@ -55,11 +55,24 @@ public class ClimbControlLeg extends Command {
      * 
      * 
      */
-
-    double pitchError = myPitchAngle - Robot.driveTrain.getFilteredGyroPitch();
-
-    Robot.climberLeg.climberLegOut(mySpeed * Constants.CLIMBER_LEG_RATE - pitchError * Pref.getPref("ClimbAngleKp"),
-        true);
+    double maxError=5;
+    double loopTime = .02;
+    double currentPitchAngle = Robot.driveTrain.getFilteredGyroPitch();
+    double pitchError = myPitchAngle - currentPitchAngle;
+    double pitchChange = lastPitchAngle - currentPitchAngle;
+    lastPitchAngle = currentPitchAngle;
+    double currentSpeed = (mySpeed * Constants.CLIMBER_ARM_LEG_RATIO) / Constants.MAX_LEG_INCHES_PER_SEC;
+    double pitchRateOfChange = pitchChange / loopTime;
+    Robot.climberLeg.climberLegOut(
+        currentSpeed + (pitchError * Robot.climberArm.getDriverSliderClimb() + pitchRateOfChange * .001), true);
+  /**
+   * if leg is getting ahead, pitch error will negative so leg must slow down
+   * if pitch error is too negative, stop leg
+   * 
+   */
+  
+        if (pitchError < -maxError)
+      Robot.climberLeg.climberLegOut(0, true);
 
   }
 
@@ -73,7 +86,6 @@ public class ClimbControlLeg extends Command {
   @Override
   protected void end() {
     Robot.climberLeg.legTargetInches = Robot.climberLeg.getLegInches();
-    Robot.climberLeg.lastHoldInches = Robot.climberLeg.getLegInches() + .01;
   }
 
   // Called when another command which requires one or more of the same
