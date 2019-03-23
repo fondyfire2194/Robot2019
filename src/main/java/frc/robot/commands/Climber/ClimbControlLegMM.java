@@ -28,14 +28,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.Constants;
 
-public class ClimbControlLeg extends Command {
+public class ClimbControlLegMM extends Command {
   private double mySpeed;
   private double myPitchAngle;
   private double lastPitchAngle;
   private double startArmAngle;
   private double startLegHeight;
+  private double legIncrement = Constants.CLIMBER_ARM_LEG_RATIO;
+  private double legTargetInches;
 
-  public ClimbControlLeg(double armSpeed, double pitchAngle) {
+  public ClimbControlLegMM(double armSpeed, double pitchAngle) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.climberLeg);
@@ -48,41 +50,36 @@ public class ClimbControlLeg extends Command {
   @Override
   protected void initialize() {
     startArmAngle = Robot.climberArm.getArmDegrees();
-    startLegHeight = Robot.climberLeg.getLegInches();
-
+    legTargetInches = Robot.climberLeg.getLegInches();
+    Robot.climberLeg.motionMagicRate = Constants.CLIMBER_LEG_CLIMB_RATE;
   }
 
-  // Called repeatedly when this Command is s -cheduled to run
+  // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     /**
-     * Pitch angle rises as front of robot rises If angle is too high, slow down arm
-     * and speed up leg Error = Command - angle will give a negative result if the
-     * front is too high So subtract from leg to speed it up
+     * Keep the leg in motion magic mode and project a new target every time the arm
+     * angle changes by one degree. New target increment is the arm leg ratio
      * 
      * 
      */
+    double robotLengthLegToArm = 35;
     double maxError = 5;
-    double loopTime = .02;
     double currentPitchAngle = Robot.driveTrain.getFilteredGyroPitch();
     double pitchError = myPitchAngle - currentPitchAngle;
-    double pitchChange = lastPitchAngle - currentPitchAngle;
+    double pitchErrorRadians = Math.toRadians(pitchError);
+    
+    double legAngleComp = robotLengthLegToArm * Math.sin(pitchErrorRadians);
+
+    if ((int) currentPitchAngle > (int) lastPitchAngle) {
+      legTargetInches += legIncrement;
+
+      Robot.climberLeg.legTargetInches = legTargetInches;
+
+      if (pitchError < -maxError)
+        Robot.climberLeg.legTargetInches = Robot.climberLeg.getLegInches();
+    }
     lastPitchAngle = currentPitchAngle;
-    double currentSpeed = (mySpeed * Constants.CLIMBER_ARM_LEG_RATIO) / Constants.MAX_LEG_INCHES_PER_SEC;
-    double pitchRateOfChange = pitchChange / loopTime;
-
-    Robot.climberLeg.climberLegOut(
-        currentSpeed + (pitchError * Robot.climberArm.getDriverSliderClimb() + pitchRateOfChange * .001), true);
-    /**
-     * if leg is getting ahead, pitch error will negative so leg must slow down if
-     * pitch error is too negative, stop leg
-     * 
-     * If leg gets too far ahead, stop it
-     */
-
-    if (pitchError < -maxError)
-      Robot.climberLeg.climberLegOut(0, true);
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -94,11 +91,8 @@ public class ClimbControlLeg extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    double armAngleChange = Robot.climberArm.getArmDegrees() - startArmAngle;
-    double calculatedLegTarget = startLegHeight + (armAngleChange * Constants.CLIMBER_ARM_LEG_RATIO);
-
-    // Robot.climberLeg.legTargetInches = calculatedLegTarget;
-     Robot.climberLeg.legTargetInches = Robot.climberLeg.getLegInches();
+    Robot.climberLeg.motionMagicRate = Constants.CLIMBER_LEG_POSITION_RATE;
+    Robot.climberLeg.legTargetInches = Robot.climberLeg.getLegInches();
   }
 
   // Called when another command which requires one or more of the same

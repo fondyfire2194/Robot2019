@@ -93,10 +93,10 @@ public class DriveTrain extends Subsystem {
     leftTalonOne.config_kD(0, 0, 0);
 
     rightTalonOne.selectProfileSlot(0, 0);
-    rightTalonOne.config_kF(0, Pref.getPref("DriveVelKf"), 0);
-    rightTalonOne.config_kP(0, Pref.getPref("DriveVelKp"), 0);
-    rightTalonOne.config_kI(0, Pref.getPref("DriveVelKi"), 0);
-    rightTalonOne.config_kD(0, Pref.getPref("DriveVelKd"), 0);
+    rightTalonOne.config_kF(0,1.3 , 0);
+    rightTalonOne.config_kP(0, 1, 0);
+    rightTalonOne.config_kI(0, 0, 0);
+    rightTalonOne.config_kD(0,0, 0);
 
     try {
       // imu = new AHRS(I2C.Port.kOnboard);
@@ -133,6 +133,7 @@ public class DriveTrain extends Subsystem {
 
   public void rightDriveOut(double speed) {
     rightCmd = speed;
+    SD.putN3("LCMD",rightCmd);
     if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
       rightTalonOne.selectProfileSlot(0, 0);
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);

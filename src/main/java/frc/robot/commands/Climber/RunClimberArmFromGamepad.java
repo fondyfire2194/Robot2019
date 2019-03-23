@@ -44,7 +44,7 @@ public class RunClimberArmFromGamepad extends Command {
 			temp = -temp;
         yValue = temp;
 
-		Robot.climberArm.climberArmOut(yValue,myVel);
+		Robot.climberArm.climberArmOut(yValue/4,myVel);
 
 	}
 
@@ -58,7 +58,7 @@ public class RunClimberArmFromGamepad extends Command {
 	@Override
 	protected void end() {
 		Robot.climberArm.climberArmOut(0,false);
-
+		Robot.climberArm.armTargetDegrees = Robot.climberArm.getArmDegrees();
 	}
 
 	// Called when another command which requires one or more of the same

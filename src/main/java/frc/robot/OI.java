@@ -84,6 +84,7 @@ public class OI {
     public JoystickButton decrementArmAngle;
 
     public JoystickButton doClimb;
+    public JoystickButton doClimbMM;
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
@@ -113,6 +114,8 @@ public class OI {
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(1));
 
         SmartDashboard.putData("Log Drive", new LogDriveData(10));
+
+        SmartDashboard.putData("Log Climber", new LogClimberData(30));
 
         SmartDashboard.putData("Log Elevator", new LogElevatorData(10));
 
@@ -175,6 +178,10 @@ public class OI {
         doClimb.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
         doClimb.whileHeld(new ClimbControlLeg(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
 
+        doClimbMM = new JoystickButton(driverController, 8);
+        doClimbMM.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
+        doClimbMM.whileHeld(new ClimbControlLegMM(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
+
         /**
          * Co driver controller
          * 
@@ -196,16 +203,20 @@ public class OI {
         stopCargoHandler.whenPressed(new StopCargoMotor());
 
         incrementArmAngle = gamepad.getLeftShoulder();
-        incrementArmAngle.whenPressed(new IncrementArmAngle(2));
+        incrementArmAngle.whenPressed(new IncrementArmAngle(10));
 
         decrementArmAngle = gamepad.getLeftTriggerClick();
-        decrementArmAngle.whenPressed(new IncrementArmAngle(-2));
+        decrementArmAngle.whenPressed(new IncrementArmAngle(-10));
 
         moveLegToZero = gamepad.getBackButton();
         moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
 
+       raiseLeg = gamepad.getRightTriggerClick();
+       raiseLeg.whenPressed(new StaggerClimb());
+    //    raiseLeg.whenPressed(new IncrementClimberLeg(-4));  
 
-
+       lowerLeg= gamepad.getRightShoulder();
+       lowerLeg.whenPressed(new IncrementClimberLeg(4));  
 
         /**
          * 

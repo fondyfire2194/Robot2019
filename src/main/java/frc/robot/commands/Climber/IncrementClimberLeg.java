@@ -12,12 +12,13 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class IncrementArmAngle extends InstantCommand {
+public class IncrementClimberLeg extends InstantCommand {
   /**
    * Add your docs here.
    */
   double myIncrement;
-  public IncrementArmAngle(double increment) {
+
+  public IncrementClimberLeg(double increment) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -27,12 +28,12 @@ public class IncrementArmAngle extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.climberArm.armTargetDegrees+= myIncrement;
-    if (Robot.climberArm.armTargetDegrees > 110) {
-      Robot.climberArm.armTargetDegrees = 110;
+    Robot.climberLeg.legTargetInches+= myIncrement;
+    if(Robot.climberLeg.legTargetInches < 0){
+      Robot.climberLeg.legTargetInches = 0;
     }
-    if (Robot.climberArm.armTargetDegrees < 0) {
-      Robot.climberArm.armTargetDegrees = 0;
+    if(Robot.climberLeg.legTargetInches > 30){
+      Robot.climberLeg.legTargetInches = 30;
     }
 
 

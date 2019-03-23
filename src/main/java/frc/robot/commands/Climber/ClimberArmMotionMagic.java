@@ -36,7 +36,7 @@ public class ClimberArmMotionMagic extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		if (Robot.climberArm.armTargetDegrees > 0 && Robot.climberArm.armTargetDegrees < 100) {
+		if (Robot.climberArm.armTargetDegrees > 0 && Robot.climberArm.armTargetDegrees < 110) {
 			if (Robot.climberArm.armTargetDegrees != Robot.climberArm.lastHoldDegrees) {
 				Robot.climberArm.armMagicMotion(Robot.climberArm.armTargetDegrees, Constants.CLIMBER_ARM_POSITION_RATE);
 				Robot.climberArm.lastHoldDegrees = Robot.climberArm.armTargetDegrees;

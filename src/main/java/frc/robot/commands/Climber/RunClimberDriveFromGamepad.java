@@ -50,7 +50,7 @@ public class RunClimberDriveFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climberLeg.runClimberLeg(0);
+		Robot.climberDrive.runClimberDrive(0);
 
 
 	}

@@ -57,7 +57,6 @@ public class ClimberArm extends Subsystem {
     climberArm.config_kP(1, 5, 0);
     climberArm.config_kI(1, 0, 0);
     climberArm.config_kD(1, 0, 0);
-
 //motion magic
     climberArm.config_kF(0,2, 0);
 		climberArm.config_kP(0, 5, 0);
@@ -120,6 +119,10 @@ public class ClimberArm extends Subsystem {
 
   public double getArmCurrent() {
     return climberArm.getOutputCurrent();
+  }
+
+  public double getArmPercentOut() {
+    return climberArm.getMotorOutputPercent();
   }
 
   public double getDriverSliderClimb() {

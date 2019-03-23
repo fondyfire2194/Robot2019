@@ -10,10 +10,9 @@ package frc.robot.commands.Teleop;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-
 public class JoystickArcadeDrive extends Command {
   public JoystickArcadeDrive() {
-  
+
     requires(Robot.driveTrain);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -48,8 +47,13 @@ public class JoystickArcadeDrive extends Command {
     else
       turnValue = temp;
 
-    if (!Robot.autoRunning)
+    if (!Robot.autoRunning && Robot.climberLeg.getLegInches() < 2.0) {
       Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Robot.driveTrain.getDriverSlider());
+    } else {
+      Robot.driveTrain.arcadeDrive(throttleValue / 10, 0);
+      Robot.climberDrive.climberDriveOut(throttleValue/2);
+
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -62,6 +66,7 @@ public class JoystickArcadeDrive extends Command {
   @Override
   protected void end() {
     Robot.driveTrain.arcadeDrive(0, 0);
+    Robot.climberDrive.climberDriveOut(0);
   }
 
   // Called when another command which requires one or more of the same

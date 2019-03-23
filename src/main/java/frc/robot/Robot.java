@@ -177,6 +177,10 @@ public class Robot extends TimedRobot {
   public static String driveUniqueLogName;
   public static String trajectoryLogName = "/U" + "/data_capturesDS19/Trajectory/T";
   public static String trajectoryUniqueLogName;
+  public static String climberLogName = "/U" + "/data_capturesDS19/Climber/C";
+  public static String climberUniqueLogName;
+
+
   public static boolean autoRunning;
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
@@ -789,5 +793,8 @@ scl = Timer.getFPGATimestamp();
 
     driveUniqueLogName = driveLogName + tempString1 + ".csv";
     trajectoryUniqueLogName = trajectoryLogName + tempString1;
+
+    climberUniqueLogName = climberLogName + tempString1 + ".csv";
+
   }
 }

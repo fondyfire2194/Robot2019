@@ -8,7 +8,6 @@
 package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
-import frc.robot.Pref;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -39,7 +38,7 @@ public class ClimberLegMotionMagic extends Command {
   @Override
   protected void execute() {
     if (Robot.climberLeg.legTargetInches != Robot.climberLeg.lastHoldInches) {
-			Robot.climberLeg.legMagicMotion(Robot.climberLeg.legTargetInches, Constants.CLIMBER_LEG_POSITION_RATE);
+			Robot.climberLeg.legMagicMotion(Robot.climberLeg.legTargetInches, Robot.climberLeg.motionMagicRate);
 			Robot.climberLeg.lastHoldInches = Robot.climberLeg.legTargetInches;
 
 		}
