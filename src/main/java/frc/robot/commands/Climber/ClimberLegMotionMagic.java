@@ -39,7 +39,7 @@ public class ClimberLegMotionMagic extends Command {
   @Override
   protected void execute() {
     if (Robot.climberLeg.legTargetInches != Robot.climberLeg.lastHoldInches) {
-			Robot.climberLeg.legMagicMotion(Robot.climberLeg.legTargetInches, Constants.CLIMBER_LEG_RATE);
+			Robot.climberLeg.legMagicMotion(Robot.climberLeg.legTargetInches, Constants.CLIMBER_LEG_POSITION_RATE);
 			Robot.climberLeg.lastHoldInches = Robot.climberLeg.legTargetInches;
 
 		}

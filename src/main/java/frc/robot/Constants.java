@@ -62,7 +62,7 @@ public class Constants {
   public static double MAX_LEG_INCHES_PER_SEC = 8;
   public static double MAX_LEG_ENC_CTS_PER_100MS = MAX_LEG_INCHES_PER_SEC / 10 * CLIMBER_LEG_COUNTS_PER_INCH;//600
   public static double LEG_INCHES_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_LEG_COUNTS_PER_INCH / 10;
-  public static double CLIMBER_LEG_RATE = 4;//IPS
+  public static double CLIMBER_LEG_POSITION_RATE = 4;//IPS
 //****************************************************************** */
   public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 53.;//
   public static double CLIMBER_ARM_LENGTH_INCHES = 18.;
