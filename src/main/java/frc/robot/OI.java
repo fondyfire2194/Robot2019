@@ -172,8 +172,8 @@ public class OI {
         lowerLeg.whenPressed(new SetClimberLegTargetInches(Constants.CLIMBER_LEG_START_POSITION));
 
         doClimb = new JoystickButton(driverController, 12);
-        doClimb.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_RATE,Constants.CLIMB_TARGET_ANGLE));
-        doClimb.whileHeld(new ClimbControlLeg(Constants.CLIMBER_ARM_RATE,Constants.CLIMB_TARGET_ANGLE));
+        doClimb.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
+        doClimb.whileHeld(new ClimbControlLeg(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
 
         /**
          * Co driver controller

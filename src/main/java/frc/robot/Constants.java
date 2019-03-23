@@ -66,16 +66,15 @@ public class Constants {
 //****************************************************************** */
   public static double CLIMBER_ARM_COUNTS_PER_DEGREE = 53.;//
   public static double CLIMBER_ARM_LENGTH_INCHES = 18.;
-  public static double MAX_ARM_DEG_PER_SEC = 12;
+  public static double MAX_ARM_DEG_PER_SEC = 50;
   public static double MAX_ARM_ENC_CTS_PER_100MS = MAX_ARM_DEG_PER_SEC / 10 * CLIMBER_ARM_COUNTS_PER_DEGREE;
   public static double ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_ARM_COUNTS_PER_DEGREE / 10;
   public static double LEVEL_2_START_ANGLE = 35;
   public static double LEVEL_3_START_ANGLE = 75;
-  public static double CLIMBER_ARM_RATE = 5;
+  public static double CLIMBER_ARM_CLIMB_RATE = 5;
+  public static double CLIMBER_ARM_POSITION_RATE = 10;
 
   public static double CLIMBER_ARM_LEG_RATIO = .322;
-
-  public static double CLIMB_LEG_RATE = CLIMBER_ARM_RATE * CLIMBER_ARM_LEG_RATIO;
  
    public static double CLIMBER_LEG_START_POSITION = 1.5;
 

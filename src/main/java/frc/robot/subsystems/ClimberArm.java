@@ -20,7 +20,11 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 /**
- * Add your docs here.
+ * encodr cts per degree = 53
+ * max deg per sec = 50
+ * max enc cts per 100 ms = 50 * 53 /10 = 265
+ * kf = 1023 /265  = 4
+ * for kf = 4 max deg per sec = 32
  */
 public class ClimberArm extends Subsystem {
   // Put methods for controlling this subsystem
@@ -47,11 +51,13 @@ public class ClimberArm extends Subsystem {
     climberArm.set(ControlMode.PercentOutput, 0);
 
     climberArm.setSelectedSensorPosition(0, 0, 0);
+    
     //velocity
     climberArm.config_kF(1, 2., 0);
     climberArm.config_kP(1, 5, 0);
     climberArm.config_kI(1, 0, 0);
     climberArm.config_kD(1, 0, 0);
+
 //motion magic
     climberArm.config_kF(0,2, 0);
 		climberArm.config_kP(0, 5, 0);
@@ -137,11 +143,13 @@ public class ClimberArm extends Subsystem {
      * arm motor 775 Pro with 343:1 gear reduction and a 4096 count encoder 53
      * counts per degree
      * 
-     * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rper 100ms
+     * 18000 / 343 = 52 rpm encoder = .8 rpsec = .08 rev per 100ms
      * 
      * 
      *
      * = 320 counts / 100 ms measured encoder rate at 100% was 250
+     * 
+     * 250 * 10 / 53 = 50 deg per sec
      *
      * Use measured rate not theoretical so 100% Kf would be 1023/250 = 4
      * 

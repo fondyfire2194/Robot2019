@@ -61,7 +61,7 @@ public class ClimbControlArm extends Command {
     double pitchError = myPitchAngle - currentPitchAngle;
     double pitchChange = lastPitchAngle - currentPitchAngle;
     lastPitchAngle = currentPitchAngle;
-    double currentSpeed = (myArmSpeed * Constants.CLIMBER_ARM_LEG_RATIO) / Constants.MAX_LEG_INCHES_PER_SEC;
+    double currentSpeed = (myArmSpeed / Constants.MAX_ARM_DEG_PER_SEC);
     double pitchRateOfChange = pitchChange / loopTime;
     /**
      * If arm gets ahead, the pitch error will be positive, so arm must slow down

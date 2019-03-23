@@ -19,7 +19,13 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 /**
- * Add your docs here.
+ * enc cts per inch = 700
+ * max inches per sec = 8
+ * max enc cts per 100 ms = 700 * 8 / 10 = 560
+ * kf = 1023 / 560 = 1.8 say 1.4
+ * if error = 1 in / sec then error = 70 enc cts per 100 ms
+ * p gain = corr * 1023 / error 
+ * for 5% correction P = 5 * 1023/70 = 7
  */
 public class ClimberLeg extends Subsystem {
   // Put methods for controlling this subsystem

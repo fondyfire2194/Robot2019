@@ -63,6 +63,7 @@ public class ClimbControlLeg extends Command {
     lastPitchAngle = currentPitchAngle;
     double currentSpeed = (mySpeed * Constants.CLIMBER_ARM_LEG_RATIO) / Constants.MAX_LEG_INCHES_PER_SEC;
     double pitchRateOfChange = pitchChange / loopTime;
+    
     Robot.climberLeg.climberLegOut(
         currentSpeed + (pitchError * Robot.climberArm.getDriverSliderClimb() + pitchRateOfChange * .001), true);
   /**
