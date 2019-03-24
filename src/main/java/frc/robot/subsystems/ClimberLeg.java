@@ -13,7 +13,7 @@ import frc.robot.RobotMap;
 import frc.robot.SD;
 import frc.robot.Constants;
 import frc.robot.commands.Climber.*;
-import edu.wpi.first.wpilibj.AnalogTrigger;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -31,7 +31,7 @@ public class ClimberLeg extends Subsystem {
   // here. Call these from Commands.
 
   public TalonSRX climberLeg = null;
-  public static AnalogTrigger legSwitch;
+  public static DigitalInput legSwitch;
   public double motionMagicRate = Constants.CLIMBER_LEG_POSITION_RATE;
   public double legTargetInches;
   public double lastHoldInches;
@@ -69,10 +69,7 @@ public class ClimberLeg extends Subsystem {
     climberLeg.config_kI(1, 0, 0);
     climberLeg.config_kD(1, 0, 0);
 
-    legSwitch = new AnalogTrigger(RobotMap.CLIMBER_LEG_TRAVEL_SWITCH);
-		legSwitch.setAveraged(true);
-		legSwitch.setLimitsVoltage(1.0, 5.0);
-
+    legSwitch = new DigitalInput(RobotMap.CLIMBER_LEG_TRAVEL_SWITCH);
 
   }
 
@@ -167,7 +164,7 @@ public class ClimberLeg extends Subsystem {
   }
 
   public void updateStatus() {
-    legOnSwitch = !legSwitch.getInWindow();
+    legOnSwitch = !legSwitch.get();
     
     if (legOnSwitch)
     switchCounter++;

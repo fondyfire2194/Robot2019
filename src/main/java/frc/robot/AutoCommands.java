@@ -153,7 +153,7 @@ public class AutoCommands {
 
                         break;
                  case 3:
-                        double secondPlaceDistance = 3.;
+                       secondPlaceDistance = 3.;
                         Robot.autonomousCommand[number] = new RobotOrient(Robot.sideRocketAngle, Constants.ORIENT_RATE, true,
                                         2);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
