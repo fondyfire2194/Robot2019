@@ -76,15 +76,12 @@ public class OI {
     public JoystickButton moveArmToZero;
     public JoystickButton moveLegToZero;
     public JoystickButton lowerLeg;
-    public JoystickButton raiseLeg;
-
+    public JoystickButton staggerClimb;
+    public JoystickButton mmClimb;
     public JoystickButton toggleExtension;
 
     public JoystickButton incrementArmAngle;
     public JoystickButton decrementArmAngle;
-
-    public JoystickButton doClimb;
-    public JoystickButton doClimbMM;
 
     public Joystick driverController = new Joystick(RobotMap.OI_DRIVER_CONTROLLER);
     public Gamepad gamepad = new Gamepad(RobotMap.OI_CO_DRIVER_CONTROLLER);
@@ -165,22 +162,14 @@ public class OI {
 
         abortAuto = new JoystickButton(driverController, 7);
 
-        raiseLeg = new JoystickButton(driverController, 9);
-        raiseLeg.whenPressed(new SetClimberLegTargetInches(0));
+        staggerClimb = new JoystickButton(driverController, 9);
+        staggerClimb.whenPressed(new StaggerClimb());
 
-        moveArmToZero = new JoystickButton(driverController,10);
-        moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1));
+        moveArmToZero = new JoystickButton(driverController, 10);
+        moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1,false));
 
         lowerLeg = new JoystickButton(driverController, 11);
-        lowerLeg.whenPressed(new SetClimberLegTargetInches(Constants.CLIMBER_LEG_START_POSITION));
-
-        doClimb = new JoystickButton(driverController, 12);
-        doClimb.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
-        doClimb.whileHeld(new ClimbControlLeg(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
-
-        doClimbMM = new JoystickButton(driverController, 8);
-        doClimbMM.whileHeld(new ClimbControlArm(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
-        doClimbMM.whileHeld(new ClimbControlLegMM(Constants.CLIMBER_ARM_CLIMB_RATE,Constants.CLIMB_TARGET_ANGLE));
+        lowerLeg.whenPressed(new SetClimberLegTargetInches(Constants.CLIMBER_LEG_START_POSITION,false));
 
         /**
          * Co driver controller
@@ -209,14 +198,14 @@ public class OI {
         decrementArmAngle.whenPressed(new IncrementArmAngle(-10));
 
         moveLegToZero = gamepad.getBackButton();
-        moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
+        moveLegToZero.whenPressed(new SetClimberLegTargetInches(0,false));
 
-       raiseLeg = gamepad.getRightTriggerClick();
-       raiseLeg.whenPressed(new StaggerClimb());
-    //    raiseLeg.whenPressed(new IncrementClimberLeg(-4));  
+        staggerClimb = gamepad.getRightTriggerClick();
+        staggerClimb.whenPressed(new StaggerClimb());
+        
 
-       lowerLeg= gamepad.getRightShoulder();
-       lowerLeg.whenPressed(new IncrementClimberLeg(4));  
+        mmClimb = gamepad.getRightShoulder();
+        mmClimb.whenPressed(new MMClimb());
 
         /**
          * 
@@ -247,12 +236,12 @@ public class OI {
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
         prepareLevelTwo = buttonBox.getBackButton();
-        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE));
+        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE,false));
 
         prepareLevelThree = buttonBox.getStartButton();
-        prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE));
+        prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE,false));
 
-         toggleExtension = buttonBox.getButtonOptions();
+        toggleExtension = buttonBox.getButtonOptions();
         toggleExtension.whenPressed(new ToggleExtendHatchPanel());
 
     }

@@ -46,7 +46,7 @@ public class Constants {
   public static double SHIP_CARGO_INCHES = 36;
   public static double ROCKET_LOWER_CARGO_INCHES = 24;
   public static double ROCKET_MID_CARGO_INCHES = ROCKET_LOWER_CARGO_INCHES + 28;
-  public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 28;
+  public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 26;
   // ********************************************************************
   public static double ELEVATOR_POSITION_RATE = 40;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
@@ -54,7 +54,7 @@ public class Constants {
   public static double ELEVATOR_IN_PER_SEC_TO_ENC_CTS_PER_100MS = ELEVATOR_ENCODER_COUNTS_PER_INCH / 10;
 
   public static double ELEVATOR_MIN_HEIGHT = -.50;
-  public static double ELEVATOR_MAX_HEIGHT = 69;
+  public static double ELEVATOR_MAX_HEIGHT = 79;
   public static double ELEVATOR_IN_POSITION_BAND = 3;
 
   public static double ELEVATOR_CARGO_LOAD = 20;
@@ -73,7 +73,7 @@ public class Constants {
   public static double ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_ARM_COUNTS_PER_DEGREE / 10;
   public static double LEVEL_2_START_ANGLE = 35;
   public static double LEVEL_3_START_ANGLE = 75;
-  public static double CLIMBER_ARM_CLIMB_RATE = 5;
+  public static double CLIMBER_ARM_CLIMB_RATE = 15;
   public static double CLIMBER_ARM_POSITION_RATE = 25;
 
   public static double CLIMBER_ARM_LEG_RATIO = .322; //inches per degree

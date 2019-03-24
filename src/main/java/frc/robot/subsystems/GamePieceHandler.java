@@ -27,6 +27,7 @@ public class GamePieceHandler extends Subsystem {
 	private boolean stopCargoIntake;
 	private DigitalInput leftPusherSensor;
 	private DigitalInput rightPusherSensor;
+	private int intakeAmpsCounter;
 
 	public static boolean hatchGripped;
 
@@ -52,6 +53,7 @@ public class GamePieceHandler extends Subsystem {
 		hatchCoverPusher = new Solenoid(6);
 		hatchCoverPusher.set(false);
 
+
 	}
 
 	// Put methods for controlling this subsystem
@@ -66,10 +68,13 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void pickUpCargo(double speed) {
+		stopCargoIntake = checkCargoIntakeAmps();
 		if (!stopCargoIntake)
 			cargoMotor.set(ControlMode.PercentOutput, speed);
-		else
+		else {
 			cargoMotor.set(ControlMode.PercentOutput, 0);
+			Robot.elevator.holdPositionInches = Constants.ROCKET_LOWER_CARGO_INCHES;
+		}
 	}
 
 	public void deliverCargo(double speed) {
@@ -127,14 +132,7 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	public void updateStatus() {
-		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit")){
-			stopCargoIntake = true;
-            Robot.elevator.holdPositionInches =Constants.ROCKET_LOWER_CARGO_INCHES;
-		}
-		if (stopCargoIntake)
-			stopCargoIntake = Robot.m_oi.pickUpCargo.get();
-		if (stopCargoIntake)
-			stopCargoMotor();
+
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
 			gripperCounter++;
 		if (gripperCounter > 2) {
@@ -152,4 +150,14 @@ public class GamePieceHandler extends Subsystem {
 
 		}
 	}
+
+	private boolean checkCargoIntakeAmps() {
+		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit") * .8) {
+			intakeAmpsCounter++;
+		} else {
+			intakeAmpsCounter = 0;
+		}
+		return cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit") || intakeAmpsCounter > 10;
+	}
+
 }

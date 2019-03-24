@@ -34,6 +34,8 @@ public class ClimberArm extends Subsystem {
 
   public double armTargetDegrees;
   public double lastHoldDegrees;
+  public double motionMagicRate = Constants.CLIMBER_ARM_POSITION_RATE;
+
 
   public ClimberArm() {
     climberArm = new TalonSRX(RobotMap.CLIMBER_ARM);
