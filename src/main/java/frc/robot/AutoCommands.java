@@ -68,7 +68,7 @@ public class AutoCommands {
         }
 
         public static int setMiddleStart() {
-                double firstPlaceDistance = 11.;
+                double firstPlaceDistance = 12.25;
                 int number = 1;
                 Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance,
                                 Constants.POSITION_RATE, 0, false, 3);
@@ -98,13 +98,13 @@ public class AutoCommands {
                         number++;
                         Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance,
                                         Constants.POSITION_RATE, 180,
-                                        Robot.gph.eitherHatchDetected(), 3);
+                                        Robot.gph.eitherHatchDetected(), 2);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load and Pickup "
                                         + String.valueOf(pickupDistance);
                         break;
                 case 2:
                 case 3:
-                        pickupDistance = 7.;
+                        pickupDistance = 8.8;
                         Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, true, Robot.invertY);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move to Load Trajectory";
                         number++;
@@ -127,6 +127,9 @@ public class AutoCommands {
         public static int deliverSecondHatch(int hatchSelected, int indexStart) {
                 int number = indexStart;
                 number++;
+                Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
+                Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset Encoders and Gyro";
+                number++;                
                 Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchDeliverIndex);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Trajectory To CS";
                 number++;
@@ -145,6 +148,19 @@ public class AutoCommands {
                         number++;
                         Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance,
                                         Constants.POSITION_RATE, Robot.sideAngle, false, 3);
+                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                                        + String.valueOf(secondPlaceDistance);
+
+                        break;
+                 case 3:
+                        double secondPlaceDistance = 3.;
+                        Robot.autonomousCommand[number] = new RobotOrient(Robot.sideRocketAngle, Constants.ORIENT_RATE, true,
+                                        2);
+                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
+                                        + String.valueOf(Robot.sideRocketAngle);
+                        number++;
+                        Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance,
+                                        Constants.POSITION_RATE, Robot.sideRocketAngle, false, 3);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
                                         + String.valueOf(secondPlaceDistance);
 

@@ -1,7 +1,7 @@
-package frc.robot.commands.Climber;
+package frc.robot.commands.Cargo;
 
 import frc.robot.Robot;
-
+import frc.robot.subsystems.GamePieceHandler;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * 
  */
-public class LogClimberData extends TimedCommand {
+public class LogCargoMotor extends TimedCommand {
 	private double startTime;
-	private String names = "LegCmd,LegIPS,ArmCmd,ArmDPS,LegAmps,LegPosition,ArmAmps,ArmDegrees,DriveAmps,Pitch\n";
-	private String units = "%,IPS,%,DPS,Amps,Inches,Amps,Angle,Amps,Degrees\n";
+	private String names = "Current,Output,Bus\n";
+	private String units = "Amps,Pct,Volts\n";
 	String output_dir = "/U" + "/data_capturesDS19/Climber/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Climber";
 	String name = output_dir + name1;
 
-	public LogClimberData(double timeout) {
+	public LogCargoMotor(double timeout) {
 		super(timeout);
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
@@ -40,12 +40,8 @@ public class LogClimberData extends TimedCommand {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (Robot.createDriveRunFile) {
-			Robot.simpleCSVLogger2194.writeData(Robot.climberLeg.getLegPercentOut(),
-					Robot.climberLeg.getLegInPerSec(), Robot.climberArm.getArmPercentOut(),
-					Robot.climberArm.getArmSpeedDegPerSec(), Robot.climberLeg.getLegCurrent(),
-					Robot.climberLeg.getLegInches(), Robot.climberArm.getArmCurrent(),
-					Robot.climberArm.getArmDegrees(), Robot.climberDrive.getDriveCurrent(),
-					Robot.driveTrain.getGyroPitch());
+			Robot.simpleCSVLogger2194.writeData(GamePieceHandler.cargoMotor.getOutputCurrent(),
+					GamePieceHandler.cargoMotor.getMotorOutputPercent(),GamePieceHandler.cargoMotor.getBusVoltage());
 		}
 	}
 

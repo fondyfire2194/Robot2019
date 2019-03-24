@@ -7,11 +7,9 @@
 
 package frc.robot.commands.Motion;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
 import frc.robot.commands.Auto.SetAutoCommandDone;
 import frc.robot.commands.Motion.ResetEncoders;
 import frc.robot.commands.Motion.ResetGyro;
-import frc.robot.commands.Motion.SetGyroOffset;
 
 public class ResetEncodersAndGyro extends CommandGroup {
   /**
@@ -36,7 +34,6 @@ public class ResetEncodersAndGyro extends CommandGroup {
     // arm.
     addSequential(new ResetEncoders());
     addSequential(new ResetGyro());
-    addSequential(new SetGyroOffset(0));
     addSequential(new SetAutoCommandDone());
   }
 }

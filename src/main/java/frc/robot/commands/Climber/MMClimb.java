@@ -10,12 +10,13 @@ package frc.robot.commands.Climber;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Climber.SetClimberLegTargetInches;
 import frc.robot.commands.Climber.SetClimberTargetAngle;
+import frc.robot.Constants;
 
 public class MMClimb extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MMClimb() {
+  public MMClimb(double legInches) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -33,7 +34,7 @@ public class MMClimb extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addParallel(new SetClimberLegTargetInches(24.,true));
-    addSequential(new SetClimberTargetAngle(100.,true));
+    addParallel(new SetClimberLegTargetInches(legInches,true));
+    addSequential(new SetClimberTargetAngle(legInches/Constants.CLIMBER_ARM_LEG_RATIO,true));
   }
 }

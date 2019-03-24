@@ -101,7 +101,7 @@ public class JoystickArcadeDriveVision extends Command {
       Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 
       if (Robot.limelightOnEnd) {
-        visionTargetError = Robot.limelightCamera.getdegVerticalToTarget();
+        visionTargetError = Robot.limelightCamera.getdegVerticalToTarget() + Pref.getPref("DriveSldnDist");
       } else {
         visionTargetError = Robot.limelightCamera.getdegRotationToTarget();
       }

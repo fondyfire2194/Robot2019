@@ -50,7 +50,6 @@ public class DriveTrain extends Subsystem {
   public double rightPositionTargetFt;
   public boolean useGyroComp;
   public double driveStraightAngle = 0;
-  public static double gyroOffset = 0;
   public static boolean useVelocityLoop;
   private int lastLeftEncoderValue;
   private int lastRightEncoderValue;
@@ -58,6 +57,7 @@ public class DriveTrain extends Subsystem {
   public double leftCmd;
   public double rightCmd;
   public double remainingDistance;
+
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -87,13 +87,13 @@ public class DriveTrain extends Subsystem {
     configVoltageCompSaturation(true);
 
     leftTalonOne.selectProfileSlot(0, 0);
-    leftTalonOne.config_kF(0, 1.3, 0);
+    leftTalonOne.config_kF(0, 1.4, 0);
     leftTalonOne.config_kP(0, 1, 0);
     leftTalonOne.config_kI(0, 0, 0);
     leftTalonOne.config_kD(0, 0, 0);
 
     rightTalonOne.selectProfileSlot(0, 0);
-    rightTalonOne.config_kF(0,1.3 , 0);
+    rightTalonOne.config_kF(0,1.4 , 0);
     rightTalonOne.config_kP(0, 1, 0);
     rightTalonOne.config_kI(0, 0, 0);
     rightTalonOne.config_kD(0,0, 0);
@@ -233,7 +233,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroYaw() {
-    return Pathfinder.boundHalfDegrees(imu.getYaw() + gyroOffset);
+    return imu.getYaw();
   }
 
   public double getGyroRoll() {
@@ -313,7 +313,6 @@ public class DriveTrain extends Subsystem {
 
   public void updateStatus() {
 
-    SmartDashboard.putNumber("GyOff", gyroOffset);
     SmartDashboard.putNumber("DrvStrtAng", driveStraightAngle);
     SmartDashboard.putNumber("GyroError", getCurrentComp());
     SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());

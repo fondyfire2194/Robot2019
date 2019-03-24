@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This command is used from a middle start where the distance and angle is
@@ -29,12 +30,10 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean myEndItNow;
 	private double myTimeout;
 	private double rampIncrement;
-	private boolean useGyroComp;
 	private boolean doneAccelerating;
 	public static double currentMaxSpeed;
 	public double myDistance;
 	private double myEndpoint;
-	private boolean inVisionRange;
 	private double remainingFtToHatch;
 	private double myTargetAngle;
 	private boolean targetWasSeen;
@@ -52,6 +51,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean correctionMade;
 	private boolean useVisionComp;
 	private double activeMotionComp;
+	private boolean gyroLocked;
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -108,29 +108,32 @@ public class RobotDriveToTargetV2 extends Command {
 
 		// check if camera can be used
 
-		inVisionRange = (remainingFtToHatch < Constants.VISION_START_FEET
-				&& remainingFtToHatch > Constants.VISION_END_FEET);
 
 		if (!doneAccelerating) {
 			doAccel();
 		}
 		// if no target seen abort auto
-		if (inVisionRange & !targetWasSeen)
+		if (remainingFtToHatch < 6 & !targetWasSeen)
 			doTargetSeenCheck();
 		// vision and gyro comps
 		doComps();
 		// one time correcton of final distance from ultrasound
-		doCorrection();
+		// doCorrection();
 		// control speed of motion using kp and kd
-		doSpeed();
+		if (doneAccelerating)
+			doSpeed();
 
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
+
+		SmartDashboard.putBoolean("PDA", doneAccelerating);
+		SmartDashboard.putBoolean("PTWS", targetWasSeen);
+
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= myEndpoint;
+		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= myEndpoint - 1;
 	}
 
 	// Called once after isFinished returns true
@@ -146,7 +149,6 @@ public class RobotDriveToTargetV2 extends Command {
 		Robot.positionRunning = false;
 		doneAccelerating = false;
 		currentMaxSpeed = 0;
-		inVisionRange = false;
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
 	}
 
@@ -158,7 +160,9 @@ public class RobotDriveToTargetV2 extends Command {
 	}
 
 	private void doAccel() {
+
 		currentMaxSpeed = currentMaxSpeed + rampIncrement;
+
 		if (currentMaxSpeed > mySpeed) {
 			currentMaxSpeed = mySpeed;
 			doneAccelerating = true;
@@ -171,16 +175,17 @@ public class RobotDriveToTargetV2 extends Command {
 		lastRemainingDistance = robotDistance;
 		positionRateOfChange = positionChange / loopTime;
 
-		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
-
+		calcLoopSpeed = remainingFtToHatch * Kp;// + positionRateOfChange * Kd;
+		SmartDashboard.putNumber("PRFT", remainingFtToHatch);
+		SmartDashboard.putNumber("PCLS", calcLoopSpeed);
 		if (calcLoopSpeed > mySpeed)
 			currentMaxSpeed = mySpeed;
 		else
 			currentMaxSpeed = calcLoopSpeed;
 
 		// set minimum speed
-		if (currentMaxSpeed < .2) {
-			currentMaxSpeed = .2;
+		if (currentMaxSpeed < 1.5) {
+			currentMaxSpeed = 1.5;
 		}
 	}
 
@@ -194,29 +199,35 @@ public class RobotDriveToTargetV2 extends Command {
 		// in vision zone keep gyro target angle current in case need to switch
 		// over to gyro
 
-		if (inVisionRange && visionTargetSeen) {
-			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+		if (visionTargetSeen) {
 			useVisionComp = true;
 			targetWasSeen = true;
 		}
+		if (useVisionComp && remainingFtToHatch < 6)  {
+			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw() + Robot.limelightCamera.getdegVerticalToTarget();
+			useVisionComp = false;
+			SmartDashboard.putNumber("VWLI", Math.abs(Robot.limelightCamera.getdegVerticalToTarget()));
 
-		useGyroComp = !useVisionComp;
+		}
+
+		Robot.driveTrain.useGyroComp = !useVisionComp;
 
 		if (useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				activeMotionComp = Robot.limelightCamera.getdegVerticalToTarget() * visionTurnGain;
+				activeMotionComp = (Robot.limelightCamera.getdegVerticalToTarget() + Pref.getPref("DriveSldnDist"))
+						* visionTurnGain;
 			} else {
 				activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
 		}
-		if (useGyroComp) {
+		if (Robot.driveTrain.useGyroComp) {
 			activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 
 	}
 
 	private void doCorrection() {
-		if (Robot.useUltrasound && inVisionRange && !correctionMade) {
+		if (Robot.useUltrasound && remainingFtToHatch < 8 && !correctionMade) {
 			double distanceDifference = Robot.ultrasound.getDistanceFeet() - remainingFtToHatch;
 			if (Math.abs(distanceDifference) < Constants.USND_CORRECT_BAND)
 				myEndpoint = myEndpoint + distanceDifference;

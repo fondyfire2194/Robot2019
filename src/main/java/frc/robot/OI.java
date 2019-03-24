@@ -19,7 +19,6 @@ import frc.robot.commands.Motion.ResetGyro;
 import frc.robot.commands.Trajectories.*;
 import frc.robot.commands.Motion.LogDriveData;
 import frc.robot.commands.Limelight.*;
-import frc.robot.commands.Auto.SetGyroOffset;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.commands.Limelight.LogVisionData;
 import frc.robot.Gamepad;
@@ -31,6 +30,7 @@ import frc.robot.commands.Cargo.*;
 import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 import frc.robot.commands.AirCompressor.*;
 import frc.robot.commands.Climber.*;
+import frc.robot.commands.Motion.*;
 import frc.robot.Constants;
 
 /**
@@ -116,11 +116,13 @@ public class OI {
 
         SmartDashboard.putData("Log Elevator", new LogElevatorData(10));
 
+        SmartDashboard.putData("Log Cargo", new LogCargoMotor(30));
+
+        SmartDashboard.putData("Log Position", new LogPositionData(10));
+
         SmartDashboard.putData("Log Vision", new LogVisionData(10));
 
         SmartDashboard.putData("BuffToAct", new BufferToActiveTrajectory(0));
-
-        SmartDashboard.putData("Set Gyro Offset", new SetGyroOffset(180));
 
         SmartDashboard.putData("Reset Elevator", new ResetElevatorPosition());
 
@@ -205,7 +207,7 @@ public class OI {
         
 
         mmClimb = gamepad.getRightShoulder();
-        mmClimb.whenPressed(new MMClimb());
+        mmClimb.whenPressed(new MMClimb(20));
 
         /**
          * 

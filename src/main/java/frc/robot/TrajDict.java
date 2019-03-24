@@ -19,17 +19,18 @@ public class TrajDict {
 
 	public static String[] secondHatchPickupNames = { "CS1ToLoad", "CLEToLoad" };
 
-	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2" };
+	public static String[] secondHatchDeliveryNames = { "LoadToCS1", "LoadToCS2","LoadToRocket"};
 
 	// order is Kp, Kd, Ka, Kturn amd Pref tuned and set(1)
 
 	public static HashMap<String, Double[]> gainDict = new HashMap<>();
 	static {
 		gainDict.put(outsideStartNames[0], new Double[] { .3, 0., 0., .4 });
-		gainDict.put(secondHatchPickupNames[0], new Double[] { .5, 0., 0.01, 1.0 });
-		gainDict.put(secondHatchPickupNames[1], new Double[] { .3, 0., 0., .8 });
+		gainDict.put(secondHatchPickupNames[0], new Double[] { .4, 0., 0.0,.9 });
+		gainDict.put(secondHatchPickupNames[1], new Double[] { .4, 0., 0., .9 });
 		gainDict.put(secondHatchDeliveryNames[0], new Double[] { .4, 0., 0., .4 });
-		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .4, 0., 0., .4 });
+		gainDict.put(secondHatchDeliveryNames[1], new Double[] { .4, 0., 0., .5 });
+		gainDict.put(secondHatchDeliveryNames[2], new Double[] { .4, 0., 0., .5 });
 	
 	}
 

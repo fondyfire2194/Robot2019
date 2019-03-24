@@ -170,6 +170,7 @@ public class Robot extends TimedRobot {
   public static boolean skipHold;
   public static boolean autoAbort;
   public static double sideAngle;
+  public static double sideRocketAngle; 
   public static boolean createDriveRunFile = true;
   public static boolean createElevatorRunFile = true;
   public static boolean createVisionRunFile = true;
@@ -344,9 +345,7 @@ private double scl;
       cycleHold = false;
 
     if (autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
-      if ((startPositionSelected == 1 || startPositionSelected == 4) && runningAutoCommand == 1) {
-        DriveTrain.gyroOffset = 180;
-      }
+  
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
       SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
       SD.putN2("CMDTimeTotal", Timer.getFPGATimestamp() - autoStartTime);
@@ -361,7 +360,7 @@ private double scl;
     }
 
     if (runningAutoCommand > numberOfAutonomousCommands) {
-      DriveTrain.gyroOffset = 0;
+
       numberOfAutonomousCommands = 0;
       runningAutoCommand = 0;
       autonomousCommandDone = false;
@@ -376,7 +375,6 @@ private double scl;
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    DriveTrain.gyroOffset = 0;
     PathfinderReverseNotifier.stopNotfier();
     PathfinderNotifier.stopNotfier();
     cancelAllAuto();
@@ -566,8 +564,8 @@ private double scl;
   }
 
   public void updateStatus() {
-SmartDashboard.putNumber("SCT",Timer.getFPGATimestamp() - scl);
-scl = Timer.getFPGATimestamp();
+   SmartDashboard.putNumber("SCT",Timer.getFPGATimestamp() - scl);
+   scl = Timer.getFPGATimestamp();
     scanCounter++;
 
     switch (scanCounter) {
@@ -720,7 +718,6 @@ scl = Timer.getFPGATimestamp();
     if (setAutoStartPB & startSettingsDone && !autoSetupRunning) {
       resetCommandNames();
       numberOfAutonomousCommands = 0;
-      DriveTrain.gyroOffset = 0;
       autoSetupRunning = true;
       autoTimeDelaySeconds = AutoChoosers.timeDelayChooser.getSelected();
 
@@ -738,27 +735,29 @@ scl = Timer.getFPGATimestamp();
         case 1:
           invertY = false;
           sideAngle = 90;
+          sideRocketAngle = 142;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           driveTrain.driveStraightAngle = 90.;
           break;
         case 2:
           invertY = false;
-          sideAngle = 90;
+          sideAngle = -90;
+          sideRocketAngle = 142;
           driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 3:
           invertY = true;
-          sideAngle = -90;
-          driveTrain.driveStraightAngle = 180.;
+          sideAngle = 90;
+          sideRocketAngle = 142;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 4:
           invertY = true;
           sideAngle = -90;
-          driveTrain.driveStraightAngle = -90.;
+          sideRocketAngle = 142;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           break;
         }

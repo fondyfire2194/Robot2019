@@ -58,6 +58,7 @@ public class AutoChoosers {
 		secondHatchChooser.setDefaultOption("No Second Hatch", 0);
 		secondHatchChooser.addOption("Cargo Ship 1", 1);
 		secondHatchChooser.addOption("Cargo Ship 2", 2);
+		secondHatchChooser.addOption("Rocket",3);
 
 		SmartDashboard.putData("Second Hatch", secondHatchChooser);
 

@@ -19,9 +19,9 @@ import frc.robot.AutoChoosers;
  */
 public class RobotRotate extends PIDSubsystem {
 
-	private static final double Kp = .015;
+	private static final double Kp = .005;
 	private static final double Ki = 0.0;
-	private static final double Kd = 0.05;
+	private static final double Kd = 0.005;
 	private static final double Kf = 0;
 
 	private static final double toleranceAngle = 2;

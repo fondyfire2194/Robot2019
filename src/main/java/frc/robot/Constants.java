@@ -37,8 +37,8 @@ public class Constants {
   public final static double DRIVE_SIDE_STALL_DETECT = 50.;
   public final static double CAMERA_TO_FRONT_OF_BUMPER = 1.0;
 
-  public final static double ORIENT_RATE = .35;
-  public final static double POSITION_RATE = 7.;
+  public final static double ORIENT_RATE = .5;
+  public final static double POSITION_RATE = 9.;
   public static double ALL_LOWER_HATCH_INCHES = 0.;
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
