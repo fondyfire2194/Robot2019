@@ -34,8 +34,9 @@ public class ClimberArm extends Subsystem {
 
   public double armTargetDegrees;
   public double lastHoldDegrees;
-  public double motionMagicRate = Constants.CLIMBER_ARM_POSITION_RATE;
-
+  public double motionMagicRate = Constants.CLIMBER_ARM_CLIMB_RATE;
+public double climbTouchAngle;
+public double climbFinalAngle;
 
   public ClimberArm() {
     climberArm = new TalonSRX(RobotMap.CLIMBER_ARM);
@@ -127,6 +128,10 @@ public class ClimberArm extends Subsystem {
     return climberArm.getMotorOutputPercent();
   }
 
+  public boolean hasResetOccurred(){
+    return climberArm.hasResetOccurred();
+  }
+
   public double getDriverSliderClimb() {
     // want to convert range to 0 to 1
     return (1 - Robot.m_oi.driverController.getRawAxis(3)) / 2;
@@ -190,5 +195,9 @@ public class ClimberArm extends Subsystem {
     SD.putN1("ClimberArmENCPer100MS", climberArm.getSelectedSensorVelocity(0));
     SD.putN1("ClimberArmTarget", armTargetDegrees);
     SD.putN1("CDS", getDriverSliderClimb());
+    SD.putN1("ClimberArmTouchDegrees", climbTouchAngle);
+    SD.putN1("ClimberArmFinalDegrees",climbFinalAngle;
+ 
+
   }
 }

@@ -70,13 +70,13 @@ public class OI {
 
     public JoystickButton jogClimberArm;
     public JoystickButton jogClimberLeg;
+    public JoystickButton jogClimberLegNoLimit;  
     public JoystickButton jogClimberDrive;
     public JoystickButton prepareLevelThree;
     public JoystickButton prepareLevelTwo;
     public JoystickButton moveArmToZero;
     public JoystickButton moveLegToZero;
-    public JoystickButton lowerLeg;
-    public JoystickButton staggerClimb;
+    public JoystickButton moveToClimbStart;
     public JoystickButton mmClimb;
     public JoystickButton toggleExtension;
 
@@ -164,14 +164,10 @@ public class OI {
 
         abortAuto = new JoystickButton(driverController, 7);
 
-        staggerClimb = new JoystickButton(driverController, 9);
-        staggerClimb.whenPressed(new StaggerClimb());
-
+ 
+        
         moveArmToZero = new JoystickButton(driverController, 10);
-        moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1,false));
-
-        lowerLeg = new JoystickButton(driverController, 11);
-        lowerLeg.whenPressed(new SetClimberLegTargetInches(Constants.CLIMBER_LEG_START_POSITION,false));
+        moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1));
 
         /**
          * Co driver controller
@@ -200,14 +196,17 @@ public class OI {
         decrementArmAngle.whenPressed(new IncrementArmAngle(-10));
 
         moveLegToZero = gamepad.getBackButton();
-        moveLegToZero.whenPressed(new SetClimberLegTargetInches(0,false));
+        moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
 
-        staggerClimb = gamepad.getRightTriggerClick();
-        staggerClimb.whenPressed(new StaggerClimb());
+        moveToClimbStart = gamepad.getRightTriggerClick();    
+        moveToClimbStart.whenPressed(new MMClimb(Robot.climberLeg.climbTouchInches,Robot.climberArm.climbTouchAngle));
+           
+        // moveToClimbStart.whenPressed(new SetClimberLegTargetInches(1.3));
+        // moveToClimbStart.whenPressed(new SetClimberTargetAngle(70));
         
 
         mmClimb = gamepad.getRightShoulder();
-        mmClimb.whenPressed(new MMClimb(20));
+        mmClimb.whenPressed(new MMClimb(Robot.climberLeg.climbFinalInches,Robot.climberArm.climbFinalAngle));
 
         /**
          * 
@@ -237,11 +236,13 @@ public class OI {
         elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
-        prepareLevelTwo = buttonBox.getBackButton();
-        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE,false));
+        prepareLevelThree = buttonBox.getBackButton();
+        prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE));
+        prepareLevelThree.whenPressed(new SetClimbValues(Constants.CLIMBER_LEG_TOUCH_POSITION, Constants.LEVEL_3_TOUCH_ANGLE, Constants.CLIMBER_LEG_LEVEL_3_POSITION, Constants.LEVEL_3_CLIMB_ANGLE));
 
-        prepareLevelThree = buttonBox.getStartButton();
-        prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE,false));
+        prepareLevelTwo = buttonBox.getStartButton();
+        prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE));
+        prepareLevelTwo.whenPressed(new SetClimbValues(Constants.CLIMBER_LEG_TOUCH_POSITION, Constants.LEVEL_2_TOUCH_ANGLE, Constants.CLIMBER_LEG_LEVEL_2_POSITION, Constants.LEVEL_2_CLIMB_ANGLE));
 
         toggleExtension = buttonBox.getButtonOptions();
         toggleExtension.whenPressed(new ToggleExtendHatchPanel());

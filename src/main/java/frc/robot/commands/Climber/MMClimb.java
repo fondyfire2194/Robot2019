@@ -16,7 +16,7 @@ public class MMClimb extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public MMClimb(double legInches) {
+  public MMClimb(double legInches, double armAngle) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -34,7 +34,7 @@ public class MMClimb extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
 
-    addParallel(new SetClimberLegTargetInches(legInches,true));
-    addSequential(new SetClimberTargetAngle(legInches/Constants.CLIMBER_ARM_LEG_RATIO,true));
+    addParallel(new SetClimberLegTargetInches(legInches));
+    addSequential(new SetClimberTargetAngle(armAngle));
   }
 }

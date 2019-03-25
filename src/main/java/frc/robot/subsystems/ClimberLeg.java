@@ -32,12 +32,15 @@ public class ClimberLeg extends Subsystem {
 
   public TalonSRX climberLeg = null;
   public static DigitalInput legSwitch;
-  public double motionMagicRate = Constants.CLIMBER_LEG_POSITION_RATE;
+  public double motionMagicRate = Constants.CLIMBER_LEG_CLIMB_RATE;
   public double legTargetInches;
   public double lastHoldInches;
   public boolean legOnSwitch;
   private int switchCounter;
   private boolean switchWasSeen;
+  public double climbTouchInches;
+public double climbFinalInches;
+
 
   public ClimberLeg() {
 
@@ -70,7 +73,9 @@ public class ClimberLeg extends Subsystem {
     climberLeg.config_kD(1, 0, 0);
 
     legSwitch = new DigitalInput(RobotMap.CLIMBER_LEG_TRAVEL_SWITCH);
-
+    
+    climberLeg.configReverseSoftLimitThreshold(0,0);
+    climberLeg.configReverseSoftLimitEnable(false);
   }
 
   @Override
@@ -111,9 +116,18 @@ public class ClimberLeg extends Subsystem {
     return climberLeg.getMotorOutputPercent();
   }
 
+  public boolean hasResetOccurred(){
+    return climberLeg.hasResetOccurred();
+  }
+
+
   public double getLegInPerSec() {
 
     return (climberLeg.getSelectedSensorVelocity(0) * 10) / Constants.CLIMBER_LEG_COUNTS_PER_INCH;
+  }
+
+  public boolean getLegSwitch(){
+    return false;
   }
 
   public void climberLegOut(double speed, boolean useVelocityLoop) {
@@ -164,20 +178,19 @@ public class ClimberLeg extends Subsystem {
   }
 
   public void updateStatus() {
-    legOnSwitch = !legSwitch.get();
-    
-    if (legOnSwitch)
-    switchCounter++;
-  else
-    switchCounter = 0;
+       
+  //   if (getLegSwitch())
+  //   switchCounter++;
+  // else
+  //   switchCounter = 0;
 
-  if (switchCounter > 10 && !switchWasSeen) {
-    resetLegPosition();
-    legTargetInches = getLegInches();
-    switchWasSeen = true;
-  }
-  if (switchWasSeen)
-    switchWasSeen = legOnSwitch;
+  // if (switchCounter > 10 && !switchWasSeen) {
+  //   resetLegPosition();
+  //   legTargetInches = getLegInches();
+  //   switchWasSeen = true;
+  // }
+  // if (switchWasSeen)
+  //   switchWasSeen = legOnSwitch;
     
     SD.putN("ClimberLegPosition", (double) getLegEncoderPosition());
     SD.putN1("ClimberLegInches", getLegInches());
@@ -185,7 +198,10 @@ public class ClimberLeg extends Subsystem {
     SD.putN1("ClimberLegInchesPerSec", getLegInPerSec());
     SD.putN1("ClimberLegTarget", legTargetInches);
     SD.putN2("ClimberLegAmps", getLegCurrent());
-    SmartDashboard.putBoolean("ClimberLegSwitch", legOnSwitch);
+    SmartDashboard.putBoolean("ClimberLegSwitch", getLegSwitch());
+    SD.putN("ClimberTouchPosition", climbTouchInches);
+    SD.putN1("ClimberFinalInches", climbFinalInches);
+
 
   }
 }

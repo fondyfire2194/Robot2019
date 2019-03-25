@@ -41,6 +41,10 @@ public class AutoChoosers {
 		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[1], 8);
 		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[1], 9);
 
+		testTrajectoryChooser.addOption("L " + TrajDict.secondHatchDeliveryNames[2], 10);
+		testTrajectoryChooser.addOption("R " + TrajDict.secondHatchDeliveryNames[2], 11);
+	
+
 		SmartDashboard.putData("Trajectory Chooser", testTrajectoryChooser);
 
 

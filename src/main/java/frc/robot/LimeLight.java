@@ -382,7 +382,8 @@ public class LimeLight {
 
     public void updateStatus() {
         SmartDashboard.putBoolean("VisionTarget", Robot.limelightCamera.getIsTargetFound());
-        SD.putN2("DegToTarget", Robot.limelightCamera.getdegRotationToTarget());
+        SD.putN2("DegHToTarget", Robot.limelightCamera.getdegRotationToTarget());
+        SD.putN2("DegVertToTarget",getdegVerticalToTarget());
         SD.putN2("TargetArea", Robot.limelightCamera.getTargetArea());
         SD.putN2("BNDBoxWidth", Robot.limelightCamera.getBoundingBoxWidth());
         SD.putN2("BndBoxHeight", Robot.limelightCamera.getBoundingBoxHeight());

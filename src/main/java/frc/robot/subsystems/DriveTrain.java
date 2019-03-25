@@ -57,6 +57,7 @@ public class DriveTrain extends Subsystem {
   public double leftCmd;
   public double rightCmd;
   public double remainingDistance;
+  public double activeMotionComp;
 
 
   // Put methods for controlling this subsystem
@@ -88,13 +89,13 @@ public class DriveTrain extends Subsystem {
 
     leftTalonOne.selectProfileSlot(0, 0);
     leftTalonOne.config_kF(0, 1.4, 0);
-    leftTalonOne.config_kP(0, 1, 0);
+    leftTalonOne.config_kP(0, .5, 0);
     leftTalonOne.config_kI(0, 0, 0);
     leftTalonOne.config_kD(0, 0, 0);
 
     rightTalonOne.selectProfileSlot(0, 0);
     rightTalonOne.config_kF(0,1.4 , 0);
-    rightTalonOne.config_kP(0, 1, 0);
+    rightTalonOne.config_kP(0, .5, 0);
     rightTalonOne.config_kI(0, 0, 0);
     rightTalonOne.config_kD(0,0, 0);
 

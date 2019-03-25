@@ -82,7 +82,7 @@ public class AutoCommands {
 
         public static int pickUpSecondHatch(int start, int indexStart) {
                 int number = indexStart + 1;
-                double pickupDistance = 7.;
+                double pickupDistance = 12.;
                 switch (start) {
                 case 1:
                 case 4:
@@ -97,7 +97,7 @@ public class AutoCommands {
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station 180";
                         number++;
                         Robot.autonomousCommand[number] = new DriveAndPickUpPanel(pickupDistance,
-                                        Constants.POSITION_RATE, 180,
+                                        Constants.POSITION_RATE, 0,
                                         Robot.gph.eitherHatchDetected(), 2);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Load and Pickup "
                                         + String.valueOf(pickupDistance);
@@ -141,6 +141,7 @@ public class AutoCommands {
                 case 1:
                 case 2:
                         double secondPlaceDistance = 3.;
+                        if(hatchSelected == 2) secondPlaceDistance = 4;
                         Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true,
                                         2);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "

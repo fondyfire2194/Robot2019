@@ -9,30 +9,36 @@ package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.Constants;
 
 /**
  * Add your docs here.
  */
-public class SetClimberTargetAngle extends InstantCommand {
+public class SetClimbValues extends InstantCommand {
   /**
    * Add your docs here.
    */
-  private double myDegrees;
+  private double myInches;
+  private double myAngle;
+  private double myFinalInches;
+  private double myFinalAngle;
   
-  public SetClimberTargetAngle(double degrees) {
+  public SetClimbValues(double touchinches, double touchangle, double finalinches, double finalangle) {
     super();
+    myInches = touchinches;
+    myAngle = touchangle;
+    myFinalInches = finalinches;
+    myFinalAngle = finalangle;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myDegrees = degrees;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-
-    Robot.climberArm.armTargetDegrees = myDegrees;
-    Robot.climberArm.lastHoldDegrees = Robot.climberArm.armTargetDegrees + .01;
+    Robot.climberLeg.climbTouchInches = myInches;
+    Robot.climberArm.climbTouchAngle = myAngle;
+    Robot.climberLeg.climbFinalInches = myFinalInches;
+    Robot.climberArm.climbFinalAngle = myFinalAngle;
   }
 
 }

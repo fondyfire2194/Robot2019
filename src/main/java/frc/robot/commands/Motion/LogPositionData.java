@@ -11,8 +11,8 @@ import frc.robot.Pref;
  */
 public class LogPositionData extends TimedCommand {
 	private double startTime;
-	private String names = "Time,LeftFt,RightFt,LeftFPS,RightFPS,GyroYaw,BoxHt,BoxWdth,VertAngle,TgtSeen,DRStAn,,useGyComp,GyComp\n";
-	private String units = "mS,Ft,Ft,FPS,FPS,Deg,Px,Px,Deg,T_F,Deg,T_F,Pct\n";
+	private String names = "Time,LeftFt,RightFt,LeftFPS,RightFPS,LeftMOP,RightMOP,LeftFE,RightFE,GyroYaw,BoxHt,BoxWdth,VertAngle,TgtSeen,DRStAn,USND,useGyComp,ActComp\n";
+	private String units = "mS,Ft,Ft,FPS,FPS,Pct,Pct,CP100,CP100,Deg,Px,Px,Deg,T_F,Deg,USNDT_F,Pct\n";
 	String output_dir = "/U" + "/data_capturesDS19/Vision/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Position";
 	String name = output_dir + name1;
@@ -44,10 +44,13 @@ public class LogPositionData extends TimedCommand {
 				useGyroComp = 1.0;
 			Robot.simpleCSVLogger2194.writeData((Timer.getFPGATimestamp() - startTime), Robot.driveTrain.getLeftFeet(),
 					Robot.driveTrain.getRightFeet(), Robot.driveTrain.getLeftFeetPerSecond(),
-					Robot.driveTrain.getRightFeetPerSecond(), Robot.driveTrain.getGyroYaw(),
-					Robot.limelightCamera.getBoundingBoxHeight(), Robot.limelightCamera.getBoundingBoxWidth(),
-					Robot.limelightCamera.getdegVerticalToTarget(), targetFound, Robot.driveTrain.driveStraightAngle,
-					Robot.ultrasound.getDistanceInches(),useGyroComp, Robot.driveTrain.getCurrentComp());
+					Robot.driveTrain.getRightFeetPerSecond(), Robot.driveTrain.getLeftCommand(),
+					Robot.driveTrain.getRightCommand(), Robot.driveTrain.getGyroYaw(),
+					Robot.driveTrain.leftTalonOne.getClosedLoopError(),
+					Robot.driveTrain.rightTalonOne.getClosedLoopError(), Robot.limelightCamera.getBoundingBoxHeight(),
+					Robot.limelightCamera.getBoundingBoxWidth(), Robot.limelightCamera.getdegVerticalToTarget(),
+					targetFound, Robot.driveTrain.driveStraightAngle, Robot.ultrasound.getDistanceInches(), useGyroComp,
+					Robot.driveTrain.activeMotionComp);
 		}
 	}
 

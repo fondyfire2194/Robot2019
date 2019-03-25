@@ -38,7 +38,7 @@ public class Constants {
   public final static double CAMERA_TO_FRONT_OF_BUMPER = 1.0;
 
   public final static double ORIENT_RATE = .5;
-  public final static double POSITION_RATE = 9.;
+  public final static double POSITION_RATE = 7.;
   public static double ALL_LOWER_HATCH_INCHES = 0.;
   public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
@@ -71,15 +71,22 @@ public class Constants {
   public static double MAX_ARM_DEG_PER_SEC = 50;
   public static double MAX_ARM_ENC_CTS_PER_100MS = MAX_ARM_DEG_PER_SEC / 10 * CLIMBER_ARM_COUNTS_PER_DEGREE;
   public static double ARM_DEG_PER_SEC_TO_ENC_CTS_PER_100MS = CLIMBER_ARM_COUNTS_PER_DEGREE / 10;
-  public static double LEVEL_2_START_ANGLE = 35;
-  public static double LEVEL_3_START_ANGLE = 75;
+  public static double LEVEL_2_START_ANGLE = 65;
+  public static double LEVEL_2_TOUCH_ANGLE = 77;
+  public static double LEVEL_2_CLIMB_ANGLE = LEVEL_2_TOUCH_ANGLE + 20;
+  public static double LEVEL_3_START_ANGLE = 25;
+  public static double LEVEL_3_TOUCH_ANGLE = 30;
+  public static double LEVEL_3_CLIMB_ANGLE = LEVEL_3_TOUCH_ANGLE + 62;
+
   public static double CLIMBER_ARM_CLIMB_RATE = 15;
   public static double CLIMBER_ARM_POSITION_RATE = 25;
 
   public static double CLIMBER_ARM_LEG_RATIO = .322; //inches per degree
   public static double CLIMBER_LEG_CLIMB_RATE = CLIMBER_ARM_CLIMB_RATE * CLIMBER_ARM_LEG_RATIO;
 
-  public static double CLIMBER_LEG_START_POSITION = 1.5;
+  public static double CLIMBER_LEG_TOUCH_POSITION = 1.3;
+  public static double CLIMBER_LEG_LEVEL_2_POSITION =CLIMBER_LEG_TOUCH_POSITION +6.;
+  public static double CLIMBER_LEG_LEVEL_3_POSITION = CLIMBER_LEG_TOUCH_POSITION + 19;
 
   public static double CLIMB_TARGET_ANGLE = 5;
 

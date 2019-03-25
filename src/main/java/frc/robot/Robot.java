@@ -186,7 +186,7 @@ public class Robot extends TimedRobot {
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
-  public static boolean useUltrasound;
+  public static boolean useUltrasound = true;
   public static boolean visionCompJoystick;
 private double scl;
   /**
@@ -416,14 +416,14 @@ private double scl;
         case 0:
           testTrajectoryName = TrajDict.outsideStartNames[0];
           towardsFieldTrajectory = true;
-          faceField = false;
+          faceField = true;
           invertY = false;
           useGainPrefs = true;
           break;
         case 1:
           testTrajectoryName = TrajDict.outsideStartNames[0];
           towardsFieldTrajectory = true;
-          faceField = false;
+          faceField = true;
           invertY = true;
           useGainPrefs = true;
           break;
@@ -512,6 +512,20 @@ private double scl;
           invertY = true;
           useGainPrefs = true;
           break;
+          case 14:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[4];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = false;
+          useGainPrefs = true;
+          break;
+        case 15:
+          testTrajectoryName = TrajDict.secondHatchDeliveryNames[4];
+          towardsFieldTrajectory = true;
+          faceField = false;
+          invertY = true;
+          useGainPrefs = true;
+          break;  
 
         default:
           break;
@@ -741,7 +755,7 @@ private double scl;
           break;
         case 2:
           invertY = false;
-          sideAngle = -90;
+          sideAngle = 90;
           sideRocketAngle = 142;
           driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
@@ -749,8 +763,9 @@ private double scl;
           break;
         case 3:
           invertY = true;
-          sideAngle = 90;
+          sideAngle = -90;
           sideRocketAngle = 142;
+          driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
@@ -758,6 +773,7 @@ private double scl;
           invertY = true;
           sideAngle = -90;
           sideRocketAngle = 142;
+          driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           break;
         }

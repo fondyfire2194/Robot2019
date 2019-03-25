@@ -19,12 +19,12 @@ public class SetClimberLegTargetInches extends InstantCommand {
    * Add your docs here.
    */
   double myTarget;
-  boolean myClimb;
-  public SetClimberLegTargetInches(double target, boolean climb) {
+  
+  public SetClimberLegTargetInches(double target) {
     super();
     
     myTarget = target;
-    myClimb = climb;
+  
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -32,13 +32,9 @@ public class SetClimberLegTargetInches extends InstantCommand {
   // Called once when the command executes
   @Override 
   protected void initialize() {
-    if(myClimb){
-       Robot.climberLeg.motionMagicRate = Constants.CLIMBER_LEG_CLIMB_RATE;     
-    }
-    else{
-      Robot.climberLeg.motionMagicRate = Constants.CLIMBER_LEG_POSITION_RATE;
-    }
+
     Robot.climberLeg.legTargetInches = myTarget;
+    Robot.climberLeg.lastHoldInches = Robot.climberLeg.legTargetInches + .01;
   }
 
 }

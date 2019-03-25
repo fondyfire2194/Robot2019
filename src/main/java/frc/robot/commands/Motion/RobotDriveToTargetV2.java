@@ -50,7 +50,6 @@ public class RobotDriveToTargetV2 extends Command {
 	private double robotDistance;
 	private boolean correctionMade;
 	private boolean useVisionComp;
-	private double activeMotionComp;
 	private boolean gyroLocked;
 
 	/**
@@ -79,9 +78,9 @@ public class RobotDriveToTargetV2 extends Command {
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
 		Robot.positionRunning = true;
-		currentMaxSpeed = 0;
+		currentMaxSpeed = Constants.MINIMUM_START_PCT * Constants.MAX_ROBOT_FT_PER_SEC;
 		doneAccelerating = false;
-		activeMotionComp = 0.;
+		Robot.driveTrain.activeMotionComp = 0.;
 		Robot.driveTrain.driveStraightAngle = myTargetAngle;
 		targetWasSeen = false;
 		targetNotSeenCtr = 0;
@@ -118,15 +117,12 @@ public class RobotDriveToTargetV2 extends Command {
 		// vision and gyro comps
 		doComps();
 		// one time correcton of final distance from ultrasound
-		// doCorrection();
+		if(Robot.useUltrasound && ! correctionMade) doCorrection();
 		// control speed of motion using kp and kd
 		if (doneAccelerating)
 			doSpeed();
 
-		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, activeMotionComp);
-
-		SmartDashboard.putBoolean("PDA", doneAccelerating);
-		SmartDashboard.putBoolean("PTWS", targetWasSeen);
+		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.driveTrain.activeMotionComp);
 
 	}
 
@@ -184,9 +180,9 @@ public class RobotDriveToTargetV2 extends Command {
 			currentMaxSpeed = calcLoopSpeed;
 
 		// set minimum speed
-		if (currentMaxSpeed < 1.5) {
-			currentMaxSpeed = 1.5;
-		}
+		// if (currentMaxSpeed < 1.5) {
+		// 	currentMaxSpeed = 1.5;
+		// }
 	}
 
 	private void doTargetSeenCheck() {
@@ -203,9 +199,9 @@ public class RobotDriveToTargetV2 extends Command {
 			useVisionComp = true;
 			targetWasSeen = true;
 		}
-		if (useVisionComp && remainingFtToHatch < 6)  {
-			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw() + Robot.limelightCamera.getdegVerticalToTarget();
-			useVisionComp = false;
+		if (useVisionComp && remainingFtToHatch < 6  && Math.abs(Robot.limelightCamera.getdegVerticalToTarget())<1.)  {
+			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
+			// useVisionComp = false;
 			SmartDashboard.putNumber("VWLI", Math.abs(Robot.limelightCamera.getdegVerticalToTarget()));
 
 		}
@@ -214,20 +210,20 @@ public class RobotDriveToTargetV2 extends Command {
 
 		if (useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				activeMotionComp = (Robot.limelightCamera.getdegVerticalToTarget() + Pref.getPref("DriveSldnDist"))
+				Robot.driveTrain.activeMotionComp = (Robot.limelightCamera.getdegVerticalToTarget() + Pref.getPref("DriveSldnDist"))
 						* visionTurnGain;
 			} else {
-				activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
+				Robot.driveTrain.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
 		}
 		if (Robot.driveTrain.useGyroComp) {
-			activeMotionComp = Robot.driveTrain.getCurrentComp();
+			Robot.driveTrain.activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 
 	}
 
 	private void doCorrection() {
-		if (Robot.useUltrasound && remainingFtToHatch < 8 && !correctionMade) {
+		if (remainingFtToHatch < 8) {
 			double distanceDifference = Robot.ultrasound.getDistanceFeet() - remainingFtToHatch;
 			if (Math.abs(distanceDifference) < Constants.USND_CORRECT_BAND)
 				myEndpoint = myEndpoint + distanceDifference;
