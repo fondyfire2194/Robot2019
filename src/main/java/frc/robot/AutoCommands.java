@@ -145,17 +145,17 @@ public class AutoCommands {
                 Robot.autonomousCommand[number] = new PickAndRunTrajectory(true, false, Robot.invertY);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - Trajectory To CS";
                 number++;
-                Robot.autonomousCommand[number] = new SetGyroOffset(0);
-                Robot.autonomousCommandName[number] = String.valueOf(number) + " - 180nOffst";
-                number++;
+                // Robot.autonomousCommand[number] = new SetGyroOffset(0);
+                // Robot.autonomousCommandName[number] = String.valueOf(number) + " - 180nOffst";
+                // number++;
 
                 switch (hatchSelected) {
 
                 case 1:
                 case 2:
-                double sideAngle = -90;
+                double sideAngle =-90;
                 if(Robot.startPositionSelected == 3 || Robot.startPositionSelected == 4)
-                sideAngle = 90;
+                sideAngle = -90;
                         double secondPlaceDistance = 3.;
                         if(hatchSelected == 2) secondPlaceDistance = 4;
                         Robot.autonomousCommand[number] = new RobotOrient(sideAngle, Constants.ORIENT_RATE, true,
