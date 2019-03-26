@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class RunClimberLegFromGamepad extends Command {
 	private boolean myVel;
-	private boolean myLimit;
 
 	public RunClimberLegFromGamepad(boolean vel) {
 		// Use requires() here to declare subsystem dependencies
@@ -61,8 +60,7 @@ public class RunClimberLegFromGamepad extends Command {
 	@Override
 	protected void end() {
 		Robot.climberLeg.climberLegOut(0,false);
-		Robot.climberLeg.climberLeg.configReverseSoftLimitEnable(false);
-
+		Robot.climberLeg.climberLeg.configReverseSoftLimitEnable(true);
 
 	}
 

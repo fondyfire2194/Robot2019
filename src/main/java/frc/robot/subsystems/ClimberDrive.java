@@ -36,7 +36,7 @@ public class ClimberDrive extends Subsystem {
     climberDrive.setNeutralMode(NeutralMode.Brake);
     climberDrive.configVoltageCompSaturation(12, 0);
     climberDrive.enableVoltageCompensation(true);
-
+    climberDrive.clearStickyFaults(0);
   }
 
   @Override

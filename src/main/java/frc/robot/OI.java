@@ -31,7 +31,7 @@ import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 import frc.robot.commands.AirCompressor.*;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Motion.*;
-import frc.robot.Constants;
+
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -189,24 +189,22 @@ public class OI {
         stopCargoHandler = gamepad.getBackButton();
         stopCargoHandler.whenPressed(new StopCargoMotor());
 
-        incrementArmAngle = gamepad.getLeftShoulder();
-        incrementArmAngle.whenPressed(new IncrementArmAngle(10));
+        // incrementArmAngle = gamepad.getLeftShoulder();
+        // incrementArmAngle.whenPressed(new IncrementArmAngle(10));
 
-        decrementArmAngle = gamepad.getLeftTriggerClick();
-        decrementArmAngle.whenPressed(new IncrementArmAngle(-10));
+        // decrementArmAngle = gamepad.getLeftTriggerClick();
+        // decrementArmAngle.whenPressed(new IncrementArmAngle(-10));
 
         moveLegToZero = gamepad.getBackButton();
         moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
 
+
         moveToClimbStart = gamepad.getRightTriggerClick();    
-        moveToClimbStart.whenPressed(new MMClimb(Robot.climberLeg.climbTouchInches,Robot.climberArm.climbTouchAngle));
-           
-        // moveToClimbStart.whenPressed(new SetClimberLegTargetInches(1.3));
-        // moveToClimbStart.whenPressed(new SetClimberTargetAngle(70));
-        
+        moveToClimbStart.whenPressed(new MoveToTouch());
+
 
         mmClimb = gamepad.getRightShoulder();
-        mmClimb.whenPressed(new MMClimb(Robot.climberLeg.climbFinalInches,Robot.climberArm.climbFinalAngle));
+        mmClimb.whenPressed(new DoClimb());
 
         /**
          * 
@@ -236,13 +234,15 @@ public class OI {
         elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
+     
         prepareLevelThree = buttonBox.getBackButton();
         prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE));
-        prepareLevelThree.whenPressed(new SetClimbValues(Constants.CLIMBER_LEG_TOUCH_POSITION, Constants.LEVEL_3_TOUCH_ANGLE, Constants.CLIMBER_LEG_LEVEL_3_POSITION, Constants.LEVEL_3_CLIMB_ANGLE));
+        prepareLevelThree.whenPressed(new SetL3Values());
+
 
         prepareLevelTwo = buttonBox.getStartButton();
         prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE));
-        prepareLevelTwo.whenPressed(new SetClimbValues(Constants.CLIMBER_LEG_TOUCH_POSITION, Constants.LEVEL_2_TOUCH_ANGLE, Constants.CLIMBER_LEG_LEVEL_2_POSITION, Constants.LEVEL_2_CLIMB_ANGLE));
+        prepareLevelTwo.whenPressed(new SetL2Values());
 
         toggleExtension = buttonBox.getButtonOptions();
         toggleExtension.whenPressed(new ToggleExtendHatchPanel());

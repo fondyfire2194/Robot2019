@@ -35,8 +35,8 @@ public class ClimberArm extends Subsystem {
   public double armTargetDegrees;
   public double lastHoldDegrees;
   public double motionMagicRate = Constants.CLIMBER_ARM_CLIMB_RATE;
-public double climbTouchAngle;
-public double climbFinalAngle;
+  public double climbTouchAngle=0;
+  public double climbFinalAngle=0;
 
   public ClimberArm() {
     climberArm = new TalonSRX(RobotMap.CLIMBER_ARM);
@@ -79,7 +79,7 @@ public double climbFinalAngle;
 		climberArm.configNominalOutputForward(0, 0);
     climberArm.configNominalOutputReverse(0, 0);
 
-
+    climberArm.clearStickyFaults(0);
   }
 
   @Override
@@ -187,6 +187,25 @@ public double climbFinalAngle;
     climberArm.set(ControlMode.MotionMagic, distance * Constants.CLIMBER_ARM_COUNTS_PER_DEGREE);
   }
 
+  public void setL2Climb(){
+    climbTouchAngle = Constants.LEVEL_2_TOUCH_ANGLE;
+    climbFinalAngle = Constants.LEVEL_2_CLIMB_ANGLE;
+  }
+
+  public void setL3Climb(){
+    climbTouchAngle = Constants.LEVEL_3_TOUCH_ANGLE;
+    climbFinalAngle = Constants.LEVEL_3_CLIMB_ANGLE;
+  }
+
+  public void setTouch(){
+    armTargetDegrees = climbTouchAngle;
+  }
+
+  public void setClimb(){
+    armTargetDegrees = climbFinalAngle;
+  }
+
+
   public void updateStatus() {
     SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
     SD.putN1("ClimberArmDegrees", getArmDegrees());
@@ -196,7 +215,7 @@ public double climbFinalAngle;
     SD.putN1("ClimberArmTarget", armTargetDegrees);
     SD.putN1("CDS", getDriverSliderClimb());
     SD.putN1("ClimberArmTouchDegrees", climbTouchAngle);
-    SD.putN1("ClimberArmFinalDegrees",climbFinalAngle;
+    SD.putN1("ClimberArmFinalDegrees",climbFinalAngle);
     SD.putN1("ClimbArmRate", motionMagicRate);
  
 

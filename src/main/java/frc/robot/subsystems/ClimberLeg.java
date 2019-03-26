@@ -38,8 +38,8 @@ public class ClimberLeg extends Subsystem {
   public boolean legOnSwitch;
   private int switchCounter;
   private boolean switchWasSeen;
-  public double climbTouchInches;
-public double climbFinalInches;
+  public double climbTouchInches =0;
+public double climbFinalInches =0;
 
 
   public ClimberLeg() {
@@ -73,9 +73,9 @@ public double climbFinalInches;
     climberLeg.config_kD(1, 0, 0);
 
     legSwitch = new DigitalInput(RobotMap.CLIMBER_LEG_TRAVEL_SWITCH);
-    
-    climberLeg.configReverseSoftLimitThreshold(0,0);
-    climberLeg.configReverseSoftLimitEnable(false);
+    climberLeg.clearStickyFaults(0);
+    climberLeg.configReverseSoftLimitThreshold(-350,0);//1/4 inch in encoder counts
+    climberLeg.configReverseSoftLimitEnable(true);
   }
 
   @Override
@@ -128,6 +128,24 @@ public double climbFinalInches;
 
   public boolean getLegSwitch(){
     return false;
+  }
+
+  public void setL2Climb(){
+    climbTouchInches = Constants.CLIMBER_LEG_TOUCH_POSITION;
+    climbFinalInches = Constants.CLIMBER_LEG_LEVEL_2_POSITION;
+  }
+
+  public void setL3Climb(){
+    climbTouchInches = Constants.CLIMBER_LEG_TOUCH_POSITION;
+    climbFinalInches = Constants.CLIMBER_LEG_LEVEL_3_POSITION;
+  }
+
+  public void setTouch(){
+    legTargetInches = climbTouchInches;
+  }
+
+  public void setClimb(){
+    legTargetInches = climbFinalInches;
   }
 
   public void climberLegOut(double speed, boolean useVelocityLoop) {

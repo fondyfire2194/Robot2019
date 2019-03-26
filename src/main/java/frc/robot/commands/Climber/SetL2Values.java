@@ -13,21 +13,12 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class SetClimbValues extends InstantCommand {
+public class SetL2Values extends InstantCommand {
   /**
    * Add your docs here.
    */
-  private double myInches;
-  private double myAngle;
-  private double myFinalInches;
-  private double myFinalAngle;
-  
-  public SetClimbValues(double touchinches, double touchangle, double finalinches, double finalangle) {
+  public SetL2Values() {
     super();
-    myInches = touchinches;
-    myAngle = touchangle;
-    myFinalInches = finalinches;
-    myFinalAngle = finalangle;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -35,10 +26,8 @@ public class SetClimbValues extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.climberLeg.climbTouchInches = myInches;
-    Robot.climberArm.climbTouchAngle = myAngle;
-    Robot.climberLeg.climbFinalInches = myFinalInches;
-    Robot.climberArm.climbFinalAngle = myFinalAngle;
+    Robot.climberArm.setL2Climb();
+    Robot.climberLeg.setL2Climb();
   }
 
 }
