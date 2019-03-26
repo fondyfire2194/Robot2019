@@ -197,6 +197,7 @@ public double climbFinalAngle;
     SD.putN1("CDS", getDriverSliderClimb());
     SD.putN1("ClimberArmTouchDegrees", climbTouchAngle);
     SD.putN1("ClimberArmFinalDegrees",climbFinalAngle;
+    SD.putN1("ClimbArmRate", motionMagicRate);
  
 
   }

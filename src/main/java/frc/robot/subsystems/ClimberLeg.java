@@ -201,7 +201,7 @@ public double climbFinalInches;
     SmartDashboard.putBoolean("ClimberLegSwitch", getLegSwitch());
     SD.putN("ClimberTouchPosition", climbTouchInches);
     SD.putN1("ClimberFinalInches", climbFinalInches);
-
+    SD.putN1("ClimbLegRate", motionMagicRate);
 
   }
 }
