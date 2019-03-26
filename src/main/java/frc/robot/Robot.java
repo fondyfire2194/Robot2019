@@ -748,14 +748,14 @@ private double scl;
         switch (startPositionSelected) {
         case 1:
           invertY = false;
-          sideAngle = 90;
+          sideAngle = -90;
           sideRocketAngle = 142;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           driveTrain.driveStraightAngle = 90.;
           break;
         case 2:
           invertY = false;
-          sideAngle = 90;
+          sideAngle = -90;
           sideRocketAngle = 142;
           driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
@@ -763,7 +763,7 @@ private double scl;
           break;
         case 3:
           invertY = true;
-          sideAngle = -90;
+          sideAngle = 90;
           sideRocketAngle = 142;
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
@@ -771,7 +771,7 @@ private double scl;
           break;
         case 4:
           invertY = true;
-          sideAngle = -90;
+          sideAngle = 90;
           sideRocketAngle = 142;
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
