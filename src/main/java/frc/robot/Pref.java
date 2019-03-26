@@ -31,7 +31,7 @@ public class Pref {
 
   static {
     prefDict.put("DriveStraightKp", .03);
-    prefDict.put("DrivePositionKp", .03);
+    prefDict.put("DrivePositionKp", 2.25);
     prefDict.put("DrivePositionKd", .03); 
     prefDict.put("DriveSldnDist", 0.);
 
