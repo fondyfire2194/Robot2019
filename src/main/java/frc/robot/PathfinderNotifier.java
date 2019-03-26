@@ -53,7 +53,7 @@ public class PathfinderNotifier {
 		periodic_time = Robot.driveTrain.leftDf.getSegment().dt;
 		
 		_notifier.startPeriodic(periodic_time);
-		SmartDashboard.putNumber("PT",periodic_time);
+		SmartDashboard.putNumber("PT",Robot.activeTrajectoryGains[3]);
 	}
 
 	public static void stopNotfier() {

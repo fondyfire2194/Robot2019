@@ -5,45 +5,30 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.Trajectories;
+package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import edu.wpi.first.wpilibj.Timer;
-
 /**
  * Add your docs here.
  */
-public class BufferToActiveTrajectory extends InstantCommand {
+public class SetGyroOffset extends InstantCommand {
   /**
    * Add your docs here.
    */
-  private int myNumber;
-
-  public BufferToActiveTrajectory(int number) {
+  private double myOffset;
+  public SetGyroOffset(double offset) {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    myNumber = number;
+    myOffset = offset;
   }
 
   // Called once when the command executes
   @Override
   protected void initialize() {
-    SmartDashboard.putNumber("MyN", myNumber);
-       Robot.activeTrajectoryGains = Robot.bufferTrajectoryGains[myNumber];
- 
-    Robot.activeLeftTrajectory = Robot.leftBufferTrajectory[myNumber];
-    Robot.activeRightTrajectory = Robot.rightBufferTrajectory[myNumber];
-    Robot.activeTrajName = Robot.bufferTrajectoryName[myNumber];
-    Robot.logName  = Robot.activeTrajName;
-    SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
-
-    // SmartDashboard.putNumber("A2BL", Robot.activeLeftTrajectory.length());
-
+    Robot.driveTrain.gyroOffset = 180;
     Robot.autonomousCommandDone = true;
-
   }
 
 }

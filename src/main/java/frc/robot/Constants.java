@@ -78,11 +78,11 @@ public class Constants {
 
   public static double LEVEL_3_START_ANGLE = 25;
   public static double LEVEL_3_TOUCH_ANGLE = 30;
-  public static double LEVEL_3_CLIMB_ANGLE = LEVEL_3_TOUCH_ANGLE + 62;
+  public static double LEVEL_3_CLIMB_ANGLE = LEVEL_3_TOUCH_ANGLE + 65;
 
   public static double CLIMBER_LEG_TOUCH_POSITION = 1.3;
   public static double CLIMBER_LEG_LEVEL_2_POSITION = CLIMBER_LEG_TOUCH_POSITION + 6.;
-  public static double CLIMBER_LEG_LEVEL_3_POSITION = CLIMBER_LEG_TOUCH_POSITION + 19;
+  public static double CLIMBER_LEG_LEVEL_3_POSITION = CLIMBER_LEG_TOUCH_POSITION + 20;
 
   public static double CLIMBER_ARM_CLIMB_RATE = 15;
   public static double CLIMBER_ARM_POSITION_RATE = 25;

@@ -57,6 +57,7 @@ public class PowerPanel extends Subsystem {
 			SD.putN1("Channel 1", getChannelCurrent(1));
 			SD.putN1("Channel 2", getChannelCurrent(2));
 			SD.putN1("Channel 3", getChannelCurrent(3));
+			SD.putN1("Channel Volts", getVoltage());
 		}
 	}
 }

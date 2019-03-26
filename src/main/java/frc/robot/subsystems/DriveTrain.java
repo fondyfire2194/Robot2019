@@ -58,6 +58,7 @@ public class DriveTrain extends Subsystem {
   public double rightCmd;
   public double remainingDistance;
   public double activeMotionComp;
+  public double gyroOffset;
 
 
   // Put methods for controlling this subsystem
@@ -124,7 +125,7 @@ public class DriveTrain extends Subsystem {
 
   public void leftDriveOut(double speed) {
     leftCmd = speed;
-    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
+    if (Robot.autoRunning || useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
       leftTalonOne.selectProfileSlot(0, 0);
       leftTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
@@ -135,7 +136,7 @@ public class DriveTrain extends Subsystem {
   public void rightDriveOut(double speed) {
     rightCmd = speed;
     SD.putN3("LCMD",rightCmd);
-    if (useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
+    if (Robot.autoRunning || useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
       rightTalonOne.selectProfileSlot(0, 0);
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
@@ -234,7 +235,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroYaw() {
-    return imu.getYaw();
+    return Pathfinder.boundHalfDegrees(gyroOffset +imu.getYaw());
   }
 
   public double getGyroRoll() {

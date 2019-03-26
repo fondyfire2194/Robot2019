@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -35,6 +36,7 @@ public class TimeDelay extends TimedCommand {
   // Called once after timeout
   @Override
   protected void end() {
+    Robot.autonomousCommandDone = true;
   }
 
   // Called when another command which requires one or more of the same

@@ -208,7 +208,7 @@ private double scl;
     climberDrive = new ClimberDrive();
 
     airCompressor = new AirCompressor();
-    // pdp = new PowerPanel();
+    //  pdp = new PowerPanel();
     gph = new GamePieceHandler();
     ultrasound = new Ultrasound(RobotMap.ULTRASOUND, Ultrasound.ultrasoundType.inch, .009766);
     m_oi = new OI();
@@ -285,6 +285,10 @@ private double scl;
     Robot.gph.retractPusher();
     Robot.gph.gripHatchPanel();
     Robot.gph.retractHatchPanel();
+    climberLeg.legTargetInches = climberLeg.getLegInches();
+		climberLeg.lastHoldInches = climberLeg.legTargetInches + .01;
+    climberArm.armTargetDegrees = climberArm.getArmDegrees();
+		climberArm.lastHoldDegrees = climberArm.armTargetDegrees + .01;
 
   }
 
@@ -319,9 +323,10 @@ private double scl;
     Robot.runningCommandName = "None";
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
-    int startCommandNumber = 0;// (int) SmartDashboard.getNumber("TestStart", 0);
-    if (autoTimeDelaySeconds == 0)
-      startCommandNumber = 1;
+
+    int startCommandNumber =0;//  (int) SmartDashboard.getNumber("TestStart", 0);
+    // if (autoTimeDelaySeconds == 0)
+    //   startCommandNumber = 1;
     if (autonomousCommand[startCommandNumber] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
       autonomousCommand[startCommandNumber].start();
       runningAutoCommand = startCommandNumber;
@@ -586,6 +591,11 @@ private double scl;
 
     case 1:
       robotUpdateStatus();
+      SmartDashboard.putNumber("AGKp", activeTrajectoryGains[0]);
+      SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
+      SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
+      SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
+  
       break;
 
     case 2:
@@ -594,6 +604,7 @@ private double scl;
 
     case 3:
       visionData.updateStatus();
+      // pdp.updateStatus();
       break;
 
     case 4:
@@ -748,15 +759,15 @@ private double scl;
         switch (startPositionSelected) {
         case 1:
           invertY = false;
-          sideAngle = -90;
-          sideRocketAngle = 142;
+          sideAngle = 90;
+          
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           driveTrain.driveStraightAngle = 90.;
           break;
         case 2:
           invertY = false;
-          sideAngle = -90;
-          sideRocketAngle = 142;
+          sideAngle = 90;
+          
           driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
@@ -764,15 +775,15 @@ private double scl;
         case 3:
           invertY = true;
           sideAngle = 90;
-          sideRocketAngle = 142;
+          
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
           break;
         case 4:
           invertY = true;
-          sideAngle = 90;
-          sideRocketAngle = 142;
+          sideAngle = -90;
+          
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           break;
