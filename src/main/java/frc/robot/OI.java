@@ -189,11 +189,11 @@ public class OI {
         stopCargoHandler = gamepad.getBackButton();
         stopCargoHandler.whenPressed(new StopCargoMotor());
 
-        // incrementArmAngle = gamepad.getLeftShoulder();
-        // incrementArmAngle.whenPressed(new IncrementArmAngle(10));
+        incrementArmAngle = gamepad.getLeftShoulder();
+        incrementArmAngle.whenPressed(new IncrementArmAngle(2));
 
-        // decrementArmAngle = gamepad.getLeftTriggerClick();
-        // decrementArmAngle.whenPressed(new IncrementArmAngle(-10));
+        decrementArmAngle = gamepad.getLeftTriggerClick();
+        decrementArmAngle.whenPressed(new IncrementArmAngle(-2));
 
         moveLegToZero = gamepad.getBackButton();
         moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
