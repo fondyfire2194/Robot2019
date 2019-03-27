@@ -12,7 +12,7 @@ public class LogElevatorData extends TimedCommand {
 	private double startTime;
 	private String names = "Time,TrajPos,TrajVel,Tgt Ht,Act Ht,Amps,Volts, Speed\n";
 	private String units = "mS,Inches,Inches,Inches,Inches,Amps,Volts,In/Sec\n";
-	String output_dir = "/U" + "/data_capturesDS19/Elevator/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDSMKE/Elevator/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Elevator";
 	String name = output_dir + name1;
 

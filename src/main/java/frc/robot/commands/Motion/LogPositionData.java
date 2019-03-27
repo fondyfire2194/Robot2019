@@ -13,7 +13,7 @@ public class LogPositionData extends TimedCommand {
 	private double startTime;
 	private String names = "Time,LeftFt,RightFt,LeftFPS,RightFPS,LeftMOP,RightMOP,LeftFE,RightFE,GyroYaw,BoxHt,BoxWdth,VertAngle,TgtSeen,DRStAn,USND,useGyComp,ActComp\n";
 	private String units = "mS,Ft,Ft,FPS,FPS,Pct,Pct,CP100,CP100,Deg,Px,Px,Deg,T_F,Deg,USNDT_F,Pct\n";
-	String output_dir = "/U" + "/data_capturesDS19/Vision/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDSMKE/Vision/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Position";
 	String name = output_dir + name1;
 

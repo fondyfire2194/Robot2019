@@ -13,7 +13,7 @@ public class LogDriveData extends TimedCommand {
 	private double startTime;
 	private String names = "LeftCmd,LeftFPS,RightCmd,RightFPS,LeftOneAmps,LeftTwoAmps,RightOneAmps,RightTwoAmps,lcp,rcp\n";
 	private String units = "PU,FPS,PU,FPS,Amps,Amps,Amps,Amps,cp100,cp100\n";
-	String output_dir = "/U" + "/data_capturesDS19/Drive/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDSMKE/Drive/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Drive";
 	String name = output_dir + name1;
 

@@ -13,7 +13,7 @@ public class LogClimberData extends TimedCommand {
 	private double startTime;
 	private String names = "LegCmd,LegIPS,ArmCmd,ArmDPS,LegAmps,LegPosition,ArmAmps,ArmDegrees,DriveAmps,Pitch\n";
 	private String units = "%,IPS,%,DPS,Amps,Inches,Amps,Angle,Amps,Degrees\n";
-	String output_dir = "/U" + "/data_capturesDS19/Climber/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDS/CMKElimber/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Climber";
 	String name = output_dir + name1;
 

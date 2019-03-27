@@ -13,7 +13,7 @@ public class LogCargoMotor extends TimedCommand {
 	private double startTime;
 	private String names = "Current,Output,Bus\n";
 	private String units = "Amps,Pct,Volts\n";
-	String output_dir = "/U" + "/data_capturesDS19/Climber/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/U" + "/data_capturesDSMKE/Climber/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Climber";
 	String name = output_dir + name1;
 

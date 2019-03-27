@@ -174,11 +174,11 @@ public class Robot extends TimedRobot {
   public static boolean createDriveRunFile = true;
   public static boolean createElevatorRunFile = true;
   public static boolean createVisionRunFile = true;
-  public static String driveLogName = "/U" + "/data_capturesDS19/Drive/Drive";
+  public static String driveLogName = "/U" + "/data_capturesDSMKE/Drive/Drive";
   public static String driveUniqueLogName;
-  public static String trajectoryLogName = "/U" + "/data_capturesDS19/Trajectory/T";
+  public static String trajectoryLogName = "/U" + "/data_capturesDSMKE/Trajectory/T";
   public static String trajectoryUniqueLogName;
-  public static String climberLogName = "/U" + "/data_capturesDS19/Climber/C";
+  public static String climberLogName = "/U" + "/data_capturesDSMKE/Climber/C";
   public static String climberUniqueLogName;
 
 
