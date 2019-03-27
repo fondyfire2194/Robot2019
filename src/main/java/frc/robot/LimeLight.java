@@ -18,7 +18,8 @@ public class LimeLight {
     private String m_tableName;
     private Boolean isConnected = false;
     private double _hearBeatPeriod = 0.1;
-    final Double[] defVal = new Double[]{0.0,0.0,0.0,0.0,0.0,0.0};
+    final Double[] defVal = new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+
     class PeriodicRunnable implements java.lang.Runnable {
         public void run() {
             resetPilelineLatency();
@@ -145,10 +146,12 @@ public class LimeLight {
         Double[] camtran = m_table.getEntry("camtran").getDoubleArray(defVal);
         return camtran[0];
     }
+
     public double getCamtranZ() {
         Double[] camtran = m_table.getEntry("camtran").getDoubleArray(defVal);
         return camtran[2];
     }
+
     private void resetPilelineLatency() {
         m_table.getEntry("tl").setValue(0.0);
     }
@@ -383,16 +386,15 @@ public class LimeLight {
     public void updateStatus() {
         SmartDashboard.putBoolean("VisionTarget", Robot.limelightCamera.getIsTargetFound());
         SD.putN2("DegHToTarget", Robot.limelightCamera.getdegRotationToTarget());
-        SD.putN2("DegVertToTarget",getdegVerticalToTarget());
+        SD.putN2("DegVertToTarget", getdegVerticalToTarget());
         SD.putN2("TargetArea", Robot.limelightCamera.getTargetArea());
         SD.putN2("BNDBoxWidth", Robot.limelightCamera.getBoundingBoxWidth());
         SD.putN2("BndBoxHeight", Robot.limelightCamera.getBoundingBoxHeight());
         SD.putN1("Pipeline Latency", Robot.limelightCamera.getPipelineLatency());
         SD.putN("Pipeline #", getPipeline());
-        SD.putN1("PerspAngle",getPerspectiveAngle());
+        SD.putN1("PerspAngle", getPerspectiveAngle());
         SD.putN1("3d X", getCamtranX());
         SD.putN1("TargetDistance", getCamtranZ());
-        
 
     }
 }

@@ -32,7 +32,6 @@ import frc.robot.commands.AirCompressor.*;
 import frc.robot.commands.Climber.*;
 import frc.robot.commands.Motion.*;
 
-
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -58,19 +57,21 @@ public class OI {
     public JoystickButton placeHatchPanelShip;
     public JoystickButton placeHatchPanelRocket;
 
-    public JoystickButton pushHatchCover;
-    public JoystickButton retractPusher;
+    public JoystickButton dc8;
+    public JoystickButton dc9;
+    public JoystickButton dc11;
+    public JoystickButton dc12;
+
     public JoystickButton pickUpCargo;
+
     public JoystickButton deliverCargo;
     public JoystickButton abortAuto;
-
-    public JoystickButton stopCargoHandler;
 
     public JoystickButton driveToVision;
 
     public JoystickButton jogClimberArm;
     public JoystickButton jogClimberLeg;
-    public JoystickButton jogClimberLegNoLimit;  
+    public JoystickButton jogClimberLegNoLimit;
     public JoystickButton jogClimberDrive;
     public JoystickButton prepareLevelThree;
     public JoystickButton prepareLevelTwo;
@@ -164,11 +165,19 @@ public class OI {
 
         abortAuto = new JoystickButton(driverController, 7);
 
- 
-        
+        dc8 = new JoystickButton(driverController, 8);
+
+        dc9 = new JoystickButton(driverController, 9);
+        dc9.whenPressed(new SetClimberLegTargetInches(0));
+
         moveArmToZero = new JoystickButton(driverController, 10);
         moveArmToZero.whenPressed(new SetClimberTargetAngle(0.1));
 
+        dc11 = new JoystickButton(driverController, 11);
+        dc11.whenPressed(new IncrementClimberLeg(2));
+
+        dc12 = new JoystickButton(driverController, 12);
+        dc12.whenPressed(new IncrementClimberLeg(-2));
         /**
          * Co driver controller
          * 
@@ -186,9 +195,6 @@ public class OI {
         jogElevator = gamepad.getButtonY();
         jogElevator.whileHeld(new RunElevatorFromGamepad());
 
-        // stopCargoHandler = gamepad.getBackButton();
-        // stopCargoHandler.whenPressed(new StopCargoMotor());
-
         incrementArmAngle = gamepad.getLeftShoulder();
         incrementArmAngle.whenPressed(new IncrementArmAngle(2));
 
@@ -198,10 +204,11 @@ public class OI {
         moveLegToZero = gamepad.getBackButton();
         moveLegToZero.whenPressed(new SetClimberLegTargetInches(0));
 
+        moveArmToZero = gamepad.getStartButton();
+        moveLegToZero.whenPressed(new SetClimberTargetAngle(0));
 
-        moveToClimbStart = gamepad.getRightTriggerClick();    
+        moveToClimbStart = gamepad.getRightTriggerClick();
         moveToClimbStart.whenPressed(new MoveToTouch());
-
 
         mmClimb = gamepad.getRightShoulder();
         mmClimb.whenPressed(new DoClimb());
@@ -234,11 +241,9 @@ public class OI {
         elevatorToMidRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_MID_CARGO_INCHES));
         elevatorToTopRocketCargo.whenPressed(new SetElevatorTargetHeight(Constants.ROCKET_TOP_CARGO_INCHES));
 
-     
         prepareLevelThree = buttonBox.getBackButton();
         prepareLevelThree.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_3_START_ANGLE));
         prepareLevelThree.whenPressed(new SetL3Values());
-
 
         prepareLevelTwo = buttonBox.getStartButton();
         prepareLevelTwo.whenPressed(new SetClimberTargetAngle(Constants.LEVEL_2_START_ANGLE));
