@@ -186,8 +186,8 @@ public class OI {
         jogElevator = gamepad.getButtonY();
         jogElevator.whileHeld(new RunElevatorFromGamepad());
 
-        stopCargoHandler = gamepad.getBackButton();
-        stopCargoHandler.whenPressed(new StopCargoMotor());
+        // stopCargoHandler = gamepad.getBackButton();
+        // stopCargoHandler.whenPressed(new StopCargoMotor());
 
         incrementArmAngle = gamepad.getLeftShoulder();
         incrementArmAngle.whenPressed(new IncrementArmAngle(2));

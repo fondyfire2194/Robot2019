@@ -30,40 +30,39 @@ public class Pref {
   public static HashMap<String, Double> prefDict = new HashMap<>();
 
   static {
-    prefDict.put("DriveStraightKp", .03);
-    prefDict.put("DrivePositionKp", 2.25);
-    prefDict.put("DrivePositionKd", .03); 
-    prefDict.put("DriveSldnDist", 0.);
 
-    prefDict.put("RotateKp", 0.005);
-    prefDict.put("RotateKi", .0);
-    prefDict.put("RotateKd", .005);
-    prefDict.put("RotateIzone", 3.);
-
-    prefDict.put("PathKp", 0.3);
-    prefDict.put("PathKd", 0.);
-    prefDict.put("PathKa", .0);
-    prefDict.put("PathKt", .4);
-    
-    prefDict.put("VisionKp", .008);
-   
-    prefDict.put("JSTwistMinKp", .2);
-    prefDict.put("JSTwistMaxKp", .4);
-
-    prefDict.put("ElevatorMMKf", .6);
-    prefDict.put("ElevatorMMKp", .7);
-    prefDict.put("ElevatorMMKi", 0.);
-    prefDict.put("ElevatorMMKd", 2.0);
-
-    prefDict.put("CargoIntakeAmpsLimit",8.0);
-
-    prefDict.put("DriveStall",25.);
-
-    prefDict.put("ArmMMKf", 2.);
-    prefDict.put("ArmMMKp", .4);
-    prefDict.put("ArmMMKi", 0.0);
     prefDict.put("ArmMMKd", 2.0);
+    prefDict.put("ArmMMKf", 2.);
+    prefDict.put("ArmMMKi", 0.0);
+    prefDict.put("ArmMMKp", .4);
 
+    prefDict.put("CargoIntakeAmpsLimit", 9.0);
+
+    prefDict.put("DrivePositionKd", .03);
+    prefDict.put("DrivePositionKp", 2.7);
+    prefDict.put("DriveSldnDist", 0.);// camera offset
+    prefDict.put("DriveStraightKp", .05);
+    prefDict.put("DriveStall", 25.);
+
+    prefDict.put("ElevatorMMKd", 2.0);
+    prefDict.put("ElevatorMMKf", .6);
+    prefDict.put("ElevatorMMKi", 0.);
+    prefDict.put("ElevatorMMKp", .7);
+
+    prefDict.put("JSTwistMaxKp", .4);
+    prefDict.put("JSTwistMinKp", .2);
+
+    prefDict.put("PathKa", .0);
+    prefDict.put("PathKd", 0.);
+    prefDict.put("PathKp", 0.3);
+    prefDict.put("PathKt", .4);
+
+    prefDict.put("RotateIzone", 3.);
+    prefDict.put("RotateKd", .005);
+    prefDict.put("RotateKi", .0);
+    prefDict.put("RotateKp", 0.005);
+
+    prefDict.put("VisionKp", .005);
 
   }
 
