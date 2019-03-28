@@ -170,7 +170,7 @@ public class Robot extends TimedRobot {
   public static boolean skipHold;
   public static boolean autoAbort;
   public static double sideAngle;
-  public static double sideRocketAngle; 
+  public static double sideRocketAngle;
   public static boolean createDriveRunFile = true;
   public static boolean createElevatorRunFile = true;
   public static boolean createVisionRunFile = true;
@@ -181,14 +181,14 @@ public class Robot extends TimedRobot {
   public static String climberLogName = "/U" + "/data_capturesDSMKE/Climber/C";
   public static String climberUniqueLogName;
 
-
   public static boolean autoRunning;
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
   public static boolean useUltrasound = true;
   public static boolean visionCompJoystick;
-private double scl;
+  private double scl;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -208,7 +208,7 @@ private double scl;
     climberDrive = new ClimberDrive();
 
     airCompressor = new AirCompressor();
-    //  pdp = new PowerPanel();
+    // pdp = new PowerPanel();
     gph = new GamePieceHandler();
     ultrasound = new Ultrasound(RobotMap.ULTRASOUND, Ultrasound.ultrasoundType.inch, .009766);
     m_oi = new OI();
@@ -286,9 +286,9 @@ private double scl;
     Robot.gph.gripHatchPanel();
     Robot.gph.retractHatchPanel();
     climberLeg.legTargetInches = climberLeg.getLegInches();
-		climberLeg.lastHoldInches = climberLeg.legTargetInches + .01;
+    climberLeg.lastHoldInches = climberLeg.legTargetInches + .01;
     climberArm.armTargetDegrees = climberArm.getArmDegrees();
-		climberArm.lastHoldDegrees = climberArm.armTargetDegrees + .01;
+    climberArm.lastHoldDegrees = climberArm.armTargetDegrees + .01;
 
   }
 
@@ -324,9 +324,9 @@ private double scl;
     autoStartTime = Timer.getFPGATimestamp();
     commandStartTime = autoStartTime;
 
-    int startCommandNumber =0;//  (int) SmartDashboard.getNumber("TestStart", 0);
+    int startCommandNumber = 0;// (int) SmartDashboard.getNumber("TestStart", 0);
     // if (autoTimeDelaySeconds == 0)
-    //   startCommandNumber = 1;
+    // startCommandNumber = 1;
     if (autonomousCommand[startCommandNumber] != null && AutoChoosers.startPositionChooser.getSelected() != 0) {
       autonomousCommand[startCommandNumber].start();
       runningAutoCommand = startCommandNumber;
@@ -350,7 +350,7 @@ private double scl;
       cycleHold = false;
 
     if (autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
-  
+
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
       SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
       SD.putN2("CMDTimeTotal", Timer.getFPGATimestamp() - autoStartTime);
@@ -380,8 +380,6 @@ private double scl;
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    PathfinderReverseNotifier.stopNotfier();
-    PathfinderNotifier.stopNotfier();
     cancelAllAuto();
 
   }
@@ -517,7 +515,7 @@ private double scl;
           invertY = true;
           useGainPrefs = true;
           break;
-          case 14:
+        case 14:
           testTrajectoryName = TrajDict.secondHatchDeliveryNames[4];
           towardsFieldTrajectory = true;
           faceField = false;
@@ -530,7 +528,7 @@ private double scl;
           faceField = false;
           invertY = true;
           useGainPrefs = true;
-          break;  
+          break;
 
         default:
           break;
@@ -583,8 +581,8 @@ private double scl;
   }
 
   public void updateStatus() {
-   SmartDashboard.putNumber("SCT",Timer.getFPGATimestamp() - scl);
-   scl = Timer.getFPGATimestamp();
+    SmartDashboard.putNumber("SCT", Timer.getFPGATimestamp() - scl);
+    scl = Timer.getFPGATimestamp();
     scanCounter++;
 
     switch (scanCounter) {
@@ -595,7 +593,7 @@ private double scl;
       SmartDashboard.putNumber("AGKd", activeTrajectoryGains[1]);
       SmartDashboard.putNumber("AGKa", activeTrajectoryGains[2]);
       SmartDashboard.putNumber("AGKt", activeTrajectoryGains[3]);
-  
+
       break;
 
     case 2:
@@ -672,13 +670,17 @@ private double scl;
     Scheduler.getInstance().removeAll();
     driveTrain.leftDriveOut(0);
     driveTrain.rightDriveOut(0);
-    for (int i = 0; i < maxCommands; i++) {
+    driveTrain.gyroOffset = 0;
+    positionRunning = false;
+    orientRunning = false;
+    trajectoryRunning = false;
+    PathfinderReverseNotifier.stopNotfier();
+    PathfinderNotifier.stopNotfier();
 
+    for (int i = 0; i < maxCommands; i++) {
       if (autonomousCommand[i] != null) {
         autonomousCommand[i].cancel();
-
-      }
-
+     }
     }
   }
 
@@ -760,14 +762,14 @@ private double scl;
         case 1:
           invertY = false;
           sideAngle = 90;
-          
+
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           driveTrain.driveStraightAngle = 90.;
           break;
         case 2:
           invertY = false;
           sideAngle = 90;
-          
+
           driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
@@ -775,7 +777,7 @@ private double scl;
         case 3:
           invertY = true;
           sideAngle = 90;
-          
+
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
           limelightCamera.setLEDMode(LedMode.kforceOn);
@@ -783,7 +785,7 @@ private double scl;
         case 4:
           invertY = true;
           sideAngle = -90;
-          
+
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
           break;

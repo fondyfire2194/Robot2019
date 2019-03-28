@@ -135,12 +135,6 @@ public class AutoCommands {
                 // moves in reverse
                 Robot.autonomousCommand[number] = new SetGyroOffset(180);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - 180 Offset";
-                // Robot.autonomousCommand[number] = new ResetEncodersAndGyro();
-                // Robot.autonomousCommandName[number] = String.valueOf(number) + " - Reset
-                // Encoders and Gyro";
-                // number++;
-                // Robot.autonomousCommand[number] = new TimeDelay(2);
-                // Robot.autonomousCommandName[number] = String.valueOf(number) + " - WAIT 5";
                 number++;
 
                 Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchDeliverIndex);
@@ -149,10 +143,6 @@ public class AutoCommands {
                 Robot.autonomousCommand[number] = new PickAndRunTrajectory(true, false, Robot.invertY);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - Trajectory To CS";
                 number++;
-                // Robot.autonomousCommand[number] = new SetGyroOffset(0);
-                // Robot.autonomousCommandName[number] = String.valueOf(number) + " -
-                // 180nOffst";
-                // number++;
 
                 switch (hatchSelected) {
 
