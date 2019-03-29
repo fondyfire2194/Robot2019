@@ -152,12 +152,12 @@ public class GamePieceHandler extends Subsystem {
 	}
 
 	private boolean checkCargoIntakeAmps() {
-		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit") * .8) {
+		if (cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit")) {
 			intakeAmpsCounter++;
 		} else {
 			intakeAmpsCounter = 0;
 		}
-		return cargoMotor.getOutputCurrent() > Pref.getPref("CargoIntakeAmpsLimit") || intakeAmpsCounter > 10;
+		return  intakeAmpsCounter > 25;
 	}
 
 }

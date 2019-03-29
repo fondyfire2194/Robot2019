@@ -85,7 +85,7 @@ public class AutoCommands {
 
         public static int pickUpSecondHatch(int start, int indexStart) {
                 int number = indexStart + 1;
-                double pickupDistance = 12.;
+                double pickupDistance = 12.5;
                 switch (start) {
                 case 1:
                 case 4:

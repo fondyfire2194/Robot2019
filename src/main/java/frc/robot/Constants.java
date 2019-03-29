@@ -40,13 +40,13 @@ public class Constants {
   public final static double ORIENT_RATE = .5;
   public final static double POSITION_RATE = 7.;
   public static double ALL_LOWER_HATCH_INCHES = 0.;
-  public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 28;
+  public static double ROCKET_MID_HATCH_INCHES = ALL_LOWER_HATCH_INCHES + 29;
   public static double ROCKET_TOP_HATCH_INCHES = ROCKET_MID_HATCH_INCHES + 28;
 
   public static double SHIP_CARGO_INCHES = 36;
-  public static double ROCKET_LOWER_CARGO_INCHES = 24;
+  public static double ROCKET_LOWER_CARGO_INCHES = 23;
   public static double ROCKET_MID_CARGO_INCHES = ROCKET_LOWER_CARGO_INCHES + 28;
-  public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 26;
+  public static double ROCKET_TOP_CARGO_INCHES = ROCKET_MID_CARGO_INCHES + 27;
   // ********************************************************************
   public static double ELEVATOR_POSITION_RATE = 40;// in per sec
   public static double ELEVATOR_ENCODER_COUNTS_PER_INCH = 341.3;
@@ -57,7 +57,7 @@ public class Constants {
   public static double ELEVATOR_MAX_HEIGHT = 79;
   public static double ELEVATOR_IN_POSITION_BAND = 3;
 
-  public static double ELEVATOR_CARGO_LOAD = 20;
+  public static double ELEVATOR_CARGO_LOAD = 36;
   // **************************************************************** */
   public static double CLIMBER_LEG_COUNTS_PER_INCH = 700;
   public static double MAX_LEG_INCHES_PER_SEC = 8;

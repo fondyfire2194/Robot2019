@@ -5,6 +5,7 @@ import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.MovingAverage;
 
 /**
  * This command is used from a middle start where the distance and angle is
@@ -51,6 +52,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean correctionMade;
 	private boolean useVisionComp;
 	private boolean gyroLocked;
+	private MovingAverage movingAverage= new MovingAverage(10);
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -61,7 +63,7 @@ public class RobotDriveToTargetV2 extends Command {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
-
+		// movingAverage = new MovingAverage(10);
 		myEndpoint = distance;
 		mySpeed = speed;
 		myEndItNow = endItNow;
@@ -107,22 +109,25 @@ public class RobotDriveToTargetV2 extends Command {
 
 		// check if camera can be used
 
-
 		if (!doneAccelerating) {
 			doAccel();
 		}
 		// if no target seen abort auto
 		if (remainingFtToHatch < 6 & !targetWasSeen)
 			doTargetSeenCheck();
-		// vision and gyro comps
-		doComps();
+
+		if (Math.abs(getFilteredDegRotToTarget() - Robot.limelightCamera.getdegRotationToTarget()) < 1)
+			// vision and gyro comps
+			doComps();
 		// one time correcton of final distance from ultrasound
-		if(Robot.useUltrasound && ! correctionMade) doCorrection();
+		if (Robot.useUltrasound && !correctionMade)
+			doCorrection();
 		// control speed of motion using kp and kd
 		if (doneAccelerating)
 			doSpeed();
 
-		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT, Robot.driveTrain.activeMotionComp);
+		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT,
+				Robot.driveTrain.activeMotionComp);
 
 	}
 
@@ -181,7 +186,7 @@ public class RobotDriveToTargetV2 extends Command {
 
 		// set minimum speed
 		// if (currentMaxSpeed < 1.5) {
-		// 	currentMaxSpeed = 1.5;
+		// currentMaxSpeed = 1.5;
 		// }
 	}
 
@@ -199,7 +204,7 @@ public class RobotDriveToTargetV2 extends Command {
 			useVisionComp = true;
 			targetWasSeen = true;
 		}
-		if (useVisionComp && remainingFtToHatch < 6  && Math.abs(Robot.limelightCamera.getdegVerticalToTarget())<1.)  {
+		if (useVisionComp && remainingFtToHatch < 6 && Math.abs(Robot.limelightCamera.getdegVerticalToTarget()) < 1.) {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 			// useVisionComp = false;
 			SmartDashboard.putNumber("VWLI", Math.abs(Robot.limelightCamera.getdegVerticalToTarget()));
@@ -210,8 +215,8 @@ public class RobotDriveToTargetV2 extends Command {
 
 		if (useVisionComp) {
 			if (Robot.limelightOnEnd) {
-				Robot.driveTrain.activeMotionComp = (Robot.limelightCamera.getdegVerticalToTarget() + Pref.getPref("DriveSldnDist"))
-						* visionTurnGain;
+				Robot.driveTrain.activeMotionComp = (Robot.limelightCamera.getdegVerticalToTarget()
+						+ Pref.getPref("DriveSldnDist")) * visionTurnGain;
 			} else {
 				Robot.driveTrain.activeMotionComp = Robot.limelightCamera.getdegRotationToTarget() * visionTurnGain;
 			}
@@ -230,6 +235,11 @@ public class RobotDriveToTargetV2 extends Command {
 			correctionMade = true;
 		}
 
+	}
+
+	public double getFilteredDegRotToTarget() {
+		movingAverage.add(Robot.limelightCamera.getdegRotationToTarget());
+		return movingAverage.getAverage();
 	}
 
 }

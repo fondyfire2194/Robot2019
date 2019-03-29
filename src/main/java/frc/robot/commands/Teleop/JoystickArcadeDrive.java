@@ -50,8 +50,8 @@ public class JoystickArcadeDrive extends Command {
     if (!Robot.autoRunning && Robot.climberLeg.getLegInches() < 2.0) {
       Robot.driveTrain.arcadeDrive(throttleValue, turnValue * Robot.driveTrain.getDriverSlider());
     } else {
-      Robot.driveTrain.arcadeDrive(throttleValue / 10, 0);
-      Robot.climberDrive.climberDriveOut(throttleValue/2);
+      Robot.driveTrain.arcadeDrive(throttleValue / 5, 0);
+      Robot.climberDrive.climberDriveOut(throttleValue);
 
     }
   }

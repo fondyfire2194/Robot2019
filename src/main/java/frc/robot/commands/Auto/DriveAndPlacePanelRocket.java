@@ -34,5 +34,6 @@ public class DriveAndPlacePanelRocket extends CommandGroup {
     // arm.
     addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
     addSequential(new PlaceHatchPanelRocket());
+    addSequential(new SetAutoCommandDone());
   }
 }

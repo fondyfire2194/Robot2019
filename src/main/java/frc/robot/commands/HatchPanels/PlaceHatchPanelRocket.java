@@ -36,7 +36,7 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     // arm.
 
     addSequential(new ExtendHatchPanel(true));
-     addSequential(new TimeDelay(.5));
+     addSequential(new TimeDelay(.75));
     addSequential(new GripHatchPanel(false));
      addSequential(new TimeDelay(.2));
     addSequential(new PushHatchPanel(true));

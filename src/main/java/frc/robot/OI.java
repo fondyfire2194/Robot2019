@@ -229,7 +229,6 @@ public class OI {
         elevatorToLowerRocketCargo = buttonBox.getButtonY();
         elevatorToMidRocketCargo = buttonBox.getButtonX();
         elevatorToTopRocketCargo = buttonBox.getButtonL1();
-        elevatorToCargoLoadStation = buttonBox.getButtonOptions();
 
         elevatorToRocketLowerHatch.whenPressed(new SetElevatorTargetHeight(Constants.ALL_LOWER_HATCH_INCHES));
 
@@ -252,6 +251,9 @@ public class OI {
 
         toggleExtension = buttonBox.getButtonOptions();
         toggleExtension.whenPressed(new ToggleExtendHatchPanel());
+
+        elevatorToCargoLoadStation = buttonBox.getButtonShare();
+        elevatorToCargoLoadStation.whenPressed(new SetElevatorTargetHeight(Constants.ELEVATOR_CARGO_LOAD));
 
     }
 }
