@@ -59,7 +59,7 @@ public class AutoCommands {
                 Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
                 Robot.autonomousCommandName[number] = "2 - Orient to Cargo Ship " + String.valueOf(Robot.sideAngle);
                 number++;
-                Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance,
+                Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(firstPlaceDistance,
                                 Constants.POSITION_RATE, Robot.sideAngle, false, 3);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
                                 + String.valueOf(firstPlaceDistance);
@@ -73,7 +73,7 @@ public class AutoCommands {
         public static int setMiddleStart() {
                 double firstPlaceDistance = 12.25;
                 int number = 1;
-                Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(firstPlaceDistance,
+                Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(firstPlaceDistance,
                                 Constants.POSITION_RATE, 0, false, 3);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
                                 + String.valueOf(firstPlaceDistance);
@@ -157,7 +157,7 @@ public class AutoCommands {
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
                                         + String.valueOf(Robot.sideAngle);
                         number++;
-                        Robot.autonomousCommand[number] = new DriveAndPlacePanelShip(secondPlaceDistance,
+                        Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance,
                                         Constants.POSITION_RATE, Robot.sideAngle, false, 3);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
                                         + String.valueOf(secondPlaceDistance);

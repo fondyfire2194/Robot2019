@@ -158,7 +158,8 @@ public class OI {
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());
 
         toggleHatchCoverGripper = new JoystickButton(driverController, 5);
-        toggleHatchCoverGripper.whenPressed(new ToggleHatchGripper());
+        toggleHatchCoverGripper.whenPressed(new ExtendHatchPanel(true));
+        toggleHatchCoverGripper.whenReleased(new ReturnHatchGripper());
 
         placeHatchPanelShip = new JoystickButton(driverController, 6);
         placeHatchPanelShip.whenPressed(new PlaceHatchPanelShip());

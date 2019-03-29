@@ -224,25 +224,25 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(driveTrain);
 
     Timer.delay(.02);
-    SmartDashboard.putNumber("Target Feet", 5);
-    SmartDashboard.putNumber("Position FPS", 5);
-    SmartDashboard.putNumber("Target Angle", angleTarget);
-    Timer.delay(.02);
-    SmartDashboard.putNumber("Orient Rate", orientRate);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("ReverseOrient", false);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("UseGainPrefs", true);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("UseUSBTraj", false);
+    // SmartDashboard.putNumber("Target Feet", 5);
+    // SmartDashboard.putNumber("Position FPS", 5);
+    // SmartDashboard.putNumber("Target Angle", angleTarget);
+    // Timer.delay(.02);
+    // SmartDashboard.putNumber("Orient Rate", orientRate);
+    // Timer.delay(.02);
+    // SmartDashboard.putBoolean("ReverseOrient", false);
+    // Timer.delay(.02);
+    // SmartDashboard.putBoolean("UseGainPrefs", true);
+    // Timer.delay(.02);
+    // SmartDashboard.putBoolean("UseUSBTraj", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("SetAuto", false);
     Timer.delay(.02);
     SmartDashboard.putBoolean("StartSet", false);
     Timer.delay(.02);
-    SmartDashboard.putBoolean("CreateTrajFile", true);
-    Timer.delay(.02);
-    SmartDashboard.putBoolean("DriveCloseLoop", false);
+    // SmartDashboard.putBoolean("CreateTrajFile", true);
+    // Timer.delay(.02);
+    // SmartDashboard.putBoolean("DriveCloseLoop", false);
 
     SmartDashboard.putData(driveTrain);
     // SmartDashboard.putData(elevator);
@@ -680,7 +680,7 @@ public class Robot extends TimedRobot {
     for (int i = 0; i < maxCommands; i++) {
       if (autonomousCommand[i] != null) {
         autonomousCommand[i].cancel();
-     }
+      }
     }
   }
 
@@ -714,7 +714,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("File Running", readingRunning);
     readingRunning = currentLoader.running;
     readThreadStartTime = Timer.getFPGATimestamp();
-    if (startSettingPB && !readingRunning) {
+    if ((startSettingPB || m_oi.dc8.get())&& !readingRunning) {
 
       startSettingsDone = false;
       currentLoader = new LoadFiles();
@@ -742,7 +742,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("AutoStartSetupDone", setAutoStartDone);
     SmartDashboard.putBoolean("AutoSetupRunning", autoSetupRunning);
     SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
-    if (setAutoStartPB & startSettingsDone && !autoSetupRunning) {
+    if ((setAutoStartPB || m_oi.driveToVision.get())&& startSettingsDone && !autoSetupRunning) {
       resetCommandNames();
       numberOfAutonomousCommands = 0;
       autoSetupRunning = true;

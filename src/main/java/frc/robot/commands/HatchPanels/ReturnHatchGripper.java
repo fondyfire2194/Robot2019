@@ -8,16 +8,13 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-
 import frc.robot.commands.TimeDelay;
 
-
-
-public class PlaceHatchPanelRocket extends CommandGroup {
+public class ReturnHatchGripper extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public PlaceHatchPanelRocket() {
+  public ReturnHatchGripper() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -34,15 +31,8 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
-    addSequential(new ExtendHatchPanel(true));
-     addSequential(new TimeDelay(.5));
-    addSequential(new GripHatchPanel(false));
-     addSequential(new TimeDelay(.2));
-    addSequential(new PushHatchPanel(true));
-     addSequential(new TimeDelay(.5));
-    addParallel(new PushHatchPanel(false));
+    addSequential(new ToggleHatchGripper());
+    addSequential(new TimeDelay(.4));
     addSequential(new ExtendHatchPanel(false));
-}
   }
-  
+}
