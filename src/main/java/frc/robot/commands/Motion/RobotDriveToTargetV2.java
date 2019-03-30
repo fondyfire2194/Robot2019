@@ -1,8 +1,14 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
+import frc.robot.LimeLight;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MovingAverage;
@@ -52,7 +58,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean correctionMade;
 	private boolean useVisionComp;
 	private boolean gyroLocked;
-	private MovingAverage movingAverage= new MovingAverage(10);
+	private MovingAverage movingAverage = new MovingAverage(10);
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -76,6 +82,7 @@ public class RobotDriveToTargetV2 extends Command {
 	@Override
 	protected void initialize() {
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
+		Shuffleboard.startRecording();
 		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
@@ -93,6 +100,7 @@ public class RobotDriveToTargetV2 extends Command {
 		Kp = Pref.getPref("DrivePositionKp");
 		Kd = Pref.getPref("DrivePositionKd");
 		correctionMade = false;
+		Robot.limelightCamera.setSnapshot(Snapshot.kon);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -113,12 +121,16 @@ public class RobotDriveToTargetV2 extends Command {
 			doAccel();
 		}
 		// if no target seen abort auto
-		if (remainingFtToHatch < 6 & !targetWasSeen)
+		if (remainingFtToHatch < 6 & !targetWasSeen){
 			doTargetSeenCheck();
 
-		if (Math.abs(getFilteredDegRotToTarget() - Robot.limelightCamera.getdegRotationToTarget()) < 1)
+		}
+		if (Math.abs(getFilteredDegRotToTarget() - Robot.limelightCamera.getdegRotationToTarget()) < 1) {
 			// vision and gyro comps
 			doComps();
+		} else {
+			Shuffleboard.addEventMarker("GLITCH", EventImportance.kHigh);
+		}
 		// one time correcton of final distance from ultrasound
 		if (Robot.useUltrasound && !correctionMade)
 			doCorrection();
@@ -146,7 +158,8 @@ public class RobotDriveToTargetV2 extends Command {
 			Robot.driveTrain.setLeftSideDriveBrakeOn(true);
 			Robot.driveTrain.setRightSideDriveBrakeOn(true);
 		}
-
+		Shuffleboard.stopRecording();
+		Robot.limelightCamera.setSnapshot(Snapshot.koff);
 		Robot.positionRunning = false;
 		doneAccelerating = false;
 		currentMaxSpeed = 0;
