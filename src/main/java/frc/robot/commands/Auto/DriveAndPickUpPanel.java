@@ -10,6 +10,7 @@ package frc.robot.commands.Auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Motion.RobotDriveToTargetV2;
 import frc.robot.commands.HatchPanels.PickUpHatchPanel;
+import frc.robot.commands.Limelight.*;
 
 public class DriveAndPickUpPanel extends CommandGroup {
   /**
@@ -32,6 +33,7 @@ public class DriveAndPickUpPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+    addParallel(new LogVisionData(3));
     addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
     addSequential(new PickUpHatchPanel());
   }
