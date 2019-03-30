@@ -10,11 +10,12 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
  */
 public class LogVisionData extends TimedCommand {
 	private double startTime;
-	private String names = "Time,LeftFt,RightFt,SpeedFPS,GyroYaw,BoxHt,BoxWdth,CalcDist,HzAngle,VertAngle,TgtSen\n";
-	private String units = "mS,Ft,Ft,FPS,Deg,Px,Px,Deg,Deg,T_F\n";
+	private String names = "Time,LeftFt,GyroYaw,BoxHt,BoxWdth,HzAngle,VertAngle,TgtSen\n";
+	private String units = "mS,Ft,Deg,Px,Px,Deg,Deg,T_F\n";
 	String output_dir = "/U" + "/data_capturesDSMKE/Vision/"; // USB drive is mounted to /U on roboRIO
-String name1 = "Vision";
-String name = output_dir + name1;
+	String name1 = "Vision";
+	String name = output_dir + name1;
+
 	public LogVisionData(double timeout) {
 		super(timeout);
 		// Use requires() here to declare subsystem dependencies
@@ -23,8 +24,8 @@ String name = output_dir + name1;
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		double temp= (int)Timer.getFPGATimestamp();
-		name+=  String.valueOf(temp)  + ".csv";
+		double temp = (int) Timer.getFPGATimestamp();
+		name += String.valueOf(temp) + ".csv";
 
 		if (Robot.createVisionRunFile)
 			Robot.simpleCSVLogger2194.init(name, names, units);
@@ -38,10 +39,9 @@ String name = output_dir + name1;
 			if (Robot.limelightCamera.getIsTargetFound())
 				targetFound = 1.0;
 			Robot.simpleCSVLogger2194.writeData((Timer.getFPGATimestamp() - startTime), Robot.driveTrain.getLeftFeet(),
-					Robot.driveTrain.getRightFeet(), Robot.driveTrain.getLeftFeetPerSecond(),
 					Robot.driveTrain.getGyroYaw(), Robot.limelightCamera.getBoundingBoxHeight(),
-			  	    Robot.limelightCamera.getBoundingBoxWidth(),Robot.visionData.calculateCameraDistance(),
-					Robot.limelightCamera.getdegRotationToTarget(),Robot.limelightCamera.getdegVerticalToTarget(), targetFound);
+					Robot.limelightCamera.getBoundingBoxWidth(), Robot.limelightCamera.getdegRotationToTarget(),
+					Robot.limelightCamera.getdegVerticalToTarget(), targetFound);
 		}
 	}
 
