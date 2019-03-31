@@ -32,7 +32,7 @@ import frc.robot.MovingAverage;
  * 
  * 
  */
-public class RobotDriveToTargetV2 extends Command {
+public class RobotDriveToLoad extends Command {
 	private double mySpeed;
 	private boolean myEndItNow;
 	private double myTimeout;
@@ -43,6 +43,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private double myEndpoint;
 	private double remainingFtToHatch;
 	private double myTargetAngle;
+	private boolean mySlowdown;
 	private boolean targetWasSeen;
 	private int targetNotSeenCtr;
 	private double visionTurnGain;
@@ -57,25 +58,25 @@ public class RobotDriveToTargetV2 extends Command {
 	private double robotDistance;
 	private boolean correctionMade;
 	private boolean useVisionComp;
-	private boolean gyroLocked;
-	private MovingAverage movingAverage = new MovingAverage(10);
+	private boolean useSwitchSlowdown;
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
 	 * testing = 3 So at 2 ft speed is 6 ft per sec, at 1 ft it is 3
 	 */
 
-	public RobotDriveToTargetV2(double distance, double speed, double targetAngle, boolean endItNow, double timeout) {
+	public RobotDriveToLoad(double distance, double speed, double targetAngle, boolean slowdown, boolean endItNow,
+			double timeout) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
 		requires(Robot.driveTrain);
-		// movingAverage = new MovingAverage(10);
 		myEndpoint = distance;
 		mySpeed = speed;
 		myEndItNow = endItNow;
 		myDistance = distance;
 		myTimeout = timeout;
 		myTargetAngle = targetAngle;
+		mySlowdown = slowdown;
 	}
 
 	// Called just before this Command runs the first time
@@ -101,6 +102,7 @@ public class RobotDriveToTargetV2 extends Command {
 		Kd = Pref.getPref("DrivePositionKd");
 		correctionMade = false;
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
+		useSwitchSlowdown = !mySlowdown;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -121,17 +123,13 @@ public class RobotDriveToTargetV2 extends Command {
 			doAccel();
 		}
 		// if no target seen abort auto
-		if (remainingFtToHatch < 6 & !targetWasSeen){
+		if (remainingFtToHatch < 6 & !targetWasSeen) {
 			doTargetSeenCheck();
 
 		}
-		if (Math.abs(getFilteredDegRotToTarget() - Robot.limelightCamera.getdegRotationToTarget()) < 1) {
-			// vision and gyro comps
-			doComps();
-		} else {
-			Shuffleboard.addEventMarker("GLITCH", EventImportance.kHigh);
-		}
-		// one time correcton of final distance from ultrasound
+		doComps();
+
+		// one time correcton of final distance from Lidar
 		if (Robot.useLidar && !correctionMade)
 			doCorrection();
 		// control speed of motion using kp and kd
@@ -190,15 +188,17 @@ public class RobotDriveToTargetV2 extends Command {
 		positionRateOfChange = positionChange / loopTime;
 
 		calcLoopSpeed = remainingFtToHatch * Kp;// + positionRateOfChange * Kd;
+		SmartDashboard.putNumber("PRFT", remainingFtToHatch);
+		SmartDashboard.putNumber("PCLS", calcLoopSpeed);
 		if (calcLoopSpeed > mySpeed)
 			currentMaxSpeed = mySpeed;
 		else
 			currentMaxSpeed = calcLoopSpeed;
 
 		// set minimum speed
-		if (currentMaxSpeed < 1.) {
-		currentMaxSpeed = 1.;
-		}
+		if (currentMaxSpeed < 1. || (useSwitchSlowdown && mySlowdown))
+			currentMaxSpeed = 1.;
+
 	}
 
 	private void doTargetSeenCheck() {
@@ -239,18 +239,13 @@ public class RobotDriveToTargetV2 extends Command {
 	}
 
 	private void doCorrection() {
-		if (remainingFtToHatch < 8) {
+		if (remainingFtToHatch < 7) {
 			double distanceDifference = Robot.lidar.getDistanceFeet() - remainingFtToHatch;
 			if (Math.abs(distanceDifference) < Constants.LIDAR_CORRECT_BAND)
 				myEndpoint = myEndpoint + distanceDifference;
 			correctionMade = true;
 		}
 
-	}
-
-	public double getFilteredDegRotToTarget() {
-		movingAverage.add(Robot.limelightCamera.getdegRotationToTarget());
-		return movingAverage.getAverage();
 	}
 
 }

@@ -2,8 +2,6 @@ package frc.robot.commands.Climber;
 
 import frc.robot.Robot;
 
-
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -43,10 +41,7 @@ public class RunClimberLegFromGamepad extends Command {
 		temp = yValue * yValue;
 		if (yValue < 0)
 			temp = -temp;
-		yValue = temp/2;
-		
-    if(Robot.climberLeg.getLegSwitch()&&yValue <0)yValue =0;
-		Robot.climberLeg.climberLegOut(yValue,myVel);
+		yValue = temp / 2;
 
 	}
 
@@ -59,7 +54,7 @@ public class RunClimberLegFromGamepad extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.climberLeg.climberLegOut(0,false);
+		Robot.climberLeg.climberLegOut(0, false);
 		Robot.climberLeg.climberLeg.configReverseSoftLimitEnable(true);
 
 	}

@@ -30,17 +30,16 @@ public class Pref {
   public static HashMap<String, Double> prefDict = new HashMap<>();
 
   static {
-
-    prefDict.put("ArmMMKd", 2.0);
-    prefDict.put("ArmMMKf", 2.);
-    prefDict.put("ArmMMKi", 0.0);
-    prefDict.put("ArmMMKp", .4);
-
+    prefDict.put("CameraOffset", 0.);// camera offset
     prefDict.put("CargoIntakeAmpsLimit", 9.0);
 
     prefDict.put("DrivePositionKd", .03);
     prefDict.put("DrivePositionKp", 2.7);
-    prefDict.put("DriveSldnDist", 0.);// camera offset
+    prefDict.put("DrivePositionRate", 6.);
+    prefDict.put("CenterDistance",11.6);//feet
+    prefDict.put("CenterLoadDistance",8.8);//feet
+    
+
     prefDict.put("DriveStraightKp", .05);
     prefDict.put("DriveStall", 25.);
 
@@ -63,6 +62,7 @@ public class Pref {
     prefDict.put("RotateKp", 0.005);
 
     prefDict.put("VisionKp", .005);
+    prefDict.put("VisionPipeline",0.);
 
   }
 

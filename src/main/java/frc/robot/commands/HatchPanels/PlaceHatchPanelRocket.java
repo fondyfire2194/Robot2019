@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 import frc.robot.commands.TimeDelay;
 
-
-
 public class PlaceHatchPanelRocket extends CommandGroup {
   /**
    * Add your docs here.
@@ -36,13 +34,14 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     // arm.
 
     addSequential(new ExtendHatchPanel(true));
-     addSequential(new TimeDelay(.75));
+    addSequential(new TimeDelay(.75));
     addSequential(new GripHatchPanel(false));
-     addSequential(new TimeDelay(.2));
+    addSequential(new TimeDelay(.25));
     addSequential(new PushHatchPanel(true));
-     addSequential(new TimeDelay(.5));
-    addParallel(new PushHatchPanel(false));
+    addSequential(new PushersBothExtended(.5));
     addSequential(new ExtendHatchPanel(false));
-}
+    addSequential(new TimeDelay(.25));
+    addParallel(new PushHatchPanel(false));
+
   }
-  
+}

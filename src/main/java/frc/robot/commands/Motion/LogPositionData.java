@@ -49,7 +49,7 @@ public class LogPositionData extends TimedCommand {
 					Robot.driveTrain.leftTalonOne.getClosedLoopError(),
 					Robot.driveTrain.rightTalonOne.getClosedLoopError(), Robot.limelightCamera.getBoundingBoxHeight(),
 					Robot.limelightCamera.getBoundingBoxWidth(), Robot.limelightCamera.getdegVerticalToTarget(),
-					targetFound, Robot.driveTrain.driveStraightAngle, Robot.ultrasound.getDistanceInches(), useGyroComp,
+					Robot.limelightCamera.getAspectRatio(),targetFound, Robot.driveTrain.driveStraightAngle, Robot.lidar.getDistanceFeet(), useGyroComp,
 					Robot.driveTrain.activeMotionComp);
 		}
 	}

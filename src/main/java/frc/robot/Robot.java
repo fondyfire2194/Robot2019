@@ -31,7 +31,6 @@ import frc.robot.subsystems.ClimberLeg;
 import frc.robot.subsystems.ClimberDrive;
 import frc.robot.subsystems.AirCompressor;
 import frc.robot.subsystems.GamePieceHandler;
-import frc.robot.subsystems.Ultrasound;
 import jaci.pathfinder.Trajectory;
 import frc.robot.AutoChoosers;
 import frc.robot.VisionData;
@@ -41,6 +40,7 @@ import frc.robot.LoadFiles;
 import frc.robot.PathfinderNotifier;
 import frc.robot.PathfinderReverseNotifier;
 import frc.robot.LimelightControlMode.*;
+import frc.robot.subsystems.Lidar;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,11 +54,11 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
   public static Elevator elevator;
+  public static Lidar lidar;
   public static GamePieceHandler gph;
   public static ClimberArm climberArm;
   public static ClimberLeg climberLeg;
   public static ClimberDrive climberDrive;
-  public static Ultrasound ultrasound;
   public static AirCompressor airCompressor;
   public static PowerPanel pdp;
   public static SimpleCSVLogger2194 simpleCSVLogger2194;
@@ -185,7 +185,7 @@ public class Robot extends TimedRobot {
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
-  public static boolean useUltrasound = true;
+  public static boolean useLidar = true;
   public static boolean visionCompJoystick;
   private double scl;
 
@@ -206,11 +206,10 @@ public class Robot extends TimedRobot {
     climberArm = new ClimberArm();
     climberLeg = new ClimberLeg();
     climberDrive = new ClimberDrive();
-
+    lidar = new Lidar(RobotMap.LIDAR_ENABLE, RobotMap.LIDAR_TRIGGER, RobotMap.LIDAR_MODE);
     airCompressor = new AirCompressor();
     // pdp = new PowerPanel();
     gph = new GamePieceHandler();
-    ultrasound = new Ultrasound(RobotMap.ULTRASOUND, Ultrasound.ultrasoundType.inch, .009766);
     m_oi = new OI();
     simpleCSVLogger2194 = new SimpleCSVLogger2194();
     limelightCamera = new LimeLight();
@@ -255,7 +254,8 @@ public class Robot extends TimedRobot {
     bufferTrajectoryGains[0] = activeTrajectoryGains;
     startPositionSelected = 0;
     elevator.holdPositionInches = 0;
-    SmartDashboard.putNumber("TestStart", 0);
+
+    limelightCamera.setPipeline((int) Pref.getPref("VisionPipeline"));
   }
 
   /**
@@ -316,6 +316,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    limelightCamera.setPipeline((int) Pref.getPref("VisionPipeline"));
     useGainPrefs = false;
     Scheduler.getInstance().run();
     driveTrain.resetGyro();
@@ -381,7 +382,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     cancelAllAuto();
-
+    limelightCamera.setPipeline((int) Pref.getPref("VisionPipeline"));
   }
 
   /**
@@ -618,10 +619,11 @@ public class Robot extends TimedRobot {
       break;
     case 7:
       airCompressor.updateStatus();
+      lidar.updateStatus();
       break;
     case 8:
       robotRotate.updateStatus();
-      ultrasound.updateStatus();
+
       break;
     case 9:
       climberArm.updateStatus();
@@ -714,7 +716,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("File Running", readingRunning);
     readingRunning = currentLoader.running;
     readThreadStartTime = Timer.getFPGATimestamp();
-    if ((startSettingPB || m_oi.dc8.get())&& !readingRunning) {
+    if ((startSettingPB || m_oi.dc8.get()) && !readingRunning) {
 
       startSettingsDone = false;
       currentLoader = new LoadFiles();
@@ -742,7 +744,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("AutoStartSetupDone", setAutoStartDone);
     SmartDashboard.putBoolean("AutoSetupRunning", autoSetupRunning);
     SmartDashboard.putNumber("NmrAutoCmds", numberOfAutonomousCommands);
-    if ((setAutoStartPB || m_oi.driveToVision.get())&& startSettingsDone && !autoSetupRunning) {
+    if ((setAutoStartPB || m_oi.driveToVision.get()) && startSettingsDone && !autoSetupRunning) {
       resetCommandNames();
       numberOfAutonomousCommands = 0;
       autoSetupRunning = true;

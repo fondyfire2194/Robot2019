@@ -19,7 +19,7 @@ public class RobotMap {
   public static final int POWER_DISTRIBUTION_PANEL = 1;
   public static final int DRIVETRAIN_LEFT_TALON_ONE = 3;
   public static final int DRIVETRAIN_LEFT_TALON_TWO = 4;
-  
+
   public static final int DRIVETRAIN_RIGHT_TALON_ONE = 6;
   public static final int DRIVETRAIN_RIGHT_TALON_TWO = 7;
 
@@ -30,11 +30,21 @@ public class RobotMap {
   public static final int CARGO_MOTOR = 10;
   public static final int ELEVATOR_MOTOR = 12;
 
-  public static final int ELEVATOR_TRAVEL_SWITCH = 0;//analog
-  public static final int CLIMBER_LEG_TRAVEL_SWITCH = 3;//dio
-  public static final int LEFT_PUSHER_SWITCH = 0;//dio
-  public static final int RIGHT_PUSHER_SWITCH = 1;//dio
-  public static final int ULTRASOUND = 3;//analog
+  public static final int ELEVATOR_TRAVEL_SWITCH = 0;// analog
+  public static final int ULTRASOUND = 3;// analog
+
+  // digital IO
+  public static final int LEFT_PUSHER_BACK_SWITCH = 0;// dio
+  public static final int LEFT_PUSHER_FWD_SWITCH = 1;// dio
+  public static final int RIGHT_PUSHER_BACK_SWITCH = 2;// dio
+  public static final int RIGHT_PUSHER_FWD_SWITCH = 3;// dio
+
+  public static final int LEFT_SIDE_CHASSIS_SWITCH = 4;// dio
+  public static final int RIGHT_SIDE_CHASSIS_SWITCH = 5;// dio
+
+  public static final int LIDAR_ENABLE = 6;
+  public static final int LIDAR_MODE = 7;
+  public static final int LIDAR_TRIGGER = 8;
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.

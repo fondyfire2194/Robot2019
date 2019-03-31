@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
  */
 public class LogVisionData extends TimedCommand {
 	private double startTime;
-	private String names = "Time,LeftFt,GyroYaw,BoxHt,BoxWdth,HzAngle,VertAngle,TgtSen\n";
-	private String units = "mS,Ft,Deg,Px,Px,Deg,Deg,T_F\n";
+	private String names = "Time,LeftFt,LeftSpd,GyroYaw,BoxHt,BoxWdth,HzAngle,VertAngle,TgtSen\n";
+	private String units = "mS,Ft,FtPerSec,Deg,Px,Px,Rat,Deg,Deg,T_F\n";
 	String output_dir = "/U" + "/data_capturesDSMKE/Vision/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Vision";
 	String name = output_dir + name1;
@@ -39,8 +39,8 @@ public class LogVisionData extends TimedCommand {
 			if (Robot.limelightCamera.getIsTargetFound())
 				targetFound = 1.0;
 			Robot.simpleCSVLogger2194.writeData((Timer.getFPGATimestamp() - startTime), Robot.driveTrain.getLeftFeet(),
-					Robot.driveTrain.getGyroYaw(), Robot.limelightCamera.getBoundingBoxHeight(),
-					Robot.limelightCamera.getBoundingBoxWidth(), Robot.limelightCamera.getdegRotationToTarget(),
+					Robot.driveTrain.getLeftFeetPerSecond(),Robot.driveTrain.getGyroYaw(), Robot.limelightCamera.getBoundingBoxHeight(),
+					Robot.limelightCamera.getBoundingBoxWidth(), Robot.limelightCamera.getAspectRatio(),Robot.limelightCamera.getdegRotationToTarget(),
 					Robot.limelightCamera.getdegVerticalToTarget(), targetFound);
 		}
 	}

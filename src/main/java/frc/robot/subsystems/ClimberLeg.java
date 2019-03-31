@@ -35,9 +35,8 @@ public class ClimberLeg extends Subsystem {
   public double motionMagicRate = Constants.CLIMBER_LEG_CLIMB_RATE;
   public double legTargetInches;
   public double lastHoldInches;
-  public boolean legOnSwitch;
-  private int switchCounter;
-  private boolean switchWasSeen;
+
+
   public double climbTouchInches =0;
 public double climbFinalInches =0;
 
@@ -72,7 +71,7 @@ public double climbFinalInches =0;
     climberLeg.config_kI(1, 0, 0);
     climberLeg.config_kD(1, 0, 0);
 
-    legSwitch = new DigitalInput(RobotMap.CLIMBER_LEG_TRAVEL_SWITCH);
+
     climberLeg.clearStickyFaults(0);
     climberLeg.configReverseSoftLimitThreshold(-350,0);//1/4 inch in encoder counts
     climberLeg.configReverseSoftLimitEnable(true);
@@ -126,9 +125,6 @@ public double climbFinalInches =0;
     return (climberLeg.getSelectedSensorVelocity(0) * 10) / Constants.CLIMBER_LEG_COUNTS_PER_INCH;
   }
 
-  public boolean getLegSwitch(){
-    return false;
-  }
 
   public void setL2Climb(){
     climbTouchInches = Constants.CLIMBER_LEG_TOUCH_POSITION;
@@ -197,26 +193,13 @@ public double climbFinalInches =0;
 
   public void updateStatus() {
        
-  //   if (getLegSwitch())
-  //   switchCounter++;
-  // else
-  //   switchCounter = 0;
-
-  // if (switchCounter > 10 && !switchWasSeen) {
-  //   resetLegPosition();
-  //   legTargetInches = getLegInches();
-  //   switchWasSeen = true;
-  // }
-  // if (switchWasSeen)
-  //   switchWasSeen = legOnSwitch;
-    
+ 
     SD.putN("ClimberLegPosition", (double) getLegEncoderPosition());
     SD.putN1("ClimberLegInches", getLegInches());
     SD.putN1("ClimberLegENCPer100MS", climberLeg.getSelectedSensorVelocity(0));
     SD.putN1("ClimberLegInchesPerSec", getLegInPerSec());
     SD.putN1("ClimberLegTarget", legTargetInches);
     SD.putN2("ClimberLegAmps", getLegCurrent());
-    SmartDashboard.putBoolean("ClimberLegSwitch", getLegSwitch());
     SD.putN("ClimberTouchPosition", climbTouchInches);
     SD.putN1("ClimberFinalInches", climbFinalInches);
     SD.putN1("ClimbLegRate", motionMagicRate);

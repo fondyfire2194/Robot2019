@@ -25,8 +25,10 @@ public class GamePieceHandler extends Subsystem {
 	public Solenoid hatchCoverPusher;
 	private int gripperCounter;
 	private boolean stopCargoIntake;
-	private DigitalInput leftPusherSensor;
-	private DigitalInput rightPusherSensor;
+	private DigitalInput leftPusherBackSensor;
+	private DigitalInput rightPusherBackSensor;
+	private DigitalInput leftPusherForwardSensor;
+	private DigitalInput rightPusherForwardSensor;
 	private int intakeAmpsCounter;
 
 	public static boolean hatchGripped;
@@ -39,9 +41,10 @@ public class GamePieceHandler extends Subsystem {
 		cargoMotor.configVoltageCompSaturation(12, 0);
 		cargoMotor.enableVoltageCompensation(true);
 
-		leftPusherSensor = new DigitalInput(0);
-
-		rightPusherSensor = new DigitalInput(1);
+		leftPusherBackSensor = new DigitalInput(RobotMap.LEFT_PUSHER_BACK_SWITCH);
+		leftPusherForwardSensor = new DigitalInput(RobotMap.LEFT_PUSHER_FWD_SWITCH);		
+		rightPusherBackSensor = new DigitalInput(RobotMap.RIGHT_PUSHER_BACK_SWITCH);
+		rightPusherForwardSensor = new DigitalInput(RobotMap.RIGHT_PUSHER_FWD_SWITCH);
 
 		hatchCoverExtend = new Solenoid(2);
 		hatchCoverExtend.set(false);
@@ -115,20 +118,36 @@ public class GamePieceHandler extends Subsystem {
 
 	}
 
-	public boolean getLeftHatchDetected() {
-		return !leftPusherSensor.get();
+	public boolean getLeftSideDetected() {
+		return !leftPusherBackSensor.get();
 	}
 
-	public boolean getRightHatchDetected() {
-		return !rightPusherSensor.get();
+	public boolean getRightSideDetected() {
+		return !rightPusherBackSensor.get();
 	}
 
-	public boolean eitherHatchDetected() {
-		return !leftPusherSensor.get() || !rightPusherSensor.get();
+	public boolean eitherSideDetected() {
+		return getLeftSideDetected() || getRightSideDetected();
 	}
 
-	public boolean bothHatchesDetected() {
-		return !leftPusherSensor.get() && !rightPusherSensor.get();
+	public boolean bothSidesDetected() {
+		return getLeftSideDetected() && getRightSideDetected();
+	}
+
+	public boolean getLeftSideExtended() {
+		return !leftPusherForwardSensor.get();
+	}
+
+	public boolean getRightSideExtended() {
+		return !rightPusherForwardSensor.get();
+	}
+
+	public boolean eitherSideExtended() {
+		return getLeftSideExtended() || getRightSideExtended();
+	}
+
+	public boolean bothSidesExtended() {
+		return getLeftSideExtended() && getRightSideExtended();
 	}
 
 	public void updateStatus() {
@@ -141,9 +160,9 @@ public class GamePieceHandler extends Subsystem {
 
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
 		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
-		SmartDashboard.putBoolean("LeftDetected", getLeftHatchDetected());
+		SmartDashboard.putBoolean("LeftDetected", getLeftSideDetected());
 
-		SmartDashboard.putBoolean("RightDetected", getRightHatchDetected());
+		SmartDashboard.putBoolean("RightDetected", getRightSideDetected());
 
 		if (AutoChoosers.debugChooser.getSelected() == 4) {
 			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());

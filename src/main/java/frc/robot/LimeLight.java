@@ -375,6 +375,9 @@ public class LimeLight {
         double t = tvert.getDouble(0.0);
         return t;
     }
+    public double getAspectRatio(){
+        return getBoundingBoxWidth()/getBoundingBoxHeight();
+    }
 
     public double getPerspectiveAngle() {
         double originalRatio = 77.0 / 35.0;
