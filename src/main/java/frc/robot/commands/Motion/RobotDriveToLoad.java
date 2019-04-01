@@ -1,17 +1,10 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
-import frc.robot.LimeLight;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.MovingAverage;
 
 /**
  * This command is used from a middle start where the distance and angle is
@@ -181,8 +174,6 @@ public class RobotDriveToLoad extends Command {
 		positionRateOfChange = positionChange / loopTime;
 
 		calcLoopSpeed = remainingFtToHatch * Kp;// + positionRateOfChange * Kd;
-		SmartDashboard.putNumber("PRFT", remainingFtToHatch);
-		SmartDashboard.putNumber("PCLS", calcLoopSpeed);
 		if (calcLoopSpeed > mySpeed)
 			currentMaxSpeed = mySpeed;
 		else
@@ -211,8 +202,7 @@ public class RobotDriveToLoad extends Command {
 		if (useVisionComp && remainingFtToHatch < 6 && Math.abs(Robot.limelightCamera.getdegVerticalToTarget()) < 1.) {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 			// useVisionComp = false;
-			SmartDashboard.putNumber("VWLI", Math.abs(Robot.limelightCamera.getdegVerticalToTarget()));
-
+	
 		}
 
 		Robot.driveTrain.useGyroComp = !useVisionComp;

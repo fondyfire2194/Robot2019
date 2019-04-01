@@ -1,17 +1,11 @@
 package frc.robot.commands.Motion;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
-import frc.robot.LimeLight;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.MovingAverage;
 
 /**
  * This command is used from a middle start where the distance and angle is
@@ -56,7 +50,6 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean visionTargetSeen;
 	private double robotDistance;
 	private boolean useVisionComp;
-	private MovingAverage movingAverage = new MovingAverage(10);
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -117,16 +110,13 @@ public class RobotDriveToTargetV2 extends Command {
 			doAccel();
 		}
 		// if no target seen abort auto
-		if (remainingFtToHatch < 6 & !targetWasSeen){
+		if (remainingFtToHatch < 6 & !targetWasSeen) {
 			doTargetSeenCheck();
 
 		}
-		if (Math.abs(getFilteredDegRotToTarget() - Robot.limelightCamera.getdegRotationToTarget()) < 1) {
-			// vision and gyro comps
-			doComps();
-		} else {
-			Shuffleboard.addEventMarker("GLITCH", EventImportance.kHigh);
-		}
+		// vision and gyro comps
+		doComps();
+
 		// control speed of motion using kp and kd
 		if (doneAccelerating)
 			doSpeed();
@@ -189,7 +179,7 @@ public class RobotDriveToTargetV2 extends Command {
 
 		// set minimum speed
 		if (currentMaxSpeed < 1.) {
-		currentMaxSpeed = 1.;
+			currentMaxSpeed = 1.;
 		}
 	}
 
@@ -210,7 +200,6 @@ public class RobotDriveToTargetV2 extends Command {
 		if (useVisionComp && remainingFtToHatch < 6 && Math.abs(Robot.limelightCamera.getdegVerticalToTarget()) < 1.) {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 			// useVisionComp = false;
-			SmartDashboard.putNumber("VWLI", Math.abs(Robot.limelightCamera.getdegVerticalToTarget()));
 
 		}
 
@@ -228,12 +217,6 @@ public class RobotDriveToTargetV2 extends Command {
 			Robot.driveTrain.activeMotionComp = Robot.driveTrain.getCurrentComp();
 		}
 
-	}
-
-
-	public double getFilteredDegRotToTarget() {
-		movingAverage.add(Robot.limelightCamera.getdegRotationToTarget());
-		return movingAverage.getAverage();
 	}
 
 }
