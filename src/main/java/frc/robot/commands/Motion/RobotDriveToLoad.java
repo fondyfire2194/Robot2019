@@ -56,7 +56,6 @@ public class RobotDriveToLoad extends Command {
 	private double positionRateOfChange;
 	private boolean visionTargetSeen;
 	private double robotDistance;
-	private boolean correctionMade;
 	private boolean useVisionComp;
 	private boolean useSwitchSlowdown;
 
@@ -83,7 +82,6 @@ public class RobotDriveToLoad extends Command {
 	@Override
 	protected void initialize() {
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
-		Shuffleboard.startRecording();
 		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
@@ -100,7 +98,6 @@ public class RobotDriveToLoad extends Command {
 		visionTurnGain = Pref.getPref("VisionKp");
 		Kp = Pref.getPref("DrivePositionKp");
 		Kd = Pref.getPref("DrivePositionKd");
-		correctionMade = false;
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
 		useSwitchSlowdown = !mySlowdown;
 	}
@@ -129,9 +126,6 @@ public class RobotDriveToLoad extends Command {
 		}
 		doComps();
 
-		// one time correcton of final distance from Lidar
-		if (Robot.useLidar && !correctionMade)
-			doCorrection();
 		// control speed of motion using kp and kd
 		if (doneAccelerating)
 			doSpeed();
@@ -156,7 +150,6 @@ public class RobotDriveToLoad extends Command {
 			Robot.driveTrain.setLeftSideDriveBrakeOn(true);
 			Robot.driveTrain.setRightSideDriveBrakeOn(true);
 		}
-		Shuffleboard.stopRecording();
 		Robot.limelightCamera.setSnapshot(Snapshot.koff);
 		Robot.positionRunning = false;
 		doneAccelerating = false;
@@ -234,16 +227,6 @@ public class RobotDriveToLoad extends Command {
 		}
 		if (Robot.driveTrain.useGyroComp) {
 			Robot.driveTrain.activeMotionComp = Robot.driveTrain.getCurrentComp();
-		}
-
-	}
-
-	private void doCorrection() {
-		if (remainingFtToHatch < 7) {
-			double distanceDifference = Robot.lidar.getDistanceFeet() - remainingFtToHatch;
-			if (Math.abs(distanceDifference) < Constants.LIDAR_CORRECT_BAND)
-				myEndpoint = myEndpoint + distanceDifference;
-			correctionMade = true;
 		}
 
 	}

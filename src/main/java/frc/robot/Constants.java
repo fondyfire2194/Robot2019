@@ -95,7 +95,6 @@ public class Constants {
   public static double VISION_START_FEET = 10.0;
   public static double VISION_END_FEET = 4.0;
 
-  public static double LIDAR_CORRECT_BAND = 2.0;
 
   public static boolean usePathWeaver = true;
 

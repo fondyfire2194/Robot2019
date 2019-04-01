@@ -42,9 +42,6 @@ public class RobotMap {
   public static final int LEFT_SIDE_CHASSIS_SWITCH = 4;// dio
   public static final int RIGHT_SIDE_CHASSIS_SWITCH = 5;// dio
 
-  public static final int LIDAR_ENABLE = 6;
-  public static final int LIDAR_MODE = 7;
-  public static final int LIDAR_TRIGGER = 8;
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.

@@ -36,7 +36,7 @@ public class PickUpHatchPanel extends CommandGroup {
     // arm.
  
     addSequential(new GripHatchPanel(true));
-    addSequential(new TimeDelay(.1));
+    addSequential(new TimeDelay(.5));
     addSequential(new SetAutoCommandDone());
 }
   }

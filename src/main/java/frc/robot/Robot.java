@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Motion.RobotOrient;
@@ -40,7 +41,6 @@ import frc.robot.LoadFiles;
 import frc.robot.PathfinderNotifier;
 import frc.robot.PathfinderReverseNotifier;
 import frc.robot.LimelightControlMode.*;
-import frc.robot.subsystems.Lidar;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = null;
   public static RobotRotate robotRotate;
   public static Elevator elevator;
-  public static Lidar lidar;
   public static GamePieceHandler gph;
   public static ClimberArm climberArm;
   public static ClimberLeg climberLeg;
@@ -185,7 +184,6 @@ public class Robot extends TimedRobot {
   private double commandStartTime;
   public static boolean limelightOnEnd = true;
   public static boolean noCameraTargetFound;
-  public static boolean useLidar = true;
   public static boolean visionCompJoystick;
   private double scl;
 
@@ -206,8 +204,7 @@ public class Robot extends TimedRobot {
     climberArm = new ClimberArm();
     climberLeg = new ClimberLeg();
     climberDrive = new ClimberDrive();
-    lidar = new Lidar(RobotMap.LIDAR_ENABLE, RobotMap.LIDAR_TRIGGER, RobotMap.LIDAR_MODE);
-    airCompressor = new AirCompressor();
+   airCompressor = new AirCompressor();
     // pdp = new PowerPanel();
     gph = new GamePieceHandler();
     m_oi = new OI();
@@ -316,6 +313,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Shuffleboard.startRecording();
     limelightCamera.setPipeline((int) Pref.getPref("VisionPipeline"));
     useGainPrefs = false;
     Scheduler.getInstance().run();
@@ -376,6 +374,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Shuffleboard.stopRecording();
     Robot.runningCommandName = "None";
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -619,7 +618,6 @@ public class Robot extends TimedRobot {
       break;
     case 7:
       airCompressor.updateStatus();
-      lidar.updateStatus();
       break;
     case 8:
       robotRotate.updateStatus();

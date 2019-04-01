@@ -11,8 +11,8 @@ import frc.robot.Pref;
  */
 public class LogPositionData extends TimedCommand {
 	private double startTime;
-	private String names = "Time,LeftFt,RightFt,LeftFPS,RightFPS,LeftMOP,RightMOP,LeftFE,RightFE,GyroYaw,BoxHt,BoxWdth,VertAngle,TgtSeen,DRStAn,USND,useGyComp,ActComp\n";
-	private String units = "mS,Ft,Ft,FPS,FPS,Pct,Pct,CP100,CP100,Deg,Px,Px,Deg,T_F,Deg,USNDT_F,Pct\n";
+	private String names = "Time,LeftFt,RightFt,LeftFPS,RightFPS,LeftMOP,RightMOP,LeftFE,RightFE,GyroYaw,BoxHt,BoxWdth,VertAngle,TgtSeen,DRStAn,useGyComp,ActComp\n";
+	private String units = "mS,Ft,Ft,FPS,FPS,Pct,Pct,CP100,CP100,Deg,Px,Px,Deg,T_F,Deg,Pct\n";
 	String output_dir = "/U" + "/data_capturesDSMKE/Vision/"; // USB drive is mounted to /U on roboRIO
 	String name1 = "Position";
 	String name = output_dir + name1;
@@ -49,7 +49,7 @@ public class LogPositionData extends TimedCommand {
 					Robot.driveTrain.leftTalonOne.getClosedLoopError(),
 					Robot.driveTrain.rightTalonOne.getClosedLoopError(), Robot.limelightCamera.getBoundingBoxHeight(),
 					Robot.limelightCamera.getBoundingBoxWidth(), Robot.limelightCamera.getdegVerticalToTarget(),
-					Robot.limelightCamera.getAspectRatio(),targetFound, Robot.driveTrain.driveStraightAngle, Robot.lidar.getDistanceFeet(), useGyroComp,
+					Robot.limelightCamera.getAspectRatio(),targetFound, Robot.driveTrain.driveStraightAngle, useGyroComp,
 					Robot.driveTrain.activeMotionComp);
 		}
 	}

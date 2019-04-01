@@ -55,9 +55,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private double positionRateOfChange;
 	private boolean visionTargetSeen;
 	private double robotDistance;
-	private boolean correctionMade;
 	private boolean useVisionComp;
-	private boolean gyroLocked;
 	private MovingAverage movingAverage = new MovingAverage(10);
 
 	/**
@@ -82,7 +80,6 @@ public class RobotDriveToTargetV2 extends Command {
 	@Override
 	protected void initialize() {
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
-		Shuffleboard.startRecording();
 		Robot.driveTrain.resetEncoders();
 		rampIncrement = mySpeed / 25;
 		setTimeout(myTimeout);
@@ -99,7 +96,6 @@ public class RobotDriveToTargetV2 extends Command {
 		visionTurnGain = Pref.getPref("VisionKp");
 		Kp = Pref.getPref("DrivePositionKp");
 		Kd = Pref.getPref("DrivePositionKd");
-		correctionMade = false;
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
 	}
 
@@ -131,9 +127,6 @@ public class RobotDriveToTargetV2 extends Command {
 		} else {
 			Shuffleboard.addEventMarker("GLITCH", EventImportance.kHigh);
 		}
-		// one time correcton of final distance from ultrasound
-		if (Robot.useLidar && !correctionMade)
-			doCorrection();
 		// control speed of motion using kp and kd
 		if (doneAccelerating)
 			doSpeed();
@@ -158,7 +151,6 @@ public class RobotDriveToTargetV2 extends Command {
 			Robot.driveTrain.setLeftSideDriveBrakeOn(true);
 			Robot.driveTrain.setRightSideDriveBrakeOn(true);
 		}
-		Shuffleboard.stopRecording();
 		Robot.limelightCamera.setSnapshot(Snapshot.koff);
 		Robot.positionRunning = false;
 		doneAccelerating = false;
@@ -238,15 +230,6 @@ public class RobotDriveToTargetV2 extends Command {
 
 	}
 
-	private void doCorrection() {
-		if (remainingFtToHatch < 8) {
-			double distanceDifference = Robot.lidar.getDistanceFeet() - remainingFtToHatch;
-			if (Math.abs(distanceDifference) < Constants.LIDAR_CORRECT_BAND)
-				myEndpoint = myEndpoint + distanceDifference;
-			correctionMade = true;
-		}
-
-	}
 
 	public double getFilteredDegRotToTarget() {
 		movingAverage.add(Robot.limelightCamera.getdegRotationToTarget());
