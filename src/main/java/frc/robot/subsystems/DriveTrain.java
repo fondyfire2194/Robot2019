@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +40,7 @@ public class DriveTrain extends Subsystem {
   public TalonSRX rightTalonOne = null;
   public TalonSRX rightTalonTwo = null;
   public static AHRS imu;
+  private DigitalInput robotAtTarget;
 
   public DistanceFollower leftDf = new DistanceFollower();
   public DistanceFollower rightDf = new DistanceFollower();
@@ -99,6 +101,8 @@ public class DriveTrain extends Subsystem {
     rightTalonOne.config_kP(0, .5, 0);
     rightTalonOne.config_kI(0, 0, 0);
     rightTalonOne.config_kD(0,0, 0);
+
+    robotAtTarget = new DigitalInput(RobotMap.RIGHT_ROBOT_AT_TARGET_SWITCH);
 
     try {
       // imu = new AHRS(I2C.Port.kOnboard);
@@ -311,6 +315,10 @@ public class DriveTrain extends Subsystem {
 
   public boolean rightEncoderNoChange() {
     return Math.abs(getRightEncoderChange()) < 2;
+  }
+
+  public boolean getRobotAtTarget(){
+    return robotAtTarget.get();
   }
 
   public void updateStatus() {

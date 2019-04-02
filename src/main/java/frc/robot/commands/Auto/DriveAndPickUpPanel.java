@@ -8,7 +8,7 @@
 package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.Motion.RobotDriveToLoad;
+import frc.robot.commands.Motion.RobotDriveToTargetV2;
 import frc.robot.commands.HatchPanels.PickUpHatchPanel;
 import frc.robot.commands.Limelight.*;
 
@@ -16,8 +16,7 @@ public class DriveAndPickUpPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public DriveAndPickUpPanel(double distance, double speed, double angle, boolean slowdown, boolean stop,
-      double timeOut) {
+  public DriveAndPickUpPanel(double distance, double speed, double angle, boolean stop, double timeOut) {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -35,7 +34,7 @@ public class DriveAndPickUpPanel extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addParallel(new LogVisionData(3));
-    addSequential(new RobotDriveToLoad(distance, speed, angle, slowdown, stop, timeOut));
+    addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
     addSequential(new PickUpHatchPanel());
   }
 }

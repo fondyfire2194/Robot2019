@@ -33,12 +33,13 @@ public class Pref {
     prefDict.put("CameraOffset", 0.);// camera offset
     prefDict.put("CargoIntakeAmpsLimit", 9.0);
 
-    prefDict.put("DrivePositionKd", .03);
-    prefDict.put("DrivePositionKp", 2.7);
+    prefDict.put("DrivePositionKd", 0.);
+    prefDict.put("DrivePositionKp", 2.);// slowdown at 3 feet = rate / Kp
     prefDict.put("DrivePositionRate", 6.);
-    prefDict.put("CenterDistance",11.6);//feet
-    prefDict.put("CenterLoadDistance",8.8);//feet
-    
+    prefDict.put("DriveMinRate", 1.);// rate decreases at rate / Kp = Kp ft/sec/
+    // so min rate happens 6" away with these settings
+    prefDict.put("CenterDistance", 11.6);// feet
+    prefDict.put("CenterLoadDistance", 8.8);// feet
 
     prefDict.put("DriveStraightKp", .05);
     prefDict.put("DriveStall", 25.);
@@ -62,7 +63,7 @@ public class Pref {
     prefDict.put("RotateKp", 0.005);
 
     prefDict.put("VisionKp", .005);
-    prefDict.put("VisionPipeline",0.);
+    prefDict.put("VisionPipeline", 0.);
 
   }
 

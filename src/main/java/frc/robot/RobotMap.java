@@ -31,17 +31,12 @@ public class RobotMap {
   public static final int ELEVATOR_MOTOR = 12;
 
   public static final int ELEVATOR_TRAVEL_SWITCH = 0;// analog
-  public static final int ULTRASOUND = 3;// analog
+  public static final int LEFT_ULTRASOUND = 2;// analog
 
   // digital IO
   public static final int LEFT_PUSHER_BACK_SWITCH = 0;// dio
-  public static final int LEFT_PUSHER_FWD_SWITCH = 1;// dio
-  public static final int RIGHT_PUSHER_BACK_SWITCH = 2;// dio
-  public static final int RIGHT_PUSHER_FWD_SWITCH = 3;// dio
-
-  public static final int LEFT_SIDE_CHASSIS_SWITCH = 4;// dio
-  public static final int RIGHT_SIDE_CHASSIS_SWITCH = 5;// dio
-
+  public static final int RIGHT_PUSHER_BACK_SWITCH = 1;// dio
+  public static final int RIGHT_ROBOT_AT_TARGET_SWITCH = 2;// dio
 
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.

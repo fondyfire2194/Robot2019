@@ -42,6 +42,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private double visionTurnGain;
 	private double Kp;
 	private double Kd;
+	private double minSpeed;
 	private double calcLoopSpeed;
 	private double loopTime = .02;
 	private double lastRemainingDistance;
@@ -89,6 +90,7 @@ public class RobotDriveToTargetV2 extends Command {
 		visionTurnGain = Pref.getPref("VisionKp");
 		Kp = Pref.getPref("DrivePositionKp");
 		Kd = Pref.getPref("DrivePositionKd");
+		minSpeed = Pref.getPref("DriveMinRate");
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
 	}
 
@@ -112,7 +114,6 @@ public class RobotDriveToTargetV2 extends Command {
 		// if no target seen abort auto
 		if (remainingFtToHatch < 6 & !targetWasSeen) {
 			doTargetSeenCheck();
-
 		}
 		// vision and gyro comps
 		doComps();
@@ -171,15 +172,15 @@ public class RobotDriveToTargetV2 extends Command {
 		lastRemainingDistance = robotDistance;
 		positionRateOfChange = positionChange / loopTime;
 
-		calcLoopSpeed = remainingFtToHatch * Kp;// + positionRateOfChange * Kd;
+		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
 		if (calcLoopSpeed > mySpeed)
 			currentMaxSpeed = mySpeed;
 		else
 			currentMaxSpeed = calcLoopSpeed;
 
 		// set minimum speed
-		if (currentMaxSpeed < 1.) {
-			currentMaxSpeed = 1.;
+		if (currentMaxSpeed <minSpeed) {
+			currentMaxSpeed = minSpeed;
 		}
 	}
 
@@ -200,7 +201,6 @@ public class RobotDriveToTargetV2 extends Command {
 		if (useVisionComp && remainingFtToHatch < 6 && Math.abs(Robot.limelightCamera.getdegVerticalToTarget()) < 1.) {
 			Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
 			// useVisionComp = false;
-
 		}
 
 		Robot.driveTrain.useGyroComp = !useVisionComp;

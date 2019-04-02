@@ -27,8 +27,7 @@ public class GamePieceHandler extends Subsystem {
 	private boolean stopCargoIntake;
 	private DigitalInput leftPusherBackSensor;
 	private DigitalInput rightPusherBackSensor;
-	private DigitalInput leftPusherForwardSensor;
-	private DigitalInput rightPusherForwardSensor;
+
 	private int intakeAmpsCounter;
 
 	public static boolean hatchGripped;
@@ -42,9 +41,7 @@ public class GamePieceHandler extends Subsystem {
 		cargoMotor.enableVoltageCompensation(true);
 
 		leftPusherBackSensor = new DigitalInput(RobotMap.LEFT_PUSHER_BACK_SWITCH);
-		leftPusherForwardSensor = new DigitalInput(RobotMap.LEFT_PUSHER_FWD_SWITCH);		
 		rightPusherBackSensor = new DigitalInput(RobotMap.RIGHT_PUSHER_BACK_SWITCH);
-		rightPusherForwardSensor = new DigitalInput(RobotMap.RIGHT_PUSHER_FWD_SWITCH);
 
 		hatchCoverExtend = new Solenoid(2);
 		hatchCoverExtend.set(false);
@@ -134,21 +131,6 @@ public class GamePieceHandler extends Subsystem {
 		return getLeftSideDetected() && getRightSideDetected();
 	}
 
-	public boolean getLeftSideExtended() {
-		return !leftPusherForwardSensor.get();
-	}
-
-	public boolean getRightSideExtended() {
-		return !rightPusherForwardSensor.get();
-	}
-
-	public boolean eitherSideExtended() {
-		return getLeftSideExtended() || getRightSideExtended();
-	}
-
-	public boolean bothSidesExtended() {
-		return getLeftSideExtended() && getRightSideExtended();
-	}
 
 	public void updateStatus() {
 
