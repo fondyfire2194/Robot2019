@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.*;
 import frc.robot.LimelightControlMode.*;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This command is used from a middle start where the distance and angle is
@@ -75,7 +76,7 @@ public class RobotDriveToTargetV2 extends Command {
 	protected void initialize() {
 		Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
 		Robot.driveTrain.resetEncoders();
-		rampIncrement = mySpeed / 25;
+		rampIncrement = mySpeed / 10;
 		setTimeout(myTimeout);
 		Robot.positionRunning = true;
 		currentMaxSpeed = Constants.MINIMUM_START_PCT * Constants.MAX_ROBOT_FT_PER_SEC;
@@ -92,6 +93,7 @@ public class RobotDriveToTargetV2 extends Command {
 		Kd = Pref.getPref("DrivePositionKd");
 		minSpeed = Pref.getPref("DriveMinRate");
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
+		useVisionComp = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -107,8 +109,10 @@ public class RobotDriveToTargetV2 extends Command {
 		remainingFtToHatch = myEndpoint - robotDistance;
 
 		// check if camera can be used
-
-		if (!doneAccelerating) {
+		// control speed of motion using kp and kd
+		if (doneAccelerating)
+			doSpeed();
+		if (!doneAccelerating ) {
 			doAccel();
 		}
 		// if no target seen abort auto
@@ -118,9 +122,7 @@ public class RobotDriveToTargetV2 extends Command {
 		// vision and gyro comps
 		doComps();
 
-		// control speed of motion using kp and kd
-		if (doneAccelerating)
-			doSpeed();
+
 
 		Robot.driveTrain.arcadeDrive(currentMaxSpeed * Constants.FT_PER_SEC_TO_PCT_OUT,
 				Robot.driveTrain.activeMotionComp);
@@ -167,17 +169,14 @@ public class RobotDriveToTargetV2 extends Command {
 	}
 
 	private void doSpeed() {
-		// differential
-		positionChange = lastRemainingDistance - remainingFtToHatch;
-		lastRemainingDistance = robotDistance;
-		positionRateOfChange = positionChange / loopTime;
+		calcLoopSpeed = remainingFtToHatch * Kp;
 
-		calcLoopSpeed = remainingFtToHatch * Kp + positionRateOfChange * Kd;
 		if (calcLoopSpeed > mySpeed)
 			currentMaxSpeed = mySpeed;
 		else
 			currentMaxSpeed = calcLoopSpeed;
-
+			SmartDashboard.putNumber("PCMS",currentMaxSpeed);
+			SmartDashboard.putNumber("PRFTH",remainingFtToHatch);
 		// set minimum speed
 		if (currentMaxSpeed <minSpeed) {
 			currentMaxSpeed = minSpeed;

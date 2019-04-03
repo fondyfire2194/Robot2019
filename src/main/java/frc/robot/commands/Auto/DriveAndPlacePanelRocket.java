@@ -35,6 +35,6 @@ public class DriveAndPlacePanelRocket extends CommandGroup {
     addParallel(new LogVisionData(2));
     addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
     addSequential(new PlaceHatchPanelRocket());
-    addSequential(new SetAutoCommandDone());
+
   }
 }

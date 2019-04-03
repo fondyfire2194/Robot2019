@@ -268,7 +268,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroError() {
-    return driveStraightAngle - imu.getYaw();
+    return driveStraightAngle - getGyroYaw();
   }
 
   public void resetGyro() {
@@ -318,7 +318,8 @@ public class DriveTrain extends Subsystem {
   }
 
   public boolean getRobotAtTarget(){
-    return robotAtTarget.get();
+    // return robotAtTarget.get();
+    return false;
   }
 
   public void updateStatus() {

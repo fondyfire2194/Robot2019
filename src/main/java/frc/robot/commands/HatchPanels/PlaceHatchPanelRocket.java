@@ -8,6 +8,7 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.commands.Auto.SetAutoCommandDone;
 
 import frc.robot.commands.TimeDelay;
 
@@ -38,9 +39,11 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     addSequential(new GripHatchPanel(false));
     addSequential(new TimeDelay(.25));
     addSequential(new PushHatchPanel(true));
+    addSequential(new TimeDelay(.25));
     addSequential(new ExtendHatchPanel(false));
     addSequential(new TimeDelay(.25));
     addParallel(new PushHatchPanel(false));
+    addSequential(new SetAutoCommandDone());
 
   }
 }

@@ -33,7 +33,7 @@ public class Pref {
     prefDict.put("CameraOffset", 0.);// camera offset
     prefDict.put("CargoIntakeAmpsLimit", 9.0);
 
-    prefDict.put("DrivePositionKd", 0.);
+
     prefDict.put("DrivePositionKp", 2.);// slowdown at 3 feet = rate / Kp
     prefDict.put("DrivePositionRate", 6.);
     prefDict.put("DriveMinRate", 1.);// rate decreases at rate / Kp = Kp ft/sec/
@@ -41,7 +41,7 @@ public class Pref {
     prefDict.put("CenterDistance", 11.6);// feet
     prefDict.put("CenterLoadDistance", 8.8);// feet
 
-    prefDict.put("DriveStraightKp", .05);
+    prefDict.put("DriveStraightKp", .03);
     prefDict.put("DriveStall", 25.);
 
     prefDict.put("ElevatorMMKd", 2.0);
@@ -63,7 +63,12 @@ public class Pref {
     prefDict.put("RotateKp", 0.005);
 
     prefDict.put("VisionKp", .005);
-    prefDict.put("VisionPipeline", 0.);
+
+    prefDict.put("VisionPipelineLeftCS", 0.);//look for left target
+    prefDict.put("VisionPipelineRightCS", 1.);//look for right target
+    prefDict.put("VisionPipelineLoad", 2.);//reduced aspect ratio
+    prefDict.put("VisionPipelineRocket", 3.);
+
 
   }
 

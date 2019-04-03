@@ -224,8 +224,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(driveTrain);
 
     Timer.delay(.02);
-    // SmartDashboard.putNumber("Target Feet", 5);
-    // SmartDashboard.putNumber("Position FPS", 5);
+    SmartDashboard.putNumber("Target Feet", 5);
+    SmartDashboard.putNumber("Position FPS", 5);
     // SmartDashboard.putNumber("Target Angle", angleTarget);
     // Timer.delay(.02);
     // SmartDashboard.putNumber("Orient Rate", orientRate);
@@ -352,7 +352,7 @@ public class Robot extends TimedRobot {
     if (m_oi.gamepad.getButtonStateB())
       cycleHold = false;
 
-    if (autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
+    if (autoRunning && autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
 
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
       SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
@@ -361,19 +361,21 @@ public class Robot extends TimedRobot {
         autonomousCommandDone = false;
         commandStartTime = Timer.getFPGATimestamp();
         runningAutoCommand++;
-        if (autonomousCommand[runningAutoCommand] != null)
+        if (runningAutoCommand > numberOfAutonomousCommands) {
+
+          numberOfAutonomousCommands = 0;
+          runningAutoCommand = 0;
+          autonomousCommandDone = false;
+          autoRunning = false;
+        }
+    
+        if (autoRunning && autonomousCommand[runningAutoCommand] != null)
           autonomousCommand[runningAutoCommand].start();
         runningCommandName = autonomousCommandName[runningAutoCommand];
       }
     }
 
-    if (runningAutoCommand > numberOfAutonomousCommands) {
-
-      numberOfAutonomousCommands = 0;
-      runningAutoCommand = 0;
-      autonomousCommandDone = false;
-      autoRunning = false;
-    }
+  
   }
 
   @Override
@@ -765,14 +767,14 @@ public class Robot extends TimedRobot {
         switch (startPositionSelected) {
         case 1:
           invertY = false;
-          sideAngle = 90;
+          sideAngle = -90;
 
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
-          driveTrain.driveStraightAngle = 90.;
+          driveTrain.driveStraightAngle = -90.;
           break;
         case 2:
           invertY = false;
-          sideAngle = 90;
+          sideAngle = -90;
 
           driveTrain.driveStraightAngle = 180.;
           numberOfAutonomousCommands = AutoCommands.setMiddleStart();
@@ -788,7 +790,7 @@ public class Robot extends TimedRobot {
           break;
         case 4:
           invertY = true;
-          sideAngle = -90;
+          sideAngle = 90;
 
           driveTrain.driveStraightAngle = 0.;
           numberOfAutonomousCommands = AutoCommands.setOutsideStart();
