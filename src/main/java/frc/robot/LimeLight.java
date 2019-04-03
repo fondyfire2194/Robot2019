@@ -375,8 +375,9 @@ public class LimeLight {
         double t = tvert.getDouble(0.0);
         return t;
     }
-    public double getAspectRatio(){
-        return getBoundingBoxWidth()/getBoundingBoxHeight();
+
+    public double getAspectRatio() {
+        return getBoundingBoxWidth() / getBoundingBoxHeight();
     }
 
     public double getPerspectiveAngle() {
@@ -390,14 +391,15 @@ public class LimeLight {
         SmartDashboard.putBoolean("VisionTarget", Robot.limelightCamera.getIsTargetFound());
         SD.putN2("DegHToTarget", Robot.limelightCamera.getdegRotationToTarget());
         SD.putN2("DegVertToTarget", getdegVerticalToTarget());
-        SD.putN2("TargetArea", Robot.limelightCamera.getTargetArea());
-        SD.putN2("BNDBoxWidth", Robot.limelightCamera.getBoundingBoxWidth());
-        SD.putN2("BndBoxHeight", Robot.limelightCamera.getBoundingBoxHeight());
-        SD.putN1("Pipeline Latency", Robot.limelightCamera.getPipelineLatency());
-        SD.putN("Pipeline #", getPipeline());
-        SD.putN1("PerspAngle", getPerspectiveAngle());
-        SD.putN1("3d X", getCamtranX());
-        SD.putN1("TargetDistance", getCamtranZ());
-
+        if (AutoChoosers.debugChooser.getSelected() == 8) {
+            SD.putN2("TargetArea", Robot.limelightCamera.getTargetArea());
+            SD.putN2("BNDBoxWidth", Robot.limelightCamera.getBoundingBoxWidth());
+            SD.putN2("BndBoxHeight", Robot.limelightCamera.getBoundingBoxHeight());
+            SD.putN1("Pipeline Latency", Robot.limelightCamera.getPipelineLatency());
+            SD.putN("Pipeline #", getPipeline());
+            SD.putN1("PerspAngle", getPerspectiveAngle());
+            SD.putN1("3d X", getCamtranX());
+            SD.putN1("TargetDistance", getCamtranZ());
+        }
     }
 }

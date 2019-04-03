@@ -163,7 +163,7 @@ public class AutoCommands {
                 case 1:
                 case 2:
 
-                        double secondPlaceDistance = 3.;
+                        double secondPlaceDistance = Pref.getPref("CargoShip1Distance");
 
                         if (hatchSelected == 2)
                                 secondPlaceDistance = 3;

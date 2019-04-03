@@ -365,14 +365,13 @@ public class Robot extends TimedRobot {
           autonomousCommandDone = false;
           autoRunning = false;
         }
-    
+
         if (autoRunning && autonomousCommand[runningAutoCommand] != null)
           autonomousCommand[runningAutoCommand].start();
         runningCommandName = autonomousCommandName[runningAutoCommand];
       }
     }
 
-  
   }
 
   @Override

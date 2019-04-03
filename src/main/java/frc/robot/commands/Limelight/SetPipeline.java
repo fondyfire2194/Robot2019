@@ -34,6 +34,7 @@ public class SetPipeline extends InstantCommand {
   protected void initialize() {
     if (myNumber >= 0 || myNumber <= 9)
       Robot.limelightCamera.setPipeline(myNumber);
+      Robot.autonomousCommandDone = true;
   }
 
 }

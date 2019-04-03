@@ -87,6 +87,7 @@ public class AutoChoosers {
 		debugChooser.addOption("PowerPanel", 5);
 		debugChooser.addOption("RobotRotate", 6);
 		debugChooser.addOption("VisionData", 7);
+		debugChooser.addOption("Limelight", 8);
 
 		SmartDashboard.putData("Debug", debugChooser);
 

@@ -40,6 +40,7 @@ public class Pref {
     // so min rate happens 6" away with these settings
     prefDict.put("CenterDistance", 11.6);// feet
     prefDict.put("CenterLoadDistance", 8.8);// feet
+    prefDict.put("CargoShip1Distance", 4.);
 
     prefDict.put("DriveStraightKp", .03);
     prefDict.put("DriveStall", 25.);
@@ -65,10 +66,11 @@ public class Pref {
     prefDict.put("VisionKp", .005);
 
     prefDict.put("VisionPipelineLeftCS", 0.);//look for left target
-    prefDict.put("VisionPipelineRightCS", 1.);//look for right target
-    prefDict.put("VisionPipelineLoad", 2.);//reduced aspect ratio
-    prefDict.put("VisionPipelineRocket", 3.);
-    prefDict.put("DriverPipeline", 4.);
+    prefDict.put("VisionPipelineRightCS", 0.);//look for right target
+    prefDict.put("VisionPipelineCenterCS", 0.);//look for center target
+    prefDict.put("VisionPipelineLoad", 0.);//reduced aspect ratio
+    prefDict.put("VisionPipelineRocket", 0.);
+  
 
   }
 
