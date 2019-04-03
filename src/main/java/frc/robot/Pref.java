@@ -68,7 +68,7 @@ public class Pref {
     prefDict.put("VisionPipelineRightCS", 1.);//look for right target
     prefDict.put("VisionPipelineLoad", 2.);//reduced aspect ratio
     prefDict.put("VisionPipelineRocket", 3.);
-
+    prefDict.put("DriverPipeline", 4.);
 
   }
 
