@@ -12,7 +12,6 @@ import frc.robot.Robot;
 import frc.robot.Constants;
 import frc.robot.commands.Motion.*;
 import frc.robot.commands.HatchPanels.*;
-import frc.robot.commands.Limelight.SetPipeline;
 import frc.robot.commands.Auto.DriveAndPickUpPanel;
 import frc.robot.commands.Auto.DriveAndPlacePanelShip;
 import frc.robot.commands.Trajectories.BufferToActiveTrajectory;
@@ -59,7 +58,7 @@ public class AutoCommands {
                 Robot.autonomousCommandName[number] = "1 - Trajectory To CS1 Line";
                 number++;
                 Robot.autonomousCommand[number] = new RobotOrient(-Robot.sideAngle, Constants.ORIENT_RATE, true, 2);
-                Robot.autonomousCommandName[number] = "2 - Orient to Cargo Ship " + String.valueOf(Robot.sideAngle);
+                Robot.autonomousCommandName[number] = "2 - Orient to Cargo Ship " + String.valueOf(-Robot.sideAngle);
                 number++;
                 Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(firstPlaceDistance, positionRate,
                                 -Robot.sideAngle, Robot.driveTrain.getRobotAtTarget(), 3);
@@ -77,9 +76,6 @@ public class AutoCommands {
                 double positionRate = Pref.getPref("DrivePositionRate");
                 int number = 1;
 
-                Robot.autonomousCommand[number] = new SetPipeline((int) Pref.getPref("VisionPipeline"));
-                Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Vision Pipeline";
-                number++;
                 Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(firstPlaceDistance, positionRate, 0,
                                 Robot.driveTrain.getRobotAtTarget(), 3);
                 Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
@@ -98,7 +94,7 @@ public class AutoCommands {
                 case 1:
                 case 4:
                         Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchPickupIndex);
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Trajectory To LS";
+                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Trajectory To LoadStation";
                         number++;
                         Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, true, Robot.invertY);
                         Robot.autonomousCommandName[number] = String.valueOf(number)
@@ -117,9 +113,6 @@ public class AutoCommands {
                         pickupDistance = Pref.getPref("CenterLoadDistance");
                         Robot.autonomousCommand[number] = new PickAndRunTrajectory(false, true, Robot.invertY);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move to Load Trajectory";
-                        number++;
-                        Robot.autonomousCommand[number] = new SetPipeline((int) Pref.getPref("VisionPipelineLoad"));
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Vision Pipeline Load";
                         number++;
                         Robot.autonomousCommand[number] = new RobotOrient(180, Constants.ORIENT_RATE, true, 3);
                         Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient to Load Station 180";
@@ -146,17 +139,13 @@ public class AutoCommands {
                 // now
                 // moves in reverse
                 Robot.autonomousCommand[number] = new SetAndCheckGyroOffest(180);
-                Robot.autonomousCommandName[number] = String.valueOf(number) + " - 180 Offset";
+                Robot.autonomousCommandName[number] = String.valueOf(number) + " - 180 Offset And Check";
                 number++;
-                Robot.autonomousCommand[number] = new TimeDelay(.1);
-                Robot.autonomousCommandName[number] = String.valueOf(number) + " timeout";
-                number++;
-
                 Robot.autonomousCommand[number] = new BufferToActiveTrajectory(Robot.secondHatchDeliverIndex);
-                Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Trajectory To CS";
+                Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Trajectory To CargoShip/Rocket";
                 number++;
                 Robot.autonomousCommand[number] = new PickAndRunTrajectory(true, false, Robot.invertY);
-                Robot.autonomousCommandName[number] = String.valueOf(number) + " - Trajectory To CS";
+                Robot.autonomousCommandName[number] = String.valueOf(number) + " - Trajectory To CargoShip/Rocket";
                 number++;
 
                 switch (hatchSelected) {
@@ -168,13 +157,10 @@ public class AutoCommands {
 
                         if (hatchSelected == 2)
                                 secondPlaceDistance = 3;
-                        Robot.autonomousCommand[number] = new SetPipeline((int) Pref.getPref("VisionPipelineLeftCS"));
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Vision Pipeline";
-                        number++;
 
                         Robot.autonomousCommand[number] = new RobotOrient(Robot.sideAngle, Constants.ORIENT_RATE, true,
                                         2);
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
+                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CargoShip "
                                         + String.valueOf(Robot.sideAngle);
                         number++;
                         Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance,
@@ -189,18 +175,15 @@ public class AutoCommands {
                                 sideRocketAngle = -154;
 
                         secondPlaceDistance = Pref.getPref("RocketDistance");
-                        Robot.autonomousCommand[number] = new SetPipeline((int) Pref.getPref("VisionPipeline"));
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Set Vision Pipeline";
-                        number++;
 
                         Robot.autonomousCommand[number] = new RobotOrient(sideRocketAngle, Constants.ORIENT_RATE, true,
                                         2);
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To CS "
+                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Orient To Rocket "
                                         + String.valueOf(sideRocketAngle);
                         number++;
                         Robot.autonomousCommand[number] = new DriveAndPlacePanelRocket(secondPlaceDistance,
                                         positionRate, sideRocketAngle, Robot.driveTrain.getRobotAtTarget(), 2);
-                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Ship and Place "
+                        Robot.autonomousCommandName[number] = String.valueOf(number) + " - Move To Rocket and Place "
                                         + String.valueOf(secondPlaceDistance);
 
                         break;

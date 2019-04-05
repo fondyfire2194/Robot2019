@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static Preferences prefs;
   public static BuildTrajectory buildTrajectory;
-  public static int maxCommands = 14;
+  public static int maxCommands = 18;
   public static Command[] autonomousCommand;
   public static double[] commandTimes = new double[maxCommands];
   public static Command autoTimeDelayCommand;

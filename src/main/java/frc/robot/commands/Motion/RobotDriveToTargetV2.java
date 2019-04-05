@@ -95,6 +95,7 @@ public class RobotDriveToTargetV2 extends Command {
 		minSpeed = Pref.getPref("DriveMinRate");
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
 		useVisionComp = false;
+		//if sensors seen at start set flag to not check them later
 		lockOutSensors = myEndItNow;
 	}
 

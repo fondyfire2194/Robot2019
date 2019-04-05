@@ -33,7 +33,7 @@ public class DriveAndPickUpPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addParallel(new LogVisionData(3));
+    // addParallel(new LogVisionData(3));
     addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
     addSequential(new PickUpHatchPanel());
   }

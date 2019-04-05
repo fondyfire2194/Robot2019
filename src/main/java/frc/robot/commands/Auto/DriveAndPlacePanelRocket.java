@@ -32,7 +32,7 @@ public class DriveAndPlacePanelRocket extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addParallel(new LogVisionData(2));
+    // addParallel(new LogVisionData(2));
     addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
     addSequential(new PlaceHatchPanelRocket());
 
