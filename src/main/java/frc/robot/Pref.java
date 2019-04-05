@@ -34,14 +34,14 @@ public class Pref {
     prefDict.put("CargoIntakeAmpsLimit", 9.0);
 
 
-    prefDict.put("DrivePositionKp", 2.);// slowdown at 3 feet = rate / Kp
+    prefDict.put("DrivePositionKp", 3.);// slowdown at 2 feet = rate / Kp
     prefDict.put("DrivePositionRate", 6.);
     prefDict.put("DriveMinRate", 1.);// rate decreases at rate / Kp = Kp ft/sec/
     // so min rate happens 6" away with these settings
-    prefDict.put("CenterDistance", 11.6);// feet
+    prefDict.put("CenterDistance", 11.5);// feet
     prefDict.put("CenterLoadDistance", 8.8);// feet
-    prefDict.put("CargoShip1Distance", 4.);
-
+    prefDict.put("CargoShip1Distance", 3.);
+    prefDict.put("RocketDistance", 4.);
     prefDict.put("DriveStraightKp", .03);
     prefDict.put("DriveStall", 25.);
 
@@ -65,10 +65,10 @@ public class Pref {
 
     prefDict.put("VisionKp", .005);
 
-    prefDict.put("VisionPipelineLeftCS", 0.);//look for left target
+    prefDict.put("VisionPipeline", 0.);//all LEDs on
     prefDict.put("VisionPipelineRightCS", 0.);//look for right target
     prefDict.put("VisionPipelineCenterCS", 0.);//look for center target
-    prefDict.put("VisionPipelineLoad", 0.);//reduced aspect ratio
+    prefDict.put("VisionPipelineLoad", 1.);//Left half LED only
     prefDict.put("VisionPipelineRocket", 0.);
   
 

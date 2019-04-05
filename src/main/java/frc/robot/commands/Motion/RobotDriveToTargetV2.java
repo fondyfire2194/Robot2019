@@ -52,6 +52,7 @@ public class RobotDriveToTargetV2 extends Command {
 	private boolean visionTargetSeen;
 	private double robotDistance;
 	private boolean useVisionComp;
+	private boolean lockOutSensors;
 
 	/**
 	 * kp equivalent is the speed / slowdown feet or 7.5 ft/sec/2.5ft from previous
@@ -94,6 +95,7 @@ public class RobotDriveToTargetV2 extends Command {
 		minSpeed = Pref.getPref("DriveMinRate");
 		Robot.limelightCamera.setSnapshot(Snapshot.kon);
 		useVisionComp = false;
+		lockOutSensors = myEndItNow;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -132,7 +134,7 @@ public class RobotDriveToTargetV2 extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return isTimedOut() || myEndItNow || Robot.driveTrain.getLeftFeet() >= myEndpoint;
+		return isTimedOut() || !lockOutSensors && myEndItNow || Robot.driveTrain.getLeftFeet() >= myEndpoint;
 	}
 
 	// Called once after isFinished returns true

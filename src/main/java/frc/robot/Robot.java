@@ -255,7 +255,7 @@ public class Robot extends TimedRobot {
     bufferTrajectoryGains[0] = activeTrajectoryGains;
     startPositionSelected = 0;
     elevator.holdPositionInches = 0;
-
+    limelightCamera.setPipeline(0);
   }
 
   /**
@@ -316,6 +316,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Shuffleboard.startRecording();
     useGainPrefs = false;
     Scheduler.getInstance().run();
     driveTrain.resetGyro();
@@ -376,13 +377,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Shuffleboard.stopRecording();
     Robot.runningCommandName = "None";
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
     cancelAllAuto();
-    limelightCamera.setPipeline((int) Pref.getPref("DriverPipeline"));
   }
 
   /**

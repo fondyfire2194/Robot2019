@@ -78,6 +78,9 @@ public class RobotOrient extends Command {
 		doneAccelerating = false;
 		if (Robot.autoRunning)
 			Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
+
+
+		Robot.gph.retractPusher();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
