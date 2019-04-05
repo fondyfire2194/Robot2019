@@ -53,7 +53,6 @@ public class GamePieceHandler extends Subsystem {
 		hatchCoverPusher = new Solenoid(6);
 		hatchCoverPusher.set(false);
 
-
 	}
 
 	// Put methods for controlling this subsystem
@@ -131,7 +130,6 @@ public class GamePieceHandler extends Subsystem {
 		return getLeftSideDetected() && getRightSideDetected();
 	}
 
-
 	public void updateStatus() {
 
 		if (hatchCoverGripper.get() != DoubleSolenoid.Value.kOff)
@@ -141,13 +139,13 @@ public class GamePieceHandler extends Subsystem {
 		}
 
 		SD.putN1("CargoMotorAmps", cargoMotor.getOutputCurrent());
-		SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
 		SmartDashboard.putBoolean("LeftDetected", getLeftSideDetected());
 
 		SmartDashboard.putBoolean("RightDetected", getRightSideDetected());
 
 		if (AutoChoosers.debugChooser.getSelected() == 4) {
 			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());
+			SD.putN1("CargoMotorPct", cargoMotor.getMotorOutputPercent());
 
 		}
 	}
@@ -158,7 +156,7 @@ public class GamePieceHandler extends Subsystem {
 		} else {
 			intakeAmpsCounter = 0;
 		}
-		return  intakeAmpsCounter > 25;
+		return intakeAmpsCounter > 25;
 	}
 
 }

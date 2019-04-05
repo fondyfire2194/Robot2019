@@ -194,15 +194,15 @@ public double climbFinalInches =0;
   public void updateStatus() {
        
  
-    SD.putN("ClimberLegPosition", (double) getLegEncoderPosition());
+    // SD.putN("ClimberLegPosition", (double) getLegEncoderPosition());
     SD.putN1("ClimberLegInches", getLegInches());
-    SD.putN1("ClimberLegENCPer100MS", climberLeg.getSelectedSensorVelocity(0));
+    // SD.putN1("ClimberLegENCPer100MS", climberLeg.getSelectedSensorVelocity(0));
     SD.putN1("ClimberLegInchesPerSec", getLegInPerSec());
-    SD.putN1("ClimberLegTarget", legTargetInches);
+    // SD.putN1("ClimberLegTarget", legTargetInches);
     SD.putN2("ClimberLegAmps", getLegCurrent());
-    SD.putN("ClimberTouchPosition", climbTouchInches);
-    SD.putN1("ClimberFinalInches", climbFinalInches);
-    SD.putN1("ClimbLegRate", motionMagicRate);
+    // SD.putN("ClimberTouchPosition", climbTouchInches);
+    // SD.putN1("ClimberFinalInches", climbFinalInches);
+    // SD.putN1("ClimbLegRate", motionMagicRate);
 
   }
 }

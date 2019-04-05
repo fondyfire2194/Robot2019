@@ -62,7 +62,6 @@ public class DriveTrain extends Subsystem {
   public double activeMotionComp;
   public double gyroOffset;
 
-
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   public DriveTrain() {
@@ -97,10 +96,10 @@ public class DriveTrain extends Subsystem {
     leftTalonOne.config_kD(0, 0, 0);
 
     rightTalonOne.selectProfileSlot(0, 0);
-    rightTalonOne.config_kF(0,1.4 , 0);
+    rightTalonOne.config_kF(0, 1.4, 0);
     rightTalonOne.config_kP(0, .5, 0);
     rightTalonOne.config_kI(0, 0, 0);
-    rightTalonOne.config_kD(0,0, 0);
+    rightTalonOne.config_kD(0, 0, 0);
 
     robotAtTarget = new DigitalInput(RobotMap.RIGHT_ROBOT_AT_TARGET_SWITCH);
 
@@ -129,7 +128,8 @@ public class DriveTrain extends Subsystem {
 
   public void leftDriveOut(double speed) {
     leftCmd = speed;
-    if (Robot.autoRunning || useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
+    if (Robot.autoRunning || useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning
+        || Robot.positionRunning) {
       leftTalonOne.selectProfileSlot(0, 0);
       leftTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
@@ -139,8 +139,9 @@ public class DriveTrain extends Subsystem {
 
   public void rightDriveOut(double speed) {
     rightCmd = speed;
-    SD.putN3("LCMD",rightCmd);
-    if (Robot.autoRunning || useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning || Robot.positionRunning) {
+    SD.putN3("LCMD", rightCmd);
+    if (Robot.autoRunning || useVelocityLoop || Robot.trajectoryRunning || Robot.orientRunning
+        || Robot.positionRunning) {
       rightTalonOne.selectProfileSlot(0, 0);
       rightTalonOne.set(ControlMode.Velocity, speed * Constants.MAX_ENC_CTS_PER_100MS);
     } else {
@@ -200,7 +201,6 @@ public class DriveTrain extends Subsystem {
     return Pref.getPref("JSTwistMinKp") + range * temp;
   }
 
-
   public int getLeftEncoderCount() {
     return leftTalonOne.getSelectedSensorPosition(0);
   }
@@ -239,7 +239,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public double getGyroYaw() {
-    return Pathfinder.boundHalfDegrees(gyroOffset +imu.getYaw());
+    return Pathfinder.boundHalfDegrees(gyroOffset + imu.getYaw());
   }
 
   public double getGyroRoll() {
@@ -317,28 +317,25 @@ public class DriveTrain extends Subsystem {
     return Math.abs(getRightEncoderChange()) < 2;
   }
 
-  public boolean getRobotAtTarget(){
+  public boolean getRobotAtTarget() {
     // return robotAtTarget.get();
     return false;
   }
 
   public void updateStatus() {
 
-    SmartDashboard.putNumber("DrvStrtAng", driveStraightAngle);
-    SmartDashboard.putNumber("GyroError", getCurrentComp());
-    SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());
-    SmartDashboard.putNumber("Left ft per s", getLeftFeetPerSecond());
     SD.putN2("LeftFeet", getLeftFeet());
     SD.putN2("RightFeet", getRightFeet());
     SD.putN1("GyroYaw", getGyroYaw());
-    SD.putN1("GyroPitch", getGyroPitch());
-    SD.putN1("GyroRoll", getGyroRoll());
-    useVelocityLoop = SmartDashboard.getBoolean("DriveCloseLoop", false);
-    SmartDashboard.putNumber("Slider", getDriverSlider());
-    SmartDashboard.putNumber("XAccel", getXAccel());
-    SmartDashboard.putNumber("SSV", leftTalonOne.getSelectedSensorVelocity(0));
-    SmartDashboard.putNumber("SSE", leftTalonOne.getClosedLoopError(0));
+    
     if (AutoChoosers.debugChooser.getSelected() == 2) {
+      SD.putN1("GyroPitch", getGyroPitch());
+      SD.putN1("GyroRoll", getGyroRoll());
+      useVelocityLoop = SmartDashboard.getBoolean("DriveCloseLoop", false);
+      SmartDashboard.putNumber("Slider", getDriverSlider());
+      SmartDashboard.putNumber("XAccel", getXAccel());
+      SmartDashboard.putNumber("SSV", leftTalonOne.getSelectedSensorVelocity(0));
+      SmartDashboard.putNumber("SSE", leftTalonOne.getClosedLoopError(0));
 
       SD.putN2("LeftCmd", getLeftCommand());
       SD.putN2("RightCmd", getRightCommand());
@@ -352,6 +349,11 @@ public class DriveTrain extends Subsystem {
       SmartDashboard.putNumber("VelKf", 1 / Constants.MAX_ENC_CTS_PER_100MS);
       SmartDashboard.putBoolean("LSStall", getLeftSideStalled());
       SmartDashboard.putBoolean("TSStall", getRightSideStalled());
+      SmartDashboard.putNumber("DrvStrtAng", driveStraightAngle);
+      SmartDashboard.putNumber("GyroError", getCurrentComp());
+      SmartDashboard.putNumber("Right ft per s", getRightFeetPerSecond());
+      SmartDashboard.putNumber("Left ft per s", getLeftFeetPerSecond());
+
     }
 
   }

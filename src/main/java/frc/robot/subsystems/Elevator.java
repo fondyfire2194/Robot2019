@@ -158,11 +158,6 @@ public class Elevator extends Subsystem {
 		if (switchWasSeen)
 			switchWasSeen = elevatorOnSwitch;
 		SD.putN2("Elevator Inches", getElevatorPositionInches());
-		SmartDashboard.putBoolean("Elevator Too Low", elevatorTooLow);
-		SmartDashboard.putBoolean("Elevator Too High", elevatorTooHigh);
-		SD.putN1("Elevator Target", elevatorTargetPosition);
-		SD.putN1("Elevator Speed IPS", getElevatorSpeedInchesPerSecond());
-		SD.putN1("Elev Talon Temp", elevatorMotor.getTemperature());
 		SmartDashboard.putBoolean("Elevator Switch", elevatorOnSwitch);
 
 		if (AutoChoosers.debugChooser.getSelected() == 3) {
@@ -176,7 +171,12 @@ public class Elevator extends Subsystem {
 			SD.putN1("ElI", elevatorMotor.getIntegralAccumulator(0));
 			SmartDashboard.putBoolean("Switch Was Seen", switchWasSeen);
 			SmartDashboard.putNumber("ELHIAMPS", elevatorHiCurrent);
-
+			SmartDashboard.putBoolean("Elevator Too Low", elevatorTooLow);
+			SmartDashboard.putBoolean("Elevator Too High", elevatorTooHigh);
+			SD.putN1("Elevator Target", elevatorTargetPosition);
+			SD.putN1("Elevator Speed IPS", getElevatorSpeedInchesPerSecond());
+			SD.putN1("Elev Talon Temp", elevatorMotor.getTemperature());
+	
 		}
 
 	}

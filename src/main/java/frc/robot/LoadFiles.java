@@ -22,13 +22,13 @@ public class LoadFiles implements Runnable {
         error = false;
         Robot.activeTrajName = "Not Used";
         SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
-        SmartDashboard.putNumber("ActTrajLngth", 0);
+        // SmartDashboard.putNumber("ActTrajLngth", 0);
 
         for (int i = 0; i < Robot.bufferTrajectoryName.length; i++) {
             Robot.bufferTrajectoryName[i] = "Not Used";
             SmartDashboard.putString("Buffer " + String.valueOf(i), Robot.bufferTrajectoryName[i]);
-            SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i), 0);
-            SmartDashboard.putNumber("BufferR Lngth" + String.valueOf(i), 0);
+            // SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i), 0);
+            // SmartDashboard.putNumber("BufferR Lngth" + String.valueOf(i), 0);
         }
 
         int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
@@ -81,8 +81,8 @@ public class LoadFiles implements Runnable {
         if (Robot.buildOK && i != 0) {
             Robot.bufferTrajectoryName[i - 1] = startName;
             SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
-            SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i - 1),
-                    Robot.leftBufferTrajectory[i - 1].length());
+            // SmartDashboard.putNumber("BufferL Lngth" + String.valueOf(i - 1),
+            //         Robot.leftBufferTrajectory[i - 1].length());
 
         }
         return !Robot.buildOK;
@@ -102,10 +102,10 @@ public class LoadFiles implements Runnable {
                 int startPositionSelected = AutoChoosers.startPositionChooser.getSelected();
 
                 Robot.activeTrajectoryGains = TrajDict.getTrajGains(startName);
-                SmartDashboard.putNumber("AGKp", Robot.activeTrajectoryGains[0]);
-                SmartDashboard.putNumber("AGKd", Robot.activeTrajectoryGains[1]);
-                SmartDashboard.putNumber("AGKa", Robot.activeTrajectoryGains[2]);
-                SmartDashboard.putNumber("AGKt", Robot.activeTrajectoryGains[3]);
+                // SmartDashboard.putNumber("AGKp", Robot.activeTrajectoryGains[0]);
+                // SmartDashboard.putNumber("AGKd", Robot.activeTrajectoryGains[1]);
+                // SmartDashboard.putNumber("AGKa", Robot.activeTrajectoryGains[2]);
+                // SmartDashboard.putNumber("AGKt", Robot.activeTrajectoryGains[3]);
 
                 SmartDashboard.putString("Active Trajectory", Robot.activeTrajName);
                 SmartDashboard.putNumber("ActTrajLngth", Robot.activeLeftTrajectory.length());
@@ -115,9 +115,9 @@ public class LoadFiles implements Runnable {
 
                 Robot.bufferTrajectoryGains[i - 1] = TrajDict.getTrajGains(startName);
 
-                SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
-                SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i - 1),
-                        Robot.rightBufferTrajectory[i - 1].length());
+            //     SmartDashboard.putString("Buffer " + String.valueOf(i - 1), Robot.bufferTrajectoryName[i - 1]);
+            //     SmartDashboard.putNumber("Buffer R Lngth" + String.valueOf(i - 1),
+            //             Robot.rightBufferTrajectory[i - 1].length());
             }
         }
         return !Robot.buildOK;

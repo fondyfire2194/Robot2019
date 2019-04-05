@@ -89,17 +89,17 @@ public class SimpleCSVLogger2194 {
 			return 0;
 		}
 
-	SmartDashboard.putNumber("CSV1T",Timer.getFPGATimestamp()-startTime);
+	// SmartDashboard.putNumber("CSV1T",Timer.getFPGATimestamp()-startTime);
 		File file = new File(output_dir);
 		if (!file.exists()) {
 			
-			SmartDashboard.putNumber("CSV2T",Timer.getFPGATimestamp()-startTime);
+			// SmartDashboard.putNumber("CSV2T",Timer.getFPGATimestamp()-startTime);
 			if (file.mkdir()) {
 				System.out.println("Directory is created!");
-				SmartDashboard.putNumber("CSV3T",Timer.getFPGATimestamp()-startTime);
+				// SmartDashboard.putNumber("CSV3T",Timer.getFPGATimestamp()-startTime);
 			} else {
 				System.out.println("Failed to create directory!");
-				SmartDashboard.putNumber("CSV4T",Timer.getFPGATimestamp()-startTime);
+				// SmartDashboard.putNumber("CSV4T",Timer.getFPGATimestamp()-startTime);
 			}
 		}
 	
@@ -110,19 +110,19 @@ public class SimpleCSVLogger2194 {
 		try {
 			// Reset state variables
 			log_write_index = 0;
-			SmartDashboard.putNumber("CSV5T",Timer.getFPGATimestamp()-startTime);
+			// SmartDashboard.putNumber("CSV5T",Timer.getFPGATimestamp()-startTime);
 			// Determine a unique file name
 			// log_name = output_dir + "log_" + name + ".csv";
-			SmartDashboard.putNumber("CSV6T",Timer.getFPGATimestamp()-startTime);
+			// SmartDashboard.putNumber("CSV6T",Timer.getFPGATimestamp()-startTime);
 			// Open File
 			FileWriter fstream = new FileWriter(name, true);
 			log_file = new BufferedWriter(fstream);
-			SmartDashboard.putNumber("CSV7T",Timer.getFPGATimestamp()-startTime);
-			SmartDashboard.putNumber("CSV8T",Timer.getFPGATimestamp()-startTime);
+			// SmartDashboard.putNumber("CSV7T",Timer.getFPGATimestamp()-startTime);
+			// SmartDashboard.putNumber("CSV8T",Timer.getFPGATimestamp()-startTime);
 			log_file.write(data_fields);
 
 		log_file.write(units_fields);
-			SmartDashboard.putNumber("CSV9T",Timer.getFPGATimestamp()-startTime);
+			// SmartDashboard.putNumber("CSV9T",Timer.getFPGATimestamp()-startTime);
 
 		}
 		// Catch ALL the errors!!!
@@ -131,7 +131,7 @@ public class SimpleCSVLogger2194 {
 			
 			return -1;
 		}
-		SmartDashboard.putNumber("CSV10T",Timer.getFPGATimestamp()-startTime);
+		// SmartDashboard.putNumber("CSV10T",Timer.getFPGATimestamp()-startTime);
 		System.out.println("done!");
 		log_open = true;
 		return 0;

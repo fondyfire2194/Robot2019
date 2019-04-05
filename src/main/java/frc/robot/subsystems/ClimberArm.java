@@ -207,16 +207,16 @@ public class ClimberArm extends Subsystem {
 
 
   public void updateStatus() {
-    SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
+    // SD.putN("ClimberArmPosition", (double) getArmEncoderPosition());
     SD.putN1("ClimberArmDegrees", getArmDegrees());
     SD.putN1("ClimberArmDegreesPerSec", getArmSpeedDegPerSec());
     SD.putN2("ClimberArmAmps", getArmCurrent());
-    SD.putN1("ClimberArmENCPer100MS", climberArm.getSelectedSensorVelocity(0));
-    SD.putN1("ClimberArmTarget", armTargetDegrees);
-    SD.putN1("CDS", getDriverSliderClimb());
-    SD.putN1("ClimberArmTouchDegrees", climbTouchAngle);
-    SD.putN1("ClimberArmFinalDegrees",climbFinalAngle);
-    SD.putN1("ClimbArmRate", motionMagicRate);
+    // SD.putN1("ClimberArmENCPer100MS", climberArm.getSelectedSensorVelocity(0));
+    // SD.putN1("ClimberArmTarget", armTargetDegrees);
+    // SD.putN1("CDS", getDriverSliderClimb());
+    // SD.putN1("ClimberArmTouchDegrees", climbTouchAngle);
+    // SD.putN1("ClimberArmFinalDegrees",climbFinalAngle);
+    // SD.putN1("ClimbArmRate", motionMagicRate);
  
 
   }

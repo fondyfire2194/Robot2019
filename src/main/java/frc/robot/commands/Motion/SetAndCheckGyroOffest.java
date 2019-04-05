@@ -7,11 +7,14 @@
 
 package frc.robot.commands.Motion;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class SetAndCheckGyroOffest extends Command {
   private double myOffset;
+  private double startTime;
   public SetAndCheckGyroOffest(double offset) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -21,7 +24,8 @@ public class SetAndCheckGyroOffest extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.driveTrain.gyroOffset = 180;
+    startTime = Timer.getFPGATimestamp();
+    Robot.driveTrain.gyroOffset = myOffset;
 
   }
 
@@ -40,6 +44,7 @@ public class SetAndCheckGyroOffest extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    SmartDashboard.putNumber("OffsetTime",Timer.getFPGATimestamp()-startTime);
     Robot.autonomousCommandDone = true;
   }
 

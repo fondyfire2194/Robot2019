@@ -353,7 +353,7 @@ public class Robot extends TimedRobot {
     if (autoRunning && autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
 
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
-      SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
+      // SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
       SD.putN2("CMDTimeTotal", Timer.getFPGATimestamp() - autoStartTime);
       if (!cycleHold) {
         autonomousCommandDone = false;
@@ -608,7 +608,7 @@ public class Robot extends TimedRobot {
       break;
 
     case 4:
-      SmartDashboard.putNumber("SCCTR", scanCounter);
+      // SmartDashboard.putNumber("SCCTR", scanCounter);
       driveTrain.updateStatus();
       break;
 
@@ -623,7 +623,7 @@ public class Robot extends TimedRobot {
       break;
     case 8:
       robotRotate.updateStatus();
-      leftUltrasound.updateStatus();
+      // leftUltrasound.updateStatus();
       break;
     case 9:
       climberArm.updateStatus();
@@ -817,14 +817,15 @@ public class Robot extends TimedRobot {
   }
 
   public static void createUniqueLogName() {
-    double temp = (int) Timer.getFPGATimestamp();
-    String tempString = String.valueOf(temp);
-    String tempString1 = tempString.substring(0, tempString.length() - 2);
-
+    int temp = DriverStation.getInstance().getMatchNumber();
+    // // double temp = (int) Timer.getFPGATimestamp();
+    // String tempString = String.valueOf(temp);
+    // String tempString1 = tempString.substring(0, tempString.length() - 2);
+    String tempString1 = String.valueOf(temp);
     driveUniqueLogName = driveLogName + tempString1 + ".csv";
     trajectoryUniqueLogName = trajectoryLogName + tempString1;
 
-    climberUniqueLogName = climberLogName + tempString1 + ".csv";
+    climberUniqueLogName = tempString1 + climberLogName + ".csv";
 
   }
 }
