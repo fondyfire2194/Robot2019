@@ -256,6 +256,7 @@ public class Robot extends TimedRobot {
     startPositionSelected = 0;
     elevator.holdPositionInches = 0;
     limelightCamera.setPipeline(0);
+    driveTrain.gyroOffset = 0;
   }
 
   /**

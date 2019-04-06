@@ -156,6 +156,7 @@ public class OI {
 
         placeHatchPanelRocket = new JoystickButton(driverController, 4);
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());
+        placeHatchPanelRocket.whenReleased(new DelayOffPushers(2.));
 
         toggleHatchCoverGripper = new JoystickButton(driverController, 5);
         toggleHatchCoverGripper.whenPressed(new ExtendHatchPanel(true));

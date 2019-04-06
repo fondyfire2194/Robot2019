@@ -9,6 +9,8 @@ package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.TimeDelay;
+import frc.robot.commands.Elevator.*;
+import frc.robot.Pref;
 
 public class ReturnHatchGripper extends CommandGroup {
   /**
@@ -32,6 +34,7 @@ public class ReturnHatchGripper extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new ToggleHatchGripper());
+    addSequential(new SetElevatorTargetHeight(3));
     addSequential(new TimeDelay(.4));
     addSequential(new ExtendHatchPanel(false));
   }
