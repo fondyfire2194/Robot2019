@@ -151,6 +151,7 @@ public class OI {
         deliverCargo.whenReleased(new ExtendHatchPanel(false));
 
         driveToVision = new JoystickButton(driverController, 3);
+        driveToVision.whenPressed(new ExtendIfPickup());
         driveToVision.whileHeld(new JoystickArcadeDriveVision());
         driveToVision.whenReleased(new DelayOffLeds(5.));
 
@@ -159,15 +160,17 @@ public class OI {
         placeHatchPanelRocket.whenReleased(new DelayOffPushers(2.));
 
         toggleHatchCoverGripper = new JoystickButton(driverController, 5);
-        toggleHatchCoverGripper.whenPressed(new ExtendHatchPanel(true));
-        toggleHatchCoverGripper.whenReleased(new ReturnHatchGripper());
-
+        // toggleHatchCoverGripper.whenPressed(new ExtendHatchPanel(true));
+        // toggleHatchCoverGripper.whenReleased(new ReturnHatchGripper());
+        toggleHatchCoverGripper.whenPressed(new ReturnHatchGripper());
+        
         placeHatchPanelShip = new JoystickButton(driverController, 6);
         placeHatchPanelShip.whenPressed(new PlaceHatchPanelShip());
 
         abortAuto = new JoystickButton(driverController, 7);
 
         dc8 = new JoystickButton(driverController, 8);
+        dc8.whenPressed(new ToggleHatchGripper());
 
         dc9 = new JoystickButton(driverController, 9);
         dc9.whenPressed(new SetClimberLegTargetInches(0));

@@ -31,7 +31,7 @@ public class GamePieceHandler extends Subsystem {
 	private int intakeAmpsCounter;
 
 	public static boolean hatchGripped;
-
+    public static boolean hatchCoverExtended;
 	public GamePieceHandler() {
 
 		cargoMotor = new TalonSRX(RobotMap.CARGO_MOTOR);
@@ -45,7 +45,8 @@ public class GamePieceHandler extends Subsystem {
 
 		hatchCoverExtend = new Solenoid(2);
 		hatchCoverExtend.set(false);
-
+		hatchCoverExtended=false;
+		
 		hatchCoverGripper = new DoubleSolenoid(1, 0);
 		hatchCoverGripper.set(DoubleSolenoid.Value.kForward);
 		hatchGripped = true;
@@ -99,10 +100,12 @@ public class GamePieceHandler extends Subsystem {
 
 	public void extendHatchPanel() {
 		hatchCoverExtend.set(true);
+		hatchCoverExtended = true;
 	}
 
 	public void retractHatchPanel() {
 		hatchCoverExtend.set(false);
+		hatchCoverExtended = false;
 	}
 
 	public void pushHatchPanel() {
@@ -142,6 +145,8 @@ public class GamePieceHandler extends Subsystem {
 		SmartDashboard.putBoolean("LeftDetected", getLeftSideDetected());
 
 		SmartDashboard.putBoolean("RightDetected", getRightSideDetected());
+		SmartDashboard.putBoolean("Hatch Cover Gripped", hatchGripped);
+		SmartDashboard.putBoolean("Hatch Cover Extended", hatchCoverExtended);
 
 		if (AutoChoosers.debugChooser.getSelected() == 4) {
 			SD.putN1("CargoMotorVolts", cargoMotor.getBusVoltage());

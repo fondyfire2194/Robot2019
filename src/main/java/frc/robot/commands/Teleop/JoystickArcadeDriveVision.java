@@ -114,6 +114,11 @@ public class JoystickArcadeDriveVision extends Command {
     double leftValue = throttleValue + turnValue;
     double rightValue = throttleValue - turnValue;
 
+    if(Robot.limelightCamera.getBoundingBoxHeight()> 123){
+      leftValue*.3;
+      rightValue*.3;
+    }
+
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
 

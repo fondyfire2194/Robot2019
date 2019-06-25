@@ -33,8 +33,14 @@ public class ReturnHatchGripper extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+    // addSequential(new ToggleHatchGripper());
+    // addSequential(new SetElevatorTargetHeight(3));
+    // addSequential(new TimeDelay(.4));
+    // addSequential(new ExtendHatchPanel(false));
+
+   addSequential(new SetElevatorTargetHeight(3));
+   addSequential(new TimeDelay(.4));
     addSequential(new ToggleHatchGripper());
-    addSequential(new SetElevatorTargetHeight(3));
     addSequential(new TimeDelay(.4));
     addSequential(new ExtendHatchPanel(false));
   }
