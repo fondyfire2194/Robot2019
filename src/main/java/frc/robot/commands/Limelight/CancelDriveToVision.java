@@ -9,6 +9,7 @@ package frc.robot.commands.Limelight;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.LimelightControlMode.*;
 
 /**
  * Add your docs here.
@@ -27,6 +28,7 @@ public class CancelDriveToVision extends InstantCommand {
   @Override
   protected void initialize() {
     Robot.cancelDriveVisionCommand = true;
+    Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
   }
 
 }
