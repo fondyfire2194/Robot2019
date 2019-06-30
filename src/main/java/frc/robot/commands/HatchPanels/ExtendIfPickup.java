@@ -25,7 +25,7 @@ public class ExtendIfPickup extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (GamePieceHandler.hatchGripped) {
+    if (!GamePieceHandler.hatchGripped) {
       Robot.gph.extendHatchPanel();
     } else {
       Robot.gph.retractHatchPanel();

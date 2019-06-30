@@ -8,10 +8,11 @@
 package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.*;
-import frc.robot.commands.Auto.SetAutoCommandDone;
-import frc.robot.commands.HatchPanels.GripHatchPanel;
+import frc.robot.commands.TimeDelay;
+import frc.robot.commands.Elevator.*;
+import frc.robot.commands.Limelight.CancelDriveToVision;
 
+import frc.robot.commands.Motion.ContinuousOutDrive;
 
 public class PickUpHatchPanel extends CommandGroup {
   /**
@@ -34,14 +35,16 @@ public class PickUpHatchPanel extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    addSequential(new ExtendHatchPanel(true));
-    addSequential(new TimeDelay(.5));
-    addSequential(new ReturnHatchGripper());
-    // addSequential(new GripHatchPanel(true));
-    // addSequential(new TimeDelay(.25));
+    // addSequential(new ToggleHatchGripper());
+    // addSequential(new SetElevatorTargetHeight(3));
+    // addSequential(new TimeDelay(.4));
     // addSequential(new ExtendHatchPanel(false));
-    // addSequential(new SetElevatorTargetHeight(5.)).
-    addSequential(new SetAutoCommandDone());
-}
+
+    addSequential(new SetElevatorTargetHeight(4));
+    addSequential(new TimeDelay(.4));
+    addSequential(new GripHatchPanel(true));
+    addSequential(new TimeDelay(.4));
+    addSequential(new CancelDriveToVision());
+    addSequential(new ContinuousOutDrive(-.25, 1.));
   }
-  
+}

@@ -5,18 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HatchPanels;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.TimeDelay;
-import frc.robot.commands.Elevator.*;
-import frc.robot.Pref;
+import frc.robot.commands.*;
+import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.HatchPanels.GripHatchPanel;
+import frc.robot.commands.Elevator.SetElevatorTargetHeight;
 
-public class ReturnHatchGripper extends CommandGroup {
+public class AutoPickUpHatchPanel extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public ReturnHatchGripper() {
+  public AutoPickUpHatchPanel() {
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -33,15 +34,12 @@ public class ReturnHatchGripper extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-    // addSequential(new ToggleHatchGripper());
-    // addSequential(new SetElevatorTargetHeight(3));
-    // addSequential(new TimeDelay(.4));
-    // addSequential(new ExtendHatchPanel(false));
+    // addSequential(new ExtendHatchPanel(true));
+    // addSequential(new TimeDelay(.5));
+    addSequential(new SetElevatorTargetHeight(5.));
+    addSequential(new TimeDelay(.6));
+    addSequential(new GripHatchPanel(true));
 
-   addSequential(new SetElevatorTargetHeight(3));
-   addSequential(new TimeDelay(.4));
-    addSequential(new ToggleHatchGripper());
-    addSequential(new TimeDelay(.4));
-    addSequential(new ExtendHatchPanel(false));
+    addSequential(new SetAutoCommandDone());
   }
 }

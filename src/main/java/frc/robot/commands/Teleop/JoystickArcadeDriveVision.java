@@ -12,6 +12,7 @@ import frc.robot.Robot;
 import frc.robot.LimelightControlMode.LedMode;
 import frc.robot.Pref;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Limelight.DelayOffLeds;
 
 public class JoystickArcadeDriveVision extends Command {
   private boolean targetWasSeen;
@@ -20,7 +21,8 @@ public class JoystickArcadeDriveVision extends Command {
   private boolean visionTargetSeen;
   private int targetSeenCtr;
   private double visionTargetError;
-  
+  private boolean closeToTarget;
+  private int testctr;
 
   public JoystickArcadeDriveVision() {
     requires(Robot.driveTrain);
@@ -43,6 +45,7 @@ public class JoystickArcadeDriveVision extends Command {
   protected void initialize() {
     targetWasSeen = false;
     targetSeenCtr = 0;
+    closeToTarget = false;
     Robot.limelightCamera.setLEDMode(LedMode.kforceOn);
     Robot.driveTrain.driveStraightAngle = Robot.driveTrain.getGyroYaw();
     Robot.visionCompJoystick = true;
@@ -57,6 +60,7 @@ public class JoystickArcadeDriveVision extends Command {
      * get values from joystick turn value can also be taken from camera image or
      * gyro based on conditions
      */
+    SmartDashboard.putNumber("JADV",testctr++);
     visionTargetSeen = Robot.limelightCamera.getIsTargetFound();
 
     throttleValue = Robot.m_oi.driverController.getY();
@@ -111,13 +115,14 @@ public class JoystickArcadeDriveVision extends Command {
     if ((targetWasSeen && !visionTargetSeen))
       turnValue = Robot.driveTrain.getCurrentComp();// gyro
 
+    if (Robot.limelightCamera.getBoundingBoxHeight() > 400 || closeToTarget) {
+      closeToTarget = true;
+      throttleValue *= .3;
+
+    }
+
     double leftValue = throttleValue + turnValue;
     double rightValue = throttleValue - turnValue;
-
-    if(Robot.limelightCamera.getBoundingBoxHeight()> 123){
-      leftValue*.3;
-      rightValue*.3;
-    }
 
     Robot.driveTrain.leftDriveOut(leftValue);
     Robot.driveTrain.rightDriveOut(rightValue);
@@ -127,7 +132,8 @@ public class JoystickArcadeDriveVision extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return Robot.cancelDriveVisionCommand;
+    // return false;
   }
 
   // Called once after isFinished returns true
@@ -138,6 +144,9 @@ public class JoystickArcadeDriveVision extends Command {
     Robot.driveTrain.setRightSideDriveBrakeOn(true);
     targetWasSeen = false;
     Robot.visionCompJoystick = false;
+    closeToTarget = false;
+    Robot.cancelDriveVisionCommand = false;
+    Robot.limelightCamera.setLEDMode(LedMode.kforceOff);
   }
 
   // Called when another command which requires one or more of the same

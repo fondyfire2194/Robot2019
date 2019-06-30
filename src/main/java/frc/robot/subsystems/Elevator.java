@@ -153,6 +153,7 @@ public class Elevator extends Subsystem {
 		if (switchCounter > 10 && !switchWasSeen) {
 			resetElevatorPosition();
 			holdPositionInches = getElevatorPositionInches();
+			elevatorTargetPosition = holdPositionInches;
 			switchWasSeen = true;
 		}
 		if (switchWasSeen)

@@ -188,6 +188,8 @@ public class Robot extends TimedRobot {
   public static boolean noCameraTargetFound;
   public static boolean visionCompJoystick;
   private double scl;
+  private double lastElevatorPosition;
+  public static boolean cancelDriveVisionCommand;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -290,16 +292,24 @@ public class Robot extends TimedRobot {
     climberLeg.lastHoldInches = climberLeg.legTargetInches + .01;
     climberArm.armTargetDegrees = climberArm.getArmDegrees();
     climberArm.lastHoldDegrees = climberArm.armTargetDegrees + .01;
-
+    lastElevatorPosition = elevator.getElevatorPositionInches();
   }
 
   @Override
   public void disabledPeriodic() {
+
     Scheduler.getInstance().run();
     readTrajFiles();
 
     // if (m_oi.gamepad.getButtonStateA()) {
     setUpAutoStart();
+
+    if (lastElevatorPosition != elevator.getElevatorPositionInches()) {
+      elevator.holdPositionInches = elevator.getElevatorPositionInches();
+      elevator.elevatorTargetPosition = elevator.holdPositionInches;
+      lastElevatorPosition = elevator.holdPositionInches;
+      elevator.lastHoldPositionInches = elevator.holdPositionInches-.1;
+    }
 
   }
 
@@ -354,7 +364,8 @@ public class Robot extends TimedRobot {
     if (autoRunning && autonomousCommandDone && numberOfAutonomousCommands >= runningAutoCommand) {
 
       commandTimes[runningAutoCommand] = Timer.getFPGATimestamp() - commandStartTime;
-      // SD.putN2("CMDTime" + String.valueOf(runningAutoCommand), commandTimes[runningAutoCommand]);
+      // SD.putN2("CMDTime" + String.valueOf(runningAutoCommand),
+      // commandTimes[runningAutoCommand]);
       SD.putN2("CMDTimeTotal", Timer.getFPGATimestamp() - autoStartTime);
       if (!cycleHold) {
         autonomousCommandDone = false;
@@ -717,7 +728,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("File Running", readingRunning);
     readingRunning = currentLoader.running;
     readThreadStartTime = Timer.getFPGATimestamp();
-    if ((startSettingPB || m_oi.dc8.get()) && !readingRunning) {
+    if ((startSettingPB || m_oi.toggleHatchCoverGripper.get()) && !readingRunning) {
 
       startSettingsDone = false;
       currentLoader = new LoadFiles();

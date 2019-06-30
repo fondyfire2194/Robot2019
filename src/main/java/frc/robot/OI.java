@@ -57,7 +57,7 @@ public class OI {
     public JoystickButton placeHatchPanelShip;
     public JoystickButton placeHatchPanelRocket;
 
-    public JoystickButton dc8;
+    public JoystickButton pickupHatchCover;
     public JoystickButton dc9;
     public JoystickButton dc11;
     public JoystickButton dc12;
@@ -148,29 +148,31 @@ public class OI {
         deliverCargo = new JoystickButton(driverController, 2);
         deliverCargo.whileHeld(new DeliverCargo(1.));
         deliverCargo.whenReleased(new StopCargoMotor());
-        deliverCargo.whenReleased(new ExtendHatchPanel(false));
+        
 
         driveToVision = new JoystickButton(driverController, 3);
-        driveToVision.whenPressed(new ExtendIfPickup());
-        driveToVision.whileHeld(new JoystickArcadeDriveVision());
+        // driveToVision.whenPressed(new ExtendIfPickup());
+        // driveToVision.whileHeld(new JoystickArcadeDriveVision());
+        driveToVision.toggleWhenPressed(new JoystickArcadeDriveVision());
         driveToVision.whenReleased(new DelayOffLeds(5.));
 
         placeHatchPanelRocket = new JoystickButton(driverController, 4);
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());
         placeHatchPanelRocket.whenReleased(new DelayOffPushers(2.));
 
-        toggleHatchCoverGripper = new JoystickButton(driverController, 5);
-        // toggleHatchCoverGripper.whenPressed(new ExtendHatchPanel(true));
-        // toggleHatchCoverGripper.whenReleased(new ReturnHatchGripper());
-        toggleHatchCoverGripper.whenPressed(new ReturnHatchGripper());
+        pickupHatchCover = new JoystickButton(driverController, 5);
+        // pickupHatchCover.whenPressed(new ExtendHatchPanel(true));
+        // pickupHatchCover.whenReleased(new ReturnHatchGripper());
+        pickupHatchCover.whenPressed(new PickUpHatchPanel());
         
+
         placeHatchPanelShip = new JoystickButton(driverController, 6);
         placeHatchPanelShip.whenPressed(new PlaceHatchPanelShip());
 
         abortAuto = new JoystickButton(driverController, 7);
 
-        dc8 = new JoystickButton(driverController, 8);
-        dc8.whenPressed(new ToggleHatchGripper());
+        toggleHatchCoverGripper = new JoystickButton(driverController, 8);
+        toggleHatchCoverGripper.whenPressed(new ToggleHatchGripper());
 
         dc9 = new JoystickButton(driverController, 9);
         dc9.whenPressed(new SetClimberLegTargetInches(0));
