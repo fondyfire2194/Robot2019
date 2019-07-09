@@ -27,9 +27,22 @@ import frc.robot.Constants;
 import frc.robot.commands.Elevator.*;
 import frc.robot.commands.HatchPanels.*;
 import frc.robot.commands.Cargo.*;
+import frc.robot.commands.Climber.DoClimb;
+import frc.robot.commands.Climber.IncrementArmAngle;
+import frc.robot.commands.Climber.IncrementClimberLeg;
+import frc.robot.commands.Climber.LogClimberData;
+import frc.robot.commands.Climber.MoveToTouch;
+import frc.robot.commands.Climber.ResetArmPosition;
+import frc.robot.commands.Climber.ResetLegPosition;
+import frc.robot.commands.Climber.RunClimberArmFromGamepad;
+import frc.robot.commands.Climber.RunClimberDriveFromGamepad;
+import frc.robot.commands.Climber.RunClimberLegFromGamepad;
+import frc.robot.commands.Climber.SetClimberLegTargetInches;
+import frc.robot.commands.Climber.SetClimberTargetAngle;
+import frc.robot.commands.Climber.SetL2Values;
+import frc.robot.commands.Climber.SetL3Values;
 import frc.robot.commands.Teleop.JoystickArcadeDriveVision;
 import frc.robot.commands.AirCompressor.*;
-import frc.robot.commands.Climber.*;
 import frc.robot.commands.Motion.*;
 
 /**
@@ -148,13 +161,12 @@ public class OI {
         deliverCargo = new JoystickButton(driverController, 2);
         deliverCargo.whileHeld(new DeliverCargo(1.));
         deliverCargo.whenReleased(new StopCargoMotor());
-        
 
         driveToVision = new JoystickButton(driverController, 3);
         // driveToVision.whenPressed(new ExtendIfPickup());
         // driveToVision.whileHeld(new JoystickArcadeDriveVision());
-        driveToVision.toggleWhenPressed(new JoystickArcadeDriveVision());
-        driveToVision.whenReleased(new DelayOffLeds(5.));
+        driveToVision.whileHeld(new JoystickArcadeDriveVision());
+        driveToVision.whenReleased(new DelayOffLeds(.5));
 
         placeHatchPanelRocket = new JoystickButton(driverController, 4);
         placeHatchPanelRocket.whenPressed(new PlaceHatchPanelRocket());
@@ -164,7 +176,6 @@ public class OI {
         // pickupHatchCover.whenPressed(new ExtendHatchPanel(true));
         // pickupHatchCover.whenReleased(new ReturnHatchGripper());
         pickupHatchCover.whenPressed(new PickUpHatchPanel());
-        
 
         placeHatchPanelShip = new JoystickButton(driverController, 6);
         placeHatchPanelShip.whenPressed(new PlaceHatchPanelShip());

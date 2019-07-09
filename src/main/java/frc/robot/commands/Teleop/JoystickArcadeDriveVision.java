@@ -115,11 +115,11 @@ public class JoystickArcadeDriveVision extends Command {
     if ((targetWasSeen && !visionTargetSeen))
       turnValue = Robot.driveTrain.getCurrentComp();// gyro
 
-    if (Robot.limelightCamera.getBoundingBoxHeight() > 400 || closeToTarget) {
-      closeToTarget = true;
-      throttleValue *= .3;
+    // if (Robot.limelightCamera.getBoundingBoxHeight() > 400 || closeToTarget) {
+    //   closeToTarget = true;
+    //   throttleValue *= .3;
 
-    }
+    // }
 
     double leftValue = throttleValue + turnValue;
     double rightValue = throttleValue - turnValue;
@@ -132,8 +132,8 @@ public class JoystickArcadeDriveVision extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.cancelDriveVisionCommand;
-    // return false;
+    // return Robot.cancelDriveVisionCommand;
+    return false;
   }
 
   // Called once after isFinished returns true

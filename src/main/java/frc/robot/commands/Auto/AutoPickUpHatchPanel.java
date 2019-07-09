@@ -39,7 +39,7 @@ public class AutoPickUpHatchPanel extends CommandGroup {
     addSequential(new SetElevatorTargetHeight(5.));
     addSequential(new TimeDelay(.6));
     addSequential(new GripHatchPanel(true));
-
+    addSequential(new TimeDelay(.2));
     addSequential(new SetAutoCommandDone());
   }
 }

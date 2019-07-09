@@ -353,7 +353,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
 
-    if (m_oi.abortAuto.get() || noCameraTargetFound) {
+    if (m_oi.abortAuto.get() /*noCameraTargetFound*/) {
       cancelAllAuto();
     }
     if (m_oi.gamepad.getButtonStateA())

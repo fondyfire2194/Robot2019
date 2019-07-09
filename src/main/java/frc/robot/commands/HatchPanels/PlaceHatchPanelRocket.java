@@ -9,7 +9,9 @@ package frc.robot.commands.HatchPanels;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Auto.SetAutoCommandDone;
+import frc.robot.commands.Elevator.SetElevatorTargetHeight;
 import frc.robot.commands.Limelight.CancelDriveToVision;
+import frc.robot.Constants;
 import frc.robot.commands.TimeDelay;
 
 public class PlaceHatchPanelRocket extends CommandGroup {
@@ -33,7 +35,6 @@ public class PlaceHatchPanelRocket extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
-
     addSequential(new ExtendHatchPanel(true));
     addSequential(new TimeDelay(.25));
     addSequential(new GripHatchPanel(false));
