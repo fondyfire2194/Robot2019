@@ -39,11 +39,10 @@ public class PickUpHatchPanel extends CommandGroup {
     // addSequential(new SetElevatorTargetHeight(3));
     // addSequential(new TimeDelay(.4));
     // addSequential(new ExtendHatchPanel(false));
-
-    addSequential(new SetElevatorTargetHeight(4));
-    addSequential(new TimeDelay(.4));
     addSequential(new GripHatchPanel(true));
     addSequential(new TimeDelay(.4));
+    addSequential(new SetElevatorTargetHeight(4.));
+    addSequential(new TimeDelay(.5));
     addSequential(new CancelDriveToVision());
     addSequential(new ContinuousOutDrive(-.25, 1.));
   }
