@@ -9,7 +9,7 @@ package frc.robot.commands.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.Motion.RobotDriveToTargetV2;
-import frc.robot.commands.HatchPanels.PlaceHatchPanelShip;
+import frc.robot.commands.HatchPanels.PlaceHatchPanelRocket;
 
 public class DriveAndPlacePanelShip extends CommandGroup {
   /**
@@ -33,6 +33,6 @@ public class DriveAndPlacePanelShip extends CommandGroup {
     // a CommandGroup containing them would require both the chassis and the
     // arm.
     addSequential(new RobotDriveToTargetV2(distance, speed, angle, stop, timeOut));
-    addSequential(new PlaceHatchPanelShip());
+    addSequential(new PlaceHatchPanelRocket());
   }
 }
